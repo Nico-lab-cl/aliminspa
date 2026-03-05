@@ -30,7 +30,7 @@ export default function Navbar() {
         { href: '/#proyectos', label: 'Proyectos' },
         { href: '/#beneficios', label: 'Beneficios' },
         { href: '/#ubicacion', label: 'Ubicación' },
-        { href: '/contacto', label: 'Contacto' },
+        { href: '/quienes-somos', label: 'Quiénes Somos' },
     ]
 
     return (
@@ -76,12 +76,10 @@ export default function Navbar() {
 
                 <div className={styles.actions}>
                     <Link
-                        href={`https://wa.me/${SITE.whatsapp}?text=Hola,%20me%20comunico%20desde%20aliminspa.cl%20👋`}
+                        href="/contacto"
                         className={`btn btn-primary ${styles.ctaDesktop}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
                     >
-                        Cotizar Ahora
+                        Contacto
                     </Link>
 
                     <button
