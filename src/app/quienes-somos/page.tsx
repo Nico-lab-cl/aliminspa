@@ -56,6 +56,14 @@ export default function TeamPage() {
         <main className={styles.page}>
             <Navbar />
 
+            {/* Premium Animated Background */}
+            <div className={styles.pageBg}>
+                <div className={styles.gridOverlay} />
+                <div className={`${styles.orb} ${styles.orbTop}`} />
+                <div className={`${styles.orb} ${styles.orbMiddle}`} />
+                <div className={`${styles.orb} ${styles.orbBottom}`} />
+            </div>
+
             {/* Hero Section */}
             <section className={styles.hero}>
                 <div className={styles.heroBg}>
