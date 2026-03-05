@@ -102,14 +102,12 @@ export default function TeamPage() {
                                             <div className={styles.avatarPlaceholder}>
                                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                                             </div>
-                                            {/* Uncomment when images are ready
-                                            <Image 
-                                                src={director.image} 
-                                                alt={director.name} 
+                                            <Image
+                                                src={director.image}
+                                                alt={director.name}
                                                 fill
                                                 className={styles.avatarImage}
                                             />
-                                            */}
                                         </div>
                                     </div>
                                     <h3 className={styles.name}>{director.name}</h3>
@@ -136,14 +134,12 @@ export default function TeamPage() {
                                             <div className={styles.avatarPlaceholder}>
                                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                                             </div>
-                                            {/* Uncomment when images are ready
-                                            <Image 
-                                                src={advisor.image} 
-                                                alt={advisor.name} 
+                                            <Image
+                                                src={advisor.image}
+                                                alt={advisor.name}
                                                 fill
                                                 className={styles.avatarImage}
                                             />
-                                            */}
                                         </div>
                                     </div>
                                     <h3 className={styles.name}>{advisor.name}</h3>
