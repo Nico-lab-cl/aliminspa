@@ -38,6 +38,37 @@
     max-width: 280px;
 }
 
+.socials {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--gold);
+    transition: all var(--transition-base);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.socials a svg {
+    width: 18px;
+    height: 18px;
+}
+
+.socials a:hover {
+    background: var(--gradient-gold);
+    color: #0B0F19;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
+}
+
 .col {
     display: flex;
     flex-direction: column;
