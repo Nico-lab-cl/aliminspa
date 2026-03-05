@@ -6,7 +6,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 /* ── RESET ─────────────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -112,26 +114,45 @@ button {
   color: inherit;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: 1rem;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
 /* ── TYPOGRAPHY ────────────────────────────────────────── */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); }
-h2 { font-size: clamp(1.6rem, 3.5vw, 2.6rem); }
-h3 { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
-h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
+h1 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+
+h4 {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
 
 /* ── LAYOUT UTILITIES ──────────────────────────────────── */
 .container {
@@ -198,6 +219,7 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
   position: relative;
   overflow: hidden;
   white-space: nowrap;
+  z-index: 1;
 }
 
 .btn::before {
@@ -206,6 +228,7 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
   inset: 0;
   opacity: 0;
   transition: opacity var(--transition-fast);
+  z-index: -1;
 }
 
 .btn:hover::before {
@@ -314,6 +337,7 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -321,8 +345,13 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideInLeft {
@@ -330,6 +359,7 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
     opacity: 0;
     transform: translateX(-40px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -341,6 +371,7 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
     opacity: 0;
     transform: translateX(40px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -352,6 +383,7 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -359,35 +391,65 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { 
-    opacity: 1; 
+
+  0%,
+  100% {
+    opacity: 1;
     box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
   }
-  50% { 
-    opacity: 0.9; 
+
+  50% {
+    opacity: 0.9;
     box-shadow: 0 0 40px rgba(37, 211, 102, 0.6);
   }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes counter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-on-scroll {
@@ -401,11 +463,25 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
   transform: translateY(0);
 }
 
-.animate-on-scroll.is-visible:nth-child(2) { transition-delay: 0.1s; }
-.animate-on-scroll.is-visible:nth-child(3) { transition-delay: 0.2s; }
-.animate-on-scroll.is-visible:nth-child(4) { transition-delay: 0.3s; }
-.animate-on-scroll.is-visible:nth-child(5) { transition-delay: 0.4s; }
-.animate-on-scroll.is-visible:nth-child(6) { transition-delay: 0.5s; }
+.animate-on-scroll.is-visible:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.animate-on-scroll.is-visible:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.animate-on-scroll.is-visible:nth-child(4) {
+  transition-delay: 0.3s;
+}
+
+.animate-on-scroll.is-visible:nth-child(5) {
+  transition-delay: 0.4s;
+}
+
+.animate-on-scroll.is-visible:nth-child(6) {
+  transition-delay: 0.5s;
+}
 
 /* ── ORB DECORATIONS ───────────────────────────────────── */
 .orb {
@@ -483,13 +559,16 @@ h4 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--surface-light);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold-dark);
 }
