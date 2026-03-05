@@ -81,6 +81,20 @@ export default function RootLayout({
   return (
     <html lang="es-CL">
       <head>
+        {/* Google tag (gtag.js) */}
+        <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-XRX761CCKM" />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-XRX761CCKM');
+            `,
+          }}
+        />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/images/logo-alimin.png" />
         <meta name="theme-color" content="#0B0F19" />
