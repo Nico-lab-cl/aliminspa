@@ -31,7 +31,13 @@ export default function Newsletter() {
 
     return (
         <section className={styles.section}>
-            <div className="container">
+            {/* Background Image Setup */}
+            <div className={styles.bgWrapper}>
+                <div className={styles.bgImage} />
+                <div className={styles.overlay} />
+            </div>
+
+            <div className={`container ${styles.container}`}>
                 <div className={styles.wrapper}>
                     <div className={styles.content}>
                         <h3 className={styles.title}>
