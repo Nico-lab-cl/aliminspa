@@ -31,12 +31,6 @@
     align-items: flex-start;
 }
 
-.brand img {
-    background: white;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-sm);
-}
-
 .desc {
     font-size: 0.92rem;
     color: var(--text-secondary);
