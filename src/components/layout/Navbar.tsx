@@ -38,7 +38,7 @@ export default function Navbar() {
             <nav className={styles.nav} aria-label="Navegación principal">
                 <Link href="/" className={styles.logo} aria-label={`${SITE.shortName} - Inicio`}>
                     <Image
-                        src="/images/logo-alimin.png"
+                        src="/images/logo-alimin-color.png"
                         alt={`${SITE.shortName} Inmobiliaria - Proyectos inmobiliarios en El Tabo`}
                         width={140}
                         height={45}

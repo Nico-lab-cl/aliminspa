@@ -12,7 +12,7 @@ export default function Footer() {
                     {/* Brand */}
                     <div className={styles.brand}>
                         <Image
-                            src="/images/logo-alimin.png"
+                            src="/images/logo-alimin-color.png"
                             alt={`${SITE.shortName} - Inmobiliaria en El Tabo`}
                             width={130}
                             height={42}
