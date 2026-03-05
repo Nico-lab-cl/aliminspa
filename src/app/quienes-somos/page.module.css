@@ -148,6 +148,104 @@
     line-height: 1.6;
 }
 
+/* Mision y Vision */
+.mvSection {
+    position: relative;
+    padding: 8rem 0;
+    margin: 2rem 0;
+    overflow: hidden;
+    color: white;
+}
+
+.mvBgWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.mvBgImage {
+    position: absolute;
+    inset: -5%;
+    /* Prevent white edges during animation */
+    width: 110%;
+    height: 110%;
+    background: url('/images/mission-bg.png') center/cover no-repeat;
+    animation: dronePOV 60s linear infinite alternate;
+}
+
+.mvOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--bg) 0%, rgba(11, 15, 25, 0.4) 30%, rgba(11, 15, 25, 0.6) 70%, var(--bg) 100%);
+    z-index: 1;
+}
+
+@keyframes dronePOV {
+    0% {
+        transform: scale(1) translate(0, 0);
+    }
+
+    100% {
+        transform: scale(1.15) translate(-2%, 2%);
+    }
+}
+
+.mvContainer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.mvCard {
+    flex: 1;
+    background: rgba(36, 68, 64, 0.7);
+    /* Teal/dark green tint from the user's image */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    max-width: 550px;
+}
+
+.mvCard:nth-child(2) {
+    margin-top: 6rem;
+    /* Stagger the cards like in the PDF */
+}
+
+.mvTitle {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mvText {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.95);
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .mvContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mvCard:nth-child(2) {
+        margin-top: 0;
+    }
+}
+
 /* Section Common */
 .section {
     padding: 4rem 0 6rem;

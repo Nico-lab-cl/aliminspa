@@ -64,7 +64,31 @@ export default function TeamPage() {
                 <div className={`${styles.orb} ${styles.orbBottom}`} />
             </div>
 
-            {/* Hero Section */}
+            {/* Mision y Vision Section */}
+            <section className={styles.mvSection}>
+                <div className={styles.mvBgWrapper}>
+                    <div className={styles.mvBgImage} />
+                    <div className={styles.mvOverlay} />
+                </div>
+
+                <div className={styles.mvContainer}>
+                    <AnimatedSection delay={0.1} className={styles.mvCard}>
+                        <h2 className={styles.mvTitle}>Misión</h2>
+                        <p className={styles.mvText}>
+                            Ayudamos a las familias y emprendedores a acceder a bienes raíces urbanizados y asequibles, facilitando espacios para vivir, invertir y crecer. Nuestro compromiso es entregar soluciones rentables, seguras y con impacto a largo plazo.
+                        </p>
+                    </AnimatedSection>
+
+                    <AnimatedSection delay={0.3} className={styles.mvCard}>
+                        <h2 className={styles.mvTitle}>Visión</h2>
+                        <p className={styles.mvText}>
+                            Convertirnos en la inmobiliaria referente en Chile para terrenos urbanizados, reconocida por nuestra transparencia, innovación y cercanía con el cliente, generando comunidades sostenibles y accesibles para todos.
+                        </p>
+                    </AnimatedSection>
+                </div>
+            </section>
+
+            {/* Equipo Intro Section */}
             <section className={styles.hero}>
                 <div className={styles.heroBg}>
                     <div className={styles.heroBgInner} />
