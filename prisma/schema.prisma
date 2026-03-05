@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  nombre    String
+  email     String
+  celular   String
+  ciudad    String
+  proyecto  String?
+  fuente    String   @default("web")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("leads")
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("newsletter_subscribers")
+}

@@ -1,0 +1,126 @@
+.section {
+    position: relative;
+    overflow: hidden;
+}
+
+.bgOrb {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.04);
+    filter: blur(120px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+}
+
+.info {
+    position: sticky;
+    top: calc(var(--navbar-height) + 2rem);
+}
+
+.title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    margin-bottom: 1rem;
+}
+
+.desc {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+}
+
+/* Form */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    backdrop-filter: blur(16px);
+}
+
+.submitBtn {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.message {
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    animation: fadeInUp 0.3s ease;
+}
+
+.success {
+    background: rgba(45, 122, 58, 0.12);
+    border: 1px solid rgba(45, 122, 58, 0.3);
+    color: var(--green-light);
+}
+
+.error {
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    color: #f87171;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .info {
+        position: static;
+    }
+
+    .form {
+        padding: 1.5rem;
+    }
+}

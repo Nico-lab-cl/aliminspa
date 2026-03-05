@@ -1,0 +1,169 @@
+'use client'
+
+import { useState, FormEvent } from 'react'
+import { PROJECTS } from '@/lib/constants'
+import AnimatedSection from '@/components/ui/AnimatedSection'
+import styles from './ContactForm.module.css'
+
+export default function ContactForm() {
+    const [form, setForm] = useState({
+        nombre: '',
+        email: '',
+        celular: '',
+        ciudad: '',
+        proyecto: '',
+    })
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        setStatus('loading')
+
+        try {
+            const res = await fetch('/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form),
+            })
+
+            if (!res.ok) throw new Error('Error al enviar')
+
+            setStatus('success')
+            setForm({ nombre: '', email: '', celular: '', ciudad: '', proyecto: '' })
+
+            setTimeout(() => setStatus('idle'), 5000)
+        } catch {
+            setStatus('error')
+            setTimeout(() => setStatus('idle'), 4000)
+        }
+    }
+
+    return (
+        <section className={`section ${styles.section}`} id="contacto">
+            <div className={styles.bgOrb} />
+
+            <div className="container">
+                <div className={styles.wrapper}>
+                    <AnimatedSection>
+                        <div className={styles.info}>
+                            <span className="section-label">Cotiza Tu Terreno</span>
+                            <h2 className={styles.title}>
+                                Cotizar Terreno en El Tabo
+                            </h2>
+                            <p className={styles.desc}>
+                                Completa el formulario y un asesor te contactará con
+                                las mejores opciones de terrenos disponibles en nuestros
+                                proyectos del Litoral Central.
+                            </p>
+
+                            <div className={styles.features}>
+                                <div className={styles.feature}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                    <span>Respuesta en menos de 24 horas</span>
+                                </div>
+                                <div className={styles.feature}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                    <span>Asesoría personalizada</span>
+                                </div>
+                                <div className={styles.feature}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                    <span>Visitas guiadas sin costo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </AnimatedSection>
+
+                    <AnimatedSection delay={200}>
+                        <form className={styles.form} onSubmit={handleSubmit} id="form-contacto">
+                            <div className="input-group">
+                                <label htmlFor="lead-nombre" className="input-label">Nombre completo</label>
+                                <input
+                                    id="lead-nombre"
+                                    type="text"
+                                    className="input"
+                                    placeholder="Tu nombre"
+                                    required
+                                    value={form.nombre}
+                                    onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label htmlFor="lead-email" className="input-label">Correo electrónico</label>
+                                <input
+                                    id="lead-email"
+                                    type="email"
+                                    className="input"
+                                    placeholder="tu@email.com"
+                                    required
+                                    value={form.email}
+                                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label htmlFor="lead-celular" className="input-label">Celular</label>
+                                <input
+                                    id="lead-celular"
+                                    type="tel"
+                                    className="input"
+                                    placeholder="+56 9 1234 5678"
+                                    required
+                                    value={form.celular}
+                                    onChange={(e) => setForm({ ...form, celular: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label htmlFor="lead-ciudad" className="input-label">Ciudad</label>
+                                <input
+                                    id="lead-ciudad"
+                                    type="text"
+                                    className="input"
+                                    placeholder="¿Desde dónde nos contactas?"
+                                    required
+                                    value={form.ciudad}
+                                    onChange={(e) => setForm({ ...form, ciudad: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label htmlFor="lead-proyecto" className="input-label">Proyecto de interés (opcional)</label>
+                                <select
+                                    id="lead-proyecto"
+                                    className="input"
+                                    value={form.proyecto}
+                                    onChange={(e) => setForm({ ...form, proyecto: e.target.value })}
+                                >
+                                    <option value="">Selecciona un proyecto</option>
+                                    {PROJECTS.map((p) => (
+                                        <option key={p.id} value={p.name}>{p.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className={`btn btn-primary btn-lg ${styles.submitBtn}`}
+                                disabled={status === 'loading'}
+                            >
+                                {status === 'loading' ? 'Enviando...' : 'Solicitar Información'}
+                            </button>
+
+                            {status === 'success' && (
+                                <div className={styles.message + ' ' + styles.success}>
+                                    ✅ ¡Datos enviados! Te contactaremos pronto.
+                                </div>
+                            )}
+                            {status === 'error' && (
+                                <div className={styles.message + ' ' + styles.error}>
+                                    ❌ Error al enviar. Intenta nuevamente.
+                                </div>
+                            )}
+                        </form>
+                    </AnimatedSection>
+                </div>
+            </div>
+        </section>
+    )
+}
