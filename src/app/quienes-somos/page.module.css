@@ -1,0 +1,231 @@
+.page {
+    position: relative;
+    padding-top: var(--navbar-height);
+    background: var(--bg);
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    padding: clamp(4rem, 8vw, 6rem) 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+.heroBg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.heroBgInner {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+.quote {
+    display: inline-block;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    margin: 2rem auto;
+    max-width: 800px;
+    line-height: 1.4;
+    position: relative;
+    padding: 0 2rem;
+}
+
+.quote::before,
+.quote::after {
+    content: '"';
+    color: var(--gold);
+    font-size: 1.5em;
+    position: absolute;
+    opacity: 0.5;
+    font-family: serif;
+}
+
+.quote::before {
+    top: -0.5rem;
+    left: -0.5rem;
+}
+
+.quote::after {
+    bottom: -1.5rem;
+    right: -0.5rem;
+}
+
+.subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Section Common */
+.section {
+    padding: 4rem 0 6rem;
+    position: relative;
+    z-index: 1;
+}
+
+.sectionTitle {
+    text-align: center;
+    margin-bottom: 4rem;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Directors Grid */
+.directorsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Advisors Grid */
+.advisorsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Team Card */
+.memberCard {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all var(--transition-base);
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.memberCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-gold);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.memberCard:hover {
+    transform: translateY(-8px);
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.memberCard:hover::before {
+    opacity: 1;
+}
+
+.avatarWrapper {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    border-radius: 50%;
+    padding: 6px;
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.4) 0%, rgba(201, 168, 76, 0.1) 100%);
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--surface);
+    overflow: hidden;
+    position: relative;
+    border: 4px solid var(--bg);
+}
+
+.avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.memberCard:hover .avatarImage {
+    transform: scale(1.08);
+}
+
+.avatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-light);
+    color: var(--gold);
+}
+
+.name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.role {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+}
+
+.desc {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+}
+
+.btnWrapper {
+    margin-top: auto;
+}
+
+.contactBtn {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .directorsGrid,
+    .advisorsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .memberCard {
+        padding: 2rem 1.5rem;
+    }
+}
