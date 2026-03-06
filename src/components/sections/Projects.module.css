@@ -1,17 +1,63 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    cursor: pointer;
+    position: relative;
+    background: var(--card-bg, rgba(255, 255, 255, 0.03));
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.cardLink {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.featured {
+    border: 1.5px solid rgba(0, 109, 119, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 109, 119, 0.15);
+    transform: translateY(-4px);
+}
+
+.featured::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #006D77, #83C5BE);
+    z-index: 10;
+}
+
+.soldOut {
+    opacity: 0.7;
+    filter: grayscale(0.4);
+    pointer-events: none;
+}
+
+.soldOut .status {
+    background: #4A4A4A !important;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .card:hover .image {
-    transform: scale(1.06);
+    transform: scale(1.08);
 }
 
 .card:hover .cta {
@@ -19,110 +65,166 @@
 }
 
 .card:hover .cta svg {
-    transform: translateX(3px);
+    transform: translateX(5px);
 }
 
 /* Image */
 .imageWrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 5/3;
+    aspect-ratio: 16/10;
     overflow: hidden;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .imageOverlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(11, 15, 25, 0.6) 100%);
+    background: linear-gradient(180deg, transparent 40%, rgba(11, 15, 25, 0.8) 100%);
 }
 
 .status {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.3rem 0.9rem;
+    top: 1.25rem;
+    right: 1.25rem;
+    padding: 0.4rem 1rem;
     border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+}
+
+.progressBadge {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 5;
+}
+
+.progressText {
+    display: block;
     font-size: 0.75rem;
     font-weight: 700;
-    color: white;
-    letter-spacing: 0.04em;
+    color: #83C5BE;
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.progressBar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #83C5BE, #006D77);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(131, 197, 190, 0.5);
 }
 
 /* Body */
 .body {
-    padding: 1.5rem;
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.75rem;
     flex: 1;
 }
 
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
 .name {
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text);
+    line-height: 1.2;
+}
+
+.featuredLabel {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #006D77;
+    background: rgba(131, 197, 190, 0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .tagline {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--gold);
     font-weight: 600;
     font-style: italic;
+    opacity: 0.9;
 }
 
 .description {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 /* Features */
 .features {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
 }
 
 .feature {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.78rem;
-    font-weight: 500;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: var(--green-light);
-    background: rgba(45, 122, 58, 0.1);
-    border: 1px solid rgba(45, 122, 58, 0.2);
-    padding: 0.25rem 0.65rem;
+    background: rgba(45, 122, 58, 0.12);
+    border: 1px solid rgba(45, 122, 58, 0.25);
+    padding: 0.35rem 0.8rem;
     border-radius: var(--radius-full);
-}
-
-.feature svg {
-    color: var(--green-light);
-    flex-shrink: 0;
 }
 
 /* Meta */
 .meta {
     display: flex;
-    gap: 1.2rem;
-    margin-top: 0.5rem;
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .metaItem {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    font-size: 0.82rem;
+    gap: 0.45rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
 }
 
@@ -134,28 +236,40 @@
 .cta {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.6rem;
     margin-top: auto;
-    padding-top: 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
+    padding-top: 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
     color: var(--text-secondary);
-    transition: color 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .cta svg {
-    transition: transform 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Responsive */
+@media (max-width: 1100px) {
+    .grid {
+        gap: 1.5rem;
+    }
+
+    .name {
+        font-size: 1.3rem;
+    }
+}
+
 @media (max-width: 992px) {
     .grid {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 680px) {
     .grid {
         grid-template-columns: 1fr;
+        max-width: 450px;
+        margin: 0 auto;
     }
 }
