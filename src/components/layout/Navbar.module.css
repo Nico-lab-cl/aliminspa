@@ -13,10 +13,9 @@
 
 .scrolled {
     height: var(--navbar-height);
-    background: rgba(11, 15, 25, 0.85);
-    backdrop-filter: blur(20px) saturate(1.4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .nav {
@@ -50,8 +49,8 @@
 .link {
     padding: 0.55rem 1rem;
     font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-secondary);
+    font-weight: 700;
+    color: #183863;
     border-radius: var(--radius-sm);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -62,7 +61,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(197, 160, 89, 0.05);
     border-radius: var(--radius-sm);
     transform: scale(0.8);
     opacity: 0;
@@ -71,8 +70,7 @@
 }
 
 .link:hover {
-    color: var(--gold);
-    text-shadow: 0 0 15px rgba(201, 168, 76, 0.4);
+    color: var(--gold-dark);
 }
 
 .link:hover::before {
@@ -91,7 +89,7 @@
     background: var(--gold);
     border-radius: 2px;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 8px var(--gold);
+    box-shadow: none;
 }
 
 .link:hover::after {
@@ -128,7 +126,7 @@
     display: block;
     width: 100%;
     height: 2px;
-    background: var(--text);
+    background: #183863;
     border-radius: 2px;
     transition: all 0.3s ease;
     transform-origin: center;
@@ -164,8 +162,7 @@
         align-items: flex-start;
         gap: 0;
         padding: calc(var(--navbar-height) + 2rem) 2rem 2rem;
-        background: rgba(11, 15, 25, 0.97);
-        backdrop-filter: blur(20px);
+        background: #FFFFFF;
         border-left: 1px solid var(--border);
         transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 100;
