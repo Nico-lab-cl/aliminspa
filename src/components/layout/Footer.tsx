@@ -45,7 +45,13 @@ export default function Footer() {
                         <ul className={styles.list}>
                             {PROJECTS.map((p) => (
                                 <li key={p.id}>
-                                    <Link href={`/proyectos/${p.slug}`}>{p.name}</Link>
+                                    <Link
+                                        href={p.externalUrl || `/proyectos/${p.slug}`}
+                                        target={p.externalUrl ? '_blank' : undefined}
+                                        rel={p.externalUrl ? 'noopener noreferrer' : undefined}
+                                    >
+                                        {p.name}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -67,20 +73,11 @@ export default function Footer() {
                         <h4 className={styles.colTitle}>Contáctanos</h4>
                         <ul className={styles.list}>
                             <li>
-                                <a
-                                    href={`https://wa.me/${SITE.whatsapp}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    📱 WhatsApp
-                                </a>
-                            </li>
-                            <li>
                                 <a href={`mailto:${SITE.email}`}>
-                                    ✉️ {SITE.email}
+                                    {SITE.email}
                                 </a>
                             </li>
-                            <li>📍 {SITE.address}</li>
+                            <li>{SITE.address}</li>
                         </ul>
                     </div>
                 </div>

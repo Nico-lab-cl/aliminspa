@@ -6,7 +6,7 @@ export const SITE = {
     description: 'Proyectos inmobiliarios y venta de terrenos en El Tabo, Litoral Central. Terrenos urbanizados con rol propio, agua certificada y luz. Invierte en el Litoral Central de Chile.',
     phone: '+56956654833',
     whatsapp: '56956654833',
-    email: 'contacto@aliminspa.cl',
+    email: 'bienesraices@aliminspa.cl',
     address: 'El Tabo, Región de Valparaíso, Chile',
     gtmId: 'GTM-TMLPLBN3',
     social: {
