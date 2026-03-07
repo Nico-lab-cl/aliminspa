@@ -9,21 +9,21 @@ import { RealEstateAgentSchema, LocalBusinessSchema } from '@/components/seo/Jso
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} | Proyectos Inmobiliarios y Venta de Terrenos en El Tabo`,
+    default: `Terrenos en Venta en El Tabo con Rol Propio | ${SITE.name}`,
     template: `%s | ${SITE.name}`,
   },
-  description: SITE.description,
+  description: 'Venta de terrenos urbanizados en El Tabo, Litoral Central. Lotes desde 200 m² con rol propio, agua y luz certificada. ¡Tu inversión segura frente al mar con Alimin!',
   keywords: [
-    'proyectos inmobiliarios en el tabo',
-    'venta de terrenos el tabo',
     'venta de terrenos en el tabo',
-    'venta de terrenos litoral central',
-    'terrenos con rol propio el tabo',
+    'terrenos en venta el tabo',
+    'parcelas en el tabo con rol propio',
     'inmobiliaria el tabo',
-    'terrenos urbanizados litoral central',
-    'invertir en terrenos chile',
-    'alimin inmobiliaria',
-    'terrenos baratos el tabo',
+    'proyectos inmobiliarios litoral central',
+    'venta de terrenos urbanizados chile',
+    'terrenos con vista al mar el tabo',
+    'alimin inmobiliaria el tabo',
+    'lomas del mar el tabo',
+    'arena y sol el tabo',
   ],
   authors: [{ name: SITE.name }],
   creator: SITE.name,
@@ -44,21 +44,21 @@ export const metadata: Metadata = {
     locale: 'es_CL',
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} | Proyectos Inmobiliarios y Venta de Terrenos en El Tabo`,
-    description: SITE.description,
+    title: `Terrenos en Venta en El Tabo con Rol Propio | ${SITE.name}`,
+    description: 'Venta de terrenos urbanizados en El Tabo, Litoral Central. Lotes desde 200 m² con rol propio, agua y luz certificada. ¡Tu inversión segura frente al mar con Alimin!',
     images: [
       {
         url: '/images/og-image.webp',
         width: 1200,
         height: 630,
-        alt: 'Alimin Inmobiliaria - Terrenos en El Tabo, Litoral Central',
+        alt: 'Alimin Inmobiliaria - Terrenos en Venta en El Tabo',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE.name} | Terrenos en El Tabo`,
-    description: SITE.description,
+    title: `Terrenos en Venta en El Tabo | ${SITE.name}`,
+    description: 'Venta de terrenos urbanizados en El Tabo, Litoral Central. Lotes con rol propio y servicios básicos.',
     images: ['/images/og-image.webp'],
   },
   alternates: {
@@ -70,6 +70,8 @@ export const metadata: Metadata = {
   other: {
     'geo.region': 'CL-VS',
     'geo.placename': 'El Tabo',
+    'geo.position': '-33.4542;-71.6667',
+    'ICBM': '-33.4542, -71.6667',
   },
 }
 
@@ -95,8 +97,9 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/logo-alimin.png" />
         <link rel="apple-touch-icon" href="/images/logo-alimin.png" />
+        <link rel="shortcut icon" href="/images/logo-alimin.png" />
         <meta name="theme-color" content="#0B0F19" />
         <RealEstateAgentSchema />
         <LocalBusinessSchema />
