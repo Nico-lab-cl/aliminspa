@@ -4,11 +4,17 @@
     left: 0;
     right: 0;
     z-index: 100;
-    height: calc(var(--navbar-height) + 30px);
+    height: calc(var(--navbar-height) + 20px);
     display: flex;
     align-items: center;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     background: #FFFFFF;
+}
+
+@media (min-width: 1200px) {
+    .header {
+        height: calc(var(--navbar-height) + 40px);
+    }
 }
 
 .scrolled {
@@ -20,9 +26,9 @@
 
 .nav {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -47,7 +53,7 @@
 }
 
 .link {
-    padding: 0.6rem 1.15rem;
+    padding: 0.6rem 1.2rem;
     font-size: 1.05rem;
     font-weight: 700;
     color: #183863;
@@ -55,6 +61,13 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     letter-spacing: 0.02em;
+}
+
+@media (min-width: 1200px) {
+    .link {
+        font-size: 1.15rem;
+        padding: 0.7rem 1.5rem;
+    }
 }
 
 .link::before {
@@ -103,8 +116,16 @@
 }
 
 .ctaDesktop {
-    padding: 0.75rem 1.6rem;
+    padding: 0.8rem 1.8rem;
     font-size: 1rem;
+    font-weight: 700;
+}
+
+@media (min-width: 1200px) {
+    .ctaDesktop {
+        padding: 0.9rem 2.2rem;
+        font-size: 1.1rem;
+    }
 }
 
 .ctaMobile {
