@@ -62,7 +62,7 @@ export default function ProyectosPage() {
                                         <p className={styles.tagline}>{project.tagline}</p>
                                         <p className={styles.desc}>{project.description}</p>
                                         <div className={styles.meta}>
-                                            <span>📍 {project.distance}</span>
+                                            <span>{project.distance}</span>
                                             <span>📐 {project.lotSize}</span>
                                         </div>
                                     </div>
