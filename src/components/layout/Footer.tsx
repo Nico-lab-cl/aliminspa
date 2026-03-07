@@ -65,6 +65,8 @@ export default function Footer() {
                             <li><Link href="/#beneficios">Beneficios</Link></li>
                             <li><Link href="/#ubicacion">Ubicación</Link></li>
                             <li><Link href="/contacto">Contacto</Link></li>
+                            <li><Link href="/politica-de-privacidad">Política de Privacidad</Link></li>
+                            <li><Link href="/terminos-del-servicio">Términos del Servicio</Link></li>
                         </ul>
                     </div>
 
