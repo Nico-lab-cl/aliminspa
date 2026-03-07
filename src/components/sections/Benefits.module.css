@@ -1,6 +1,7 @@
 .section {
     position: relative;
     overflow: hidden;
+    background: var(--bg-alt);
 }
 
 .bgOrb1 {
@@ -40,16 +41,16 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 2rem;
-    backdrop-filter: blur(10px);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     text-align: center;
+    box-shadow: var(--shadow-sm);
 }
 
 .card:hover {
     background: var(--bg-card-hover);
     border-color: var(--border-hover);
     transform: translateY(-6px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
 }
 
 .card:hover .iconWrapper {

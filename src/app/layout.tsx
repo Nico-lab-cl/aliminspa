@@ -100,7 +100,7 @@ export default function RootLayout({
         <link rel="icon" href="/images/logo-alimin.png" />
         <link rel="apple-touch-icon" href="/images/logo-alimin.png" />
         <link rel="shortcut icon" href="/images/logo-alimin.png" />
-        <meta name="theme-color" content="#0B0F19" />
+        <meta name="theme-color" content="#FFFFFF" />
         <RealEstateAgentSchema />
         <LocalBusinessSchema />
       </head>
