@@ -4,11 +4,11 @@
     left: 0;
     right: 0;
     z-index: 100;
-    height: calc(var(--navbar-height) + 20px);
+    height: calc(var(--navbar-height) + 30px);
     display: flex;
     align-items: center;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    background: transparent;
+    background: #FFFFFF;
 }
 
 .scrolled {
@@ -47,8 +47,8 @@
 }
 
 .link {
-    padding: 0.55rem 1rem;
-    font-size: 0.95rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #183863;
     border-radius: var(--radius-sm);
@@ -103,8 +103,8 @@
 }
 
 .ctaDesktop {
-    padding: 0.65rem 1.4rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 1.6rem;
+    font-size: 1rem;
 }
 
 .ctaMobile {
