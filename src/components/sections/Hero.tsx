@@ -14,9 +14,18 @@ export default function Hero() {
 
     return (
         <section className={styles.hero} id="hero">
-            {/* Background image with overlay */}
+            {/* Background video with overlay */}
             <div className={styles.bgWrapper}>
-                <div className={styles.bgImage} />
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className={styles.video}
+                    poster="/images/hero/hero-bg.webp"
+                >
+                    <source src="/hero-video.mp4" type="video/mp4" />
+                </video>
                 <div className={styles.overlay} />
             </div>
 
