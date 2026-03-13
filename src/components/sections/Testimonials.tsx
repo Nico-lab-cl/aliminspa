@@ -78,8 +78,9 @@ export default function Testimonials() {
             <div className="container">
                 <div className="section-header">
                     <AnimatedSection>
+                        <span className="section-label">Testimonios</span>
                         <h2 className="section-title">
-                            Más de 50 familias han encontrado su lugar ideal en el Litoral Central con Alimin Inmobiliaria
+                            +50 familias han encontrado su hogar con nosotros
                         </h2>
                     </AnimatedSection>
                 </div>
