@@ -17,6 +17,22 @@ const TESTIMONIALS = [
 export default function Testimonials() {
     const [lightboxOpen, setLightboxOpen] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [itemsToShow, setItemsToShow] = useState(1)
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setItemsToShow(3)
+            } else if (window.innerWidth >= 768) {
+                setItemsToShow(2)
+            } else {
+                setItemsToShow(1)
+            }
+        }
+        handleResize()
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
 
     useEffect(() => {
         if (lightboxOpen) {
@@ -36,7 +52,7 @@ export default function Testimonials() {
             }
         }, 5000)
         return () => clearInterval(interval)
-    }, [lightboxOpen, currentIndex])
+    }, [lightboxOpen, currentIndex, itemsToShow])
 
     const openLightbox = (index: number) => {
         setCurrentIndex(index)
@@ -48,11 +64,11 @@ export default function Testimonials() {
     }
 
     const goToPrev = () => {
-        setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1))
+        setCurrentIndex((prev: number) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1))
     }
 
     const goToNext = () => {
-        setCurrentIndex((prev) => (prev === TESTIMONIALS.length - 1 ? 0 : prev + 1))
+        setCurrentIndex((prev: number) => (prev === TESTIMONIALS.length - 1 ? 0 : prev + 1))
     }
 
     return (
@@ -87,11 +103,20 @@ export default function Testimonials() {
                 </AnimatedSection>
 
                 <div className={styles.carouselContainer}>
-                    <div className={styles.carouselTrack} style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                    <div 
+                        className={styles.carouselTrack} 
+                        style={{ 
+                            transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)` 
+                        }}
+                    >
                         {TESTIMONIALS.map((testimonial, i) => (
-                            <div key={testimonial.id} className={styles.slide}>
+                            <div 
+                                key={testimonial.id} 
+                                className={styles.slide}
+                                style={{ flex: `0 0 ${100 / itemsToShow}%` }}
+                            >
                                 <button
-                                    className={styles.card}
+                                    className={`${styles.card} ${i === currentIndex ? styles.activeCard : ''}`}
                                     onClick={() => openLightbox(i)}
                                     aria-label={`Ver testimonio ${testimonial.id}`}
                                 >
@@ -100,9 +125,9 @@ export default function Testimonials() {
                                             src={testimonial.src}
                                             alt={testimonial.alt}
                                             fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             className={styles.image}
-                                            priority={i === 0}
+                                            priority={i < itemsToShow}
                                         />
                                         <div className={styles.overlay}>
                                             <span className={styles.zoomIcon}>
