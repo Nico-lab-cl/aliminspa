@@ -15,6 +15,7 @@ export default function Footer() {
                             src="/images/logo-alimin-color.png"
                             alt={`${SITE.shortName} - Inmobiliaria en El Tabo`}
                             width={130}
+                            height={40}
                         />
                         <p className={styles.desc}>
                             Proyectos inmobiliarios y venta de terrenos en El Tabo, Litoral Central.
