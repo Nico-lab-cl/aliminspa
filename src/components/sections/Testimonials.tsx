@@ -78,27 +78,25 @@ export default function Testimonials() {
             <div className="container">
                 <div className="section-header">
                     <AnimatedSection>
-                        <span className="section-label">Testimonios</span>
                         <h2 className="section-title">
-                            Familias que ya confiaron en nosotros
-                        </h2>
-                        <p className="section-subtitle">
                             Más de 50 familias han encontrado su lugar ideal en el Litoral Central con Alimin Inmobiliaria
-                        </p>
+                        </h2>
                     </AnimatedSection>
                 </div>
 
                 <AnimatedSection delay={0.2}>
-                    <div className={styles.badge}>
-                        <span className={styles.badgeIcon}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                        </span>
-                        <span className={styles.badgeText}>+50 familias confían en nosotros</span>
+                    <div className={styles.badgeWrapper}>
+                        <div className={styles.badge}>
+                            <span className={styles.badgeIcon}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </span>
+                            <span className={styles.badgeText}>+50 familias confían en nosotros</span>
+                        </div>
                     </div>
                 </AnimatedSection>
 

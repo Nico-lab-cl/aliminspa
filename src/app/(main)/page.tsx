@@ -14,8 +14,8 @@ export default function HomePage() {
       <FAQSchema />
       <Hero />
       <Projects />
-      <Testimonials />
       <Benefits />
+      <Testimonials />
       <Location />
       <ContactForm />
       <FAQ />
