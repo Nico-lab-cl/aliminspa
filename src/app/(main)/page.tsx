@@ -1,5 +1,6 @@
 import Hero from '@/components/sections/Hero'
 import Projects from '@/components/sections/Projects'
+import Testimonials from '@/components/sections/Testimonials'
 import Benefits from '@/components/sections/Benefits'
 import Location from '@/components/sections/Location'
 import ContactForm from '@/components/sections/ContactForm'
@@ -13,6 +14,7 @@ export default function HomePage() {
       <FAQSchema />
       <Hero />
       <Projects />
+      <Testimonials />
       <Benefits />
       <Location />
       <ContactForm />

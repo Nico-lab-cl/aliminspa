@@ -1,16 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { SITE } from '@/lib/constants'
 import styles from './Hero.module.css'
 
 export default function Hero() {
-    const [loaded, setLoaded] = useState(false)
-
-    useEffect(() => {
-        setLoaded(true)
-    }, [])
+    const [loaded] = useState(true)
 
     return (
         <section className={styles.hero} id="hero">
