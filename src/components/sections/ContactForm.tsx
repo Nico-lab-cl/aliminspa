@@ -1,11 +1,14 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { PROJECTS } from '@/lib/constants'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import styles from './ContactForm.module.css'
 
-export default function ContactForm() {
+function ContactFormInner() {
+    const searchParams = useSearchParams()
+    
     const [form, setForm] = useState({
         nombre: '',
         email: '',
@@ -20,10 +23,19 @@ export default function ContactForm() {
         setStatus('loading')
 
         try {
+            // Capturar UTMs de la URL
+            const utm_data = {
+                utm_source: searchParams.get('utm_source'),
+                utm_medium: searchParams.get('utm_medium'),
+                utm_campaign: searchParams.get('utm_campaign'),
+                utm_content: searchParams.get('utm_content'),
+                utm_term: searchParams.get('utm_term'),
+            }
+
             const res = await fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
+                body: JSON.stringify({ ...form, ...utm_data }),
             })
 
             if (!res.ok) throw new Error('Error al enviar')
@@ -165,5 +177,13 @@ export default function ContactForm() {
                 </div>
             </div>
         </section>
+    )
+}
+
+export default function ContactForm() {
+    return (
+        <Suspense fallback={<div>Cargando formulario...</div>}>
+            <ContactFormInner />
+        </Suspense>
     )
 }

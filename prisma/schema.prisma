@@ -14,6 +14,11 @@ model Lead {
   ciudad    String
   proyecto  String?
   fuente    String   @default("web")
+  utm_source   String?
+  utm_medium   String?
+  utm_campaign String?
+  utm_content  String?
+  utm_term     String?
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("leads")
