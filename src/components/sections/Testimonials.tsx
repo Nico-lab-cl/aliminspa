@@ -6,12 +6,12 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import styles from './Testimonials.module.css'
 
 const TESTIMONIALS = [
-    { id: 1, src: '/images/testimonials/testimonio-1.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 2, src: '/images/testimonials/testimonio-2.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 3, src: '/images/testimonials/testimonio-3.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 4, src: '/images/testimonials/testimonio-4.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 5, src: '/images/testimonials/testimonio-5.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 6, src: '/images/testimonials/testimonio-6.webp', alt: 'Familia satisfecha Alimin' },
+    { id: 1, src: '/images/testimonials/testimonio-1.jpg', alt: 'Familia satisfecha Alimin' },
+    { id: 2, src: '/images/testimonials/testimonio-2.jpg', alt: 'Familia satisfecha Alimin' },
+    { id: 3, src: '/images/testimonials/testimonio-3.jpg', alt: 'Familia satisfecha Alimin' },
+    { id: 4, src: '/images/testimonials/testimonio-4.jpg', alt: 'Familia satisfecha Alimin' },
+    { id: 5, src: '/images/testimonials/testimonio-5.jpg', alt: 'Familia satisfecha Alimin' },
+    { id: 6, src: '/images/testimonials/testimonio-6.jpg', alt: 'Familia satisfecha Alimin' },
 ] as const
 
 export default function Testimonials() {
