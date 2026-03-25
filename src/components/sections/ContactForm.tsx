@@ -23,6 +23,18 @@ function ContactFormInner() {
         setStatus('loading')
 
         try {
+            // Helper para obtener cookies del navegador (Meta Pixel)
+            const getCookie = (name: string) => {
+                if (typeof document === 'undefined') return undefined
+                const value = `; ${document.cookie}`
+                const parts = value.split(`; ${name}=`)
+                if (parts.length === 2) return parts.pop()?.split(';').shift()
+                return undefined
+            }
+
+            const fbp = getCookie('_fbp')
+            const fbc = getCookie('_fbc')
+
             // Capturar UTMs de la URL
             const utm_data = {
                 utm_source: searchParams.get('utm_source'),
@@ -35,7 +47,7 @@ function ContactFormInner() {
             const res = await fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...form, ...utm_data }),
+                body: JSON.stringify({ ...form, ...utm_data, fbp, fbc }),
             })
 
             if (!res.ok) throw new Error('Error al enviar')

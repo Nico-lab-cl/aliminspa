@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { PROJECTS, SITE } from '@/lib/constants'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { BreadcrumbSchema } from '@/components/seo/JsonLd'
+import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import styles from './page.module.css'
 
 export const metadata: Metadata = {
@@ -17,6 +18,12 @@ export const metadata: Metadata = {
 export default function ProyectosPage() {
     return (
         <>
+            <MetaTrackPageView 
+                eventName="ViewContent"
+                customData={{ 
+                    content_category: 'Real Estate Catalog',
+                }} 
+            />
             <BreadcrumbSchema
                 items={[
                     { name: 'Inicio', url: SITE.url },

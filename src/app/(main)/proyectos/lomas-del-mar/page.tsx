@@ -5,6 +5,7 @@ import { PROJECTS, SITE } from '@/lib/constants'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import ContactForm from '@/components/sections/ContactForm'
 import { BreadcrumbSchema } from '@/components/seo/JsonLd'
+import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 
 const project = PROJECTS[0] // Lomas del Mar
 
@@ -17,6 +18,13 @@ export const metadata: Metadata = {
 export default function LomasDelMarPage() {
     return (
         <>
+            <MetaTrackPageView 
+                customData={{ 
+                    content_name: project.name, 
+                    content_category: 'Real Estate',
+                    content_type: 'product' 
+                }} 
+            />
             <BreadcrumbSchema
                 items={[
                     { name: 'Inicio', url: SITE.url },
