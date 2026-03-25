@@ -9,6 +9,7 @@ export const SITE = {
     email: 'bienesraices@aliminspa.cl',
     address: 'El Tabo, Región de Valparaíso, Chile',
     gtmId: 'GTM-TMLPLBN3',
+    pixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || '1998226647754673',
     social: {
         instagram: '',
         facebook: '',
