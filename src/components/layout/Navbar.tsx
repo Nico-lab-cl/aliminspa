@@ -38,7 +38,7 @@ export default function Navbar() {
             <nav className={styles.nav} aria-label="Navegación principal">
                 <Link href="/" className={styles.logo} aria-label={`${SITE.shortName} - Inicio`}>
                     <Image
-                        src="/images/home_redesign/logo.png.png"
+                        src="/images/home_redesign/logo.webp.webp"
                         alt={`${SITE.shortName} Inmobiliaria`}
                         width={200}
                         height={50}

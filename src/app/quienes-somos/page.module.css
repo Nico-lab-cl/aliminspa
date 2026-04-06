@@ -18,7 +18,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: url('/images/team-bg.png') center/cover no-repeat;
+    background: url('/images/team-bg.webp') center/cover no-repeat;
     opacity: 0.15;
     /* Subtle blend with dark mode */
     transform: scale(1.05);

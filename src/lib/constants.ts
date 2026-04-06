@@ -145,17 +145,17 @@ export const BENEFITS = [
 ] as const
 
 export const MINI_BENEFITS = [
-    { iconImage: '/images/home_redesign/1.png_1.png', label: 'Rol propio' },
-    { iconImage: '/images/home_redesign/2.png_1.png', label: 'Proyectos legales y urbanizados' },
-    { iconImage: '/images/home_redesign/3.png_1.png', label: 'Agua certificada por la SEREMI' },
-    { iconImage: '/images/home_redesign/4.png_1.png', label: 'Luz' },
-    { iconImage: '/images/home_redesign/5.png_1.png', label: 'Portón automático' },
-    { iconImage: '/images/home_redesign/6.png_1.png', label: 'Recinto cerrado' },
-    { iconImage: '/images/home_redesign/7.png_1.png', label: 'Calles compactadas con maicillo' },
-    { iconImage: '/images/home_redesign/8.png_1.png', label: 'luminarias solares' },
-    { iconImage: '/images/home_redesign/9.png_1.png', label: 'veredas con soleras' },
-    { iconImage: '/images/home_redesign/10.png_1.png', label: 'Estacionamiento para visitas' },
-    { iconImage: '/images/home_redesign/11.png_1.png', label: 'Áreas verdes' },
+    { iconImage: '/images/home_redesign/1.webp_1.webp', label: 'Rol propio' },
+    { iconImage: '/images/home_redesign/2.webp_1.webp', label: 'Proyectos legales y urbanizados' },
+    { iconImage: '/images/home_redesign/3.webp_1.webp', label: 'Agua certificada por la SEREMI' },
+    { iconImage: '/images/home_redesign/4.webp_1.webp', label: 'Luz' },
+    { iconImage: '/images/home_redesign/5.webp_1.webp', label: 'Portón automático' },
+    { iconImage: '/images/home_redesign/6.webp_1.webp', label: 'Recinto cerrado' },
+    { iconImage: '/images/home_redesign/7.webp_1.webp', label: 'Calles compactadas con maicillo' },
+    { iconImage: '/images/home_redesign/8.webp_1.webp', label: 'luminarias solares' },
+    { iconImage: '/images/home_redesign/9.webp_1.webp', label: 'veredas con soleras' },
+    { iconImage: '/images/home_redesign/10.webp_1.webp', label: 'Estacionamiento para visitas' },
+    { iconImage: '/images/home_redesign/11.webp_1.webp', label: 'Áreas verdes' },
 ] as const
 
 export const FAQ_ITEMS = [

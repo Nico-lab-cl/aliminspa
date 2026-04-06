@@ -7,7 +7,7 @@ const NEW_PROJECTS = [
     {
         id: 'lomas',
         title: 'Lomas del Mar',
-        image: '/images/home_redesign/29.png',
+        image: '/images/home_redesign/29.webp',
         tagline: 'Tu refugio cerca al mar',
         desc: 'Una inversión inteligente y fugaz. Terrenos urbanizados con vista al mar en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía.',
         alert: '¡Solo el 25% disponible!',
@@ -16,7 +16,7 @@ const NEW_PROJECTS = [
     {
         id: 'arena',
         title: 'Arena y Sol',
-        image: '/images/home_redesign/30.png',
+        image: '/images/home_redesign/30.webp',
         tagline: '¡Tu propio lugar en El Tabo!',
         subdesc: 'Terrenos urbanizados de 200 m2',
         desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
@@ -26,7 +26,7 @@ const NEW_PROJECTS = [
     {
         id: 'libertad',
         title: 'Libertad y Alegría',
-        image: '/images/home_redesign/31.png',
+        image: '/images/home_redesign/31.webp',
         tagline: '¡Tu propio lugar en El Tabo!',
         subdesc: 'Terrenos urbanizados de 200 m2',
         desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
@@ -79,7 +79,7 @@ export default function Projects() {
                     <div className={styles.divider} />
                     <div className={styles.leafIcon}>
                         <Image 
-                            src="/images/home_redesign/logo.png.png" 
+                            src="/images/home_redesign/logo.webp.webp" 
                             alt="Alimin Logo" 
                             width={160} 
                             height={90}
