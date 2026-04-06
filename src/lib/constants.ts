@@ -22,7 +22,7 @@ export const PROJECTS = [
         name: 'Lomas del Mar',
         slug: 'lomas-del-mar',
         tagline: 'Tu refugio cerca al mar',
-        description: 'Una inversión inteligente y fugaz. Terrenos urbanizados con vista al mar en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía. ¡Solo el 25% disponible!',
+        description: 'Una inversión inteligente. Terrenos urbanizados en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía. ¡Solo el 25% disponible!',
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
         location: 'El Tabo, Región de Valparaíso',
         distance: 'A 8 MINUTOS DE LA PLAYA DEL TABO',

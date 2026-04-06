@@ -9,7 +9,7 @@ const NEW_PROJECTS = [
         title: 'Lomas del Mar',
         image: '/images/home_redesign/29.webp',
         tagline: 'Tu refugio cerca al mar',
-        desc: 'Una inversión inteligente y fugaz. Terrenos urbanizados con vista al mar en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía.',
+        desc: 'Una inversión inteligente. Terrenos urbanizados en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía.',
         alert: '¡Solo el 25% disponible!',
         href: 'https://aliminlomasdelmar.com?utm_source=aliminspa.cl&utm_medium=boton_reservas&utm_campaign=home_projects',
         target: '_blank'
