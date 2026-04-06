@@ -40,21 +40,7 @@ export default function Steps() {
                                 <circle cx="12" cy="12" r="12" fill="var(--gold)"/>
                                 <path d="M10 16.4l-4-4 1.4-1.4 2.6 2.6 6.6-6.6 1.4 1.4z" fill="#2F4F4F"/>
                             </svg>
-                            <span>Documento Nacional de Identidad <span className={styles.textGold}>(DNI)</span> vigente</span>
-                        </li>
-                        <li>
-                            <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="12" fill="var(--gold)"/>
-                                <path d="M10 16.4l-4-4 1.4-1.4 2.6 2.6 6.6-6.6 1.4 1.4z" fill="#2F4F4F"/>
-                            </svg>
-                            <span><span className={styles.textGold}>Comprobante</span> de domicilio (Servicios)</span>
-                        </li>
-                        <li>
-                            <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="12" fill="var(--gold)"/>
-                                <path d="M10 16.4l-4-4 1.4-1.4 2.6 2.6 6.6-6.6 1.4 1.4z" fill="#2F4F4F"/>
-                            </svg>
-                            <span>Comprobantes de <span className={styles.textGold}>ingresos mensuales</span></span>
+                            <span>Cédula de Identidad <span className={styles.textGold}>(RUT)</span> vigente</span>
                         </li>
                         <li>
                             <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="currentColor">
