@@ -12,8 +12,8 @@ export default function Location() {
                             Terrenos en el Litoral Central de Chile
                         </h2>
                         <p className="section-subtitle">
-                            Nuestros proyectos se ubican en El Tabo, con acceso directo a
-                            playas, centros comerciales y la ruta que conecta con Santiago.
+                            Nuestros proyectos se ubican en El Tabo, a solo 8 minutos de la
+                            playa, centros comerciales y la ruta que conecta con Santiago.
                         </p>
                     </AnimatedSection>
                 </div>
