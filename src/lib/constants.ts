@@ -21,11 +21,11 @@ export const PROJECTS = [
         id: 'lomas-del-mar',
         name: 'Lomas del Mar',
         slug: 'lomas-del-mar',
-        tagline: 'Tu refugio frente al mar',
+        tagline: 'Tu refugio cerca al mar',
         description: 'Una inversión inteligente y fugaz. Terrenos urbanizados con vista al mar en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía. ¡Solo el 25% disponible!',
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
         location: 'El Tabo, Región de Valparaíso',
-        distance: 'A 7 minutos de la playa',
+        distance: 'A 8 MINUTOS DE LA PLAYA DEL TABO',
         lotSize: 'Desde 200 m²',
         status: 'Terrenos Disponibles',
         soldPercentage: 25,
@@ -33,38 +33,81 @@ export const PROJECTS = [
         image: '/images/projects/lomas-del-mar.webp',
         color: '#006D77', // Deep sea teal
         isFeatured: true,
+        financing: {
+            showDicom: true,
+            hasDirectCredit: true,
+            options: [
+                {
+                    pie: '$1.500.000',
+                    terreno: '200 m²',
+                    valorTotal: '$23.990.000',
+                    cuotaReferencial: '$250.000',
+                    plazo: '90 Cuotas'
+                },
+                {
+                    pie: '$3.500.000',
+                    terreno: '200 m²',
+                    valorTotal: '$24.990.000',
+                    cuotaReferencial: '$300.000',
+                    plazo: '72 Cuotas'
+                }
+            ]
+        }
     },
     {
         id: 'arena-y-sol',
         name: 'Arena y Sol',
         slug: 'arena-y-sol',
         tagline: '¡Tu propio lugar en El Tabo!',
-        description: 'Terrenos urbanizados de 200 m². Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
+        description: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
         location: 'El Tabo, Región de Valparaíso',
-        distance: 'A 10 minutos de la playa',
+        distance: 'A 10 MINUTOS DE LA PLAYA DEL TABO',
         lotSize: '200 m²',
         status: 'Últimos Terrenos',
         externalUrl: null,
         image: '/images/projects/arena-y-sol.webp',
         color: '#B8860B', // Dark goldenrod
         isFeatured: false,
+        financing: {
+            showDicom: true,
+            hasDirectCredit: false,
+            options: [
+                {
+                    terreno: '200 m²',
+                    pie: '$15.000.000',
+                    cuotaReferencial: '$500.000',
+                    valorTotal: '39.990.000',
+                    pagoContado: '35.000.000'
+                }
+            ]
+        }
     },
     {
         id: 'libertad-y-alegria',
         name: 'Libertad y Alegría',
         slug: 'libertad-y-alegria',
-        tagline: 'Vive con libertad, llena de alegría',
-        description: 'Proyecto exitoso y completamente vendido. Gracias a todos los que confiaron en la calidad y seguridad de Alimin Inmobiliaria.',
+        tagline: '¡Tu propio lugar en El Tabo!',
+        description: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Acceso Pavimentado'],
         location: 'El Tabo, Región de Valparaíso',
-        distance: 'A minutos de la playa',
+        distance: 'A 10 MINUTOS DE LA PLAYA DEL TABO',
         lotSize: 'Desde 200 m²',
         status: 'Proyecto Vendido',
         externalUrl: null,
         image: '/images/projects/libertad-y-alegria.webp',
         color: '#4A4A4A', // Muted gray for sold out
         isFeatured: false,
+        financing: {
+            showDicom: false,
+            hasDirectCredit: false,
+            options: [
+                {
+                    terreno: '200 m²',
+                    pagoContado: '$56.990.000'
+                }
+            ]
+        }
     },
 ] as const
 
@@ -99,6 +142,20 @@ export const BENEFITS = [
         title: 'Financiamiento Directo',
         description: 'Facilidades de pago sin necesidad de crédito bancario. Pie desde el 20%.',
     },
+] as const
+
+export const MINI_BENEFITS = [
+    { iconImage: '/images/home_redesign/1.png_1.png', label: 'Rol propio' },
+    { iconImage: '/images/home_redesign/2.png_1.png', label: 'Proyectos legales y urbanizados' },
+    { iconImage: '/images/home_redesign/3.png_1.png', label: 'Agua certificada por la SEREMI' },
+    { iconImage: '/images/home_redesign/4.png_1.png', label: 'Luz' },
+    { iconImage: '/images/home_redesign/5.png_1.png', label: 'Portón automático' },
+    { iconImage: '/images/home_redesign/6.png_1.png', label: 'Recinto cerrado' },
+    { iconImage: '/images/home_redesign/7.png_1.png', label: 'Calles compactadas con maicillo' },
+    { iconImage: '/images/home_redesign/8.png_1.png', label: 'luminarias solares' },
+    { iconImage: '/images/home_redesign/9.png_1.png', label: 'veredas con soleras' },
+    { iconImage: '/images/home_redesign/10.png_1.png', label: 'Estacionamiento para visitas' },
+    { iconImage: '/images/home_redesign/11.png_1.png', label: 'Áreas verdes' },
 ] as const
 
 export const FAQ_ITEMS = [

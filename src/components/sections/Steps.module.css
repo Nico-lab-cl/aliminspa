@@ -1,0 +1,239 @@
+.section {
+    padding: 2rem 0 6rem;
+    background-color: #2F4F4F;
+    color: white;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.title {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.titleItalic {
+    font-style: italic;
+    font-weight: 400;
+}
+
+.highlight {
+    color: #eab308; /* Deeper intense gold from Testimonials pattern */
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem); /* Slightly larger */
+}
+
+.stepsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto 4rem;
+}
+
+.step {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--gold);
+    color: #2F4F4F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    box-shadow: 4px 6px 12px rgba(0,0,0,0.4); /* Solid deep shadow matches mockup */
+}
+
+.stepTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.stepDesc {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.requisitosPanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+    flex-wrap: wrap;
+}
+
+.requisitosTitle {
+    font-size: clamp(2.5rem, 4vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+    flex: 1;
+    min-width: 250px;
+    text-align: right;
+}
+
+.requisitosList {
+    flex: 2;
+    min-width: 300px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.requisitosList li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.1rem;
+}
+
+.checkIcon {
+    width: 28px;
+    height: 28px;
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+.ctas {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.textGold {
+    color: #eab308;
+    font-weight: 600;
+}
+
+.btnProjectSolid {
+    background-color: #eab308;
+    color: white;
+    border-radius: 50px;
+    padding: 1rem 3rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.btnProjectSolid:hover {
+    background-color: #c49405;
+}
+
+.btnWhatsApp {
+    background-color: #5cc235;
+    color: white;
+    border-radius: 50px;
+    padding: 1rem 3rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+}
+
+.btnWhatsApp:hover {
+    background-color: #4da32d;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+@media (max-width: 768px) {
+    .section { padding: 3rem 0; }
+    .header { margin-bottom: 2rem; overflow: hidden; }
+    
+    .titleItalic, .highlight {
+        font-size: clamp(1rem, 4.5vw, 1.8rem);
+        white-space: nowrap;
+        display: block;
+    }
+
+    .stepsGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .step {
+        min-width: 0;
+    }
+
+    .step:nth-child(3) {
+        grid-column: 1 / -1;
+        max-width: 250px;
+        margin: 0 auto;
+    }
+
+    .circle {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .stepTitle {
+        font-size: 1rem;
+    }
+
+    .stepDesc {
+        font-size: 0.8rem;
+    }
+    
+    .requisitosPanel { 
+        flex-direction: column; 
+        gap: 2rem; 
+        padding: 0 1rem; 
+    }
+    
+    .requisitosTitle { 
+        text-align: center; 
+        font-size: 2.2rem; 
+    }
+    
+    .requisitosList { 
+        width: 100%; 
+    }
+    
+    .ctas { 
+        flex-direction: column; 
+        width: 100%;
+        max-width: 350px;
+        margin: 1rem auto 0;
+    }
+    
+    .btnProjectSolid, .btnWhatsApp { 
+        width: 100%; 
+        display: block; 
+        text-align: center; 
+        padding: 1.1rem;
+    }
+}

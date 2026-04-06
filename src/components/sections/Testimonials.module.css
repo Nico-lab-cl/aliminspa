@@ -1,362 +1,141 @@
 .section {
-    background: var(--bg-alt);
-    overflow: hidden;
+    padding: 0 0 6rem;
+    background-color: #2F4F4F; /* Match Background of Benefits/Steps */
+    color: white;
 }
 
-.bgOrb {
-    position: absolute;
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(197, 160, 89, 0.05) 0%, transparent 70%);
-    top: -300px;
-    left: -300px;
-    pointer-events: none;
-    z-index: 0;
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
 }
 
-.badgeWrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: rgba(197, 160, 89, 0.08);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(197, 160, 89, 0.15);
-    color: var(--gold-dark);
-    padding: 0.65rem 1.5rem;
-    border-radius: var(--radius-full);
+.title {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
     font-weight: 600;
-    font-size: 0.95rem;
-    margin-bottom: 3.5rem;
-    position: relative;
-    z-index: 1;
-    transition: all var(--transition-base);
+    line-height: 1.15;
+    margin: 0;
 }
 
-.badge:hover {
-    background: rgba(197, 160, 89, 0.15);
-    transform: translateY(-2px);
+.highlight {
+    color: #ffc107; /* Super intense gold/yellow per user request */
+    font-weight: 600;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-.badgeIcon {
+.carouselWrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 50%;
-}
-
-.badgeText {
-    letter-spacing: 0.02em;
+    gap: 0.5rem;
+    max-width: 1600px; /* Big increase to make images larger */
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .carouselContainer {
-    position: relative;
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    overflow: visible;
-    padding: 2rem 0 4rem;
-    z-index: 1;
+    flex: 1;
+    overflow: hidden;
 }
 
 .carouselTrack {
     display: flex;
-    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-    will-change: transform;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .slide {
-    padding: 0 1rem;
-    transition: all 0.5s ease;
+    min-width: 0; 
 }
 
 .card {
     position: relative;
-    border: none;
-    padding: 0;
-    background: white;
-    cursor: pointer;
-    border-radius: var(--radius-xl);
+    border-radius: 4px;
     overflow: hidden;
-    aspect-ratio: 4/5;
-    width: 100%;
-    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    background: transparent;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s;
+    height: 100%;
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.activeCard {
-    transform: scale(1.05);
-}
-
-.card:focus {
-    outline: 2px solid var(--gold);
-    outline-offset: 4px;
-}
-
-.imageWrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: inherit;
+    transform: scale(1.02);
 }
 
 .image {
-    object-fit: cover;
-    transition: transform var(--transition-slow);
+    width: 100%;
+    height: auto;
+    display: block; /* Removes inline rendering blanks under image */
 }
 
-.card:hover .image {
-    transform: scale(1.08);
-}
-
-.overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-base);
-}
-
-.card:hover .overlay {
-    background: rgba(0, 0, 0, 0.4);
-}
-
-.zoomIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
+.navButton {
     background: white;
+    color: #2F4F4F;
+    border: none;
     border-radius: 50%;
-    color: var(--gold);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    flex-shrink: 0;
 }
 
-.card:hover .zoomIcon {
-    opacity: 1;
-    transform: translateY(0);
+.navButton:hover {
+    transform: scale(1.1);
 }
 
-/* Lightbox */
+/* Lightbox styles */
 .lightbox {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0,0,0,0.85);
     z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.lightboxClose {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-fast);
-    z-index: 10;
-}
-
-.lightboxClose:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: rotate(90deg);
-}
-
-.lightboxNav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 52px;
-    height: 52px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-fast);
-    z-index: 10;
-}
-
-.lightboxNav:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
-
-.lightboxPrev {
-    left: 1.5rem;
-}
-
-.lightboxNext {
-    right: 1.5rem;
+    padding: 2rem;
+    backdrop-filter: blur(5px);
 }
 
 .lightboxContent {
-    max-width: 90vw;
-    max-height: 85vh;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+    max-height: 85vh;
 }
 
 .lightboxImage {
-    max-width: 100%;
-    max-height: 80vh;
     object-fit: contain;
-    border-radius: var(--radius-md);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-.lightboxCounter {
-    margin-top: 1rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-}
-
-/* Navigation */
-.navButton {
+.closeBtn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: white;
-    border: none;
-    box-shadow: var(--shadow-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    color: var(--text);
-    transition: all var(--transition-base);
-    opacity: 0.8;
-}
-
-.navButton:hover {
-    opacity: 1;
-    background: var(--gold);
+    top: 20px;
+    right: 30px;
+    background: transparent;
     color: white;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.prevButton {
-    left: 1rem;
-}
-
-.nextButton {
-    right: 1rem;
-}
-
-.dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-}
-
-.dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(197, 160, 89, 0.3);
+    font-size: 2rem;
     border: none;
-    padding: 0;
     cursor: pointer;
-    transition: all var(--transition-base);
-}
-
-.activeDot {
-    background: var(--gold);
-    width: 24px;
-    border-radius: 10px;
+    z-index: 10000;
 }
 
 @media (max-width: 768px) {
-    .navButton {
-        width: 40px;
-        height: 40px;
-        top: auto;
-        bottom: 0;
-        transform: none;
-    }
-
-    .navButton:hover {
-        transform: scale(1.1);
-    }
-
-    .prevButton {
-        left: 20%;
-    }
-
-    .nextButton {
-        right: 20%;
-    }
-
-    .card {
-        aspect-ratio: 4/3;
-    }
-
-    .carouselContainer {
-        padding-bottom: 4rem;
+    .section {
+        padding: 0 0 3rem;
     }
     
-    .lightboxNav {
-        width: 44px;
-        height: 44px;
+    .title {
+        font-size: 1.8rem;
     }
     
-    .lightboxPrev {
-        left: 0.5rem;
-    }
-    
-    .lightboxNext {
-        right: 0.5rem;
-    }
-    
-    .lightboxClose {
-        top: 1rem;
-        right: 1rem;
-        width: 40px;
-        height: 40px;
+    .highlight {
+        font-size: clamp(1.2rem, 6vw, 1.6rem);
+        white-space: nowrap;
     }
 }

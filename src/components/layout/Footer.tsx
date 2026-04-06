@@ -12,13 +12,13 @@ export default function Footer() {
             <div className={styles.glow} />
             <div className="container">
                 <div className={styles.grid}>
-                    {/* Brand */}
                     <div className={styles.brand}>
                         <Image
-                            src="/images/logo-alimin-color.png"
+                            src="/images/home_redesign/logo.png.png"
                             alt={`${SITE.shortName} - Inmobiliaria en El Tabo`}
-                            width={130}
-                            height={40}
+                            width={160}
+                            height={90}
+                            style={{ objectFit: 'contain' }}
                         />
                         <p className={styles.desc}>
                             Proyectos inmobiliarios y venta de terrenos en El Tabo, Litoral Central.

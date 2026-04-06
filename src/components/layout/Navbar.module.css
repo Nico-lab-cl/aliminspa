@@ -3,227 +3,140 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
-    height: calc(var(--navbar-height) + 20px);
-    display: flex;
-    align-items: center;
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    background: #FFFFFF;
-}
-
-@media (min-width: 1200px) {
-    .header {
-        height: calc(var(--navbar-height) + 40px);
-    }
+    z-index: 1000;
+    transition: all 0.3s ease;
+    background-color: #2F4F4F; /* Solid dark background matching the image exactly */
 }
 
 .scrolled {
-    height: var(--navbar-height);
-    background: #FFFFFF;
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    background-color: #2F4F4F;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .nav {
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 .logo {
-    z-index: 101;
     display: flex;
     align-items: center;
-    transition: transform 0.2s ease;
-}
-
-.logo:hover {
-    transform: scale(1.03);
+    text-decoration: none;
+    z-index: 101;
 }
 
 .links {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
     list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2rem;
 }
 
 .link {
-    padding: 0.6rem 1.2rem;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #183863;
-    border-radius: var(--radius-sm);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
     position: relative;
-    letter-spacing: 0.02em;
-}
-
-@media (min-width: 1200px) {
-    .link {
-        font-size: 1.15rem;
-        padding: 0.7rem 1.5rem;
-    }
-}
-
-.link::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(197, 160, 89, 0.05);
-    border-radius: var(--radius-sm);
-    transform: scale(0.8);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: -1;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
 }
 
 .link:hover {
-    color: var(--gold-dark);
-}
-
-.link:hover::before {
-    transform: scale(1);
-    opacity: 1;
-}
-
-.link::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%) scaleX(0);
-    width: 25px;
-    height: 2px;
-    background: var(--gold);
-    border-radius: 2px;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: none;
-}
-
-.link:hover::after {
-    transform: translateX(-50%) scaleX(1);
+    color: var(--gold);
 }
 
 .actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
-}
-
-.ctaDesktop {
-    padding: 0.8rem 1.8rem;
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-@media (min-width: 1200px) {
-    .ctaDesktop {
-        padding: 0.9rem 2.2rem;
-        font-size: 1.1rem;
-    }
-}
-
-.ctaMobile {
-    display: none;
-}
-
-/* Hamburger */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 32px;
-    height: 32px;
     z-index: 101;
 }
 
-.hamburger span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: #183863;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    transform-origin: center;
+.ctaButton {
+    background-color: #d4af37; /* The exact gold from the image */
+    color: #2F4F4F;
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
 }
 
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
+.ctaButton:hover {
+    background-color: #f3e5ab; /* Lighter gold */
 }
 
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-}
-
+.hamburger,
 .overlay {
     display: none;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
+/* Mobile responsive */
+@media (max-width: 991px) {
     .links {
         position: fixed;
         top: 0;
         right: -100%;
-        width: 80%;
-        max-width: 320px;
-        height: 100vh;
+        bottom: 0;
+        width: 300px;
+        background-color: #2F4F4F;
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-        padding: calc(var(--navbar-height) + 2rem) 2rem 2rem;
-        background: #FFFFFF;
-        border-left: 1px solid var(--border);
-        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 100;
-        overflow-y: auto;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.3s ease;
+        z-index: 1000;
     }
 
     .links.open {
         right: 0;
-    }
-
-    .link {
-        font-size: 1.1rem;
-        padding: 0.9rem 0;
-        width: 100%;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .link::after {
-        display: none;
-    }
-
-    .ctaDesktop {
-        display: none;
-    }
-
-    .ctaMobile {
-        display: block;
-        width: 100%;
-        margin-top: 1.5rem;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
     }
 
     .hamburger {
         display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 24px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 1rem;
     }
+
+    .hamburger span {
+        width: 100%;
+        height: 3px;
+        background-color: #d4a946; /* Gold color requested */
+        border-radius: 10px;
+        transition: all 0.3s linear;
+        position: relative;
+        transform-origin: 1px;
+    }
+
+    .hamburger.active span:first-child { transform: rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
 
     .overlay {
         display: block;
         position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 99;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+    }
+
+    .ctaButton {
+        display: none; /* Hide on mobile as per mockup */
     }
 }

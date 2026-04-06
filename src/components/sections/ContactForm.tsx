@@ -66,14 +66,19 @@ function ContactFormInner() {
         <section className={`section ${styles.section}`} id="contacto">
             <div className={styles.bgOrb} />
 
-            <div className="container">
-                <div className={styles.wrapper}>
-                    <AnimatedSection>
+            <div className="container" style={{ position: 'relative' }}>
+                <div className={styles.header}>
+                    <h2 className={styles.mainTitle}>Cotizar Terreno en El Tabo</h2>
+                </div>
+                
+                <div className={styles.decorativeFrame}></div>
+
+                <AnimatedSection>
+                    <div className={styles.wrapper}>
                         <div className={styles.info}>
-                            <span className="section-label">Cotiza Tu Terreno</span>
-                            <h2 className={styles.title}>
+                            <h3 className={styles.boxTitle}>
                                 Cotizar Terreno en El Tabo
-                            </h2>
+                            </h3>
                             <p className={styles.desc}>
                                 Completa el formulario y un asesor te contactará con
                                 las mejores opciones de terrenos disponibles en nuestros
@@ -82,22 +87,20 @@ function ContactFormInner() {
 
                             <div className={styles.features}>
                                 <div className={styles.feature}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                                     <span>Respuesta en menos de 24 horas</span>
                                 </div>
                                 <div className={styles.feature}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                                     <span>Asesoría personalizada</span>
                                 </div>
                                 <div className={styles.feature}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                                     <span>Visitas guiadas sin costo</span>
                                 </div>
                             </div>
                         </div>
-                    </AnimatedSection>
 
-                    <AnimatedSection delay={200}>
                         <form className={styles.form} onSubmit={handleSubmit} id="form-contacto">
                             <div className="input-group">
                                 <label htmlFor="lead-nombre" className="input-label">Nombre completo</label>
@@ -185,8 +188,8 @@ function ContactFormInner() {
                                 </div>
                             )}
                         </form>
-                    </AnimatedSection>
-                </div>
+                    </div>
+                </AnimatedSection>
             </div>
         </section>
     )

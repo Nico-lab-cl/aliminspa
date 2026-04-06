@@ -1,111 +1,92 @@
-import Link from 'next/link'
+import React from 'react'
 import Image from 'next/image'
-import { PROJECTS } from '@/lib/constants'
-import AnimatedSection from '@/components/ui/AnimatedSection'
+import Link from 'next/link'
 import styles from './Projects.module.css'
+
+const NEW_PROJECTS = [
+    {
+        id: 'lomas',
+        title: 'Lomas del Mar',
+        image: '/images/home_redesign/29.png',
+        tagline: 'Tu refugio cerca al mar',
+        desc: 'Una inversión inteligente y fugaz. Terrenos urbanizados con vista al mar en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía.',
+        alert: '¡Solo el 25% disponible!',
+        href: '#contacto'
+    },
+    {
+        id: 'arena',
+        title: 'Arena y Sol',
+        image: '/images/home_redesign/30.png',
+        tagline: '¡Tu propio lugar en El Tabo!',
+        subdesc: 'Terrenos urbanizados de 200 m2',
+        desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
+        alert: '',
+        href: '#contacto'
+    },
+    {
+        id: 'libertad',
+        title: 'Libertad y Alegría',
+        image: '/images/home_redesign/31.png',
+        tagline: '¡Tu propio lugar en El Tabo!',
+        subdesc: 'Terrenos urbanizados de 200 m2',
+        desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
+        alert: '',
+        href: '#contacto'
+    }
+]
 
 export default function Projects() {
     return (
-        <section className="section" id="proyectos">
-            <div className="container">
-                <div className="section-header">
-                    <AnimatedSection>
-                        <span className="section-label">Nuestros Proyectos</span>
-                        <h2 className="section-title">
-                            Venta de Terrenos en El Tabo
-                        </h2>
-                        <p className="section-subtitle">
-                            Descubre nuestros proyectos inmobiliarios con terrenos urbanizados,
-                            rol propio y ubicación privilegiada en el Litoral Central.
-                        </p>
-                    </AnimatedSection>
+        <section className={styles.section} id="proyectos">
+            <div className={styles.fluidContainer}>
+                <div className={styles.header}>
+                    <h2 className={styles.title}>Nuestros Proyectos</h2>
                 </div>
 
                 <div className={styles.grid}>
-                    {PROJECTS.map((project, i) => {
-                        const isSoldOut = project.status === 'Proyecto Vendido';
-                        const hasSoldPercentage = 'soldPercentage' in project;
+                    {NEW_PROJECTS.map((proj) => (
+                        <div key={proj.id} className={styles.card}>
+                            <h3 className={styles.cardTitle}>{proj.title}</h3>
+                            
+                            <div className={styles.imageWrapper}>
+                                <Image
+                                    src={proj.image}
+                                    alt={proj.title}
+                                    width={400}
+                                    height={500}
+                                    className={styles.graphicImg}
+                                />
+                            </div>
 
-                        return (
-                            <AnimatedSection key={project.id} delay={i * 120}>
-                                <div className={`${styles.card} ${isSoldOut ? styles.soldOut : ''} ${project.isFeatured ? styles.featured : ''}`}>
-                                    <Link
-                                        href={project.externalUrl || `/proyectos/${project.slug}`}
-                                        target={project.externalUrl ? '_blank' : undefined}
-                                        rel={project.externalUrl ? 'noopener noreferrer' : undefined}
-                                        className={styles.cardLink}
-                                    >
-                                        <div className={styles.imageWrapper}>
-                                            <Image
-                                                src={project.image}
-                                                alt={`${project.name} - Terrenos en venta en El Tabo, Litoral Central`}
-                                                width={600}
-                                                height={360}
-                                                className={styles.image}
-                                            />
-                                            <div className={styles.imageOverlay} />
-                                            <span
-                                                className={styles.status}
-                                                style={{ background: project.color }}
-                                            >
-                                                {project.status}
-                                            </span>
+                            <div className={styles.infoWrapper}>
+                                <h4 className={styles.tagline}>{proj.tagline}</h4>
+                                {proj.subdesc && <p className={styles.subdesc}>{proj.subdesc}</p>}
+                                <p className={styles.desc}>{proj.desc}</p>
+                                {proj.alert && <p className={styles.alert}>{proj.alert}</p>}
+                            </div>
 
-                                            {hasSoldPercentage && (
-                                                <div className={styles.progressBadge}>
-                                                    <span className={styles.progressText}>
-                                                        ¡{project.soldPercentage}% Vendido!
-                                                    </span>
-                                                    <div className={styles.progressBar}>
-                                                        <div
-                                                            className={styles.progressFill}
-                                                            style={{ width: `${project.soldPercentage}%` }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className={styles.body}>
-                                            <div className={styles.headerRow}>
-                                                <h3 className={styles.name}>{project.name}</h3>
-                                                {project.isFeatured && (
-                                                    <span className={styles.featuredLabel}>Inversión Destacada</span>
-                                                )}
-                                            </div>
-                                            <p className={styles.tagline}>{project.tagline}</p>
-                                            <p className={styles.description}>{project.description}</p>
-
-                                            <div className={styles.features}>
-                                                {project.features.map((feat) => (
-                                                    <span key={feat} className={styles.feature}>
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                                                        {feat}
-                                                    </span>
-                                                ))}
-                                            </div>
-
-                                            <div className={styles.meta}>
-                                                <span className={styles.metaItem}>
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
-                                                    {project.distance}
-                                                </span>
-                                                <span className={styles.metaItem}>
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /></svg>
-                                                    {project.lotSize}
-                                                </span>
-                                            </div>
-
-                                            <div className={styles.cta}>
-                                                <span>{isSoldOut ? 'Más información' : (project.externalUrl ? 'Terrenos Disponibles' : 'Ver Proyecto')}</span>
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </div>
-                            </AnimatedSection>
-                        );
-                    })}
+                            <div className={styles.actionWrapper}>
+                                <Link href={proj.href} className={styles.pillButton}>
+                                    Terrenos Disponibles
+                                </Link>
+                                <span className={styles.arrows}>&raquo;</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                
+                <div className={styles.footerSection}>
+                    <div className={styles.divider} />
+                    <div className={styles.leafIcon}>
+                        <Image 
+                            src="/images/home_redesign/logo.png.png" 
+                            alt="Alimin Logo" 
+                            width={160} 
+                            height={90}
+                            style={{ objectFit: 'contain' }}
+                        />
+                    </div>
+                    <div className={styles.divider} />
                 </div>
             </div>
         </section>

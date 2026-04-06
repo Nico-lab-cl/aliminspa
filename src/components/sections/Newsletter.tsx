@@ -30,14 +30,8 @@ export default function Newsletter() {
     }
 
     return (
-        <section className={styles.section}>
-            {/* Background Image Setup */}
-            <div className={styles.bgWrapper}>
-                <div className={styles.bgImage} />
-                <div className={styles.overlay} />
-            </div>
-
-            <div className={`container ${styles.container}`}>
+        <section className={styles.section} id="newsletter">
+            <div className={`container ${styles.container}`} style={{ position: 'relative' }}>
                 <div className={styles.wrapper}>
                     <div className={styles.content}>
                         <h3 className={styles.title}>
