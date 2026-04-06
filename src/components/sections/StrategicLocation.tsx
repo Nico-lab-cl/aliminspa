@@ -26,7 +26,7 @@ export default function StrategicLocation() {
                         <div className={styles.mapDecorativeWrapper}>
                             <div className={styles.imageWrapper}>
                                 <Image 
-                                    src="/images/home_redesign/dise_o_sin_t_tulo.webp.webp" 
+                                    src="/images/home_redesign/dise_o_sin_t_tulo.png.webp" 
                                     alt="Mapa de Ubicación El Tabo" 
                                     width={700}
                                     height={500}
@@ -47,7 +47,7 @@ export default function StrategicLocation() {
                         </div>
                         <div className={styles.projectsGraphicWrapper}>
                             <Image 
-                                src="/images/home_redesign/ico_proyectos.webp.webp" 
+                                src="/images/home_redesign/ico_proyectos.png.webp" 
                                 alt="Nuestros Proyectos" 
                                 width={500}
                                 height={400}

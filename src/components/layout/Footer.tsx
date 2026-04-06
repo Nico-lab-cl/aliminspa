@@ -14,7 +14,7 @@ export default function Footer() {
                 <div className={styles.grid}>
                     <div className={styles.brand}>
                         <Image
-                            src="/images/home_redesign/logo.webp.webp"
+                            src="/images/home_redesign/logo.png.webp"
                             alt={`${SITE.shortName} - Inmobiliaria en El Tabo`}
                             width={160}
                             height={90}

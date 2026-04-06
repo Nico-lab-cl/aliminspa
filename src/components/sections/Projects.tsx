@@ -79,7 +79,7 @@ export default function Projects() {
                     <div className={styles.divider} />
                     <div className={styles.leafIcon}>
                         <Image 
-                            src="/images/home_redesign/logo.webp.webp" 
+                            src="/images/home_redesign/logo.png.webp" 
                             alt="Alimin Logo" 
                             width={160} 
                             height={90}
