@@ -11,7 +11,8 @@ const NEW_PROJECTS = [
         tagline: 'Tu refugio cerca al mar',
         desc: 'Una inversión inteligente y fugaz. Terrenos urbanizados con vista al mar en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía.',
         alert: '¡Solo el 25% disponible!',
-        href: '#contacto'
+        href: 'https://aliminlomasdelmar.com?utm_source=aliminspa.cl&utm_medium=boton_reservas&utm_campaign=home_projects',
+        target: '_blank'
     },
     {
         id: 'arena',
@@ -21,7 +22,8 @@ const NEW_PROJECTS = [
         subdesc: 'Terrenos urbanizados de 200 m2',
         desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
         alert: '',
-        href: '#contacto'
+        href: '#contacto',
+        target: '_self'
     },
     {
         id: 'libertad',
@@ -31,7 +33,8 @@ const NEW_PROJECTS = [
         subdesc: 'Terrenos urbanizados de 200 m2',
         desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
         alert: '',
-        href: '#contacto'
+        href: '#contacto',
+        target: '_self'
     }
 ]
 
@@ -66,7 +69,12 @@ export default function Projects() {
                             </div>
 
                             <div className={styles.actionWrapper}>
-                                <Link href={proj.href} className={styles.pillButton}>
+                                <Link 
+                                    href={proj.href} 
+                                    className={styles.pillButton}
+                                    target={proj.target}
+                                    rel={proj.target === '_blank' ? "noopener noreferrer" : undefined}
+                                >
                                     Terrenos Disponibles
                                 </Link>
                                 <span className={styles.arrows}>&raquo;</span>

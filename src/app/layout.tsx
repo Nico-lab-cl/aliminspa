@@ -97,9 +97,6 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="icon" href="/images/logo-alimin.webp" />
-        <link rel="apple-touch-icon" href="/images/logo-alimin.webp" />
-        <link rel="shortcut icon" href="/images/logo-alimin.webp" />
         <meta name="theme-color" content="#FFFFFF" />
         <RealEstateAgentSchema />
         <LocalBusinessSchema />
