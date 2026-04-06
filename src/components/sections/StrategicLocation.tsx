@@ -42,7 +42,7 @@ export default function StrategicLocation() {
                                 A solo <span className={styles.highlight}>8 minutos</span> de la playa
                             </h3>
                             <p className={styles.infoDesc}>
-                                Nuestros proyectos se ubican en <span className={styles.highlight}>El Tabo</span>, con acceso directo a playas, centros comerciales y la ruta que conecta con Santiago.
+                                Nuestros proyectos se ubican en <span className={styles.highlight}>El Tabo</span>, a 8 minutos de la playa en auto, supermercados, centros comerciales, terminal de buses y la ruta que conecta con Santiago.
                             </p>
                         </div>
                         <div className={styles.projectsGraphicWrapper}>
