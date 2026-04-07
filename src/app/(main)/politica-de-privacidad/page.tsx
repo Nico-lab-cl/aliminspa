@@ -1,4 +1,13 @@
+import { Metadata } from 'next'
 import { SITE } from '@/lib/constants'
+
+export const metadata: Metadata = {
+    title: 'Política de Privacidad',
+    description: `Consulta cómo manejamos tus datos en ${SITE.name}. Tu privacidad es nuestra prioridad en El Tabo, Litoral Central.`,
+    alternates: {
+        canonical: `${SITE.url}/politica-de-privacidad`,
+    },
+}
 
 export default function PrivacyPolicyPage() {
     return (

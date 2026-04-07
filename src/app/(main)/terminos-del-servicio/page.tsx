@@ -1,4 +1,13 @@
+import { Metadata } from 'next'
 import { SITE } from '@/lib/constants'
+
+export const metadata: Metadata = {
+    title: 'Condiciones del Servicio',
+    description: `Términos y condiciones para el uso de los servicios y sitio web de ${SITE.name} en El Tabo, Chile.`,
+    alternates: {
+        canonical: `${SITE.url}/terminos-del-servicio`,
+    },
+}
 
 export default function TermsOfServicePage() {
     return (

@@ -26,10 +26,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
         ...projectRoutes,
         {
+            url: `${baseUrl}/quienes-somos`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
             url: `${baseUrl}/contacto`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/politica-de-privacidad`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.5,
+        },
+        {
+            url: `${baseUrl}/terminos-del-servicio`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.5,
         },
     ]
 }
