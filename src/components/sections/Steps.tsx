@@ -22,13 +22,8 @@ export default function Steps() {
                     </div>
                     <div className={styles.step}>
                         <div className={styles.circle}>2</div>
-                        <h3 className={styles.stepTitle}>Evaluación rápida</h3>
-                        <p className={styles.stepDesc}>Revisamos tus documentos en menos de 48 horas sin historial complejo.</p>
-                    </div>
-                    <div className={styles.step}>
-                        <div className={styles.circle}>3</div>
-                        <h3 className={styles.stepTitle}>Firma y entrega</h3>
-                        <p className={styles.stepDesc}>Formalizamos el acuerdo y recibes la posesión de tu nueva propiedad.</p>
+                        <h3 className={styles.stepTitle}>Firma</h3>
+                        <p className={styles.stepDesc}>formalizamos el acuerdo mediante una promesa de compraventa hasta completar el valor total</p>
                     </div>
                 </div>
 

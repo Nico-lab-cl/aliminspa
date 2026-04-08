@@ -186,12 +186,6 @@
         min-width: 0;
     }
 
-    .step:nth-child(3) {
-        grid-column: 1 / -1;
-        max-width: 250px;
-        margin: 0 auto;
-    }
-
     .circle {
         width: 60px;
         height: 60px;
