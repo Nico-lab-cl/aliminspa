@@ -66,7 +66,7 @@ export const PROJECTS = [
         lotSize: '200 m²',
         status: 'Últimos Terrenos',
         externalUrl: null,
-        image: '/images/projects/arena-y-sol-v2.png',
+        image: '/images/projects/arena-y-sol-v2.jpg',
         color: '#B8860B', // Dark goldenrod
         isFeatured: false,
         financing: {
