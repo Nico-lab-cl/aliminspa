@@ -92,7 +92,7 @@ export const PROJECTS = [
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Acceso Pavimentado'],
         location: 'El Tabo, Región de Valparaíso',
         distance: 'A 10 MINUTOS DE LA PLAYA DEL TABO',
-        lotSize: 'Desde 200 m²',
+        lotSize: 'Desde 400 m²',
         status: 'Proyecto Vendido',
         externalUrl: null,
         image: '/images/projects/libertad-y-alegria.webp',
@@ -103,7 +103,7 @@ export const PROJECTS = [
             hasDirectCredit: false,
             options: [
                 {
-                    terreno: '200 m²',
+                    terreno: '400 m²',
                     pagoContado: '$56.990.000'
                 }
             ]

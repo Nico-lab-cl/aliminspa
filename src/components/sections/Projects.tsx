@@ -30,7 +30,7 @@ const NEW_PROJECTS = [
         title: 'Libertad y Alegría',
         image: '/images/home_redesign/31.webp',
         tagline: '¡Tu propio lugar en El Tabo!',
-        subdesc: 'Terrenos urbanizados de 200 m2',
+        subdesc: 'Terrenos urbanizados de 400 m2',
         desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',
         alert: '',
         href: '#contacto',
