@@ -17,7 +17,7 @@ const NEW_PROJECTS = [
     {
         id: 'arena',
         title: 'Arena y Sol',
-        image: '/images/home_redesign/30.webp',
+        image: '/images/projects/arena-y-sol-v2.png',
         tagline: '¡Tu propio lugar en El Tabo!',
         subdesc: 'Terrenos urbanizados de 200 m2',
         desc: 'Quedan muy pocos cupos para asegurar tu espacio en este exitoso proyecto a solo 10 minutos de la costa.',

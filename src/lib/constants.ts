@@ -66,7 +66,7 @@ export const PROJECTS = [
         lotSize: '200 m²',
         status: 'Últimos Terrenos',
         externalUrl: null,
-        image: '/images/projects/arena-y-sol.webp',
+        image: '/images/projects/arena-y-sol-v2.png',
         color: '#B8860B', // Dark goldenrod
         isFeatured: false,
         financing: {
@@ -75,10 +75,10 @@ export const PROJECTS = [
             options: [
                 {
                     terreno: '200 m²',
-                    pie: '$15.000.000',
+                    pie: '$20.000.000',
                     cuotaReferencial: '$500.000',
-                    valorTotal: '39.990.000',
-                    pagoContado: '35.000.000'
+                    valorTotal: '42.000.000',
+                    pagoContado: '39.000.000'
                 }
             ]
         }
