@@ -26,11 +26,11 @@ export const PROJECTS = [
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
         location: 'El Tabo, Región de Valparaíso',
         distance: 'A 8 MINUTOS DE LA PLAYA DEL TABO',
-        lotSize: 'Desde 200 m²',
+        lotSize: '200 m² - 390 m²',
         status: 'Terrenos Disponibles',
         soldPercentage: 25,
         externalUrl: 'https://aliminlomasdelmar.com?utm_source=aliminspa.cl&utm_medium=boton_reservas&utm_campaign=home_projects',
-        image: '/images/projects/lomas-del-mar.webp',
+        image: '/images/projects/lomas-del-mar-v2.jpg',
         color: '#006D77', // Deep sea teal
         isFeatured: true,
         financing: {
@@ -38,18 +38,20 @@ export const PROJECTS = [
             hasDirectCredit: true,
             options: [
                 {
-                    pie: '$1.500.000',
                     terreno: '200 m²',
-                    valorTotal: '$23.990.000',
-                    cuotaReferencial: '$250.000',
-                    plazo: '90 Cuotas'
+                    pie: '$5.500.000',
+                    valorTotal: '$29.990.000',
+                    cuotaReferencial: '$550.000',
+                    plazo: '63 Cuotas',
+                    pagoContado: '$26.000.000'
                 },
                 {
-                    pie: '$3.500.000',
-                    terreno: '200 m²',
-                    valorTotal: '$24.990.000',
-                    cuotaReferencial: '$300.000',
-                    plazo: '72 Cuotas'
+                    terreno: '390 m²',
+                    pie: '$7.500.000',
+                    valorTotal: '$37.990.000',
+                    cuotaReferencial: '$550.000',
+                    plazo: '76 Cuotas',
+                    pagoContado: '$35.000.000'
                 }
             ]
         }
