@@ -11,6 +11,8 @@ import FeaturesCarousel from './FeaturesCarousel'
 import VideoSection from './VideoSection'
 import PricingSection from './PricingSection'
 import Testimonials from '@/components/sections/Testimonials'
+import AttractionsCarousel from './AttractionsCarousel'
+import Newsletter from '@/components/sections/Newsletter'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -229,61 +231,13 @@ export default function LomasDelMarPage() {
                     </div>
                 </section>
 
-                <section className="section">
-                    <div className="container">
-                        <AnimatedSection>
-                            <div className="section-header">
-                                <span className="section-label" style={{ color: '#E2B230' }}>El Entorno</span>
-                                <h2 className="section-title" style={{ color: 'white' }}>Cercano a todo</h2>
-                                <p className="section-subtitle" style={{ color: 'white' }}>
-                                    Ubicación estratégica cerca de atractivos turísticos, restaurantes y zonas naturales.
-                                </p>
-                            </div>
-                        </AnimatedSection>
-
-                        <div className={styles.attractionsGrid}>
-                            <AnimatedSection delay={100}>
-                                <div className={styles.attractionCard}>
-                                    <div className={styles.attractionImageContainer}>
-                                        <Image src="/images/lomas-del-mar/kaluche.png" alt="Restaurante Kaluche" fill sizes="(max-width: 768px) 100vw, 33vw" />
-                                    </div>
-                                    <div style={{ padding: '1.5rem', textAlign: 'center' }}>
-                                        <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Restaurant Kaluche</h3>
-                                        <p style={{ color: '#a0b2b3', fontSize: '0.9rem', marginTop: '0.5rem' }}>Gastronomía local a minutos de tu terreno.</p>
-                                    </div>
-                                </div>
-                            </AnimatedSection>
-
-                            <AnimatedSection delay={200}>
-                                <div className={styles.attractionCard}>
-                                    <div className={styles.attractionImageContainer}>
-                                        <Image src="/images/lomas-del-mar/dise_o_sin_t_tulo_1.png" alt="Playa El Tabo" fill sizes="(max-width: 768px) 100vw, 33vw" />
-                                    </div>
-                                    <div style={{ padding: '1.5rem', textAlign: 'center' }}>
-                                        <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Playa de El Tabo</h3>
-                                        <p style={{ color: '#a0b2b3', fontSize: '0.9rem', marginTop: '0.5rem' }}>Disfruta de la costa del litoral central.</p>
-                                    </div>
-                                </div>
-                            </AnimatedSection>
-
-                            <AnimatedSection delay={300}>
-                                <div className={styles.attractionCard}>
-                                    <div className={styles.attractionImageContainer}>
-                                        <Image src="/images/lomas-del-mar/10.png" alt="Naturaleza y Relax" fill sizes="(max-width: 768px) 100vw, 33vw" />
-                                    </div>
-                                    <div style={{ padding: '1.5rem', textAlign: 'center' }}>
-                                        <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Tranquilidad Natural</h3>
-                                        <p style={{ color: '#a0b2b3', fontSize: '0.9rem', marginTop: '0.5rem' }}>Ecosistema perfecto para desconectar.</p>
-                                    </div>
-                                </div>
-                            </AnimatedSection>
-                        </div>
-                    </div>
-                </section>
+                <AttractionsCarousel />
 
                 <div id="contacto">
                     <ContactForm />
                 </div>
+                
+                <Newsletter />
             </div>
         </>
     )
