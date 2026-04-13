@@ -194,42 +194,7 @@ export default function LomasDelMarPage() {
 
                 <Testimonials />
 
-                <section className={`section ${styles.contentSection}`} id="disponibilidad">
-                    <div className="container">
-                        <AnimatedSection>
-                            <div className="section-header">
-                                <span className="section-label" style={{ color: '#E2B230' }}>Características</span>
-                                <h2 className="section-title" style={{ color: 'white' }}>Los beneficios para ti</h2>
-                                <p className="section-subtitle" style={{ color: 'white' }}>
-                                    Todo lo que necesitas saber antes de asegurar tu terreno. 
-                                    A 8 minutos del mar.
-                                </p>
-                            </div>
-                        </AnimatedSection>
-                        
-                        <div className={styles.benefitsGrid}>
-                            {[
-                                { img: '/images/lomas-del-mar/1_1.png', label: 'Rol Propio' },
-                                { img: '/images/lomas-del-mar/2_1.png', label: 'Parcelas Legales' },
-                                { img: '/images/lomas-del-mar/3_1.png', label: 'Agua Certificada' },
-                                { img: '/images/lomas-del-mar/4_1.png', label: 'Luz Eléctrica' },
-                                { img: '/images/lomas-del-mar/5_1.png', label: 'Portón Automático' },
-                                { img: '/images/lomas-del-mar/6_1.png', label: 'Recinto Cerrado' },
-                                { img: '/images/lomas-del-mar/7_1.png', label: 'Calles Compactadas' },
-                                { img: '/images/lomas-del-mar/8_1.png', label: 'Luminaria Solar' },
-                            ].map((bene, i) => (
-                                <AnimatedSection key={i} delay={i * 100}>
-                                    <div className={styles.benefitCard}>
-                                        <div className={styles.benefitIcon}>
-                                            <Image src={bene.img} alt={bene.label} fill sizes="80px" />
-                                        </div>
-                                        <div className={styles.benefitLabel}>{bene.label}</div>
-                                    </div>
-                                </AnimatedSection>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+
 
                 <AttractionsCarousel />
 
