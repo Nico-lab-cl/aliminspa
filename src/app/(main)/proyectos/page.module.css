@@ -1,7 +1,7 @@
 .page {
     padding-top: calc(var(--navbar-height) + 3rem);
     padding-bottom: var(--section-gap);
-    background: linear-gradient(145deg, #38564D 0%, #20362f 100%);
+    background-color: #2F4F4F; /* Matching navbar and footer */
     color: white;
     min-height: 100vh;
 }
