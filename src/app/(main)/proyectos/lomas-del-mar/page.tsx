@@ -83,24 +83,20 @@ export default function LomasDelMarPage() {
                 <section className={styles.introSection}>
                     <div className="container" style={{ maxWidth: '800px' }}>
                         <div className={styles.introTop}>
-                            <Image 
-                                src="/images/projects/lomas-del-mar-v2.jpg" // Fallback context 
-                                alt="Ubicación El Tabo" 
-                                width={60} 
-                                height={60} 
-                                style={{ display: 'none' }} 
-                            />
-                            {/* Generic Island icon fallback via SVG as it perfectly matches the request outline */}
-                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'white' }}>
-                                <path d="M13 22c0-3.33-2-5-5-5s-5 1.67-5 5"/>
-                                <path d="M14 17a10.4 10.4 0 0 0 3-4c1.5-2.5 3-4 3-7"/>
-                                <path d="M14 17c1.5-2.5 3-4 3-7"/>
-                                <path d="M17 6a8 8 0 0 0-8 8"/>
-                                <path d="M9 14h.01"/>
-                                <path d="M13 8h.01"/>
-                                <path d="M17 11h.01"/>
-                                <path d="m2 22 2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2"/>
-                                <circle cx="5" cy="5" r="2"/>
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                                {/* Pequeño sol (arriba izquierda) */}
+                                <circle cx="5" cy="5" r="1.5" />
+                                {/* Palmera (hojas arriba derecha) */}
+                                <path d="M11 11c0-2-1-4-4-5s-4 4-2 7" />
+                                <path d="M12 11c2-3 5-4 7-2s0 6-3 6" />
+                                <path d="M11 11c0 0-1-6 2-8s5 5 2 7" />
+                                {/* Palmera tronco inclinado */}
+                                <path d="M11 11c0 3 2 6 2 9" />
+                                {/* Isla/Roca en la base del tronco */}
+                                <path d="M9 20a4 4 0 0 0 8 0" />
+                                {/* Olas en la base */}
+                                <path d="M2 21c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1" />
+                                <path d="M4 23c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1" />
                             </svg>
                             <h2 className={styles.introSubtitle}>
                                 A solo 8 minutos de la playa de <strong>El Tabo.</strong>
@@ -115,8 +111,8 @@ export default function LomasDelMarPage() {
                             <div className={styles.introLine}></div>
                             <div className={styles.introLogo}>
                                 <Image 
-                                    src="/favicon.png" 
-                                    alt="Alimin Logo" 
+                                    src="/images/lomas-del-mar/logo-verde.png" 
+                                    alt="Alimin Logo Verde" 
                                     fill 
                                     style={{ objectFit: 'contain' }} 
                                 />
