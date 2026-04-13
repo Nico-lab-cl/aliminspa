@@ -13,28 +13,13 @@ export default function VideoSection() {
                     <span className={styles.goldText}>Conoce el entorno y las vistas reales.</span>
                 </h2>
                 
-                <div className={styles.videoGrid}>
+                <div className={styles.videoContainer}>
                     <div className={styles.videoCard}>
                         <div className={styles.videoWrapper}>
                             <video 
                                 controls 
-                                preload="none" 
-                                poster="/images/projects/lomas-del-mar-v2.jpg"
+                                preload="none"
                             >
-                                <source src="/videos/lomas-del-mar/Lomas web.mp4" type="video/mp4" />
-                                Tu navegador no soporta la etiqueta de video.
-                            </video>
-                        </div>
-                    </div>
-
-                    <div className={styles.videoCard}>
-                        <div className={styles.videoWrapper}>
-                            <video 
-                                controls 
-                                preload="none" 
-                                poster="/images/projects/lomas-del-mar-v2.jpg"
-                            >
-                                {/* Reusing the same video for the second slot as requested by the mockup */}
                                 <source src="/videos/lomas-del-mar/Lomas web.mp4" type="video/mp4" />
                                 Tu navegador no soporta la etiqueta de video.
                             </video>
