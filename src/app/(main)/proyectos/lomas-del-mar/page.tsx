@@ -7,6 +7,7 @@ import ContactForm from '@/components/sections/ContactForm'
 import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { TrendingUp, CheckCircle } from 'lucide-react'
+import FeaturesCarousel from './FeaturesCarousel'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -182,6 +183,8 @@ export default function LomasDelMarPage() {
                         </AnimatedSection>
                     </div>
                 </section>
+
+                <FeaturesCarousel />
 
                 <section className={`section ${styles.contentSection}`} id="disponibilidad">
                     <div className="container">
