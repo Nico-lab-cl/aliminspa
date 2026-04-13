@@ -146,7 +146,7 @@ export default function LomasDelMarPage() {
                                             </div>
                                         </div>
                                         <div className={styles.statsPercentage}>
-                                            26<span>%</span>
+                                            42<span>%</span>
                                         </div>
                                     </div>
                                     
@@ -163,17 +163,17 @@ export default function LomasDelMarPage() {
                                         </div>
                                         <div className={styles.statBox}>
                                             <span className={styles.statLabel}>DISPONIBLES</span>
-                                            <span className={styles.statValue}>81</span>
+                                            <span className={styles.statValue}>76</span>
                                         </div>
                                     </div>
 
                                     <div className={styles.progressBarContainer}>
                                         <div className={styles.progressBarTrack}>
-                                            <div className={styles.progressBarFill} style={{ width: '26%' }}></div>
+                                            <div className={styles.progressBarFill} style={{ width: '42%' }}></div>
                                         </div>
                                         <div className={styles.progressLabels}>
                                             <span>L-01</span>
-                                            <span>26% COMPLETADO</span>
+                                            <span>42% COMPLETADO</span>
                                             <span>L-191</span>
                                         </div>
                                     </div>
