@@ -10,6 +10,7 @@ import { TrendingUp, CheckCircle, Palmtree } from 'lucide-react'
 import FeaturesCarousel from './FeaturesCarousel'
 import VideoSection from './VideoSection'
 import PricingSection from './PricingSection'
+import Testimonials from '@/components/sections/Testimonials'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -188,6 +189,8 @@ export default function LomasDelMarPage() {
                 <VideoSection />
 
                 <PricingSection />
+
+                <Testimonials />
 
                 <section className={`section ${styles.contentSection}`} id="disponibilidad">
                     <div className="container">
