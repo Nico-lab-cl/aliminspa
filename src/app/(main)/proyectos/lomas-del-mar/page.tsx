@@ -43,7 +43,7 @@ export default function LomasDelMarPage() {
                         muted 
                         loop 
                         playsInline
-                        poster="/images/lomas-del-mar/web.png"
+                        poster="/images/projects/lomas-del-mar-v2.jpg"
                     >
                         <source src="/videos/lomas-del-mar/Lomas web.mp4" type="video/mp4" />
                     </video>
