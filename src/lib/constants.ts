@@ -29,7 +29,7 @@ export const PROJECTS = [
         lotSize: '200 m² - 390 m²',
         status: 'Terrenos Disponibles',
         soldPercentage: 25,
-        externalUrl: 'https://aliminlomasdelmar.com?utm_source=aliminspa.cl&utm_medium=boton_reservas&utm_campaign=home_projects',
+        externalUrl: null,
         image: '/images/projects/lomas-del-mar-v2.jpg',
         color: '#006D77', // Deep sea teal
         isFeatured: true,
