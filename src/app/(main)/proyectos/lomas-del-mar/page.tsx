@@ -50,9 +50,10 @@ export default function LomasDelMarPage() {
                         muted 
                         loop 
                         playsInline
-                        poster="/images/projects/lomas-del-mar-v2.jpg"
+                        poster="/images/projects/lomas-del-mar-poster-premium.png"
+                        preload="auto"
                     >
-                        <source src="/videos/lomas-del-mar/Lomas web.mp4" type="video/mp4" />
+                        <source src="/videos/lomas-del-mar/Lomas web optimized.mp4" type="video/mp4" />
                     </video>
                     
                     <video 
@@ -61,8 +62,10 @@ export default function LomasDelMarPage() {
                         muted 
                         loop 
                         playsInline
+                        poster="/images/projects/lomas-del-mar-poster-premium.png"
+                        preload="auto"
                     >
-                        <source src="/videos/lomas-del-mar/lomas cel.mp4" type="video/mp4" />
+                        <source src="/videos/lomas-del-mar/lomas cel optimized.mp4" type="video/mp4" />
                     </video>
 
                     <div className={styles.heroOverlay}></div>
