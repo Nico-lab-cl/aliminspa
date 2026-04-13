@@ -151,7 +151,7 @@
 /* Intro Section */
 .introSection {
     background-color: #365759; /* Fondo verde oscuro */
-    padding: 6rem 1.5rem;
+    padding: 6rem 1.5rem 3rem;
     text-align: center;
     color: white;
     display: flex;
@@ -217,6 +217,164 @@
 
 .introMainText strong {
     font-weight: 700;
+}
+
+/* Stats Section */
+.statsSection {
+    background-color: #365759; /* Continuous background from intro */
+    padding: 0 1.5rem 6rem;
+    display: flex;
+    justify-content: center;
+}
+
+.statsCard {
+    background-color: #243e40;
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: 10px 10px 0px 0px #b18b45; /* The gold offset */
+    color: white;
+    width: 100%;
+}
+
+.statsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.statsTitleBox {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.statsIcon {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+}
+
+.statsTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.statsSubtitle {
+    font-size: 0.85rem;
+    color: #a0b2b3;
+    margin: 0;
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.liveDot {
+    width: 6px;
+    height: 6px;
+    background-color: #E2B230; /* Can be green or gold, using gold to match theme */
+    border-radius: 50%;
+    box-shadow: 0 0 8px #E2B230;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.statsPercentage {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.statsPercentage span {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.statBox {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.statLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a0b2b3;
+    letter-spacing: 1px;
+}
+
+.statValue {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progressBarContainer {
+    width: 100%;
+}
+
+.progressBarTrack {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    height: 12px;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progressBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffffff 0%, #e2b230 100%);
+    border-radius: 50px;
+    position: relative;
+    box-shadow: inset -5px 0 10px rgba(255,255,255,0.5);
+}
+
+.progressLabels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #a0b2b3;
+}
+
+@media (max-width: 768px) {
+    .statsHeader {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    .statsTitleBox {
+        flex-direction: column;
+    }
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Benefits Grid */

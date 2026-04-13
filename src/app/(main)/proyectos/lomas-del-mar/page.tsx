@@ -6,6 +6,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import ContactForm from '@/components/sections/ContactForm'
 import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
+import { TrendingUp, CheckCircle } from 'lucide-react'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -128,6 +129,61 @@ export default function LomasDelMarPage() {
                             llamado <strong>Lomas del Mar</strong>, <strong>una propuesta a<br/>
                             largo plazo</strong> que hemos preparado en Alimin.
                         </p>
+                    </div>
+                </section>
+
+                <section className={styles.statsSection}>
+                    <div className="container" style={{ maxWidth: '900px', width: '100%' }}>
+                        <AnimatedSection>
+                            <div className={styles.statsCardWrapper}>
+                                <div className={styles.statsCard}>
+                                    <div className={styles.statsHeader}>
+                                        <div className={styles.statsTitleBox}>
+                                            <div className={styles.statsIcon}>
+                                                <TrendingUp size={24} color="#ffffff" strokeWidth={2.5}/>
+                                            </div>
+                                            <div>
+                                                <h3 className={styles.statsTitle}>LOTES VENDIDOS</h3>
+                                                <p className={styles.statsSubtitle}>
+                                                    <span className={styles.liveDot}></span> Actualización en tiempo real
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.statsPercentage}>
+                                            26<span>%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className={styles.statsGrid}>
+                                        <div className={styles.statBox}>
+                                            <span className={styles.statLabel}>VENDIDOS</span>
+                                            <span className={styles.statValue}>
+                                                <CheckCircle size={20} color="#a0b2b3" /> 50
+                                            </span>
+                                        </div>
+                                        <div className={styles.statBox}>
+                                            <span className={styles.statLabel}>RESERVADOS</span>
+                                            <span className={styles.statValue}>0</span>
+                                        </div>
+                                        <div className={styles.statBox}>
+                                            <span className={styles.statLabel}>DISPONIBLES</span>
+                                            <span className={styles.statValue}>81</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.progressBarContainer}>
+                                        <div className={styles.progressBarTrack}>
+                                            <div className={styles.progressBarFill} style={{ width: '26%' }}></div>
+                                        </div>
+                                        <div className={styles.progressLabels}>
+                                            <span>L-01</span>
+                                            <span>26% COMPLETADO</span>
+                                            <span>L-191</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </AnimatedSection>
                     </div>
                 </section>
 
