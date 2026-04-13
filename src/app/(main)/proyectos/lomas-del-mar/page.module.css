@@ -148,6 +148,77 @@
     background-color: var(--bg-alt);
 }
 
+/* Intro Section */
+.introSection {
+    background-color: #365759; /* Fondo verde oscuro */
+    padding: 6rem 1.5rem;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.introTop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.introSubtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 400;
+    margin: 0;
+}
+
+.introSubtitle strong {
+    color: #E2B230; /* Dorado */
+    font-weight: 700;
+}
+
+.introGreeting {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    color: #f0f0f0;
+}
+
+.introDivider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+.introLine {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #E2B230;
+    opacity: 0.7;
+}
+
+.introLogo {
+    margin: 0 1.5rem;
+    position: relative;
+    width: 45px;
+    height: 45px;
+}
+
+.introMainText {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.introMainText strong {
+    font-weight: 700;
+}
+
 /* Benefits Grid */
 .benefitsGrid {
     display: grid;

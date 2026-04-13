@@ -79,6 +79,58 @@ export default function LomasDelMarPage() {
                     </div>
                 </section>
 
+                <section className={styles.introSection}>
+                    <div className="container" style={{ maxWidth: '800px' }}>
+                        <div className={styles.introTop}>
+                            <Image 
+                                src="/images/projects/lomas-del-mar-v2.jpg" // Fallback context 
+                                alt="Ubicación El Tabo" 
+                                width={60} 
+                                height={60} 
+                                style={{ display: 'none' }} 
+                            />
+                            {/* Generic Island icon fallback via SVG as it perfectly matches the request outline */}
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'white' }}>
+                                <path d="M13 22c0-3.33-2-5-5-5s-5 1.67-5 5"/>
+                                <path d="M14 17a10.4 10.4 0 0 0 3-4c1.5-2.5 3-4 3-7"/>
+                                <path d="M14 17c1.5-2.5 3-4 3-7"/>
+                                <path d="M17 6a8 8 0 0 0-8 8"/>
+                                <path d="M9 14h.01"/>
+                                <path d="M13 8h.01"/>
+                                <path d="M17 11h.01"/>
+                                <path d="m2 22 2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2"/>
+                                <circle cx="5" cy="5" r="2"/>
+                            </svg>
+                            <h2 className={styles.introSubtitle}>
+                                A solo 8 minutos de la playa de <strong>El Tabo.</strong>
+                            </h2>
+                        </div>
+                        
+                        <p className={styles.introGreeting}>
+                            Hola, queremos contarte algo especial...
+                        </p>
+                        
+                        <div className={styles.introDivider}>
+                            <div className={styles.introLine}></div>
+                            <div className={styles.introLogo}>
+                                <Image 
+                                    src="/favicon.png" 
+                                    alt="Alimin Logo" 
+                                    fill 
+                                    style={{ objectFit: 'contain' }} 
+                                />
+                            </div>
+                            <div className={styles.introLine}></div>
+                        </div>
+
+                        <p className={styles.introMainText}>
+                            Estamos lanzando un nuevo proyecto<br/>
+                            llamado <strong>Lomas del Mar</strong>, <strong>una propuesta a<br/>
+                            largo plazo</strong> que hemos preparado en Alimin.
+                        </p>
+                    </div>
+                </section>
+
                 <section className={`section ${styles.contentSection}`} id="disponibilidad">
                     <div className="container">
                         <AnimatedSection>
