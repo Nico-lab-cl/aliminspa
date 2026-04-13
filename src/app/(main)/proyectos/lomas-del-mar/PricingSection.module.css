@@ -1,5 +1,5 @@
 .section {
-    background-color: var(--bg-alt); /* using #365759 */
+    background-color: #365759; /* using #365759 */
     padding: 5rem 1.5rem;
     color: white;
 }

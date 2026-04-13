@@ -1,7 +1,8 @@
 .page {
     /* Eliminamos padding-top para que el video pueda tocar el fondo del header si es necesario, o lo mantenemos si el header es solido */
     overflow-x: hidden;
-    background-color: #fff;
+    background-color: #365759; /* #365759 */
+    color: white;
 }
 
 .hero {
@@ -145,7 +146,7 @@
 
 /* Sections Configuration */
 .contentSection {
-    background-color: var(--bg-alt);
+    background-color: #365759;
 }
 
 /* Intro Section */
@@ -386,7 +387,7 @@
 }
 
 .benefitCard {
-    background: var(--surface);
+    background: #243e40;
     border-radius: var(--radius-lg);
     padding: 2rem;
     display: flex;
@@ -418,7 +419,7 @@
 .benefitLabel {
     font-weight: 700;
     font-size: 1.1rem;
-    color: var(--text);
+    color: white;
 }
 
 /* Attractions */
@@ -433,7 +434,7 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    background: var(--surface);
+    background: #243e40;
 }
 
 .attractionImageContainer {

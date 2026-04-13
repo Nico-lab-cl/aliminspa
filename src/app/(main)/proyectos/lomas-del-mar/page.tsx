@@ -193,9 +193,9 @@ export default function LomasDelMarPage() {
                     <div className="container">
                         <AnimatedSection>
                             <div className="section-header">
-                                <span className="section-label">Características</span>
-                                <h2 className="section-title">Los beneficios para ti</h2>
-                                <p className="section-subtitle">
+                                <span className="section-label" style={{ color: '#E2B230' }}>Características</span>
+                                <h2 className="section-title" style={{ color: 'white' }}>Los beneficios para ti</h2>
+                                <p className="section-subtitle" style={{ color: 'white' }}>
                                     Todo lo que necesitas saber antes de asegurar tu terreno. 
                                     A 8 minutos del mar.
                                 </p>
@@ -226,13 +226,13 @@ export default function LomasDelMarPage() {
                     </div>
                 </section>
 
-                <section className="section" style={{ backgroundColor: 'white' }}>
+                <section className="section">
                     <div className="container">
                         <AnimatedSection>
                             <div className="section-header">
-                                <span className="section-label">El Entorno</span>
-                                <h2 className="section-title">Cercano a todo</h2>
-                                <p className="section-subtitle">
+                                <span className="section-label" style={{ color: '#E2B230' }}>El Entorno</span>
+                                <h2 className="section-title" style={{ color: 'white' }}>Cercano a todo</h2>
+                                <p className="section-subtitle" style={{ color: 'white' }}>
                                     Ubicación estratégica cerca de atractivos turísticos, restaurantes y zonas naturales.
                                 </p>
                             </div>
@@ -246,7 +246,7 @@ export default function LomasDelMarPage() {
                                     </div>
                                     <div style={{ padding: '1.5rem', textAlign: 'center' }}>
                                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Restaurant Kaluche</h3>
-                                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Gastronomía local a minutos de tu terreno.</p>
+                                        <p style={{ color: '#a0b2b3', fontSize: '0.9rem', marginTop: '0.5rem' }}>Gastronomía local a minutos de tu terreno.</p>
                                     </div>
                                 </div>
                             </AnimatedSection>
@@ -258,7 +258,7 @@ export default function LomasDelMarPage() {
                                     </div>
                                     <div style={{ padding: '1.5rem', textAlign: 'center' }}>
                                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Playa de El Tabo</h3>
-                                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Disfruta de la costa del litoral central.</p>
+                                        <p style={{ color: '#a0b2b3', fontSize: '0.9rem', marginTop: '0.5rem' }}>Disfruta de la costa del litoral central.</p>
                                     </div>
                                 </div>
                             </AnimatedSection>
@@ -270,7 +270,7 @@ export default function LomasDelMarPage() {
                                     </div>
                                     <div style={{ padding: '1.5rem', textAlign: 'center' }}>
                                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Tranquilidad Natural</h3>
-                                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Ecosistema perfecto para desconectar.</p>
+                                        <p style={{ color: '#a0b2b3', fontSize: '0.9rem', marginTop: '0.5rem' }}>Ecosistema perfecto para desconectar.</p>
                                     </div>
                                 </div>
                             </AnimatedSection>

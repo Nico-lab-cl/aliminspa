@@ -1,5 +1,5 @@
 .section {
-    background-color: var(--bg-alt); /* Wait, the screenshot background is #2F4F4F? Let's check the picture. Yes, standard dark green var(--bg-alt) or #365759. Actually let's use #2F4F4F for alternating rows, or keep #365759 if it's meant to be continuous */
+    background-color: #365759; /* Wait, the screenshot background is #2F4F4F? Let's check the picture. Yes, standard dark green #365759 or #365759. Actually let's use #2F4F4F for alternating rows, or keep #365759 if it's meant to be continuous */
     padding: 6rem 1.5rem;
     color: white;
 }
