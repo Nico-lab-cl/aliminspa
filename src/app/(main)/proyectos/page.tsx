@@ -30,50 +30,46 @@ export default function ProyectosPage() {
                     { name: 'Proyectos', url: `${SITE.url}/proyectos` },
                 ]}
             />
+            
             <div className={styles.page}>
                 <div className="container">
                     <AnimatedSection>
-                        <div className="section-header">
-                            <span className="section-label">Nuestros Proyectos</span>
-                            <h1 className="section-title">Proyectos Inmobiliarios en El Tabo</h1>
-                            <p className="section-subtitle">
-                                Descubre nuestras opciones de terrenos urbanizados con rol propio
-                                en el Litoral Central de Chile.
-                            </p>
+                        <div className={styles.intro}>
+                            <div className={styles.titleContainer}>
+                                <div className={styles.titleLine}></div>
+                                <h1 className={styles.title}>Nuestros Proyectos</h1>
+                                <div className={styles.titleLine}></div>
+                            </div>
                         </div>
                     </AnimatedSection>
 
                     <div className={styles.grid}>
                         {PROJECTS.map((project, i) => (
-                            <AnimatedSection key={project.id} delay={i * 150}>
-                                <Link
-                                    href={project.externalUrl || `/proyectos/${project.slug}`}
-                                    target={project.externalUrl ? '_blank' : undefined}
-                                    rel={project.externalUrl ? 'noopener noreferrer' : undefined}
-                                    className={`card ${styles.card}`}
-                                >
-                                    <div className={styles.imageWrapper}>
-                                        <Image
-                                            src={project.image}
-                                            alt={`${project.name} - Proyecto de terrenos en El Tabo`}
-                                            width={800}
-                                            height={450}
-                                            className={styles.image}
-                                        />
-                                    </div>
-                                    <div className={styles.body}>
-                                        <span className={styles.status} style={{ background: project.color }}>
-                                            {project.status}
-                                        </span>
-                                        <h2 className={styles.name}>{project.name}</h2>
-                                        <p className={styles.tagline}>{project.tagline}</p>
-                                        <p className={styles.desc}>{project.description}</p>
-                                        <div className={styles.meta}>
-                                            <span>{project.distance}</span>
-                                            <span>📐 {project.lotSize}</span>
-                                        </div>
-                                    </div>
-                                </Link>
+                            <AnimatedSection key={project.id} delay={i * 150} className={styles.card}>
+                                <h2 className={styles.projectTitle}>{project.name}</h2>
+                                <div className={styles.imageWrapper}>
+                                    <Image
+                                        src={project.image}
+                                        alt={`${project.name} - Proyecto de terrenos en El Tabo`}
+                                        fill
+                                        className={styles.image}
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    />
+                                </div>
+                                <h3 className={styles.subtitle}>{project.tagline}</h3>
+                                <p className={styles.lotInfo}>Terrenos urbanizados de {project.lotSize}</p>
+                                <p className={styles.description}>{project.description}</p>
+                                
+                                <div className={styles.buttonContainer}>
+                                    <Link 
+                                        href={project.externalUrl || `/proyectos/${project.slug}`}
+                                        target={project.externalUrl ? '_blank' : undefined}
+                                        rel={project.externalUrl ? 'noopener noreferrer' : undefined}
+                                        className={styles.btnAction}
+                                    >
+                                        Más info &raquo;
+                                    </Link>
+                                </div>
                             </AnimatedSection>
                         ))}
                     </div>
