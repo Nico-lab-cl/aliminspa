@@ -6,7 +6,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import ContactForm from '@/components/sections/ContactForm'
 import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { TrendingUp, CheckCircle } from 'lucide-react'
+import { TrendingUp, CheckCircle, Palmtree } from 'lucide-react'
 import FeaturesCarousel from './FeaturesCarousel'
 import styles from './page.module.css'
 
@@ -84,21 +84,18 @@ export default function LomasDelMarPage() {
                 <section className={styles.introSection}>
                     <div className="container" style={{ maxWidth: '800px' }}>
                         <div className={styles.introTop}>
-                            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                                {/* Sol */}
-                                <circle cx="5" cy="6" r="2" />
-                                {/* Tronco curvo de la palmera */}
-                                <path d="M12 21c0-4.5 1-8 4-12" />
-                                {/* Hojas largas y elegantes */}
-                                <path d="M16 9c-2.5-1-5-1-7 1" />
-                                <path d="M16 9c1-2.5 4-3 6-1" />
-                                <path d="M16 9c2 1.5 3 4 2 6" />
-                                <path d="M16 9c-1 2-3 4-5 4" />
-                                {/* Base de la isla (suelo plano y curvado en los bordes) */}
-                                <path d="M6 21h12c1 0 2-.5 2-1.5s-1-1.5-2-1.5H6c-1 0-2 .5-2 1.5S5 21 6 21z" />
-                                {/* Olas en la base */}
-                                <path d="M3 23c1.5 0 2-.5 3.5-.5s2 .5 3.5.5 2-.5 3.5-.5 2 .5 3.5.5 2-.5 3.5-.5" />
-                            </svg>
+                            <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Palmtree size={60} color="#ffffff" strokeWidth={1.5} />
+                                {/* Sol en la esquina superior izquierda como diseño de la maqueta */}
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" style={{ position: 'absolute', top: 0, left: 0 }}>
+                                    <circle cx="12" cy="12" r="5" fill="none" />
+                                </svg>
+                                {/* Base de agua simplificada */}
+                                <svg width="80" height="20" viewBox="0 0 80 20" fill="none" stroke="#ffffff" strokeWidth="1.5" style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)' }}>
+                                    <path d="M5 10c3 0 5-2 8-2s5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2" />
+                                    <path d="M5 15c3 0 5-2 8-2s5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2" />
+                                </svg>
+                            </div>
                             <h2 className={styles.introSubtitle}>
                                 A solo 8 minutos de la playa de <strong>El Tabo.</strong>
                             </h2>
