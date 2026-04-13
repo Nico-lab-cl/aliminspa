@@ -1,7 +1,7 @@
 .page {
     padding-top: calc(var(--navbar-height) + 3rem);
     padding-bottom: var(--section-gap);
-    background-color: #314d45; /* Dark background matching image */
+    background: linear-gradient(145deg, #38564D 0%, #20362f 100%);
     color: white;
     min-height: 100vh;
 }
