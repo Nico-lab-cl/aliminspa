@@ -8,6 +8,7 @@ import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { TrendingUp, CheckCircle, Palmtree } from 'lucide-react'
 import FeaturesCarousel from './FeaturesCarousel'
+import VideoSection from './VideoSection'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -182,6 +183,8 @@ export default function LomasDelMarPage() {
                 </section>
 
                 <FeaturesCarousel />
+
+                <VideoSection />
 
                 <section className={`section ${styles.contentSection}`} id="disponibilidad">
                     <div className="container">

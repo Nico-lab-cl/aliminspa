@@ -1,0 +1,63 @@
+.section {
+    background-color: var(--bg-alt); /* Wait, the screenshot background is #2F4F4F? Let's check the picture. Yes, standard dark green var(--bg-alt) or #365759. Actually let's use #2F4F4F for alternating rows, or keep #365759 if it's meant to be continuous */
+    padding: 6rem 1.5rem;
+    color: white;
+}
+
+.title {
+    text-align: center;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 4rem;
+}
+
+.goldText {
+    color: #E2B230; /* Dorado */
+    font-weight: 700;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.videoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.videoCard {
+    position: relative;
+    background-color: #243e40;
+    border-radius: 12px;
+    padding: 0; /* Videos flush to edge? The screenshot shows the video fully filling the rounded container. */
+    /* Gold border effect */
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-left: 1px solid rgba(255,255,255,0.1);
+    border-right: 2px solid #E2B230;
+    border-bottom: 2px solid #E2B230;
+    box-shadow: 6px 6px 0px 0px rgba(226, 178, 48, 0.4); /* optional drop shadow for depth */
+    overflow: hidden;
+    height: 300px;
+}
+
+.videoWrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px; /* Needs to match outer clip */
+}
+
+.videoWrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px; /* inset clip */
+}
+
+@media (max-width: 768px) {
+    .videoGrid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
