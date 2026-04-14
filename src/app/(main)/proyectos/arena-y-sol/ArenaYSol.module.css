@@ -1,0 +1,279 @@
+.aysPage {
+    --ays-dark-green: #2F4F4F;
+    --ays-gold: #D9B055;
+    --ays-surface-low: #f3f3f3;
+    --ays-surface-highest: #e2e2e2;
+    --ays-text-on-dark: #ffffff;
+    --ays-text-on-light: #1a1c1c;
+    
+    background-color: var(--ays-dark-green);
+    color: var(--ays-text-on-dark);
+}
+
+.hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.heroBackground {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(47, 79, 79, 0.6), rgba(47, 79, 79, 0.8));
+    z-index: 1;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 0 5%;
+}
+
+.heroTitle {
+    font-family: 'Newsreader', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.heroSubtitle {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.heroHighlight {
+    color: var(--ays-gold);
+    font-weight: 600;
+    margin-bottom: 3rem;
+    display: block;
+}
+
+.ctaGroup {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.buttonPrimary {
+    background: var(--ays-dark-green);
+    color: var(--ays-gold);
+    padding: 1rem 2.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    border: 1px solid var(--ays-gold); /* Subtle border per user layout */
+    transition: all 0.3s ease;
+}
+
+.buttonSecondary {
+    background: #55a630; /* Specific green for WhatsApp advisor */
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    transition: all 0.3s ease;
+}
+
+/* Section 2 Intro */
+.introSection {
+    padding: 8rem 0;
+    background-color: var(--ays-dark-green);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.introText {
+    padding-left: 5%;
+}
+
+.introHeading {
+    font-family: 'Newsreader', serif;
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+.introHeadingLarge {
+    font-size: 5rem;
+    font-weight: 800;
+    display: block;
+    margin-top: 1rem;
+}
+
+.introBody {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    max-width: 500px;
+    opacity: 0.8;
+}
+
+.introImage {
+    position: relative;
+    height: 600px;
+    border-radius: 4px 0 0 4px;
+    overflow: hidden;
+}
+
+/* Section 3 Gallery */
+.gallerySection {
+    padding: 8rem 0;
+    text-align: center;
+}
+
+.galleryTitle {
+    font-family: 'Newsreader', serif;
+    font-size: 3rem;
+    margin-bottom: 4rem;
+}
+
+.galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 0 5%;
+}
+
+.galleryCard {
+    position: relative;
+    height: 500px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.5s ease;
+}
+
+.galleryCard:hover {
+    transform: translateY(-10px);
+}
+
+/* Responsive */
+/* Financing Section */
+.financingSection {
+    padding: 8rem 0;
+    background-color: var(--ays-dark-green);
+}
+
+.financingGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    padding: 0 5%;
+}
+
+.benefitList {
+    list-style: none;
+    margin-top: 2rem;
+}
+
+.benefitItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.benefitIcon {
+    color: var(--ays-gold);
+    flex-shrink: 0;
+}
+
+.cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.propertyCard {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.propertyCard:hover {
+    transform: translateY(-5px);
+}
+
+.cardImage {
+    position: relative;
+    height: 200px;
+}
+
+.cardContent {
+    padding: 1.5rem;
+}
+
+.cardPrice {
+    font-family: 'Newsreader', serif;
+    font-size: 1.5rem;
+    color: var(--ays-gold);
+    margin: 0.5rem 0;
+}
+
+/* CTA Section */
+.ctaSection {
+    padding: 10rem 0;
+    text-align: center;
+    background-color: var(--ays-dark-green);
+    position: relative;
+}
+
+.ctaLogo {
+    margin-bottom: 3rem;
+    opacity: 0.5;
+}
+
+.ctaTitle {
+    font-family: 'Newsreader', serif;
+    font-size: 4rem;
+    margin-bottom: 3rem;
+}
+
+/* Family Carousel */
+.carouselSection {
+    padding: 8rem 0;
+    overflow: hidden;
+}
+
+.carouselHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    padding: 0 5%;
+}
+
+.carouselTitle {
+    font-family: 'Newsreader', serif;
+    font-size: 3rem;
+    max-width: 600px;
+}
+
+@media (max-width: 1024px) {
+    .financingGrid {
+        grid-template-columns: 1fr;
+    }
+    .cardsContainer {
+        grid-template-columns: 1fr;
+    }
+}
