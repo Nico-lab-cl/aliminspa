@@ -22,14 +22,14 @@ export default function AysIntro() {
                 
                 <AnimatedSection delay={200}>
                     <p className={styles.introBody}>
-                        Un proyecto pensado para quienes quieren dar el paso hacia un terreno urbanizado cerca del mar, con acceso claro, servicios y una compra más simple.
+                        Un proyecto pensado para quienes quieren dar el paso hacia un terreno urbanizado cerca del mar, con acceso claro, servicios y una compra más simple en el corazón del Litoral Central.
                     </p>
                 </AnimatedSection>
             </div>
             
             <div className={styles.introImage}>
                 <Image
-                    src="/images/arena_y_sol/15.png"
+                    src="/images/arena_y_sol/intro.png"
                     alt="Vista del terreno Arena y Sol"
                     fill
                     className="object-cover"

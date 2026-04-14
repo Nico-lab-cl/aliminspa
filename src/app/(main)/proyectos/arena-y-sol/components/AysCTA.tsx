@@ -12,11 +12,11 @@ export default function AysCTA() {
                 <AnimatedSection>
                     <div className={styles.ctaLogo}>
                         <Image
-                            src="/images/arena_y_sol/logo.png"
+                            src="/images/arena_y_sol/logo-ays.png"
                             alt="Alimin Logo"
-                            width={150}
-                            height={60}
-                            className="mx-auto grayscale invert"
+                            width={120}
+                            height={45}
+                            className="mx-auto brightness-0 invert opacity-40"
                         />
                     </div>
                 </AnimatedSection>

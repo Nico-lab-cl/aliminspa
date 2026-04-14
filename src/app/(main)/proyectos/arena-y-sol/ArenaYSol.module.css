@@ -1,5 +1,5 @@
 .aysPage {
-    --ays-dark-green: #2F4F4F;
+    --ays-dark-green: #2c494d; /* Corrected to the specific Teal from design system */
     --ays-gold: #D9B055;
     --ays-surface-low: #f3f3f3;
     --ays-surface-highest: #e2e2e2;
@@ -8,8 +8,10 @@
     
     background-color: var(--ays-dark-green);
     color: var(--ays-text-on-dark);
+    font-family: 'Manrope', sans-serif;
 }
 
+/* SECTION: HERO */
 .hero {
     position: relative;
     height: 100vh;
@@ -17,6 +19,7 @@
     display: flex;
     align-items: center;
     overflow: hidden;
+    background-color: black;
 }
 
 .heroBackground {
@@ -28,168 +31,202 @@
 .heroOverlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgba(47, 79, 79, 0.6), rgba(47, 79, 79, 0.8));
+    background: linear-gradient(180deg, rgba(44, 73, 77, 0.4) 0%, rgba(44, 73, 77, 0.7) 100%);
     z-index: 1;
 }
 
 .heroContent {
     position: relative;
     z-index: 2;
-    max-width: 900px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 0 5%;
 }
 
 .heroTitle {
     font-family: 'Newsreader', serif;
-    font-size: clamp(3rem, 8vw, 6rem);
-    line-height: 1;
-    margin-bottom: 1.5rem;
-    font-weight: 400;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    line-height: 0.95;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .heroSubtitle {
     font-family: 'Manrope', sans-serif;
     font-size: 1.25rem;
-    max-width: 600px;
-    margin-bottom: 2rem;
+    max-width: 550px;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    font-weight: 300;
     opacity: 0.9;
 }
 
 .heroHighlight {
     color: var(--ays-gold);
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 3.5rem;
     display: block;
 }
 
 .ctaGroup {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
 }
 
 .buttonPrimary {
     background: var(--ays-dark-green);
     color: var(--ays-gold);
-    padding: 1rem 2.5rem;
+    padding: 1.2rem 3rem;
     border-radius: 4px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05rem;
-    border: 1px solid var(--ays-gold); /* Subtle border per user layout */
-    transition: all 0.3s ease;
+    letter-spacing: 0.1rem;
+    border: 1px solid var(--ays-gold);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.buttonPrimary:hover {
+    background: var(--ays-gold);
+    color: var(--ays-dark-green);
+    transform: translateY(-4px);
 }
 
 .buttonSecondary {
-    background: #55a630; /* Specific green for WhatsApp advisor */
+    background: #55a630;
     color: white;
-    padding: 1rem 2.5rem;
+    padding: 1.2rem 3rem;
     border-radius: 4px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05rem;
-    transition: all 0.3s ease;
+    letter-spacing: 0.1rem;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Section 2 Intro */
+.buttonSecondary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-4px);
+}
+
+/* SECTION: INTRO (Asymmetrical) */
 .introSection {
-    padding: 8rem 0;
+    padding: 10rem 0;
     background-color: var(--ays-dark-green);
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 6rem;
     align-items: center;
 }
 
 .introText {
-    padding-left: 5%;
+    padding-left: 8%;
 }
 
 .introHeading {
     font-family: 'Newsreader', serif;
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
     line-height: 1.1;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .introHeadingLarge {
-    font-size: 5rem;
+    font-size: clamp(4rem, 8vw, 6.5rem);
     font-weight: 800;
     display: block;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    color: var(--ays-gold);
+    line-height: 1;
 }
 
 .introBody {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1.8;
-    max-width: 500px;
-    opacity: 0.8;
+    max-width: 550px;
+    font-weight: 300;
+    opacity: 0.7;
 }
 
 .introImage {
     position: relative;
-    height: 600px;
-    border-radius: 4px 0 0 4px;
+    height: 700px;
+    clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%); /* Editorial diagonal cut */
     overflow: hidden;
 }
 
-/* Section 3 Gallery */
+/* SECTION: GALLERY (Masonry-like) */
 .gallerySection {
-    padding: 8rem 0;
-    text-align: center;
+    padding: 12rem 0;
+    background-color: #263e42; /* Subtle tonal shift */
 }
 
 .galleryTitle {
     font-family: 'Newsreader', serif;
-    font-size: 3rem;
-    margin-bottom: 4rem;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    text-align: center;
+    margin-bottom: 6rem;
+    font-weight: 300;
 }
 
 .galleryGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 2rem;
     padding: 0 5%;
 }
 
 .galleryCard {
     position: relative;
-    height: 500px;
-    cursor: pointer;
+    cursor: zoom-in;
     overflow: hidden;
-    transition: transform 0.5s ease;
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.galleryCard:hover {
-    transform: translateY(-10px);
+.galleryCard img {
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* Responsive */
-/* Financing Section */
+.galleryCard:hover img {
+    transform: scale(1.08);
+}
+
+/* Specific heights and placements for editorial look */
+.item1 { grid-column: span 8; height: 600px; }
+.item2 { grid-column: span 4; height: 600px; margin-top: 4rem; }
+.item3 { grid-column: span 12; height: 500px; }
+
+/* SECTION: FINANCING */
 .financingSection {
-    padding: 8rem 0;
+    padding: 10rem 0;
     background-color: var(--ays-dark-green);
 }
 
 .financingGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
+    gap: 8rem;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 0 5%;
 }
 
 .benefitList {
     list-style: none;
-    margin-top: 2rem;
+    margin-top: 3.5rem;
 }
 
 .benefitItem {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(217, 176, 85, 0.1);
 }
 
 .benefitIcon {
@@ -199,81 +236,85 @@
 
 .cardsContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
 }
 
 .propertyCard {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+    background: rgba(44, 73, 77, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(217, 176, 85, 0.2);
+    border-radius: 8px;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    display: flex;
+    transition: all 0.4s ease;
 }
 
 .propertyCard:hover {
-    transform: translateY(-5px);
+    border-color: var(--ays-gold);
+    transform: scale(1.02);
 }
 
 .cardImage {
     position: relative;
-    height: 200px;
+    width: 40%;
+    min-height: 250px;
 }
 
 .cardContent {
-    padding: 1.5rem;
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .cardPrice {
     font-family: 'Newsreader', serif;
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     color: var(--ays-gold);
-    margin: 0.5rem 0;
+    margin: 0.8rem 0;
+    font-weight: 300;
 }
 
-/* CTA Section */
-.ctaSection {
-    padding: 10rem 0;
-    text-align: center;
-    background-color: var(--ays-dark-green);
-    position: relative;
-}
-
-.ctaLogo {
-    margin-bottom: 3rem;
-    opacity: 0.5;
-}
-
-.ctaTitle {
-    font-family: 'Newsreader', serif;
-    font-size: 4rem;
-    margin-bottom: 3rem;
-}
-
-/* Family Carousel */
+/* SECTION: CAROUSEL */
 .carouselSection {
-    padding: 8rem 0;
-    overflow: hidden;
+    padding: 10rem 0;
+    background-color: #263e42;
 }
 
 .carouselHeader {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 3rem;
+    max-width: 1400px;
+    margin: 0 auto 5rem;
     padding: 0 5%;
 }
 
 .carouselTitle {
     font-family: 'Newsreader', serif;
-    font-size: 3rem;
-    max-width: 600px;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    max-width: 700px;
+    line-height: 1.1;
 }
 
+/* Mobile Responsive */
 @media (max-width: 1024px) {
-    .financingGrid {
+    .introSection {
         grid-template-columns: 1fr;
+        padding: 6rem 0;
+        gap: 4rem;
     }
-    .cardsContainer {
-        grid-template-columns: 1fr;
+    .introText { padding: 0 5%; }
+    .introImage {
+        clip-path: none;
+        height: 500px;
+        order: -1;
     }
+    .galleryGrid { grid-template-columns: 1fr; }
+    .item1, .item2, .item3 { grid-column: span 12; height: 400px; margin-top: 0; }
+    .financingGrid { grid-template-columns: 1fr; gap: 5rem; }
+    .propertyCard { flex-direction: column; }
+    .cardImage { width: 100%; height: 250px; }
 }

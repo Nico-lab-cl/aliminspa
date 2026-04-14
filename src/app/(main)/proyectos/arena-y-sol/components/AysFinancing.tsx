@@ -21,16 +21,19 @@ export default function AysFinancing() {
                     
                     <ul className={styles.benefitList}>
                         {[
-                            'Crédito directo con Alimin',
-                            'NUESTRO CRÉDITO es 0% interés',
-                            'Sin importar tu DICOM'
+                            { title: 'Crédito directo con Alimin', desc: 'Sin trámites bancarios engorrosos.' },
+                            { title: 'NUESTRO CRÉDITO es 0% interés', desc: 'Paga solo el valor de tu terreno.' },
+                            { title: 'Sin importar tu DICOM', desc: 'Tu capacidad de ahorro es lo que cuenta.' }
                         ].map((benefit, idx) => (
                             <AnimatedSection key={idx} delay={idx * 100}>
                                 <li className={styles.benefitItem}>
                                     <div className={styles.benefitIcon}>
-                                        <Check size={24} />
+                                        <Check size={28} strokeWidth={3} />
                                     </div>
-                                    <span>{benefit}</span>
+                                    <div>
+                                        <div className="font-bold text-lg">{benefit.title}</div>
+                                        <div className="text-sm opacity-60 font-light">{benefit.desc}</div>
+                                    </div>
                                 </li>
                             </AnimatedSection>
                         ))}
@@ -38,35 +41,34 @@ export default function AysFinancing() {
                 </div>
 
                 <div className={styles.cardsContainer}>
-                    {[1, 2].map((i) => (
-                        <AnimatedSection key={i} delay={300 + (i * 100)}>
-                            <div className={styles.propertyCard}>
-                                <div className={styles.cardImage}>
-                                    <Image
-                                        src="/images/arena_y_sol/107.png"
-                                        alt="Terreno Arena y Sol"
-                                        fill
-                                        className="object-cover"
-                                    />
-                                </div>
-                                <div className={styles.cardContent}>
-                                    <h3 className="font-bold text-lg">Terrenos urbanizados de 200 m²</h3>
-                                    <p className={styles.cardPrice}>Pie $20.000.000</p>
-                                    <div className="text-sm opacity-70 mt-2">
-                                        <p>Valor total: $42.000.000</p>
-                                        <p>Precio de contado: $39.000.000</p>
-                                    </div>
-                                    <p className="text-xs mt-4 text-[#D9B055]">
-                                        Aprovecha nuestro crédito directo. Sin importar tu DICOM.
-                                    </p>
-                                </div>
+                    <AnimatedSection delay={400}>
+                        <div className={styles.propertyCard}>
+                            <div className={styles.cardImage}>
+                                <Image
+                                    src="/images/arena_y_sol/property-card.png"
+                                    alt="Terreno Arena y Sol"
+                                    fill
+                                    className="object-cover"
+                                />
                             </div>
-                        </AnimatedSection>
-                    ))}
+                            <div className={styles.cardContent}>
+                                <h3 className="font-bold text-xl uppercase tracking-wider">Terrenos Urbanizados</h3>
+                                <div className="text-sm opacity-60 mb-2">Sup. 200 m² / Rol Propio</div>
+                                <p className={styles.cardPrice}>Pie $20.000.000</p>
+                                <div className="space-y-1 text-sm opacity-80 mt-2 border-t border-white/10 pt-4">
+                                    <p>Valor total: $42.000.000</p>
+                                    <p>Precio de contado: $39.000.000</p>
+                                </div>
+                                <p className="text-xs mt-6 text-[#D9B055] font-semibold uppercase tracking-tighter">
+                                    Financiamiento directo disponible hoy
+                                </p>
+                            </div>
+                        </div>
+                    </AnimatedSection>
                 </div>
             </div>
             
-            <div className="text-center mt-12">
+            <div className="text-center mt-20">
                 <AnimatedSection delay={600}>
                     <button className={styles.buttonPrimary}>
                         Ver ubicación en Google Maps

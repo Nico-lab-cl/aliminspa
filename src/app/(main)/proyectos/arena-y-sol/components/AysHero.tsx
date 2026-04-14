@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import styles from '../ArenaYSol.module.css'
+import { motion } from 'framer-motion'
 
 export default function AysHero() {
     return (
@@ -11,7 +12,7 @@ export default function AysHero() {
                 {/* Desktop Background */}
                 <div className="hidden md:block absolute inset-0">
                     <Image
-                        src="/images/arena_y_sol/110.png"
+                        src="/images/arena_y_sol/hero-desktop.png"
                         alt="Proyecto Arena y Sol Desktop"
                         fill
                         priority
@@ -21,7 +22,7 @@ export default function AysHero() {
                 {/* Mobile Background */}
                 <div className="block md:hidden absolute inset-0">
                     <Image
-                        src="/images/arena_y_sol/lomas.png"
+                        src="/images/arena_y_sol/hero-mobile.png"
                         alt="Proyecto Arena y Sol Mobile"
                         fill
                         priority
@@ -32,18 +33,28 @@ export default function AysHero() {
             
             <div className={styles.heroOverlay} />
             
-            <div className={styles.heroContent}>
+            <motion.div 
+                className={styles.heroContent}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+            >
                 <h1 className={styles.heroTitle}>
                     Proyecto <br />
                     Arena y Sol
                 </h1>
                 <p className={styles.heroSubtitle}>
-                    Terrenos 100% urbanizados de 200 m² a 8 min de la playa. 
-                    El refugio que estabas buscando en El Tabo.
+                    Terrenos 100% urbanizados de 200 m² a 10 min de la playa. 
+                    El refugio sofisticado que estabas buscando en El Tabo.
                 </p>
-                <span className={styles.heroHighlight}>
+                <motion.span 
+                    className={styles.heroHighlight}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8, duration: 1 }}
+                >
                     Sin bancos, sin intereses y con financiamiento directo.
-                </span>
+                </motion.span>
                 
                 <div className={styles.ctaGroup}>
                     <button className={styles.buttonPrimary}>
@@ -53,7 +64,7 @@ export default function AysHero() {
                         Hablar con un asesor
                     </button>
                 </div>
-            </div>
+            </motion.div>
         </section>
     )
 }
