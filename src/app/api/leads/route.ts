@@ -4,7 +4,14 @@ import { sendMetaEvent } from '@/lib/meta-capi'
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json()
+        let body
+        try {
+            body = await request.json()
+        } catch (e) {
+            console.error('Error parsing request body:', e)
+            return NextResponse.json({ error: 'Payload JSON inválido' }, { status: 400 })
+        }
+
         const { 
             nombre, email, celular, ciudad, proyecto,
             fbp, fbc,
@@ -13,7 +20,7 @@ export async function POST(request: NextRequest) {
 
         if (!nombre || !email || !celular || !ciudad) {
             return NextResponse.json(
-                { error: 'Todos los campos son obligatorios' },
+                { error: 'Todos los campos son obligatorios: nombre, email, celular, ciudad' },
                 { status: 400 }
             )
         }
@@ -61,10 +68,19 @@ export async function POST(request: NextRequest) {
         ).catch(err => console.error('Error sending Meta Lead event:', err))
 
         return NextResponse.json({ success: true, id: lead.id }, { status: 201 })
-    } catch (error) {
-        console.error('Error creating lead:', error)
+    } catch (error: any) {
+        console.error('Error creating lead (Full Details):', {
+            message: error.message,
+            code: error.code,
+            meta: error.meta,
+            stack: error.stack
+        })
+        
         return NextResponse.json(
-            { error: 'Error interno del servidor' },
+            { 
+                error: 'Error interno del servidor', 
+                message: process.env.NODE_ENV === 'development' ? error.message : undefined 
+            },
             { status: 500 }
         )
     }
