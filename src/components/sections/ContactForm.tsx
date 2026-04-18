@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, FormEvent, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { PROJECTS } from '@/lib/constants'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import styles from './ContactForm.module.css'
 
 function ContactFormInner() {
     const searchParams = useSearchParams()
+    const router = useRouter()
     
     const [form, setForm] = useState({
         nombre: '',
@@ -55,7 +56,10 @@ function ContactFormInner() {
             setStatus('success')
             setForm({ nombre: '', email: '', celular: '', ciudad: '', proyecto: '' })
 
-            setTimeout(() => setStatus('idle'), 5000)
+            // Redirigir a la página de gracias después de un breve delay
+            setTimeout(() => {
+                router.push('/gracias')
+            }, 500)
         } catch {
             setStatus('error')
             setTimeout(() => setStatus('idle'), 4000)

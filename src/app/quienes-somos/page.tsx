@@ -6,7 +6,7 @@ import { AuroraBackground } from './components/AuroraBackground'
 import { HeroSection } from './components/HeroSection'
 import { MisionVision } from './components/MisionVision'
 import { DirectionSection } from './components/DirectionSection'
-import { AdvisorsSection } from './components/AdvisorsSection'
+import { AdvisorsSection } from '@/components/sections/AdvisorsSection'
 import styles from './page.module.css'
 
 export const metadata: Metadata = {
