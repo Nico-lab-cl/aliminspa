@@ -97,7 +97,7 @@ export const PROJECTS = [
         lotSize: 'Desde 400 m²',
         status: 'Proyecto Vendido',
         externalUrl: null,
-        image: '/images/projects/libertad-y-alegria.png',
+        image: '/images/projects/libertad-y-alegria.webp',
         color: '#4A4A4A', // Muted gray for sold out
         isFeatured: false,
         financing: {
