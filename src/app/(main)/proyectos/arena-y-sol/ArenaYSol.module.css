@@ -28,6 +28,13 @@
     z-index: 0;
 }
 
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 1;
+}
+
 .heroContentCentered {
     position: relative;
     z-index: 2;
@@ -48,9 +55,11 @@
     font-family: 'Manrope', sans-serif;
     color: var(--ays-gold);
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 700;
     display: block;
     margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.05em;
 }
 
 .heroTitleCentered {
@@ -58,24 +67,28 @@
     font-size: clamp(3.5rem, 10vw, 7rem);
     line-height: 1;
     margin-bottom: 1.5rem;
-    font-weight: 500;
+    font-weight: 700;
     color: #ffffff;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .heroSubtitleCentered {
     font-family: 'Manrope', sans-serif;
     font-size: 1.5rem;
     line-height: 1.4;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     color: #ffffff;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .heroHighlightGold {
     display: block;
     color: var(--ays-gold);
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 3rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 3.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .ctaGroupCentered {
@@ -388,18 +401,23 @@
     }
     
     .heroTitleCentered {
-        font-size: 3rem;
-        margin-bottom: 1.2rem;
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
     }
     
     .heroSubtitleCentered {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.15rem;
+        margin-bottom: 0.8rem;
     }
     
     .heroHighlightGold {
         font-size: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        padding: 0 10%;
+    }
+
+    .heroProjectLabelGold {
+        font-size: 1.2rem;
     }
 
     .ctaGroupCentered {
