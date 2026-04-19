@@ -12,25 +12,27 @@ export default function AysIntro() {
                 <AnimatedSection>
                     <div className={styles.introTop}>
                         <div className={styles.iconWrapper}>
-                            <svg viewBox="0 0 100 100" className={styles.sunPalmIcon} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" stroke="currentColor" strokeWidth="12" fill="none" strokeLinecap="round" strokeLinejoin="round" className={styles.sunPalmIcon}>
                                 {/* Sol */}
-                                <circle cx="22" cy="22" r="7" />
-                                <path d="M22 8v4 M22 32v4 M8 22h4 M32 22h4 M12 12l3 3 M29 29l3 3 M12 32l3-3 M29 15l3 3" />
-                                
+                                <circle cx="56" cy="56" r="24" />
+                                <line x1="56" y1="12" x2="56" y2="20" />
+                                <line x1="56" y1="92" x2="56" y2="100" />
+                                <line x1="12" y1="56" x2="20" y2="56" />
+                                <line x1="92" y1="56" x2="100" y2="56" />
+                                <line x1="24.89" y1="24.89" x2="30.55" y2="30.55" />
+                                <line x1="81.45" y1="81.45" x2="87.11" y2="87.11" />
+                                <line x1="24.89" y1="87.11" x2="30.55" y2="81.45" />
+                                <line x1="81.45" y1="30.55" x2="87.11" y2="24.89" />
+
+                                {/* Palmera */}
+                                <path d="M120,216c8-56,32-96,72-104" />
+                                <path d="M192,112c-29.33-40-77.33-40-104,0" />
+                                <path d="M192,112c34.67-34.67,66.67-18.67,40,32" />
+                                <path d="M192,112c40,18.67,45.33,56,8,72" />
+                                <path d="M192,112c-45.33,18.67-56,56-24,72" />
+
                                 {/* Olas */}
-                                <path d="M10 82 Q 30 72 50 82 T 90 82" />
-                                <path d="M15 90 Q 35 80 55 90 T 85 90" />
-                                
-                                {/* Base/Isla */}
-                                <path d="M25 75 Q 55 65 85 75" />
-                                
-                                {/* Palmera Izquierda */}
-                                <path d="M45 72 Q 55 45 42 35" />
-                                <path d="M42 35 C 32 30 25 45 22 55 M42 35 C 35 20 20 25 15 30 M42 35 C 55 25 65 30 70 40 M42 35 C 60 45 65 55 60 65" />
-                                
-                                {/* Palmera Derecha (Más Grande) */}
-                                <path d="M65 74 Q 85 30 72 20" />
-                                <path d="M72 20 C 60 15 50 30 45 40 M72 20 C 65 5 45 10 40 15 M72 20 C 85 10 95 15 100 25 M72 20 C 95 30 100 45 95 55 M72 20 C 80 15 95 25 95 35" />
+                                <path d="M24,216c16-16,32-16,48,0s32,16,48,0s32-16,48,0s32,16,48,0" />
                             </svg>
                         </div>
                         <h2 className={styles.introSubtitle}>
