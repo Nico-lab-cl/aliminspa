@@ -39,12 +39,12 @@ export default function AysHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: "easeOut" }}
             >
+                <span className={styles.heroProjectLabel}>Proyecto</span>
                 <h1 className={styles.heroTitle}>
-                    Proyecto <br />
                     Arena y Sol
                 </h1>
                 <p className={styles.heroSubtitle}>
-                    Terrenos 100% urbanizados de 200 m² a 10 min de la playa. 
+                    Terrenos 100% urbanizados de 200 m² a 10 min de la playa. <br className="hidden md:block" />
                     El refugio sofisticado que estabas buscando en El Tabo.
                 </p>
                 <motion.span 
@@ -53,7 +53,7 @@ export default function AysHero() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8, duration: 1 }}
                 >
-                    Sin bancos, sin intereses y con financiamiento directo.
+                    SIN BANCOS, SIN INTERESES Y CON FINANCIAMIENTO DIRECTO.
                 </motion.span>
                 
                 <div className={styles.ctaGroup}>

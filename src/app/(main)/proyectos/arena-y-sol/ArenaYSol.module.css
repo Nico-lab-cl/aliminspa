@@ -41,37 +41,55 @@
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 5%;
+    padding: 120px 5% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.heroProjectLabel {
+    font-family: 'Manrope', sans-serif;
+    color: var(--ays-gold);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    display: block;
+    margin-bottom: 0.75rem;
 }
 
 .heroTitle {
     font-family: 'Newsreader', serif;
-    font-size: clamp(3.5rem, 10vw, 7rem);
-    line-height: 0.95;
+    font-size: clamp(4.5rem, 12vw, 9rem);
+    line-height: 0.85;
     margin-bottom: 2rem;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    color: #ffffff;
 }
 
 .heroSubtitle {
     font-family: 'Manrope', sans-serif;
-    font-size: 1.25rem;
-    max-width: 550px;
-    margin-bottom: 2.5rem;
-    line-height: 1.6;
+    font-size: 1.4rem;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
     font-weight: 300;
-    opacity: 0.9;
+    opacity: 0.95;
+    color: #ffffff;
+    letter-spacing: -0.01em;
 }
 
 .heroHighlight {
-    color: var(--ays-gold);
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 3.5rem;
     display: block;
+    color: var(--ays-gold);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 3.5rem;
+    max-width: 650px;
+    line-height: 1.4;
 }
 
 .ctaGroup {
@@ -81,37 +99,41 @@
 }
 
 .buttonPrimary {
-    background: var(--ays-dark-green);
+    background: transparent;
     color: var(--ays-gold);
-    padding: 1.2rem 3rem;
+    padding: 1rem 2.5rem;
     border-radius: 4px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0.08em;
     border: 1px solid var(--ays-gold);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .buttonPrimary:hover {
     background: var(--ays-gold);
     color: var(--ays-dark-green);
-    transform: translateY(-4px);
 }
 
 .buttonSecondary {
-    background: #55a630;
+    background: #4B9B2B;
     color: white;
-    padding: 1.2rem 3rem;
+    padding: 1rem 2.5rem;
     border-radius: 4px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1rem;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    letter-spacing: 0.08em;
+    border: none;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .buttonSecondary:hover {
     filter: brightness(1.1);
-    transform: translateY(-4px);
+    transform: scale(1.02);
 }
 
 /* SECTION: INTRO (Asymmetrical) */
@@ -317,4 +339,40 @@
     .financingGrid { grid-template-columns: 1fr; gap: 5rem; }
     .propertyCard { flex-direction: column; }
     .cardImage { width: 100%; height: 250px; }
+
+    /* HERO MOBILE */
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 100px 0 60px;
+    }
+    
+    .heroContent {
+        padding: 0 5%;
+    }
+    
+    .heroTitle {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .heroSubtitle {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .heroHighlight {
+        font-size: 0.9rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .ctaGroup {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .buttonPrimary, .buttonSecondary {
+        width: 100%;
+        text-align: center;
+    }
 }
