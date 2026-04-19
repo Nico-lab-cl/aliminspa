@@ -21,7 +21,7 @@ export default function AysIntro() {
                             </svg>
                         </div>
                         <h2 className={styles.introSubtitle}>
-                            A solo 10 minutos de la playa de <span className={styles.goldText}>El Tabo.</span>
+                            A solo 10 minutos de la playa de <span className={styles.goldText}>El Tabo</span>
                         </h2>
                     </div>
                 </AnimatedSection>
