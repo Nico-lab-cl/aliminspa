@@ -12,12 +12,25 @@ export default function AysIntro() {
                 <AnimatedSection>
                     <div className={styles.introTop}>
                         <div className={styles.iconWrapper}>
-                            {/* Palm and Sun Icon Group */}
-                            <svg viewBox="0 0 100 60" className={styles.sunPalmIcon} fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="20" cy="20" r="8" stroke="currentColor" strokeWidth="2" />
-                                <path d="M20 5V10M20 30V35M35 20H30M5 20H10M31 9L27 13M13 27L9 31M31 31L27 27M13 13L9 9" stroke="currentColor" strokeWidth="2" />
-                                <path d="M50 50C50 35 65 25 80 25M50 50C50 35 35 25 20 25M50 50V25M45 55H55M40 58H60" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                <path d="M10 50Q30 45 50 50T90 50" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            <svg viewBox="0 0 100 100" className={styles.sunPalmIcon} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                {/* Sol */}
+                                <circle cx="22" cy="22" r="7" />
+                                <path d="M22 8v4 M22 32v4 M8 22h4 M32 22h4 M12 12l3 3 M29 29l3 3 M12 32l3-3 M29 15l3 3" />
+                                
+                                {/* Olas */}
+                                <path d="M10 82 Q 30 72 50 82 T 90 82" />
+                                <path d="M15 90 Q 35 80 55 90 T 85 90" />
+                                
+                                {/* Base/Isla */}
+                                <path d="M25 75 Q 55 65 85 75" />
+                                
+                                {/* Palmera Izquierda */}
+                                <path d="M45 72 Q 55 45 42 35" />
+                                <path d="M42 35 C 32 30 25 45 22 55 M42 35 C 35 20 20 25 15 30 M42 35 C 55 25 65 30 70 40 M42 35 C 60 45 65 55 60 65" />
+                                
+                                {/* Palmera Derecha (Más Grande) */}
+                                <path d="M65 74 Q 85 30 72 20" />
+                                <path d="M72 20 C 60 15 50 30 45 40 M72 20 C 65 5 45 10 40 15 M72 20 C 85 10 95 15 100 25 M72 20 C 95 30 100 45 95 55 M72 20 C 80 15 95 25 95 35" />
                             </svg>
                         </div>
                         <h2 className={styles.introSubtitle}>

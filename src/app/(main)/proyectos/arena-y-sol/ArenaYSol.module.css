@@ -147,17 +147,19 @@
 
 .introTop {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: center;
+    gap: 2.5rem;
     margin-bottom: 3.5rem;
 }
 
 .iconWrapper {
-    width: 180px;
-    height: 110px;
+    width: 220px;
+    height: 180px;
     color: #ffffff;
-    opacity: 0.9;
+    opacity: 0.95;
+    flex-shrink: 0;
 }
 
 .sunPalmIcon {
@@ -170,6 +172,8 @@
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 300;
     letter-spacing: -0.01em;
+    text-align: left;
+    max-width: 800px;
 }
 
 .goldText {
@@ -195,8 +199,8 @@
 
 .introLogo {
     position: relative;
-    width: 150px;
-    height: 40px;
+    width: 280px;
+    height: 65px;
     flex-shrink: 0;
     opacity: 1;
 }
@@ -439,6 +443,11 @@
         padding: 60px 0;
     }
 
+    .introTop {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
     .introDividerWrapper {
         gap: 1rem;
         margin: 2.5rem 0;
@@ -449,17 +458,18 @@
     }
 
     .iconWrapper {
-        width: 100px;
-        height: 60px;
+        width: 130px;
+        height: 110px;
     }
 
     .introLogo {
-        width: 100px;
-        height: 30px;
+        width: 160px;
+        height: 45px;
     }
 
     .introSubtitle {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+        text-align: center;
     }
 
     .introDescription {
