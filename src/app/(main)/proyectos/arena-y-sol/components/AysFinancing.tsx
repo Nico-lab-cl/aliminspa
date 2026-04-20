@@ -52,9 +52,11 @@ export default function AysFinancing() {
                             <div className={styles.financeCard}>
                                 <div className={styles.financeImageWrapper}>
                                     <Image
-                                        src={`/images/arena_y_sol/finance-${num}.png`}
+                                        src={`/images/arena_y_sol/fin-${num}.png`}
                                         alt={`Terreno Arena y Sol ${num}`}
                                         fill
+                                        unoptimized
+                                        priority
                                         className="object-cover"
                                     />
                                     <div className={styles.financeCardTag}>200 m2</div>
