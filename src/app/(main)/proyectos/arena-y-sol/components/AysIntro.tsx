@@ -12,28 +12,27 @@ export default function AysIntro() {
                 <AnimatedSection>
                     <div className={styles.introTop}>
                         <div className={styles.iconWrapper}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" className={styles.sunPalmIcon}>
-                                {/* Isla Base */}
-                                <path d="M14 46 Q 36 36 56 46" strokeWidth="2.5" />
-                                
-                                {/* Sol */}
-                                <g transform="translate(6, 4)">
-                                    <circle cx="12" cy="12" r="5" strokeWidth="2.5" />
-                                    <path d="M12 1v3 M12 20v3 M1.5 12h3 M19.5 12h3 M4.5 4.5l2.5 2.5 M17 17l2.5 2.5 M4.5 19.5l2.5-2.5 M17 4.5l2.5 2.5" strokeWidth="2.5" />
-                                </g>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className={styles.sunPalmIcon}>
+                                {/* Sol Brillante */}
+                                <circle cx="22" cy="25" r="8" />
+                                <path d="M22 8v4 M22 42v4 M4 25h4 M36 25h4 M9 12l3 3 M32 38l3 3 M9 38l3-3 M32 12l3 3" />
 
-                                {/* Palmera Tropical (Tronco curvo y hojas) */}
-                                <g transform="translate(24, 10) scale(1.6)" strokeWidth="1.5">
-                                    <path d="M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4" />
-                                    <path d="M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3" />
-                                    <path d="M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 2.12-2.12c-1.95-1.96-5.27-1.8-7.42.35z" />
-                                    <path d="M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14" />
-                                    <path d="M8.28 12.11c1.99-1.95 5.31-1.79 7.46.36l-4.24 4.24-.7.7-.71.71-2.12 2.12c1.95 1.96 5.27 1.8 7.42-.35z" />
-                                </g>
+                                {/* Olas Fluidas */}
+                                <path d="M10 78 Q 20 70 30 78 T 50 78 T 70 78 T 90 78" />
+                                <path d="M15 90 Q 25 82 35 90 T 55 90 T 75 90" />
 
-                                {/* Olas */}
-                                <path d="M8 53 Q 12 56 16 53 T 24 53 T 32 53 T 40 53 T 48 53 T 56 53" strokeWidth="2" />
-                                <path d="M12 59 Q 16 62 20 59 T 28 59 T 36 59 T 44 59 T 52 59" strokeWidth="2" />
+                                {/* Duna / Isla */}
+                                <path d="M20 68 Q 50 50 85 68" />
+
+                                {/* Tronco de la Palmera */}
+                                <path d="M65 62 Q 74 45 60 25" />
+
+                                {/* Hojas Curvadas Elegantes */}
+                                <path d="M60 25 Q 35 20 30 40" />  
+                                <path d="M60 25 Q 45 5 40 15" />    
+                                <path d="M60 25 Q 75 0 80 15" />    
+                                <path d="M60 25 Q 90 25 90 45" />   
+                                <path d="M60 25 Q 75 40 65 50" />   
                             </svg>
                         </div>
                         <h2 className={styles.introSubtitle}>
