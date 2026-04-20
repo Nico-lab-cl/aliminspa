@@ -56,7 +56,6 @@ export default function AysAttractions() {
                             {SERVICIOS.map((item, index) => (
                                 <div key={index} className={styles.attrCard}>
                                     <Image src={item.src} alt={item.label} fill className="object-cover" />
-                                    <div className={styles.attrLabel}>{item.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -79,12 +78,11 @@ export default function AysAttractions() {
                         
                         <div className={styles.attrCarousel} ref={scrollRefActividades}>
                             {ACTIVIDADES.map((item, index) => (
-                                <div key={index} className={styles.attrCard}>
-                                    <Image src={item.src} alt={item.label} fill className="object-cover" />
-                                    <div className={styles.attrLabel}>{item.label}</div>
-                                </div>
-                            ))}
-                        </div>
+                                 <div key={index} className={styles.attrCard}>
+                                     <Image src={item.src} alt={item.label} fill className="object-cover" />
+                                 </div>
+                             ))}
+                         </div>
 
                         <button onClick={() => scroll(scrollRefActividades, 'right')} className={styles.attrNavBtn}>
                             <ChevronRight size={24} />
