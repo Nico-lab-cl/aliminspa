@@ -50,38 +50,15 @@ export default function AysFinancing() {
                     {[1, 2].map((num, idx) => (
                         <AnimatedSection key={num} delay={400 + (idx * 150)}>
                             <div className={styles.financeCard}>
-                                <div className={styles.financeImageWrapper}>
+                                <div className={styles.financeImageWrapperFull}>
                                     <Image
                                         src={`/images/arena_y_sol/fin-${num}.png`}
                                         alt={`Terreno Arena y Sol ${num}`}
                                         fill
                                         unoptimized
                                         priority
-                                        className="object-cover"
+                                        className="object-contain"
                                     />
-                                    <div className={styles.financeCardTag}>200 m2</div>
-                                </div>
-                                <div className={styles.financeCardBody}>
-                                    <div className={styles.financeCardSubtitle}>
-                                        Terrenos urbanizados de <span className={styles.boldText}>200 m2</span>
-                                    </div>
-                                    <div className={styles.financePiePrice}>
-                                        Pie $20.000.000
-                                    </div>
-                                    <div className={styles.financePricingList}>
-                                        {pricingInfo.map((info, i) => (
-                                            <div key={i} className={styles.financePricingRow}>
-                                                <span>{info.label}:</span>
-                                                <span className={info.highlight ? styles.goldText : ''}>{info.value}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p className={styles.financeCardAd}>
-                                        Aprovecha nuestro <span className={styles.goldText}>crédito directo.</span>
-                                    </p>
-                                    <div className={styles.financeCardDicom}>
-                                        Sin importar tu <span className={styles.goldText}>DICOM</span>
-                                    </div>
                                 </div>
                             </div>
                         </AnimatedSection>

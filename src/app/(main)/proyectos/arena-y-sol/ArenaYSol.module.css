@@ -347,85 +347,24 @@
     text-align: center;
 }
 
-.financeImageWrapper {
+.financeImageWrapperFull {
     position: relative;
     width: 100%;
-    aspect-ratio: 1/1;
-    max-width: 480px;
-    margin-bottom: 2.5rem;
+    aspect-ratio: 3/4;
+    max-width: 550px;
+    margin: 0 auto;
 }
 
-.financeImageWrapper::before {
+.financeImageWrapperFull::before {
     content: '';
     position: absolute;
-    top: -15px;
-    right: -15px;
-    width: 100px;
-    height: 100px;
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
     border-top: 5px solid var(--ays-gold);
     border-right: 5px solid var(--ays-gold);
     z-index: 2;
-}
-
-.financeCardTag {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.3);
-    border: 2px solid var(--ays-gold);
-    padding: 1rem 2rem;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--ays-gold);
-    z-index: 5;
-    backdrop-filter: blur(4px);
-}
-
-.financeCardBody {
-    width: 100%;
-    max-width: 480px;
-}
-
-.financeCardSubtitle {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-    font-weight: 400;
-}
-
-.financePiePrice {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--ays-gold);
-    margin-bottom: 1.5rem;
-}
-
-.financePricingList {
-    background: rgba(255,255,255,0.03);
-    padding: 1.5rem;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-}
-
-.financePricingRow {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: 1.25rem;
-    margin-bottom: 0.4rem;
-}
-
-.financeCardAd {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    margin-bottom: 0.8rem;
-}
-
-.financeCardDicom {
-    font-size: 2.2rem;
-    font-weight: 800;
-    font-style: italic;
-    letter-spacing: -0.01em;
 }
 
 .goldTextItalic {
