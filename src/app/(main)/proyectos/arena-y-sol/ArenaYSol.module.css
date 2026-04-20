@@ -845,13 +845,97 @@
 }
 
 .aysContactSection {
-    padding: 10rem 0;
+    padding: 2rem 0 10rem;
     background-color: var(--ays-dark-green);
 }
 
-.aysContactSection :global(.container) {
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 5rem;
-    border-radius: 20px;
+/* SECTION: ATTRACTIONS */
+.attractionsSection {
+    padding: 8rem 0;
+    background-color: var(--ays-dark-green);
+    color: white;
 }
+
+.attrTitle {
+    font-family: 'Manrope', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ays-gold);
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.attrGroup {
+    margin-bottom: 6rem;
+}
+
+.attrCarouselWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.attrNavBtn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.attrNavBtn:hover {
+    background: var(--ays-gold);
+    color: #333;
+}
+
+.attrCarousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 1rem;
+}
+
+.attrCarousel::-webkit-scrollbar {
+    display: none;
+}
+
+.attrCard {
+    scroll-snap-align: start;
+    flex: 0 0 260px;
+    aspect-ratio: 16/10;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.attrLabel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .attrNavBtn { display: none; }
+    .attrCarousel { padding: 0 5%; }
+    .attrCard { flex: 0 0 220px; }
+}
+
+

@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { Leaf } from 'lucide-react'
 import styles from '../ArenaYSol.module.css'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 
@@ -12,11 +13,7 @@ export default function AysCTA() {
                     <div className={styles.ctaDividerRow}>
                         <div className={styles.ctaDividerLine}></div>
                         <div className={styles.ctaLeafIcon}>
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 21 2c-2.5 4-3 5.5-4.1 11.2A7 7 0 0 1 11 20z" />
-                                <path d="M11 20v-5" />
-                                <path d="M11 15c-1-2.5-3-4.5-5.5-5.5" />
-                            </svg>
+                            <Leaf size={48} strokeWidth={1} />
                         </div>
                         <div className={styles.ctaDividerLine}></div>
                     </div>

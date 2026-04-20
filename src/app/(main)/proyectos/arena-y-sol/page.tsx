@@ -12,6 +12,7 @@ import AysFeatures from './components/AysFeatures'
 import AysFinancing from './components/AysFinancing'
 import AysCTA from './components/AysCTA'
 import AysFamilyCarousel from './components/AysFamilyCarousel'
+import AysAttractions from './components/AysAttractions'
 import ContactForm from '@/components/sections/ContactForm'
 import Newsletter from '@/components/sections/Newsletter'
 
@@ -56,11 +57,9 @@ export default function ArenaYSolPage() {
                 
                 <AysFamilyCarousel />
                 
-                <section className={styles.aysContactSection} id="contacto">
-                    <div className="container">
-                        <ContactForm />
-                    </div>
-                </section>
+                <AysAttractions />
+                
+                <ContactForm />
                 
                 <Newsletter />
             </main>
