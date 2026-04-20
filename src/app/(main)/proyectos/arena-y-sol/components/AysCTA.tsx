@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Leaf } from 'lucide-react'
+import Image from 'next/image'
 import styles from '../ArenaYSol.module.css'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 
@@ -13,7 +13,14 @@ export default function AysCTA() {
                     <div className={styles.ctaDividerRow}>
                         <div className={styles.ctaDividerLine}></div>
                         <div className={styles.ctaLeafIcon}>
-                            <Leaf size={48} strokeWidth={1} />
+                            <Image 
+                                src="/images/arena_y_sol/logo-ays.png" 
+                                alt="Alimin Logo" 
+                                width={120} 
+                                height={45} 
+                                className="brightness-0 invert opacity-60"
+                                style={{ objectFit: 'contain' }}
+                            />
                         </div>
                         <div className={styles.ctaDividerLine}></div>
                     </div>
