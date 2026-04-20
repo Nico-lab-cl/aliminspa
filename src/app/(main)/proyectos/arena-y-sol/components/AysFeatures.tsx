@@ -59,12 +59,11 @@ export default function AysFeatures() {
                                     <Image 
                                         src={feature.iconImage}
                                         alt={feature.label}
-                                        width={160}
-                                        height={160}
+                                        width={240}
+                                        height={240}
                                         className={styles.featIcon}
                                     />
                                 </div>
-                                <h3 className={styles.featCardLabel}>{feature.label}</h3>
                             </div>
                         ))}
                     </div>

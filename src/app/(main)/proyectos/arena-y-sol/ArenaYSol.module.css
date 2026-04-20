@@ -590,8 +590,8 @@
 }
 
 .featIconWrapper {
-    margin-bottom: 2rem;
-    height: 160px;
+    margin-bottom: 0;
+    height: 240px;
     display: flex;
     align-items: center;
     justify-content: center;
