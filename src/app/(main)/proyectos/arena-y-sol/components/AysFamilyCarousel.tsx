@@ -2,15 +2,17 @@
 
 import React, { useRef } from 'react'
 import Image from 'next/image'
-import { ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import styles from '../ArenaYSol.module.css'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 
-const CLIENTS = [
-    { src: '/images/arena_y_sol/client-1.png', label: 'Ya hay clientes avanzando con el cierre perimetral' },
-    { src: '/images/arena_y_sol/client-2.png', label: 'Nuevos propietarios planificando su futuro' },
-    { src: '/images/arena_y_sol/gallery-3.png', label: 'Terrenos listos para entrega inmediata' },
-    { src: '/images/arena_y_sol/intro.png', label: 'Vistas panorámicas garantizadas' },
+const FAMILY_IMAGES = [
+    { src: '/images/testimonials/testimonio-1.webp', alt: 'Familia Alimin 1' },
+    { src: '/images/testimonials/testimonio-2.webp', alt: 'Familia Alimin 2' },
+    { src: '/images/testimonials/testimonio-3.webp', alt: 'Familia Alimin 3' },
+    { src: '/images/testimonials/testimonio-4.webp', alt: 'Familia Alimin 4' },
+    { src: '/images/testimonials/testimonio-5.webp', alt: 'Familia Alimin 5' },
+    { src: '/images/testimonials/testimonio-6.webp', alt: 'Familia Alimin 6' },
 ]
 
 export default function AysFamilyCarousel() {
@@ -18,61 +20,42 @@ export default function AysFamilyCarousel() {
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
-            const scrollAmount = 500
+            const amount = 350
             scrollRef.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                left: direction === 'left' ? -amount : amount,
                 behavior: 'smooth'
             })
         }
     }
 
     return (
-        <section className={styles.carouselSection}>
-            <div className={styles.carouselHeader}>
+        <section className={styles.familySection}>
+            <div className="container">
                 <AnimatedSection>
-                    <h2 className={styles.carouselTitle}>
-                        Ya hay clientes avanzando con el cierre perimetral de sus terrenos
+                    <h2 className={styles.familyTitle}>
+                        +100 familias <br />
+                        <span className={styles.goldText}>han invertido con nosotros</span>
                     </h2>
                 </AnimatedSection>
                 
-                <div className="flex gap-4">
-                    <button 
-                        onClick={() => scroll('left')} 
-                        className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors"
-                        aria-label="Anterior"
-                    >
-                        <ChevronsLeft size={32} strokeWidth={1.5} />
+                <div className={styles.familyCarouselActions}>
+                    <button onClick={() => scroll('left')} className={styles.familyNavBtn} aria-label="Anterior">
+                        <ChevronLeft size={24} />
                     </button>
-                    <button 
-                        onClick={() => scroll('right')} 
-                        className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors"
-                        aria-label="Siguiente"
-                    >
-                        <ChevronsRight size={32} strokeWidth={1.5} />
+                    <button onClick={() => scroll('right')} className={styles.familyNavBtn} aria-label="Siguiente">
+                        <ChevronRight size={24} />
                     </button>
                 </div>
-            </div>
 
-            <div className="relative mt-8 px-[5%]">
-                <div 
-                    className="flex gap-8 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-12"
-                    ref={scrollRef}
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                    {CLIENTS.map((item, index) => (
-                        <div 
-                            key={index} 
-                            className="flex-shrink-0 w-[85vw] md:w-[600px] aspect-[16/10] relative rounded-lg overflow-hidden snap-start group"
-                        >
+                <div className={styles.familyScrollContainer} ref={scrollRef}>
+                    {FAMILY_IMAGES.map((img, idx) => (
+                        <div key={idx} className={styles.familyCard}>
                             <Image 
-                                src={item.src}
-                                alt={item.label}
+                                src={img.src}
+                                alt={img.alt}
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
-                                <p className="text-white text-xl font-light tracking-wide">{item.label}</p>
-                            </div>
                         </div>
                     ))}
                 </div>
@@ -80,3 +63,4 @@ export default function AysFamilyCarousel() {
         </section>
     )
 }
+

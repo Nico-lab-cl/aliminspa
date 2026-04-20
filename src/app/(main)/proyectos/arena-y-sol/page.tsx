@@ -13,6 +13,7 @@ import AysFinancing from './components/AysFinancing'
 import AysCTA from './components/AysCTA'
 import AysFamilyCarousel from './components/AysFamilyCarousel'
 import ContactForm from '@/components/sections/ContactForm'
+import Newsletter from '@/components/sections/Newsletter'
 
 const project = PROJECTS[1] // Arena y Sol
 
@@ -51,15 +52,17 @@ export default function ArenaYSolPage() {
                 
                 <AysFinancing />
                 
-                <AysFamilyCarousel />
-                
                 <AysCTA />
                 
-                <section className="bg-white py-20">
+                <AysFamilyCarousel />
+                
+                <section className={styles.aysContactSection} id="contacto">
                     <div className="container">
                         <ContactForm />
                     </div>
                 </section>
+                
+                <Newsletter />
             </main>
         </div>
     )

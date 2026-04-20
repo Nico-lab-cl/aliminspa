@@ -750,3 +750,169 @@
     .featCarouselWrapper { padding: 0; }
     .featCarousel { gap: 1.5rem; padding: 0 5%; }
 }
+
+/* SECTION: CTA (Cotizar) */
+.ctaSection {
+    padding: 10rem 0;
+    background-color: var(--ays-dark-green);
+    text-align: center;
+    color: #ffffff;
+}
+
+.ctaDividerRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+.ctaDividerLine {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ays-gold), transparent);
+    opacity: 0.4;
+    max-width: 300px;
+}
+
+.ctaLeafIcon {
+    color: var(--ays-gold);
+}
+
+.ctaTitle {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    margin-bottom: 5rem;
+    letter-spacing: -0.01em;
+}
+
+.ctaButtonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.btnGold, .btnGreen {
+    font-family: 'Manrope', sans-serif;
+    padding: 1.5rem 3.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-radius: 60px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 320px;
+}
+
+.btnGold {
+    background-color: var(--ays-gold);
+    color: #333;
+}
+
+.btnGreen {
+    background-color: #4FB552;
+    color: white;
+}
+
+.btnGold:hover, .btnGreen:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    filter: brightness(1.1);
+}
+
+/* SECTION: FAMILY CAROUSEL */
+.familySection {
+    padding: 10rem 0;
+    background-color: var(--ays-dark-green);
+    color: #ffffff;
+}
+
+.familyTitle {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 3rem;
+    line-height: 1.1;
+}
+
+.familyTitle .goldText {
+    color: var(--ays-gold);
+}
+
+.familyCarouselActions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.familyNavBtn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.familyNavBtn:hover {
+    background: var(--ays-gold);
+    border-color: var(--ays-gold);
+    color: #333;
+}
+
+.familyScrollContainer {
+    display: flex;
+    gap: 2.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 2rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.familyScrollContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.familyCard {
+    scroll-snap-align: center;
+    flex: 0 0 320px;
+    aspect-ratio: 4/5;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 768px) {
+    .btnGold, .btnGreen {
+        width: 100%;
+        min-width: unset;
+        font-size: 1.1rem;
+    }
+    .familyCard {
+        flex: 0 0 280px;
+    }
+}
+
+.aysContactSection {
+    padding: 10rem 0;
+    background-color: var(--ays-dark-green);
+}
+
+.aysContactSection :global(.container) {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 5rem;
+    border-radius: 20px;
+}
