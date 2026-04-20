@@ -139,7 +139,7 @@
 
 /* SECTION: INTRO (Centered & Iconic) */
 .introSection {
-    padding: 120px 0;
+    padding: 120px 0 40px;
     background-color: var(--ays-dark-green);
     text-align: center;
     color: #ffffff;
@@ -237,7 +237,7 @@
 
 /* SECTION: GALLERY */
 .gallerySection {
-    padding: 8rem 0;
+    padding: 2rem 0 8rem;
     background-color: var(--ays-dark-green);
     overflow: hidden;
 }
