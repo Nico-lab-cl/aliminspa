@@ -1,5 +1,5 @@
 .aysPage {
-    --ays-dark-green: #2c494d; /* Corrected to the specific Teal from design system */
+    --ays-dark-green: #2c494d;
     --ays-gold: #D9B055;
     --ays-surface-low: #f3f3f3;
     --ays-surface-highest: #e2e2e2;
@@ -9,6 +9,7 @@
     background-color: var(--ays-dark-green);
     color: var(--ays-text-on-dark);
     font-family: 'Manrope', sans-serif;
+    scroll-behavior: smooth;
 }
 
 /* SECTION: HERO */

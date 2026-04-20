@@ -4,8 +4,12 @@ import React from 'react'
 import Image from 'next/image'
 import styles from '../ArenaYSol.module.css'
 import AnimatedSection from '@/components/ui/AnimatedSection'
+import Link from 'next/link'
 
 export default function AysCTA() {
+    const whatsappMsg = encodeURIComponent("Hola, me interesa saber más de las parcelas en Arena y Sol 🌊☀️")
+    const whatsappUrl = `https://wa.me/56956654833?text=${whatsappMsg}`
+
     return (
         <section className={styles.ctaSection}>
             <div className="container">
@@ -34,12 +38,17 @@ export default function AysCTA() {
 
                 <AnimatedSection delay={400}>
                     <div className={styles.ctaButtonGroup}>
-                        <button className={styles.btnGold}>
+                        <Link href="#contacto" className={styles.btnGold}>
                             Ver Disponibilidad
-                        </button>
-                        <button className={styles.btnGreen}>
+                        </Link>
+                        <Link 
+                            href={whatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.btnGreen}
+                        >
                             Hablar con un asesor
-                        </button>
+                        </Link>
                     </div>
                 </AnimatedSection>
             </div>

@@ -5,7 +5,12 @@ import Image from 'next/image'
 import styles from '../ArenaYSol.module.css'
 import { motion } from 'framer-motion'
 
+import Link from 'next/link'
+
 export default function AysHero() {
+    const whatsappMsg = encodeURIComponent("Hola, me interesa saber más de Arena y Sol 🌊. Vengo desde la página principal.")
+    const whatsappUrl = `https://wa.me/56956654833?text=${whatsappMsg}`
+
     return (
         <section className={styles.hero}>
             <div className={styles.heroBackground}>
@@ -53,12 +58,17 @@ export default function AysHero() {
                     </span>
                     
                     <div className={styles.ctaGroupCentered}>
-                        <button className={styles.buttonPillPrimary}>
+                        <Link href="#contacto" className={styles.buttonPillPrimary}>
                             Ver Disponibilidad
-                        </button>
-                        <button className={styles.buttonPillSecondary}>
+                        </Link>
+                        <Link 
+                            href={whatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer" 
+                            className={styles.buttonPillSecondary}
+                        >
                             Hablar con un asesor
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </motion.div>
