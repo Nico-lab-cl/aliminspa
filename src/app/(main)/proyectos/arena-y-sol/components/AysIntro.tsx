@@ -4,35 +4,27 @@ import React from 'react'
 import Image from 'next/image'
 import styles from '../ArenaYSol.module.css'
 import AnimatedSection from '@/components/ui/AnimatedSection'
+import { Palmtree } from 'lucide-react'
 
 export default function AysIntro() {
     return (
         <section className={styles.introSection}>
-            <div className="container" style={{ maxWidth: '900px' }}>
+            <div className="container" style={{ maxWidth: '1400px' }}>
                 <AnimatedSection>
                     <div className={styles.introTop}>
-                        <div className={styles.iconWrapper}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className={styles.sunPalmIcon}>
-                                {/* Sol Brillante */}
-                                <circle cx="22" cy="25" r="8" />
-                                <path d="M22 8v4 M22 42v4 M4 25h4 M36 25h4 M9 12l3 3 M32 38l3 3 M9 38l3-3 M32 12l3 3" />
-
-                                {/* Olas Fluidas */}
-                                <path d="M10 78 Q 20 70 30 78 T 50 78 T 70 78 T 90 78" />
-                                <path d="M15 90 Q 25 82 35 90 T 55 90 T 75 90" />
-
-                                {/* Duna / Isla */}
-                                <path d="M20 68 Q 50 50 85 68" />
-
-                                {/* Tronco de la Palmera */}
-                                <path d="M65 62 Q 74 45 60 25" />
-
-                                {/* Hojas Curvadas Elegantes */}
-                                <path d="M60 25 Q 35 20 30 40" />  
-                                <path d="M60 25 Q 45 5 40 15" />    
-                                <path d="M60 25 Q 75 0 80 15" />    
-                                <path d="M60 25 Q 90 25 90 45" />   
-                                <path d="M60 25 Q 75 40 65 50" />   
+                        <div className={styles.iconWrapper} style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Palmtree style={{ width: '80%', height: '80%' }} color="#ffffff" strokeWidth={1.5} />
+                            
+                            {/* Sol en la esquina superior izquierda */}
+                            <svg width="40%" height="40%" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" style={{ position: 'absolute', top: '-10%', left: '-10%' }}>
+                                <circle cx="12" cy="12" r="5" fill="none" />
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                            </svg>
+                            
+                            {/* Base de agua simplificada */}
+                            <svg width="120%" height="30%" viewBox="0 0 80 20" fill="none" stroke="#ffffff" strokeWidth="1.5" style={{ position: 'absolute', bottom: '-5%', left: '50%', transform: 'translateX(-50%)' }}>
+                                <path d="M5 10c3 0 5-2 8-2s5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2" />
+                                <path d="M5 15c3 0 5-2 8-2s5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2 5-2 8-2 5 2 8 2" />
                             </svg>
                         </div>
                         <h2 className={styles.introSubtitle}>
