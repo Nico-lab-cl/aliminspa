@@ -235,46 +235,59 @@
     overflow: hidden;
 }
 
-/* SECTION: GALLERY (Masonry-like) */
+/* SECTION: GALLERY */
 .gallerySection {
-    padding: 12rem 0;
-    background-color: #263e42; /* Subtle tonal shift */
-}
-
-.galleryTitle {
-    font-family: 'Newsreader', serif;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    text-align: center;
-    margin-bottom: 6rem;
-    font-weight: 300;
-}
-
-.galleryGrid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-gap: 2rem;
-    padding: 0 5%;
-}
-
-.galleryCard {
-    position: relative;
-    cursor: zoom-in;
+    padding: 8rem 0;
+    background-color: var(--ays-dark-green);
     overflow: hidden;
-    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.galleryCard img {
-    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+.galleryTitle75 {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    text-align: center;
+    margin-bottom: 5rem;
+    font-weight: 800;
+    font-style: italic;
+    color: #ffffff;
+    letter-spacing: -0.02em;
 }
 
-.galleryCard:hover img {
-    transform: scale(1.08);
+.galleryFlexContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.5rem;
+    padding: 2rem 5% 4rem;
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
-/* Specific heights and placements for editorial look */
-.item1 { grid-column: span 8; height: 600px; }
-.item2 { grid-column: span 4; height: 600px; margin-top: 4rem; }
-.item3 { grid-column: span 12; height: 500px; }
+.galleryItemCard {
+    position: relative;
+    aspect-ratio: 16/10;
+    width: 100%;
+}
+
+.galleryItemCard::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    bottom: -15px;
+    left: -15px;
+    right: 25px; /* Deja que la imagen tape el borde derecho */
+    border-top: 5px solid var(--ays-gold);
+    border-left: 5px solid var(--ays-gold);
+    border-bottom: 5px solid var(--ays-gold);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.galleryItemImg {
+    position: relative;
+    z-index: 1;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
 
 /* SECTION: FINANCING */
 .financingSection {
@@ -388,8 +401,31 @@
         height: 500px;
         order: -1;
     }
-    .galleryGrid { grid-template-columns: 1fr; }
-    .item1, .item2, .item3 { grid-column: span 12; height: 400px; margin-top: 0; }
+    .galleryTitle75 {
+        font-size: 2.2rem;
+        margin-bottom: 3.5rem;
+    }
+
+    .galleryFlexContainer {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 2rem;
+        padding: 0 5% 3rem;
+        padding-right: 15%; /* Add space at end so last item can be scrolled fully */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .galleryFlexContainer::-webkit-scrollbar {
+        display: none;
+    }
+
+    .galleryItemCard {
+        min-width: 85vw;
+        flex: 0 0 auto;
+        scroll-snap-align: center;
+    }
     .financingGrid { grid-template-columns: 1fr; gap: 5rem; }
     .propertyCard { flex-direction: column; }
     .cardImage { width: 100%; height: 250px; }
