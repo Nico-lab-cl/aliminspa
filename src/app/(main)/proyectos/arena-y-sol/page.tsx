@@ -8,6 +8,7 @@ import styles from './ArenaYSol.module.css'
 import AysHero from './components/AysHero'
 import AysIntro from './components/AysIntro'
 import AysGallery from './components/AysGallery'
+import AysFeatures from './components/AysFeatures'
 import AysFinancing from './components/AysFinancing'
 import AysCTA from './components/AysCTA'
 import AysFamilyCarousel from './components/AysFamilyCarousel'
@@ -45,6 +46,8 @@ export default function ArenaYSolPage() {
                 <AysIntro />
                 
                 <AysGallery />
+                
+                <AysFeatures />
                 
                 <AysFinancing />
                 
