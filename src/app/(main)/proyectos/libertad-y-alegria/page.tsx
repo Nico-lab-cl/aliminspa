@@ -116,8 +116,8 @@ export default function LibertadYAlegriaPage() {
 
                         <AnimatedSection delay={400}>
                             <h2 className={styles.introMainTitle}>
-                                Terrenos 100% urbanizados de <span className={styles.goldText}>400 m2</span><br />
-                                a 10 minutos de la playa.
+                                Terrenos 100% urbanizados de <span className={styles.goldText}>400 m2</span><br className="hidden md:block" />
+                                a 10 minutos de la playa
                             </h2>
                             <p className={styles.introDescription}>
                                 Un proyecto diseñado para aquellos que desean avanzar hacia un <br className="hidden md:block" />
