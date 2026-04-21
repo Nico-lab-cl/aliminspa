@@ -5,11 +5,11 @@
     right: 0;
     z-index: 1000;
     transition: all 0.3s ease;
-    background-color: #29433B; /* Solid dark background matching the image exactly */
+    background-color: #2F4F4F; /* Solid dark background matching the image exactly */
 }
 
 .scrolled {
-    background-color: #29433B;
+    background-color: #2F4F4F;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -85,7 +85,7 @@
         right: -100%;
         bottom: 0;
         width: 300px;
-        background-color: #29433B;
+        background-color: #2F4F4F;
         flex-direction: column;
         justify-content: center;
         align-items: center;

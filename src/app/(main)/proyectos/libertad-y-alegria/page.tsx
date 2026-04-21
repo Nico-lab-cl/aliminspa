@@ -184,7 +184,7 @@ export default function LibertadYAlegriaPage() {
                 </section>
 
                 {/* CONTACT & NEWSLETTER WRAPPER (DARK GREEN BACKGROUND) */}
-                <div style={{ backgroundColor: '#29433B' }}>
+                <div style={{ backgroundColor: '#2F4F4F' }}>
                     {/* CONTACT FORM */}
                     <section className={styles.contactSection}>
                         <div className={styles.contactContainer}>
