@@ -94,6 +94,53 @@
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
+.ctaGroupCentered {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.buttonPillPrimary {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: var(--gold);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    border: 2px solid var(--gold);
+}
+
+.buttonPillPrimary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    background: #b8962e;
+    border-color: #b8962e;
+}
+
+.buttonPillSecondary {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: transparent;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.buttonPillSecondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+    transform: translateY(-2px);
+}
+
 @media (max-width: 768px) {
     .hero {
         min-height: 500px;

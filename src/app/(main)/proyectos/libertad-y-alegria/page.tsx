@@ -12,6 +12,9 @@ import styles from './LibertadYAlegria.module.css'
 const project = PROJECTS.find(p => p.id === 'libertad-y-alegria')!
 
 export default function LibertadYAlegriaPage() {
+    const whatsappMsg = encodeURIComponent("Hola, quiero hablar con un asesor sobre el proyecto Libertad y Alegría, vengo desde la página.")
+    const whatsappUrl = `https://wa.me/${SITE.whatsapp}?text=${whatsappMsg}`
+
     return (
         <div className={styles.lyaPage}>
             <MetaTrackPageView 
@@ -40,7 +43,7 @@ export default function LibertadYAlegriaPage() {
                         playsInline
                         poster="/images/proyectos/libertad-y-alegria/1.png"
                     >
-                        <source src="/videos/Hero-pagina-libertad-y-alegria.mp4" type="video/mp4" />
+                        <source src="/videos/Hero-pagina-libertad-y-alegria.mp4#t=5" type="video/mp4" />
                     </video>
                     
                     <div className={styles.heroOverlay} />
@@ -51,6 +54,20 @@ export default function LibertadYAlegriaPage() {
                             <h1 className={styles.heroTitle}>Libertad y<br/>Alegría</h1>
                             <p className={styles.heroSubtitle}>¡Tu propio lugar en El Tabo!</p>
                             <p className={styles.heroDistance}>A 10 MINUTOS DE LA PLAYA DEL TABO</p>
+                            
+                            <div className={styles.ctaGroupCentered}>
+                                <Link href="#cotizar" className={styles.buttonPillPrimary}>
+                                    Ver Disponibilidad
+                                </Link>
+                                <Link 
+                                    href={whatsappUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer" 
+                                    className={styles.buttonPillSecondary}
+                                >
+                                    Hablar con un asesor
+                                </Link>
+                            </div>
                         </AnimatedSection>
                     </div>
                 </section>
@@ -184,7 +201,7 @@ export default function LibertadYAlegriaPage() {
                 </section>
 
                 {/* CONTACT & NEWSLETTER WRAPPER (DARK GREEN BACKGROUND) */}
-                <div style={{ backgroundColor: '#2F4F4F' }}>
+                <div style={{ backgroundColor: '#2F4F4F' }} id="cotizar">
                     {/* CONTACT FORM */}
                     <section className={styles.contactSection}>
                         <div className={styles.contactContainer}>
