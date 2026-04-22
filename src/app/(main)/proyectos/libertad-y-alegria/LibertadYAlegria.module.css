@@ -719,3 +719,83 @@
     .featCarouselWrapper { padding: 0; }
     .featCarousel { gap: 1.5rem; padding: 0 5%; }
 }
+
+/* ==========================================================================
+   PROMO CARDS SECTION
+   ========================================================================== */
+.promoSection {
+    padding: 0 0 8rem;
+    background-color: var(--dark-green);
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.promoCTAWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+
+.promoCTA {
+    background-color: var(--gold);
+    color: #ffffff;
+    font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    padding: 1.5rem 4rem;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+}
+
+.promoCardsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.promoCard {
+    position: relative;
+    aspect-ratio: 3/4;
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s ease;
+}
+
+.promoCard:hover {
+    transform: translateY(-8px);
+}
+
+.promoCardImage {
+    object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+    .promoCardsGrid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1.5rem;
+        padding: 0 5%;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .promoCardsGrid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .promoCard {
+        min-width: 75vw;
+        flex: 0 0 auto;
+        scroll-snap-align: center;
+    }
+
+    .promoCTA {
+        font-size: 1.2rem;
+        padding: 1.2rem 2rem;
+    }
+}

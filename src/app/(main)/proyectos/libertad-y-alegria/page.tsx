@@ -9,6 +9,7 @@ import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { Palmtree } from 'lucide-react'
 import LyaFeatures from './components/LyaFeatures'
+import LyaPromoCards from './components/LyaPromoCards'
 import styles from './LibertadYAlegria.module.css'
 
 const project = PROJECTS.find(p => p.id === 'libertad-y-alegria')!
@@ -131,6 +132,9 @@ export default function LibertadYAlegriaPage() {
 
                 {/* FEATURES CAROUSEL */}
                 <LyaFeatures />
+
+                {/* PROMO CARDS */}
+                <LyaPromoCards />
 
                 {/* GALERIA DEL PROYECTO */}
                 <section className={styles.gallerySection}>
