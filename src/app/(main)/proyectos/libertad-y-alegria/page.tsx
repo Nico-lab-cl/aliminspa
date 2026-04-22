@@ -149,22 +149,6 @@ export default function LibertadYAlegriaPage() {
                 {/* ATTRACTIONS: SERVICIOS Y ACTIVIDADES */}
                 <LyaAttractions />
 
-                {/* STATUS BANNER */}
-                <section className={styles.statusBanner}>
-                    <AnimatedSection>
-                        <div className={styles.statusContainer}>
-                            <div className={styles.statusIcon}>✨</div>
-                            <h2 className={styles.statusTitle}>¡Proyecto Vendido!</h2>
-                            <p className={styles.statusText}>
-                                Gracias a todos nuestros clientes por confiar en este hermoso proyecto. Si deseas información sobre nuestros terrenos en proyectos disponibles como Lomas del Mar o Arena y Sol, contáctanos.
-                            </p>
-                            <Link href="/proyectos" className={styles.buttonGold}>
-                                Ver Proyectos disponibles
-                            </Link>
-                        </div>
-                    </AnimatedSection>
-                </section>
-
                 {/* NEWSLETTER */}
                 <Newsletter />
             </main>
