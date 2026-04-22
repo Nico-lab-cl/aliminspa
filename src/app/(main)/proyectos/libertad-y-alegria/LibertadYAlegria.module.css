@@ -598,3 +598,124 @@
     font-weight: 700;
     cursor: pointer;
 }
+
+/* ==========================================================================
+   FEATURES CAROUSEL
+   ========================================================================== */
+.featuresSection {
+    padding: 6rem 0 10rem;
+    background-color: var(--dark-green);
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.featuresHeader {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.featuresTitle {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.featCarouselWrapper {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.featCarousel {
+    display: flex;
+    gap: 2.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 2rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.featCarousel::-webkit-scrollbar {
+    display: none;
+}
+
+.featCard {
+    scroll-snap-align: center;
+    flex: 0 0 350px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 320px;
+    border: 1px solid var(--gold);
+    position: relative;
+    transition: transform 0.4s ease, background-color 0.4s ease;
+}
+
+.featCard:hover {
+    transform: translateY(-5px);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.featIconWrapper {
+    margin-bottom: 0;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.featIcon {
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
+}
+
+.featNavButton {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    color: var(--dark-green);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.featNavButton:hover {
+    transform: translateY(-50%) scale(1.1);
+    background-color: var(--gold);
+    color: white;
+}
+
+.featPrevButton { left: 0; }
+.featNextButton { right: 0; }
+
+@media (max-width: 1024px) {
+    .featCard {
+        flex: 0 0 300px;
+        min-height: 280px;
+    }
+    .featIconWrapper { height: 120px; }
+    .featIcon { width: 120px; height: 120px; }
+    .featNavButton { display: none; }
+    .featCarouselWrapper { padding: 0; }
+    .featCarousel { gap: 1.5rem; padding: 0 5%; }
+}

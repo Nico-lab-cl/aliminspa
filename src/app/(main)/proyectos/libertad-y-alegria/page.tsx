@@ -8,6 +8,7 @@ import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { Palmtree } from 'lucide-react'
+import LyaFeatures from './components/LyaFeatures'
 import styles from './LibertadYAlegria.module.css'
 
 const project = PROJECTS.find(p => p.id === 'libertad-y-alegria')!
@@ -127,6 +128,9 @@ export default function LibertadYAlegriaPage() {
                         </AnimatedSection>
                     </div>
                 </section>
+
+                {/* FEATURES CAROUSEL */}
+                <LyaFeatures />
 
                 {/* GALERIA DEL PROYECTO */}
                 <section className={styles.gallerySection}>
