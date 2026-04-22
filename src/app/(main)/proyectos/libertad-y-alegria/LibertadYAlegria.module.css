@@ -206,8 +206,8 @@
 
 .introLogo {
     position: relative;
-    width: 280px;
-    height: 65px;
+    width: 380px;
+    height: 90px;
     flex-shrink: 0;
     opacity: 1;
 }
@@ -220,7 +220,6 @@
     color: #ffffff;
     max-width: 1200px;
     margin: 0 auto 2rem;
-    text-wrap: balance;
 }
 
 .introDescription {
@@ -249,12 +248,11 @@
         margin: 2rem 0;
     }
     .introLogo {
-        width: 200px;
-        height: 50px;
+        width: 280px;
+        height: 65px;
     }
     .introMainTitle {
         font-size: 2.2rem;
-        text-wrap: pretty;
     }
     .introDescription {
         font-size: 1.1rem;
