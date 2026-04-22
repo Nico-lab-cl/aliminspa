@@ -10,6 +10,9 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import { Palmtree } from 'lucide-react'
 import LyaFeatures from './components/LyaFeatures'
 import LyaPromoCards from './components/LyaPromoCards'
+import LyaCTA from './components/LyaCTA'
+import LyaAttractions from './components/LyaAttractions'
+import Testimonials from '@/components/sections/Testimonials'
 import styles from './LibertadYAlegria.module.css'
 
 const project = PROJECTS.find(p => p.id === 'libertad-y-alegria')!
@@ -212,6 +215,15 @@ export default function LibertadYAlegriaPage() {
                         </AnimatedSection>
                     </div>
                 </section>
+
+                {/* CTA: COTIZAR TERRENO */}
+                <LyaCTA />
+
+                {/* TESTIMONIALS: +100 FAMILIAS */}
+                <Testimonials />
+
+                {/* ATTRACTIONS: SERVICIOS Y ACTIVIDADES */}
+                <LyaAttractions />
 
                 {/* STATUS BANNER */}
                 <section className={styles.statusBanner}>

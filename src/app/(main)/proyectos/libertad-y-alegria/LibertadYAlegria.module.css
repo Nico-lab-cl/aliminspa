@@ -799,3 +799,217 @@
         padding: 1.2rem 2rem;
     }
 }
+
+/* ==========================================================================
+   CTA SECTION (Cotizar Terreno)
+   ========================================================================== */
+.lyaCTASection {
+    background-color: var(--dark-green);
+    padding: 6rem 2rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+.lyaCTADivider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.lyaCTALine {
+    height: 1px;
+    background-color: var(--gold);
+    flex-grow: 1;
+}
+
+.lyaCTAIcon {
+    margin: 0 2rem;
+    color: var(--gold);
+    width: 40px;
+    height: 40px;
+}
+
+.lyaCTATitle {
+    font-size: 2.2rem;
+    font-weight: 400;
+    margin-bottom: 3rem;
+}
+
+.lyaCTAButtons {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.lyaBtnGold {
+    background-color: var(--gold);
+    color: #1A1A1A;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lyaBtnGold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.lyaBtnGreen {
+    background-color: #4CAF50;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lyaBtnGreen:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+@media (max-width: 768px) {
+    .lyaCTATitle {
+        font-size: 1.8rem;
+    }
+    .lyaCTAButtons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    .lyaBtnGold, .lyaBtnGreen {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+    }
+}
+
+/* ==========================================================================
+   ATTRACTIONS CAROUSEL
+   ========================================================================== */
+.attractionsSection {
+    padding: 4rem 0;
+    background-color: var(--dark-green);
+    color: #ffffff;
+}
+
+.attractionGroup {
+    margin-bottom: 5rem;
+}
+
+.attractionTitle {
+    text-align: center;
+    color: var(--gold);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-style: italic;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+}
+
+.attractionCarouselWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    gap: 0.5rem;
+}
+
+.attractionCarousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.attractionCarousel::-webkit-scrollbar {
+    display: none;
+}
+
+.attractionCard {
+    position: relative;
+    flex: 0 0 auto;
+    width: 260px;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.attractionCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+.attractionImage {
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.attractionCard:hover .attractionImage {
+    transform: scale(1.05);
+}
+
+.attractionLabel {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background-color: #3b5b5b;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    z-index: 2;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.attractionNavBtn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-green);
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.attractionNavBtn:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .attractionNavBtn {
+        display: none;
+    }
+    .attractionCarousel {
+        padding: 1rem;
+        scroll-snap-type: x mandatory;
+    }
+    .attractionCard {
+        scroll-snap-align: start;
+        width: 240px;
+    }
+}
