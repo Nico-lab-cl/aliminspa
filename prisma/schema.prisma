@@ -33,3 +33,17 @@ model NewsletterSubscriber {
 
   @@map("newsletter_subscribers")
 }
+
+model Booking {
+  id        String   @id @default(cuid())
+  nombre    String
+  email     String
+  celular   String
+  proyecto  String
+  fecha     DateTime
+  hora      String
+  status    String   @default("confirmed")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("bookings")
+}

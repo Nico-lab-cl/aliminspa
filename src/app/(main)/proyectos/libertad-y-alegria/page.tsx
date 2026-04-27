@@ -15,6 +15,7 @@ import LyaAttractions from './components/LyaAttractions'
 import Testimonials from '@/components/sections/Testimonials'
 import Newsletter from '@/components/sections/Newsletter'
 import ContactForm from '@/components/sections/ContactForm'
+import BookingCalendar from '@/components/sections/BookingCalendar'
 import styles from './LibertadYAlegria.module.css'
 
 const project = PROJECTS.find(p => p.id === 'libertad-y-alegria')!
@@ -149,6 +150,9 @@ export default function LibertadYAlegriaPage() {
 
                 {/* ATTRACTIONS: SERVICIOS Y ACTIVIDADES */}
                 <LyaAttractions />
+
+                {/* BOOKING CALENDAR */}
+                <BookingCalendar defaultProject="Libertad y Alegría" />
 
                 {/* CONTACT FORM */}
                 <ContactForm />

@@ -13,6 +13,7 @@ import PricingSection from './PricingSection'
 import Testimonials from '@/components/sections/Testimonials'
 import AttractionsCarousel from './AttractionsCarousel'
 import Newsletter from '@/components/sections/Newsletter'
+import BookingCalendar from '@/components/sections/BookingCalendar'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -200,6 +201,8 @@ export default function LomasDelMarPage() {
 
 
                 <AttractionsCarousel />
+
+                <BookingCalendar defaultProject="Lomas del Mar" />
 
                 <div id="contacto">
                     <ContactForm />

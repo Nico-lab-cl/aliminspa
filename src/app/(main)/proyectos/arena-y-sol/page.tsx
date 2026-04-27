@@ -15,6 +15,7 @@ import AysFamilyCarousel from './components/AysFamilyCarousel'
 import AysAttractions from './components/AysAttractions'
 import ContactForm from '@/components/sections/ContactForm'
 import Newsletter from '@/components/sections/Newsletter'
+import BookingCalendar from '@/components/sections/BookingCalendar'
 
 const project = PROJECTS[1] // Arena y Sol
 
@@ -58,6 +59,8 @@ export default function ArenaYSolPage() {
                 <AysFamilyCarousel />
                 
                 <AysAttractions />
+                
+                <BookingCalendar defaultProject="Arena y Sol" />
                 
                 <ContactForm />
                 
