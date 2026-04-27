@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback } from 'react'
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check, Download, ExternalLink } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check, Mail, Video } from 'lucide-react'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import styles from './BookingCalendar.module.css'
 
@@ -47,78 +47,7 @@ function formatDateCL(date: Date): string {
     return `${days[date.getDay()]} ${date.getDate()} de ${MONTH_NAMES[date.getMonth()]}`
 }
 
-function toGoogleCalendarUrl(params: {
-    title: string
-    date: Date
-    hour: string
-    description: string
-    location: string
-}): string {
-    const { title, date, hour, description, location } = params
-    const [h] = hour.split(':').map(Number)
-    const start = new Date(date)
-    start.setHours(h, 0, 0, 0)
-    const end = new Date(start)
-    end.setHours(h + 1)
 
-    const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
-
-    const url = new URL('https://calendar.google.com/calendar/render')
-    url.searchParams.set('action', 'TEMPLATE')
-    url.searchParams.set('text', title)
-    url.searchParams.set('dates', `${fmt(start)}/${fmt(end)}`)
-    url.searchParams.set('details', description)
-    url.searchParams.set('location', location)
-    return url.toString()
-}
-
-function generateICS(params: {
-    title: string
-    date: Date
-    hour: string
-    description: string
-    location: string
-    organizer: string
-}): string {
-    const { title, date, hour, description, location, organizer } = params
-    const [h] = hour.split(':').map(Number)
-    const start = new Date(date)
-    start.setHours(h, 0, 0, 0)
-    const end = new Date(start)
-    end.setHours(h + 1)
-
-    const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
-    const uid = `booking-${Date.now()}@aliminspa.cl`
-
-    return [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Alimin SPA//Booking//ES',
-        'CALSCALE:GREGORIAN',
-        'METHOD:REQUEST',
-        'BEGIN:VEVENT',
-        `DTSTART:${fmt(start)}`,
-        `DTEND:${fmt(end)}`,
-        `SUMMARY:${title}`,
-        `DESCRIPTION:${description.replace(/\n/g, '\\n')}`,
-        `LOCATION:${location}`,
-        `ORGANIZER;CN=Alimin Inmobiliaria:mailto:${organizer}`,
-        `UID:${uid}`,
-        'STATUS:CONFIRMED',
-        'BEGIN:VALARM',
-        'TRIGGER:-PT30M',
-        'ACTION:DISPLAY',
-        'DESCRIPTION:Recordatorio de visita',
-        'END:VALARM',
-        'BEGIN:VALARM',
-        'TRIGGER:-P1D',
-        'ACTION:DISPLAY',
-        'DESCRIPTION:Tu visita es mañana',
-        'END:VALARM',
-        'END:VEVENT',
-        'END:VCALENDAR',
-    ].join('\r\n')
-}
 
 /* ─── COMPONENT ─── */
 interface BookingCalendarProps {
@@ -138,6 +67,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
     const [selectedTime, setSelectedTime] = useState('')
     const [form, setForm] = useState({ nombre: '', email: '', celular: '' })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const [meetLink, setMeetLink] = useState<string | null>(null)
 
     const project = PROJECTS_LIST.find(p => p.id === selectedProject)
 
@@ -257,6 +187,8 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
             })
 
             if (!res.ok) throw new Error('Error al agendar')
+            const data = await res.json()
+            setMeetLink(data.meetLink || null)
             setStatus('success')
             setStep(4)
         } catch {
@@ -273,36 +205,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
         }
     }
 
-    // Google Calendar link
-    const calendarLink = useMemo(() => {
-        if (!selectedDate || !project) return '#'
-        return toGoogleCalendarUrl({
-            title: `Visita ${project.name} — Alimin Inmobiliaria`,
-            date: selectedDate,
-            hour: selectedTime,
-            description: `Visita agendada al proyecto ${project.name} en El Tabo.\n\nContacto: ${form.nombre}\nEmail: ${form.email}\nCelular: ${form.celular}\n\nAlimin Inmobiliaria - aliminspa.cl`,
-            location: 'El Tabo, Región de Valparaíso, Chile',
-        })
-    }, [selectedDate, selectedTime, project, form])
 
-    const downloadICS = () => {
-        if (!selectedDate || !project) return
-        const ics = generateICS({
-            title: `Visita ${project.name} — Alimin Inmobiliaria`,
-            date: selectedDate,
-            hour: selectedTime,
-            description: `Visita agendada al proyecto ${project.name} en El Tabo.\nContacto: ${form.nombre}\nEmail: ${form.email}\nCelular: ${form.celular}`,
-            location: 'El Tabo, Región de Valparaíso, Chile',
-            organizer: 'bienesraices@aliminspa.cl',
-        })
-        const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `visita-${project.id}-alimin.ics`
-        a.click()
-        URL.revokeObjectURL(url)
-    }
 
     /* ─── RENDER ─── */
     return (
@@ -553,7 +456,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                 <h3 className={styles.successTitle}>¡Visita Agendada!</h3>
                                 <p className={styles.successSubtitle}>
                                     Hemos registrado tu visita exitosamente.<br />
-                                    Agrega el evento a tu calendario para no olvidarlo.
+                                    Te enviamos una invitación con Google Meet a tu correo.
                                 </p>
 
                                 <div className={styles.successDetails}>
@@ -578,23 +481,21 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                 </div>
 
                                 <div className={styles.calendarButtons}>
-                                    <a
-                                        href={calendarLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={styles.btnGoogleCal}
-                                    >
-                                        <ExternalLink size={18} />
-                                        Agregar a Google Calendar
-                                    </a>
-                                    <button
-                                        type="button"
-                                        className={styles.btnIcs}
-                                        onClick={downloadICS}
-                                    >
-                                        <Download size={18} />
-                                        Descargar .ics
-                                    </button>
+                                    <div className={styles.meetNotice}>
+                                        <Mail size={20} color="#d4a946" />
+                                        <p>Revisa tu correo <strong>{form.email}</strong> para la invitación con el evento y link de Google Meet.</p>
+                                    </div>
+                                    {meetLink && (
+                                        <a
+                                            href={meetLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={styles.btnGoogleCal}
+                                        >
+                                            <Video size={18} />
+                                            Ir a Google Meet
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         </div>

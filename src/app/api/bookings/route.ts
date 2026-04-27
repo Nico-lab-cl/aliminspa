@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendMetaEvent } from '@/lib/meta-capi'
+import { createCalendarEvent } from '@/lib/google-calendar'
 
 export async function POST(request: NextRequest) {
     try {
@@ -34,6 +35,16 @@ export async function POST(request: NextRequest) {
             },
         })
 
+        // Create Google Calendar event with Google Meet
+        const calendarResult = await createCalendarEvent({
+            nombre,
+            email,
+            celular,
+            proyecto,
+            fecha,
+            hora,
+        })
+
         // Send Meta event for tracking
         const client_ip_address = request.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1'
         const client_user_agent = request.headers.get('user-agent') || ''
@@ -56,7 +67,12 @@ export async function POST(request: NextRequest) {
             eventSourceUrl
         ).catch(err => console.error('Error sending Meta Schedule event:', err))
 
-        return NextResponse.json({ success: true, id: booking.id }, { status: 201 })
+        return NextResponse.json({
+            success: true,
+            id: booking.id,
+            meetLink: calendarResult.meetLink,
+            calendarEventId: calendarResult.eventId,
+        }, { status: 201 })
     } catch (error: any) {
         console.error('Error creating booking:', {
             message: error.message,
