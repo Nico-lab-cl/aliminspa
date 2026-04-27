@@ -72,6 +72,30 @@
     background-color: #f3e5ab; /* Lighter gold */
 }
 
+.agendaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 50px;
+    border: 1.5px solid rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-right: 0.75rem;
+}
+
+.agendaButton:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    border-color: #d4af37;
+}
+
+.agendaButton svg {
+    flex-shrink: 0;
+}
+
 .hamburger,
 .overlay {
     display: none;
@@ -136,7 +160,8 @@
         z-index: 999;
     }
 
-    .ctaButton {
+    .ctaButton,
+    .agendaButton {
         display: none; /* Hide on mobile as per mockup */
     }
 }

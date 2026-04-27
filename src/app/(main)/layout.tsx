@@ -13,6 +13,22 @@ export default function MainLayout({
             <main>{children}</main>
             <Footer />
 
+            {/* Floating Booking Button */}
+            <a
+                href="/reunion"
+                className="booking-float"
+                aria-label="Agenda tu Visita"
+                id="booking-float"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                    <line x1="9" y1="16" x2="15" y2="16"/>
+                </svg>
+            </a>
+
             {/* WhatsApp Floating Button */}
             <a
                 href={`https://wa.me/${SITE.whatsapp}?text=Hola,%20me%20comunico%20desde%20aliminspa.cl%20👋`}

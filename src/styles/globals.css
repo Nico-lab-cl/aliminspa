@@ -536,6 +536,43 @@ h4 {
   fill: white;
 }
 
+/* ── BOOKING FLOATING BUTTON ──────────────────────────── */
+.booking-float {
+  position: fixed;
+  bottom: calc(1.5rem + 60px + 1rem); /* Above WhatsApp button */
+  right: 1.5rem;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #d4a946 0%, #bda055 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(212, 169, 70, 0.4);
+  z-index: 1000;
+  transition: all var(--transition-fast);
+  animation: pulse-glow-gold 3s ease-in-out infinite;
+}
+
+.booking-float:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 8px 36px rgba(212, 169, 70, 0.55);
+}
+
+.booking-float svg {
+  width: 26px;
+  height: 26px;
+}
+
+@keyframes pulse-glow-gold {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(212, 169, 70, 0.35);
+  }
+  50% {
+    box-shadow: 0 4px 32px rgba(212, 169, 70, 0.55);
+  }
+}
+
 /* ── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 768px) {
   :root {
