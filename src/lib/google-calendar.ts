@@ -7,30 +7,40 @@ import { google } from 'googleapis'
  * 1. Create a Google Cloud project at https://console.cloud.google.com
  * 2. Enable "Google Calendar API"
  * 3. Create a Service Account and download the JSON key
- * 4. Share your calendar (bienesraices@aliminspa.cl) with the service account email
- *    (give it "Make changes to events" permission)
- * 5. Set environment variables:
- *    - GOOGLE_CALENDAR_ID: Calendar ID (usually the email, e.g. bienesraices@aliminspa.cl)
- *    - GOOGLE_SERVICE_ACCOUNT_EMAIL: Service account email
- *    - GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: Private key from JSON (with \n newlines)
+ * 4. Set environment variables for OAuth2 (Recommended):
+ *    - GOOGLE_CALENDAR_ID: bienesraices@aliminspa.cl
+ *    - GOOGLE_CLIENT_ID: Your OAuth2 Client ID
+ *    - GOOGLE_CLIENT_SECRET: Your OAuth2 Client Secret
+ *    - GOOGLE_REFRESH_TOKEN: The offline refresh token
  */
 
 function getCalendarClient() {
-    const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
-    const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n')
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+
+    if (clientId && clientSecret && refreshToken) {
+        const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
+        oauth2Client.setCredentials({ refresh_token: refreshToken });
+        return google.calendar({ version: 'v3', auth: oauth2Client });
+    }
+
+    // Fallback to Service Account
+    const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
     if (!email || !privateKey) {
-        console.warn('Google Calendar credentials not configured. Skipping calendar event creation.')
-        return null
+        console.warn('Google Calendar credentials not configured. Skipping calendar event.');
+        return null;
     }
 
     const auth = new google.auth.JWT({
         email,
         key: privateKey,
         scopes: ['https://www.googleapis.com/auth/calendar'],
-    })
+    });
 
-    return google.calendar({ version: 'v3', auth })
+    return google.calendar({ version: 'v3', auth });
 }
 
 export async function createCalendarEvent(params: {
