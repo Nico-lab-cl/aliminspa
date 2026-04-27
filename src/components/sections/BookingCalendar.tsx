@@ -479,23 +479,9 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                         <span className={styles.successDetailValue}>{form.nombre}</span>
                                     </div>
                                 </div>
-
-                                <div className={styles.calendarButtons}>
-                                    <div className={styles.meetNotice}>
-                                        <Mail size={20} color="#d4a946" />
-                                        <p>Revisa tu correo <strong>{form.email}</strong> para la invitación con el evento y link de Google Meet.</p>
-                                    </div>
-                                    {meetLink && (
-                                        <a
-                                            href={meetLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={styles.btnGoogleCal}
-                                        >
-                                            <Video size={18} />
-                                            Ir a Google Meet
-                                        </a>
-                                    )}
+                                <div className={styles.meetNotice}>
+                                    <Mail size={20} color="#d4a946" />
+                                    <p>Revisa tu correo <strong>{form.email}</strong> para la invitación con el evento y link de Google Meet.</p>
                                 </div>
                             </div>
                         </div>
