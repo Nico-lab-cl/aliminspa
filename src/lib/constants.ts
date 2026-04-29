@@ -16,6 +16,14 @@ export const SITE = {
     },
 } as const
 
+export const CONTEST = {
+    endDate: '2026-05-05',
+    message: 'Gana 50 o 100 luquitas en nuestro sorteo',
+    cta: 'Concursa',
+    link: 'https://www.instagram.com/p/DXsjIRIlpq0/'
+} as const
+
+
 export const PROJECTS = [
     {
         id: 'lomas-del-mar',

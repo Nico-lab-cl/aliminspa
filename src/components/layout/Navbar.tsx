@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from './Navbar.module.css'
 import { SITE } from '@/lib/constants'
+import PromoBanner from './PromoBanner'
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -36,6 +37,7 @@ export default function Navbar() {
 
     return (
         <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+            <PromoBanner />
             <nav className={styles.nav} aria-label="Navegación principal">
                 <Link href="/" className={styles.logo} aria-label={`${SITE.shortName} - Inicio`}>
                     <Image

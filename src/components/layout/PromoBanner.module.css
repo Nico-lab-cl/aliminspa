@@ -1,0 +1,114 @@
+.banner {
+    background: linear-gradient(90deg, #1A3A3A 0%, #2F4F4F 50%, #1A3A3A 100%);
+    color: white;
+    padding: 0.65rem 1rem;
+    position: relative;
+    z-index: 1001;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: skewX(-25deg);
+    animation: shimmer 6s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.tag {
+    background: rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.message {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cta {
+    background-color: #d4af37;
+    color: #1A3A3A;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.cta:hover {
+    transform: scale(1.05);
+    background-color: #f3e5ab;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+.cta svg {
+    transition: transform 0.3s ease;
+}
+
+.cta:hover svg {
+    transform: translate(2px, -2px);
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+        padding: 0.2rem 0;
+    }
+
+    .message {
+        font-size: 0.85rem;
+    }
+
+    .tag {
+        display: none;
+    }
+
+    .cta {
+        font-size: 0.75rem;
+        padding: 0.3rem 1rem;
+    }
+}
