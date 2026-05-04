@@ -11,12 +11,18 @@ export default function SorteoPage() {
   const [inputText, setInputText] = useState('');
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [filterDuplicates, setFilterDuplicates] = useState(true);
   const [currentWinner, setCurrentWinner] = useState<string | null>(null);
   const [showSetup, setShowSetup] = useState(true);
   const [tempDisplay, setTempDisplay] = useState('');
 
   const handleStart = () => {
-    const list = inputText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    let list = inputText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    
+    if (filterDuplicates) {
+      list = Array.from(new Set(list));
+    }
+
     if (list.length < 2) {
       alert('Por favor ingresa al menos 2 participantes');
       return;
@@ -159,9 +165,18 @@ export default function SorteoPage() {
               onChange={(e) => setInputText(e.target.value)}
             />
             
+            <div className="flex flex-col gap-4 mb-6">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${filterDuplicates ? 'bg-[#c5a059]' : 'bg-white/10'}`} onClick={() => setFilterDuplicates(!filterDuplicates)}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${filterDuplicates ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+                <span className="text-sm text-gray-300 group-hover:text-white transition-colors">Filtrar duplicados (Un solo cupo por persona)</span>
+              </label>
+            </div>
+            
             <div className="flex justify-between items-center">
               <div className="text-xs text-gray-500 uppercase tracking-widest">
-                Total: <span className="text-white font-bold">{inputText.split('\n').filter(s => s.trim()).length}</span>
+                Total detectados: <span className="text-white font-bold">{inputText.split('\n').filter(s => s.trim()).length}</span>
               </div>
               <button 
                 onClick={handleStart}
