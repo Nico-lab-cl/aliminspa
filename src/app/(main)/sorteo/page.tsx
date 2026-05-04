@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Trophy, Users, Play, RotateCcw, Award, Star, Instagram } from 'lucide-react';
+import { Trophy, Users, Play, RotateCcw, Award, Star } from 'lucide-react';
 import styles from './sorteo.module.css';
 
 export default function SorteoPage() {
@@ -143,7 +143,7 @@ export default function SorteoPage() {
             className={styles.glassCard}
           >
             <div className={styles.setupTitle}>
-              <Instagram className="text-[#c5a059]" />
+              <Users className="text-[#c5a059]" />
               <span>Cargar Participantes</span>
             </div>
             
