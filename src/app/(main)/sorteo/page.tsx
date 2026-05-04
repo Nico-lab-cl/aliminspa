@@ -15,6 +15,15 @@ export default function SorteoPage() {
   const [currentWinner, setCurrentWinner] = useState<string | null>(null);
   const [showSetup, setShowSetup] = useState(true);
   const [tempDisplay, setTempDisplay] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check for admin key in URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'alimin2026') {
+      setIsAdmin(true);
+    }
+  }, []);
 
   const handleStart = () => {
     let list = inputText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
@@ -142,7 +151,22 @@ export default function SorteoPage() {
       </header>
 
       <main className="w-full max-w-4xl flex flex-col items-center">
-        {showSetup ? (
+        {!isAdmin && showSetup ? (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <div className="mb-8">
+               <Trophy size={64} className="text-[#c5a059] mx-auto mb-4 opacity-50" />
+               <h2 className="text-3xl font-serif mb-2">Sorteo en Vivo</h2>
+               <p className="text-gray-500 uppercase tracking-widest text-sm">Próximamente • Martes 5 de Mayo</p>
+            </div>
+            <div className="glass-card p-8 inline-block">
+              <p className="text-gray-300 italic">"El éxito es la suma de pequeños esfuerzos repetidos día tras día"</p>
+            </div>
+          </motion.div>
+        ) : showSetup ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
