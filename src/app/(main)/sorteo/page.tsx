@@ -253,20 +253,29 @@ export default function SorteoPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <AnimatePresence>
-                  {winners.map((winner, idx) => (
-                    <motion.div 
-                      key={winner}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className={styles.winnerItem}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={styles.winnerBadge}>{winners.length - idx}</div>
-                        <span className="text-lg font-semibold">{winner}</span>
-                      </div>
-                      <Star className="text-[#c5a059]" fill="currentColor" size={16} />
-                    </motion.div>
-                  ))}
+                  {winners.map((winner, idx) => {
+                    const prizeIndex = winners.length - 1 - idx;
+                    const prizes = ["$50.000", "$50.000", "$100.000"];
+                    const currentPrize = prizes[prizeIndex] || "Premio Especial";
+                    
+                    return (
+                      <motion.div 
+                        key={winner}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className={styles.winnerItem}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className={styles.winnerBadge}>{winners.length - idx}</div>
+                          <div>
+                            <span className="text-lg font-semibold block">{winner}</span>
+                            <span className="text-[10px] text-[#c5a059] uppercase tracking-widest font-bold">Ganador {currentPrize}</span>
+                          </div>
+                        </div>
+                        <Star className="text-[#c5a059]" fill="currentColor" size={16} />
+                      </motion.div>
+                    );
+                  })}
                 </AnimatePresence>
               </div>
 
