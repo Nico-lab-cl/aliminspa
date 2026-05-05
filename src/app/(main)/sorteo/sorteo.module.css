@@ -10,6 +10,12 @@
   font-family: 'Inter', sans-serif;
 }
 
+@media (max-width: 768px) {
+  .mainContainer {
+    padding: 1rem 0.5rem;
+  }
+}
+
 .header {
   margin-bottom: 3rem;
   text-align: center;
@@ -31,6 +37,12 @@
   letter-spacing: -0.02em;
 }
 
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+  }
+}
+
 .subtitle {
   text-transform: uppercase;
   letter-spacing: 0.3em;
@@ -48,6 +60,13 @@
   width: 100%;
   max-width: 800px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .glassCard {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
 }
 
 .setupTitle {
@@ -106,6 +125,15 @@
   transform: none;
 }
 
+@media (max-width: 768px) {
+  .btnPrimary {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .rouletteContainer {
   height: 160px;
   background: rgba(0, 0, 0, 0.5);
@@ -132,6 +160,12 @@
   margin-top: 3rem;
   width: 100%;
   max-width: 800px;
+}
+
+@media (max-width: 768px) {
+  .winnersList {
+    margin-top: 1.5rem;
+  }
 }
 
 .winnerItem {

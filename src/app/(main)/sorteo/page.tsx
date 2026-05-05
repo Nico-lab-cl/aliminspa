@@ -224,7 +224,7 @@ export default function SorteoPage() {
                 <span className="text-sm text-gray-300">Filtrar duplicados</span>
               </label>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <span className="text-xs text-gray-500 uppercase">Total: {inputText.split('\n').filter(s => s.trim()).length}</span>
               <button onClick={handleStart} className={styles.btnPrimary}><Play size={18} /> Preparar Sorteo</button>
             </div>
@@ -242,7 +242,7 @@ export default function SorteoPage() {
                 </div>
               </div>
               
-              <button onClick={spinWheel} disabled={isSpinning} className={`${styles.btnPrimary} text-2xl px-16 py-6`}>
+              <button onClick={spinWheel} disabled={isSpinning} className={`${styles.btnPrimary} text-xl md:text-2xl px-8 py-4 md:px-16 md:py-6 w-full max-w-sm justify-center`}>
                 {isSpinning ? 'GIRANDO...' : '¡GIRAR RULETA!'}
               </button>
 
