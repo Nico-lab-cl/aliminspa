@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Trophy, Users, Play, RotateCcw, Star, Upload, Eye, Crown, Sparkles } from 'lucide-react';
+import { Trophy, Users, Play, RotateCcw, Star, Upload, Eye, Crown, Sparkles, Search, CheckCircle, XCircle } from 'lucide-react';
 import styles from './sorteo.module.css';
 
 type SorteoStatus = 'pending' | 'active' | 'finished';
@@ -29,6 +29,7 @@ export default function SorteoPage() {
   const [loading, setLoading] = useState(true);
   const [showParticipantPreview, setShowParticipantPreview] = useState(false);
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rotationRef = useRef(0);
@@ -275,6 +276,61 @@ export default function SorteoPage() {
     }
   };
 
+  // ─── Reusable: Public Participant Search ───
+  const filteredParticipants = searchQuery.trim()
+    ? participants.filter(p => p.toLowerCase().includes(searchQuery.toLowerCase()))
+    : participants;
+
+  const searchFound = searchQuery.trim().length > 0 && filteredParticipants.length > 0;
+  const searchNotFound = searchQuery.trim().length > 0 && filteredParticipants.length === 0;
+
+  const renderParticipantSearch = () => (
+    <div className={styles.searchSection}>
+      <div className={styles.searchHeader}>
+        <Users size={18} className={styles.goldIcon} />
+        <h3 className={styles.searchTitle}>Participantes ({participants.length})</h3>
+      </div>
+      <p className={styles.searchHint}>Busca tu nombre para verificar que estás en el sorteo</p>
+
+      <div className={styles.searchInputWrapper}>
+        <Search size={16} className={styles.searchIcon} />
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="Buscar @usuario..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        {searchFound && (
+          <div className={styles.searchResultBadge} data-found>
+            <CheckCircle size={14} />
+            <span>¡Encontrado!</span>
+          </div>
+        )}
+        {searchNotFound && (
+          <div className={styles.searchResultBadge} data-notfound>
+            <XCircle size={14} />
+            <span>No encontrado</span>
+          </div>
+        )}
+      </div>
+
+      <div className={styles.participantsGrid}>
+        {(searchQuery.trim() ? filteredParticipants : participants).map((name, i) => (
+          <span
+            key={name + i}
+            className={`${styles.participantTag} ${winners.includes(name) ? styles.winnerTag : ''} ${
+              searchQuery.trim() && name.toLowerCase().includes(searchQuery.toLowerCase()) ? styles.highlightTag : ''
+            }`}
+          >
+            {name}
+            {winners.includes(name) && <Star size={10} fill="currentColor" />}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+
   if (loading) {
     return (
       <div className={styles.mainContainer}>
@@ -327,37 +383,8 @@ export default function SorteoPage() {
             </div>
           </motion.div>
 
-          {/* Participants preview */}
-          <div className={styles.participantsSection}>
-            <button
-              className={styles.toggleParticipants}
-              onClick={() => setShowParticipantPreview(!showParticipantPreview)}
-            >
-              <Eye size={16} />
-              {showParticipantPreview ? 'Ocultar' : 'Ver'} participantes ({participants.length})
-            </button>
-
-            <AnimatePresence>
-              {showParticipantPreview && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className={styles.participantsGrid}
-                >
-                  {participants.map((name, i) => (
-                    <span
-                      key={name + i}
-                      className={`${styles.participantTag} ${winners.includes(name) ? styles.winnerTag : ''}`}
-                    >
-                      {name}
-                      {winners.includes(name) && <Star size={10} fill="currentColor" />}
-                    </span>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          {/* Searchable Participants */}
+          {participants.length > 0 && renderParticipantSearch()}
         </main>
       </div>
     );
@@ -425,6 +452,9 @@ export default function SorteoPage() {
               ))}
             </div>
           )}
+
+          {/* Searchable Participants */}
+          {participants.length > 0 && renderParticipantSearch()}
 
           <p className={styles.liveSubtext}>
             Sigue el sorteo en nuestro live de Instagram
