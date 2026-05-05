@@ -47,3 +47,14 @@ model Booking {
 
   @@map("bookings")
 }
+
+model Sorteo {
+  id           String   @id @default("current")
+  participants String   @db.Text // JSON array of participant usernames
+  winners      String   @db.Text // JSON array of winner usernames
+  status       String   @default("pending") // pending | active | finished
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("sorteos")
+}
