@@ -413,6 +413,11 @@ export default function SorteoPage() {
                 </div>
               ))}
             </div>
+            <div className={styles.deadlineNotice}>
+              <span className={styles.deadlineIcon}>⏰</span>
+              <p>Los comentarios se reciben hasta las <strong>20:00 hrs (8:00 PM)</strong></p>
+              <p className={styles.deadlineSub}>Comenta en nuestra publicación de Instagram para participar</p>
+            </div>
           </div>
         </main>
       </div>
