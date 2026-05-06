@@ -276,17 +276,11 @@
 /* ─── Sorteo Layout (Admin Active) ─── */
 .sorteoLayout {
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 2rem;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .sorteoLayout {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 500px;
 }
 
 /* ─── Wheel Section ─── */
@@ -375,6 +369,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 1.5rem;
+  width: 100%;
 }
 
 .winnersPanelTitle {
