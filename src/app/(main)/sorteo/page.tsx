@@ -220,13 +220,19 @@ export default function SorteoPage() {
   };
 
   const finalizeSelection = useCallback(() => {
-    setIsSpinning(false);
-
     const sliceAngle = (2 * Math.PI) / participantsRef.current.length;
     let winningIndex = Math.floor((0 - rotationRef.current) / sliceAngle) % participantsRef.current.length;
     if (winningIndex < 0) winningIndex += participantsRef.current.length;
 
     const winner = participantsRef.current[winningIndex];
+
+    // If this person already won, re-spin automatically
+    if (winnersRef.current.includes(winner)) {
+      angularVelocityRef.current = 0.3 + Math.random() * 0.3;
+      return;
+    }
+
+    setIsSpinning(false);
     const newWinners = [...winnersRef.current, winner];
     setWinners(newWinners);
     setCurrentWinner(winner);
