@@ -28,12 +28,12 @@ export default function PromoBanner() {
     return (
         <div className={styles.banner}>
             <div className={styles.container}>
-                <span className={styles.tag}>Sorteo Día del Trabajador 🎁</span>
+                <span className={styles.tag}>{CONTEST.tag}</span>
                 <p className={styles.message}>{CONTEST.message}</p>
                 <Link 
                     href={CONTEST.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                    target={CONTEST.link.startsWith('http') ? "_blank" : undefined}
+                    rel={CONTEST.link.startsWith('http') ? "noopener noreferrer" : undefined}
                     className={styles.cta}
                 >
                     {CONTEST.cta}

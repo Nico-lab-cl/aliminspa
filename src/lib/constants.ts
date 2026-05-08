@@ -17,10 +17,11 @@ export const SITE = {
 } as const
 
 export const CONTEST = {
-    endDate: '2026-05-05',
-    message: 'Gana 50 o 100 luquitas en nuestro sorteo',
-    cta: 'Concursa',
-    link: 'https://www.instagram.com/p/DXsjIRIlpq0/'
+    endDate: '2026-05-10',
+    tag: 'Especial Día de la Madre 🌸',
+    message: 'Todas las mamás que nos visiten el sábado 9 y domingo 10 de mayo se llevarán una sorpresa',
+    cta: 'Agenda tu visita',
+    link: '/reunion'
 } as const
 
 
