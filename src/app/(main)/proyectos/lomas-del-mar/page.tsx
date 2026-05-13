@@ -14,6 +14,7 @@ import Testimonials from '@/components/sections/Testimonials'
 import AttractionsCarousel from './AttractionsCarousel'
 import Newsletter from '@/components/sections/Newsletter'
 import BookingCalendar from '@/components/sections/BookingCalendar'
+import PromoPoll from '@/components/ui/PromoPoll'
 import styles from './page.module.css'
 
 const project = PROJECTS[0] // Lomas del Mar
@@ -210,6 +211,9 @@ export default function LomasDelMarPage() {
                 
                 <Newsletter />
             </div>
+
+            {/* Encuesta interactiva — aparece al 50% de scroll */}
+            <PromoPoll />
         </>
     )
 }
