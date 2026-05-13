@@ -58,3 +58,18 @@ model Sorteo {
 
   @@map("sorteos")
 }
+
+model PollVote {
+  id         String   @id @default(cuid())
+  pollId     String   @map("poll_id")      // Identificador de la encuesta (ej. "lomas-del-mar-beneficio")
+  optionId   Int      @map("option_id")    // ID de la opción elegida (1, 2, 3...)
+  optionText String   @map("option_text")  // Texto de la opción para referencia
+  fingerprint String? @map("fingerprint")  // Hash del IP para evitar duplicados sin guardar datos personales
+  userAgent  String?  @map("user_agent")
+  proyecto   String?                       // Proyecto asociado (ej. "Lomas del Mar")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([pollId])
+  @@index([pollId, fingerprint])
+  @@map("poll_votes")
+}
