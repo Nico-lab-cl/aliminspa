@@ -19,14 +19,86 @@ const POLL_OPTIONS = [
   { id: 3, text: '🥉 Asesoría legal y gestión de trámites notariales 100% gratuita' },
 ] as const;
 
-// Clave usada en localStorage para persistir el estado del voto
-const STORAGE_KEY = 'alimin_poll_voted';
+// Clave usada en localStorage para persistir el estado de la encuesta
+const STORAGE_KEY = 'alimin_poll_state';
 
 // Porcentaje de scroll para activar la aparición del componente
 const SCROLL_TRIGGER_PERCENT = 50;
 
 // Tiempo (ms) antes de ocultar el componente después de votar
 const AUTO_DISMISS_DELAY = 8000;
+
+// Tiempo de cooldown (ms) antes de volver a mostrar si el usuario cerró sin votar
+// 7 días = 7 * 24 * 60 * 60 * 1000
+const DISMISS_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+
+// ═══════════════════════════════════════════════════════════
+// Tipos para la persistencia en localStorage
+// ═══════════════════════════════════════════════════════════
+interface PollState {
+  /** 'voted' = nunca volver a mostrar | 'dismissed' = re-mostrar tras cooldown */
+  status: 'voted' | 'dismissed';
+  /** Timestamp (ms) de cuándo se guardó el estado */
+  timestamp: number;
+}
+
+/**
+ * Lee el estado de la encuesta desde localStorage.
+ * Retorna null si no hay estado guardado o si el JSON es inválido.
+ */
+function readPollState(): PollState | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Validación básica de la estructura
+    if (parsed && typeof parsed.status === 'string' && typeof parsed.timestamp === 'number') {
+      return parsed as PollState;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Guarda el estado de la encuesta en localStorage.
+ */
+function savePollState(status: PollState['status']): void {
+  try {
+    const state: PollState = { status, timestamp: Date.now() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Fallo silencioso si localStorage no está disponible
+  }
+}
+
+/**
+ * Determina si la encuesta debe mostrarse según el estado guardado.
+ *
+ * - Sin estado → mostrar (visitante nuevo)
+ * - status: 'voted' → NUNCA volver a mostrar
+ * - status: 'dismissed' → mostrar solo si han pasado más de 7 días
+ */
+function shouldShowPoll(): { show: boolean; alreadyVoted: boolean } {
+  const state = readPollState();
+
+  // Visitante nuevo — sin datos en localStorage
+  if (!state) return { show: true, alreadyVoted: false };
+
+  // Ya votó — no molestar nunca más
+  if (state.status === 'voted') return { show: false, alreadyVoted: true };
+
+  // Cerró sin votar — verificamos si ya pasó el cooldown de 7 días
+  if (state.status === 'dismissed') {
+    const elapsed = Date.now() - state.timestamp;
+    const cooldownExpired = elapsed >= DISMISS_COOLDOWN_MS;
+    return { show: cooldownExpired, alreadyVoted: false };
+  }
+
+  // Fallback seguro
+  return { show: true, alreadyVoted: false };
+}
 
 // ═══════════════════════════════════════════════════════════
 // Mapeo de clases CSS para las barras de progreso de cada opción
@@ -55,16 +127,16 @@ export default function PromoPoll() {
 
   // ── Verificación de localStorage y listener de scroll ───────
   useEffect(() => {
-    // Verificamos si el usuario ya votó en una sesión anterior
-    try {
-      const voted = localStorage.getItem(STORAGE_KEY);
-      if (voted === 'true') {
-        setHasVoted(true);
-        setIsDismissed(true); // No mostramos el componente si ya votó
-        return;
-      }
-    } catch {
-      // localStorage no disponible (SSR, incógnito restrictivo, etc.)
+    // Limpieza de la clave antigua (backwards compatibility)
+    try { localStorage.removeItem('alimin_poll_voted'); } catch { /* noop */ }
+
+    // Verificamos si la encuesta debe mostrarse según el estado guardado
+    const { show, alreadyVoted } = shouldShowPoll();
+
+    if (!show) {
+      setHasVoted(alreadyVoted);
+      setIsDismissed(true);
+      return;
     }
 
     const handleScroll = () => {
@@ -88,7 +160,7 @@ export default function PromoPoll() {
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // Solo se ejecuta al montar — no depende de estados internos
+  }, []); // Solo se ejecuta al montar
 
   // ── Handler de voto ─────────────────────────────────────────
   const handleVote = useCallback((optionId: number) => {
@@ -96,12 +168,8 @@ export default function PromoPoll() {
     // await submitVote(optionId);
     console.log('[PromoPoll] Voto registrado:', optionId);
 
-    // Persistimos en localStorage para prevenir doble voto
-    try {
-      localStorage.setItem(STORAGE_KEY, 'true');
-    } catch {
-      // Fallo silencioso si localStorage no está disponible
-    }
+    // Persistimos como 'voted' — nunca más se mostrará la encuesta
+    savePollState('voted');
 
     setHasVoted(true);
     setShowResults(true);
@@ -114,8 +182,11 @@ export default function PromoPoll() {
     }, AUTO_DISMISS_DELAY);
   }, []);
 
-  // ── Handler de cierre manual ────────────────────────────────
+  // ── Handler de cierre manual (sin votar) ────────────────────
   const handleClose = useCallback(() => {
+    // Guardamos como 'dismissed' con timestamp — se re-mostrará en 7 días
+    savePollState('dismissed');
+
     setIsVisible(false);
     // Esperamos a que termine la animación de salida antes de desmontar
     setTimeout(() => setIsDismissed(true), 600);
