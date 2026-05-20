@@ -97,6 +97,9 @@ export default function LinkInBio() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.orb1} />
+      <div className={styles.orb2} />
+      <div className={styles.orb3} />
       <header className={styles.profile}>
         <div className={styles.logoWrapper}>
           <Image
