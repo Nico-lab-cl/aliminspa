@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Globe, Map, Sunset, Trees } from 'lucide-react';
+import { Globe, Map, Sunset, Trees, Calendar, MessageCircle, ShieldCheck, Users, PiggyBank } from 'lucide-react';
 import styles from './page.module.css';
 
 export const metadata = {
@@ -43,6 +43,16 @@ export default function LinkInBio() {
       title: 'Página Web Oficial',
       url: '/',
       icon: <Globe size={20} />,
+    },
+    {
+      title: 'Agendar una Visita',
+      url: '/reunion',
+      icon: <Calendar size={20} />,
+    },
+    {
+      title: 'Canal de WhatsApp (¡Únete!)',
+      url: 'https://whatsapp.com/channel/0029Vb7Ud5M9hXF2KzGzwv2R',
+      icon: <MessageCircle size={20} />,
     },
     {
       title: 'Proyecto Lomas del Mar',
@@ -111,7 +121,6 @@ export default function LinkInBio() {
             priority
           />
         </div>
-        <h1 className={styles.title}>AliminSPA</h1>
         <p className={styles.description}>
           Hacemos realidad tu sueño de la casa propia. Proyectos inmobiliarios en las mejores ubicaciones.
         </p>
@@ -124,6 +133,21 @@ export default function LinkInBio() {
             <span>{link.title}</span>
           </Link>
         ))}
+      </section>
+
+      <section className={styles.badges}>
+        <div className={styles.badgeItem}>
+          <ShieldCheck size={26} className={styles.badgeIcon} />
+          <span className={styles.badgeText}>+8 Años de Experiencia en la industria</span>
+        </div>
+        <div className={styles.badgeItem}>
+          <Users size={26} className={styles.badgeIcon} />
+          <span className={styles.badgeText}>+150 Familias Confían en nosotros</span>
+        </div>
+        <div className={styles.badgeItem}>
+          <PiggyBank size={26} className={styles.badgeIcon} />
+          <span className={styles.badgeText}>El Pie Más Bajo del litoral central</span>
+        </div>
       </section>
 
       <section className={styles.socials}>
