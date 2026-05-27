@@ -1,18 +1,18 @@
 .page {
-    background-color: #0b0f19;
-    color: #e2e8f0;
+    background-color: #ffffff;
+    color: #2c3e50;
     min-height: 100vh;
     overflow-x: hidden;
     font-family: var(--font);
 }
 
-/* --- Hero Section --- */
+/* --- Hero Section (Premium Dark Blue/Teal) --- */
 .hero {
     position: relative;
-    padding: 8rem 0 4rem 0;
-    background: radial-gradient(circle at top, rgba(217, 119, 6, 0.15) 0%, rgba(9, 13, 22, 0) 60%), #090d16;
+    padding: 10rem 0 6rem 0;
+    background: radial-gradient(circle at 50% 30%, rgba(26, 138, 125, 0.45) 0%, rgba(24, 56, 99, 1) 100%), #183863;
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 3px solid #C5A059;
     overflow: hidden;
 }
 
@@ -27,73 +27,76 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
-    border: 1px solid rgba(217, 119, 6, 0.5);
-    color: #f59e0b;
-    font-size: 0.85rem;
-    font-weight: 800;
+    background: rgba(197, 160, 89, 0.15);
+    border: 1px solid #C5A059;
+    color: #f3e5ab;
+    font-size: 0.8rem;
+    font-weight: 700;
     padding: 0.5rem 1.25rem;
     border-radius: 50px;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     margin-bottom: 2rem;
-    box-shadow: 0 0 20px rgba(217, 119, 6, 0.15);
+    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.15);
 }
 
 .badge span {
     display: inline-block;
     width: 8px;
     height: 8px;
-    background-color: #ef4444;
+    background-color: #C5A059;
     border-radius: 50%;
     animation: flash 1.5s infinite;
 }
 
 @keyframes flash {
-    0%, 100% { opacity: 0.3; }
+    0%, 100% { opacity: 0.4; }
     50% { opacity: 1; }
 }
 
 .title {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     color: #ffffff;
+    font-family: var(--font-heading);
 }
 
 .textGlow {
-    background: linear-gradient(135deg, #ffffff 30%, #fcd34d 70%, #f97316 100%);
+    background: linear-gradient(135deg, #ffffff 40%, #f3e5ab 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 40px rgba(251, 191, 36, 0.1);
+    font-weight: 800;
 }
 
 .subtitle {
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
-    color: #94a3b8;
-    max-width: 680px;
-    margin: 0 auto 3rem auto;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    color: #e2e8f0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    max-width: 700px;
+    margin: 0 auto 3.5rem auto;
     line-height: 1.6;
 }
 
 /* --- Countdown Timer --- */
 .countdownWrapper {
-    background: rgba(17, 24, 39, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
     border-radius: var(--radius-lg);
-    padding: 2rem;
-    max-width: 600px;
+    padding: 2.2rem 2.5rem;
+    max-width: 620px;
     margin: 0 auto 3rem auto;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .countdownLabel {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 700;
-    color: #f59e0b;
+    color: #C5A059;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     margin-bottom: 1.25rem;
@@ -113,32 +116,32 @@
 }
 
 .countdownValue {
-    font-family: monospace;
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-family: 'Montserrat', monospace;
+    font-size: clamp(2.2rem, 4vw, 3rem);
     font-weight: 700;
     color: #ffffff;
-    background: rgba(31, 41, 55, 0.8);
+    background: rgba(24, 56, 99, 0.85);
     width: 100%;
-    padding: 0.5rem 0;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    padding: 0.6rem 0;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .countdownUnit {
     font-size: 0.75rem;
-    color: #64748b;
+    color: #cbd5e1;
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 0.05em;
 }
 
-/* --- Offer Benefits Grid --- */
+/* --- Offer Benefits Grid (Clean White Backdrop) --- */
 .promoSection {
     padding: var(--section-gap) 0;
-    background-color: #0b0f19;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: #ffffff;
 }
 
 .promoGrid {
@@ -149,13 +152,14 @@
 }
 
 .promoCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #ffffff;
+    border: 1px solid rgba(24, 56, 99, 0.08);
     border-radius: var(--radius-lg);
-    padding: 2.5rem 2rem;
+    padding: 3rem 2.2rem;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .promoCard::before {
@@ -164,17 +168,16 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, #f59e0b, #ef4444);
+    height: 4px;
+    background: var(--gradient-gold);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .promoCard:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(217, 119, 6, 0.3);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    transform: translateY(-6px);
+    border-color: rgba(197, 160, 89, 0.3);
+    box-shadow: var(--shadow-lg);
 }
 
 .promoCard:hover::before {
@@ -184,46 +187,48 @@
 .promoIcon {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%);
+    background: rgba(197, 160, 89, 0.1);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.75rem;
-    color: #f59e0b;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(217, 119, 6, 0.2);
+    font-size: 1.6rem;
+    color: #C5A059;
+    margin-bottom: 1.75rem;
+    border: 1px solid rgba(197, 160, 89, 0.25);
 }
 
 .promoCardTitle {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 0.75rem;
+    color: #183863;
+    margin-bottom: 0.85rem;
+    font-family: var(--font-heading);
 }
 
 .promoCardDesc {
     font-size: 0.95rem;
-    color: #94a3b8;
+    color: rgba(44, 62, 80, 0.75);
     line-height: 1.6;
 }
 
-/* --- Trust Belt --- */
+/* --- Trust Belt (Sophisticated Dark Teal) --- */
 .trustBelt {
-    background: #060910;
-    padding: 3rem 0;
+    background: #14695F;
+    padding: 3.5rem 0;
     border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 3px solid #C5A059;
+    color: #ffffff;
     text-align: center;
 }
 
 .trustBeltTitle {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #64748b;
+    color: #f3e5ab;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    margin-bottom: 2rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 2.5rem;
 }
 
 .trustGrid {
@@ -241,42 +246,46 @@
 
 .trustIcon {
     font-size: 2.2rem;
-    color: #f59e0b;
+    color: #f3e5ab;
     margin-bottom: 0.25rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
 }
 
 .trustName {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #ffffff;
+    font-family: var(--font-heading);
 }
 
 .trustDesc {
-    font-size: 0.8rem;
-    color: #64748b;
+    font-size: 0.82rem;
+    color: #cbd5e1;
     max-width: 200px;
+    line-height: 1.4;
 }
 
-/* --- Projects Section --- */
+/* --- Projects Section (Soft Light Gray) --- */
 .projectsSection {
     padding: var(--section-gap) 0;
-    background-color: #090d16;
+    background-color: #F4F6F8;
 }
 
 .projectsHeader {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 4.5rem;
 }
 
 .sectionHeading {
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    color: #ffffff;
-    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    color: #183863;
+    font-weight: 700;
     margin-bottom: 1rem;
+    font-family: var(--font-heading);
 }
 
 .sectionHeading span {
-    color: #f59e0b;
+    color: #C5A059;
 }
 
 .projectsGrid {
@@ -286,23 +295,23 @@
 }
 
 .projectCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #ffffff;
+    border: 1px solid rgba(24, 56, 99, 0.06);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.4s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
 }
 
 .projectCard:hover {
     transform: translateY(-8px);
-    border-color: rgba(217, 119, 6, 0.4);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+    border-color: rgba(197, 160, 89, 0.25);
+    box-shadow: var(--shadow-lg);
 }
 
 .projectImgContainer {
     position: relative;
-    height: 350px;
+    height: 360px;
     width: 100%;
 }
 
@@ -314,40 +323,42 @@
     position: absolute;
     top: 1.25rem;
     left: 1.25rem;
-    background: #f59e0b;
-    color: #000000;
-    font-size: 0.75rem;
-    font-weight: 800;
-    padding: 0.4rem 1rem;
+    background: var(--gradient-gold);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.45rem 1.1rem;
     border-radius: 50px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     z-index: 10;
+    box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3);
 }
 
 .projectContent {
-    padding: 2.5rem;
+    padding: 3rem 2.5rem;
 }
 
 .projectName {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #183863;
     margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
 }
 
 .projectDistance {
     font-size: 0.8rem;
     font-weight: 700;
-    color: #f59e0b;
+    color: #C5A059;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .projectDesc {
     font-size: 0.95rem;
-    color: #94a3b8;
+    color: rgba(44, 62, 80, 0.8);
     line-height: 1.6;
     margin-bottom: 2rem;
 }
@@ -355,7 +366,7 @@
 .featuresList {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.6rem;
     margin-bottom: 2rem;
 }
 
@@ -364,41 +375,42 @@
     align-items: center;
     gap: 0.35rem;
     font-size: 0.8rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: #cbd5e1;
+    background: #F4F6F8;
+    border: 1px solid rgba(24, 56, 99, 0.06);
+    color: #2c3e50;
     padding: 0.35rem 0.85rem;
     border-radius: 50px;
+    font-weight: 500;
 }
 
 .featureCheck {
-    color: #f59e0b;
+    color: #1A8A7D;
     font-weight: 900;
 }
 
 .projectFinancing {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: #F4F6F8;
+    border: 1px solid rgba(24, 56, 99, 0.05);
     border-radius: var(--radius-md);
-    padding: 1.5rem;
+    padding: 1.75rem;
     margin-bottom: 2rem;
 }
 
 .financeTitle {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #183863;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    letter-spacing: 0.08em;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(24, 56, 99, 0.08);
     padding-bottom: 0.5rem;
 }
 
 .financeDetails {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .financeItem {
@@ -408,55 +420,59 @@
 
 .financeLabel {
     font-size: 0.75rem;
-    color: #64748b;
+    color: rgba(44, 62, 80, 0.6);
+    margin-bottom: 0.15rem;
 }
 
 .financeValue {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #183863;
 }
 
 .highlightValue {
-    color: #f59e0b;
+    color: #1A8A7D;
+    font-weight: 800;
 }
 
-/* --- Testimonials Section --- */
+/* --- Testimonials Section (Clean White) --- */
 .testimonialsSection {
     padding: var(--section-gap) 0;
-    background-color: #060910;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    background-color: #ffffff;
+    border-top: 1px solid rgba(0,0,0,0.03);
 }
 
-/* --- Form & Advisor Section --- */
+/* --- Form & Advisor Section (Soft Gray Backdrop) --- */
 .formAdvisorGrid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
-    gap: 4rem;
+    gap: 4.5rem;
     align-items: start;
     padding: var(--section-gap) 0;
 }
 
 .formSection {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #ffffff;
+    border: 1px solid rgba(24, 56, 99, 0.08);
     border-radius: var(--radius-lg);
-    padding: 3rem;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    padding: 3.5rem;
+    box-shadow: var(--shadow-lg);
     position: relative;
 }
 
 .formTitle {
     font-size: 2rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #183863;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-heading);
 }
 
 .formSubtitle {
-    font-size: 1rem;
-    color: #94a3b8;
+    font-size: 0.98rem;
+    color: rgba(44, 62, 80, 0.75);
     margin-bottom: 2.5rem;
+    line-height: 1.5;
 }
 
 .advisorsColumn {
@@ -470,37 +486,41 @@
 }
 
 .advisorsTitle {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #183863;
     margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
 }
 
 .advisorsSubtitle {
     font-size: 0.95rem;
-    color: #94a3b8;
+    color: rgba(44, 62, 80, 0.75);
+    line-height: 1.5;
 }
 
 .advisorCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #ffffff;
+    border: 1px solid rgba(24, 56, 99, 0.06);
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    padding: 1.75rem;
     display: flex;
-    gap: 1.25rem;
+    gap: 1.5rem;
     align-items: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
 }
 
 .advisorCard:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(217, 119, 6, 0.25);
+    background: #ffffff;
+    border-color: rgba(197, 160, 89, 0.25);
     transform: translateX(5px);
+    box-shadow: var(--shadow-md);
 }
 
 .advisorImg {
     border-radius: 50%;
-    border: 2px solid #f59e0b;
+    border: 3px solid #C5A059;
     object-fit: cover;
 }
 
@@ -509,15 +529,16 @@
 }
 
 .advisorName {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #183863;
     margin-bottom: 0.25rem;
+    font-family: var(--font-heading);
 }
 
 .advisorRole {
-    font-size: 0.8rem;
-    color: #f59e0b;
+    font-size: 0.75rem;
+    color: #C5A059;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -527,14 +548,15 @@
 
 .advisorPhone {
     font-size: 0.85rem;
-    color: #64748b;
+    color: rgba(44, 62, 80, 0.6);
     font-family: monospace;
 }
 
 .whatsappButton {
-    background: #25d366;
+    background: #25D366;
     color: #ffffff;
-    padding: 0.6rem;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -549,30 +571,31 @@
     box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
 }
 
-/* --- Form Field Reset --- */
+/* --- Form Input Refinements --- */
 .darkInput {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #ffffff;
+    background: #ffffff;
+    border: 1px solid rgba(24, 56, 99, 0.15);
+    color: #2c3e50;
+    transition: all var(--transition-fast);
 }
 
 .darkInput:focus {
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    border-color: #1A8A7D;
+    box-shadow: 0 0 0 3px rgba(26, 138, 125, 0.15);
 }
 
-/* --- Form Submit Button --- */
+/* --- Form Submit Button (Gold Theme) --- */
 .submitButton {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: #000000;
-    font-weight: 800;
-    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+    background: var(--gradient-gold);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: var(--shadow-gold);
 }
 
 .submitButton:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(245, 158, 11, 0.5);
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    box-shadow: 0 8px 24px rgba(197, 160, 89, 0.4);
+    background: linear-gradient(135deg, #d4af37 0%, #c5a059 100%);
 }
 
 .submitButton:disabled {
@@ -592,15 +615,15 @@
 }
 
 .success {
-    background-color: rgba(37, 211, 102, 0.1);
-    border: 1px solid rgba(37, 211, 102, 0.3);
-    color: #44ea82;
+    background-color: rgba(37, 211, 102, 0.08);
+    border: 1px solid rgba(37, 211, 102, 0.2);
+    color: #1aad54;
 }
 
 .error {
-    background-color: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #f87171;
+    background-color: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #dc2626;
 }
 
 /* ==========================================
@@ -634,7 +657,7 @@
     }
     
     .formSection {
-        padding: 2rem;
+        padding: 2.5rem;
     }
 }
 
@@ -678,7 +701,7 @@
 /* Mobile Devices (under 600px) */
 @media (max-width: 600px) {
     .hero {
-        padding: 6rem 0 3rem 0;
+        padding: 8rem 0 4rem 0;
     }
 
     .countdownGrid {
@@ -686,7 +709,7 @@
     }
 
     .countdownWrapper {
-        padding: 1.25rem;
+        padding: 1.5rem 1.25rem;
     }
 
     .trustGrid {
@@ -695,7 +718,7 @@
     }
 
     .projectContent {
-        padding: 1.5rem;
+        padding: 2rem 1.5rem;
     }
 
     .financeDetails {
@@ -704,12 +727,12 @@
     }
 
     .formSection {
-        padding: 1.5rem 1.25rem;
+        padding: 2rem 1.25rem;
     }
 
     .advisorCard {
-        padding: 1rem;
-        gap: 1rem;
+        padding: 1.25rem;
+        gap: 1.25rem;
     }
 
     .advisorImg {

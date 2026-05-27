@@ -4,7 +4,7 @@ import { useState, useEffect, FormEvent, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Clock, ShieldCheck, Check, CheckCircle, MessageCircle, Phone, ArrowRight, Tag, Sparkles, ChevronRight } from 'lucide-react'
+import { Clock, ShieldCheck, Check, CheckCircle, MessageCircle, Phone, ArrowRight, Tag, Sparkles, Droplet, Zap, Lock } from 'lucide-react'
 import { SITE, PROJECTS } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import Testimonials from '@/components/sections/Testimonials'
@@ -103,7 +103,7 @@ function CyberForm() {
     return (
         <form className={styles.form} onSubmit={handleSubmit} id="cyber-form">
             <div className="input-group">
-                <label htmlFor="cyber-nombre" className="input-label" style={{ color: '#e2e8f0' }}>Nombre completo</label>
+                <label htmlFor="cyber-nombre" className="input-label" style={{ color: '#183863' }}>Nombre completo</label>
                 <input
                     id="cyber-nombre"
                     type="text"
@@ -115,8 +115,8 @@ function CyberForm() {
                 />
             </div>
 
-            <div className="input-group">
-                <label htmlFor="cyber-email" className="input-label" style={{ color: '#e2e8f0' }}>Correo electrónico</label>
+            <div className="input-group" style={{ marginTop: '1.25rem' }}>
+                <label htmlFor="cyber-email" className="input-label" style={{ color: '#183863' }}>Correo electrónico</label>
                 <input
                     id="cyber-email"
                     type="email"
@@ -128,8 +128,8 @@ function CyberForm() {
                 />
             </div>
 
-            <div className="input-group">
-                <label htmlFor="cyber-celular" className="input-label" style={{ color: '#e2e8f0' }}>Celular</label>
+            <div className="input-group" style={{ marginTop: '1.25rem' }}>
+                <label htmlFor="cyber-celular" className="input-label" style={{ color: '#183863' }}>Celular</label>
                 <input
                     id="cyber-celular"
                     type="tel"
@@ -141,8 +141,8 @@ function CyberForm() {
                 />
             </div>
 
-            <div className="input-group">
-                <label htmlFor="cyber-ciudad" className="input-label" style={{ color: '#e2e8f0' }}>Ciudad de residencia</label>
+            <div className="input-group" style={{ marginTop: '1.25rem' }}>
+                <label htmlFor="cyber-ciudad" className="input-label" style={{ color: '#183863' }}>Ciudad de residencia</label>
                 <input
                     id="cyber-ciudad"
                     type="text"
@@ -154,8 +154,8 @@ function CyberForm() {
                 />
             </div>
 
-            <div className="input-group">
-                <label htmlFor="cyber-proyecto" className="input-label" style={{ color: '#e2e8f0' }}>Proyecto de interés</label>
+            <div className="input-group" style={{ marginTop: '1.25rem' }}>
+                <label htmlFor="cyber-proyecto" className="input-label" style={{ color: '#183863' }}>Proyecto de interés</label>
                 <select
                     id="cyber-proyecto"
                     className={`input ${styles.darkInput}`}
@@ -173,7 +173,7 @@ function CyberForm() {
             <button
                 type="submit"
                 className={`btn btn-primary btn-lg ${styles.submitButton}`}
-                style={{ width: '100%', marginTop: '1rem' }}
+                style={{ width: '100%', marginTop: '2rem' }}
                 disabled={status === 'loading'}
             >
                 {status === 'loading' ? 'Enviando...' : 'Asegurar mi Promoción'}
@@ -197,7 +197,6 @@ export default function CyberPageClient() {
     const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' })
 
     useEffect(() => {
-        // Countdown target date
         const targetDate = new Date('2026-05-31T23:59:59').getTime()
 
         const updateCountdown = () => {
@@ -290,28 +289,34 @@ export default function CyberPageClient() {
                 <div className="container">
                     <div className={styles.projectsHeader}>
                         <h2 className={styles.sectionHeading}>¿En qué consiste la <span>Promo Cyber</span>?</h2>
-                        <p style={{ color: '#94a3b8', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
+                        <p style={{ color: 'rgba(44, 62, 80, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
                             Descubre los beneficios exclusivos de comprar tu terreno durante esta campaña.
                         </p>
                     </div>
 
                     <div className={styles.promoGrid}>
                         <div className={styles.promoCard}>
-                            <div className={styles.promoIcon}>🏷️</div>
+                            <div className={styles.promoIcon}>
+                                <Tag size={24} />
+                            </div>
                             <h3 className={styles.promoCardTitle}>Pie en 3 Cuotas Sin Interés</h3>
                             <p className={styles.promoCardDesc}>
-                                Flexibilidad total para tu pago inicial. Cancela el pie en 3 cuotas mensuales sin ningún recargo ni reajuste.
+                                Flexibilidad total para tu pago inicial. Cancela el pie de tu terreno en 3 cuotas mensuales sin ningún recargo ni reajuste.
                             </p>
                         </div>
                         <div className={styles.promoCard}>
-                            <div className={styles.promoIcon}>⚖️</div>
+                            <div className={styles.promoIcon}>
+                                <ShieldCheck size={24} />
+                            </div>
                             <h3 className={styles.promoCardTitle}>Gestión Legal Gratuita</h3>
                             <p className={styles.promoCardDesc}>
                                 Nos hacemos cargo del estudio de títulos, redacción de escrituras y gestiones legales 100% sin costo para ti.
                             </p>
                         </div>
                         <div className={styles.promoCard}>
-                            <div className={styles.promoIcon}>💻</div>
+                            <div className={styles.promoIcon}>
+                                <Lock size={24} />
+                            </div>
                             <h3 className={styles.promoCardTitle}>Proceso de Compra Digital</h3>
                             <p className={styles.promoCardDesc}>
                                 Rápido, transparente y 100% seguro. Reserva tu terreno e inicia el proceso desde la comodidad de tu hogar.
@@ -327,22 +332,30 @@ export default function CyberPageClient() {
                     <h3 className={styles.trustBeltTitle}>Nuestros Sellos de Confianza y Seguridad</h3>
                     <div className={styles.trustGrid}>
                         <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>🗺️</div>
+                            <div className={styles.trustIcon}>
+                                <ShieldCheck size={36} />
+                            </div>
                             <h4 className={styles.trustName}>Rol Propio</h4>
                             <p className={styles.trustDesc}>Individualizado e inscrito en el Conservador de Bienes Raíces</p>
                         </div>
                         <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>💧</div>
+                            <div className={styles.trustIcon}>
+                                <Droplet size={36} />
+                            </div>
                             <h4 className={styles.trustName}>Agua Certificada</h4>
                             <p className={styles.trustDesc}>Aprobada por la SEREMI de Salud para consumo humano</p>
                         </div>
                         <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>⚡</div>
+                            <div className={styles.trustIcon}>
+                                <Zap size={36} />
+                            </div>
                             <h4 className={styles.trustName}>Luz Eléctrica</h4>
                             <p className={styles.trustDesc}>Empalme instalado en el frontis de cada lote</p>
                         </div>
                         <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>🔒</div>
+                            <div className={styles.trustIcon}>
+                                <Lock size={36} />
+                            </div>
                             <h4 className={styles.trustName}>Compra Segura</h4>
                             <p className={styles.trustDesc}>Reserva 100% digital respaldada con contrato notarial</p>
                         </div>
@@ -355,7 +368,7 @@ export default function CyberPageClient() {
                 <div className="container">
                     <div className={styles.projectsHeader}>
                         <h2 className={styles.sectionHeading}>Proyectos en <span>Promoción Cyber</span></h2>
-                        <p style={{ color: '#94a3b8', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
+                        <p style={{ color: 'rgba(44, 62, 80, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
                             Opciones exclusivas ubicadas en las zonas con mayor plusvalía de El Tabo.
                         </p>
                     </div>
@@ -504,7 +517,7 @@ export default function CyberPageClient() {
             </section>
 
             {/* --- FORM AND SALES TEAM SECTION --- */}
-            <section className="section" id="cyber-contacto" style={{ backgroundColor: '#090d16', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <section className="section" id="cyber-contacto" style={{ backgroundColor: '#F4F6F8', borderTop: '1px solid rgba(24, 56, 99, 0.05)' }}>
                 <div className="container">
                     <div className={styles.formAdvisorGrid}>
                         {/* Form Column */}
@@ -533,16 +546,16 @@ export default function CyberPageClient() {
                                     <Image
                                         src={adv.image}
                                         alt={adv.name}
-                                        width={80}
-                                        height={80}
+                                        width={75}
+                                        height={75}
                                         className={styles.advisorImg}
                                     />
                                     <div className={styles.advisorInfo}>
                                         <span className={styles.advisorRole}>{adv.role}</span>
                                         <h4 className={styles.advisorName}>{adv.name}</h4>
-                                        <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem' }}>{adv.description}</p>
+                                        <p style={{ fontSize: '0.85rem', color: 'rgba(44, 62, 80, 0.75)', marginBottom: '0.5rem' }}>{adv.description}</p>
                                         <div className={styles.advisorPhone}>
-                                            <Phone size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle', color: '#f59e0b' }} />
+                                            <Phone size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle', color: '#C5A059' }} />
                                             {adv.phone}
                                         </div>
                                     </div>
@@ -553,7 +566,7 @@ export default function CyberPageClient() {
                                         className={styles.whatsappButton}
                                         aria-label={`Hablar por WhatsApp con ${adv.name}`}
                                     >
-                                        <MessageCircle size={24} />
+                                        <MessageCircle size={22} />
                                     </a>
                                 </div>
                             ))}
