@@ -1,0 +1,723 @@
+.page {
+    background-color: #0b0f19;
+    color: #e2e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: var(--font);
+}
+
+/* --- Hero Section --- */
+.hero {
+    position: relative;
+    padding: 8rem 0 4rem 0;
+    background: radial-gradient(circle at top, rgba(217, 119, 6, 0.15) 0%, rgba(9, 13, 22, 0) 60%), #090d16;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.heroContent {
+    max-width: 850px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+    border: 1px solid rgba(217, 119, 6, 0.5);
+    color: #f59e0b;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.15);
+}
+
+.badge span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    animation: flash 1.5s infinite;
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+}
+
+.textGlow {
+    background: linear-gradient(135deg, #ffffff 30%, #fcd34d 70%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 40px rgba(251, 191, 36, 0.1);
+}
+
+.subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: #94a3b8;
+    max-width: 680px;
+    margin: 0 auto 3rem auto;
+    line-height: 1.6;
+}
+
+/* --- Countdown Timer --- */
+.countdownWrapper {
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.countdownLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.25rem;
+    display: block;
+}
+
+.countdownGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+.countdownItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.countdownValue {
+    font-family: monospace;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(31, 41, 55, 0.8);
+    width: 100%;
+    padding: 0.5rem 0;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    margin-bottom: 0.5rem;
+}
+
+.countdownUnit {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* --- Offer Benefits Grid --- */
+.promoSection {
+    padding: var(--section-gap) 0;
+    background-color: #0b0f19;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.promoGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.promoCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.promoCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.promoCard:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(217, 119, 6, 0.3);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
+
+.promoCard:hover::before {
+    opacity: 1;
+}
+
+.promoIcon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #f59e0b;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.promoCardTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+}
+
+.promoCardDesc {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+/* --- Trust Belt --- */
+.trustBelt {
+    background: #060910;
+    padding: 3rem 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+}
+
+.trustBeltTitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+}
+
+.trustGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.trustItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trustIcon {
+    font-size: 2.2rem;
+    color: #f59e0b;
+    margin-bottom: 0.25rem;
+}
+
+.trustName {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.trustDesc {
+    font-size: 0.8rem;
+    color: #64748b;
+    max-width: 200px;
+}
+
+/* --- Projects Section --- */
+.projectsSection {
+    padding: var(--section-gap) 0;
+    background-color: #090d16;
+}
+
+.projectsHeader {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.sectionHeading {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    color: #ffffff;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.sectionHeading span {
+    color: #f59e0b;
+}
+
+.projectsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+}
+
+.projectCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.projectCard:hover {
+    transform: translateY(-8px);
+    border-color: rgba(217, 119, 6, 0.4);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+}
+
+.projectImgContainer {
+    position: relative;
+    height: 350px;
+    width: 100%;
+}
+
+.projectImg {
+    object-fit: cover;
+}
+
+.projectTag {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: #f59e0b;
+    color: #000000;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 10;
+}
+
+.projectContent {
+    padding: 2.5rem;
+}
+
+.projectName {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.projectDistance {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.25rem;
+}
+
+.projectDesc {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.featuresList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.featureBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #cbd5e1;
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+}
+
+.featureCheck {
+    color: #f59e0b;
+    font-weight: 900;
+}
+
+.projectFinancing {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.financeTitle {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 0.5rem;
+}
+
+.financeDetails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.financeItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.financeLabel {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.financeValue {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.highlightValue {
+    color: #f59e0b;
+}
+
+/* --- Testimonials Section --- */
+.testimonialsSection {
+    padding: var(--section-gap) 0;
+    background-color: #060910;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* --- Form & Advisor Section --- */
+.formAdvisorGrid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    align-items: start;
+    padding: var(--section-gap) 0;
+}
+
+.formSection {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.formTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.formSubtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 2.5rem;
+}
+
+.advisorsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.advisorsHeader {
+    margin-bottom: 1rem;
+}
+
+.advisorsTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.advisorsSubtitle {
+    font-size: 0.95rem;
+    color: #94a3b8;
+}
+
+.advisorCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.advisorCard:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(217, 119, 6, 0.25);
+    transform: translateX(5px);
+}
+
+.advisorImg {
+    border-radius: 50%;
+    border: 2px solid #f59e0b;
+    object-fit: cover;
+}
+
+.advisorInfo {
+    flex: 1;
+}
+
+.advisorName {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.advisorRole {
+    font-size: 0.8rem;
+    color: #f59e0b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.advisorPhone {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-family: monospace;
+}
+
+.whatsappButton {
+    background: #25d366;
+    color: #ffffff;
+    padding: 0.6rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+}
+
+.whatsappButton:hover {
+    transform: scale(1.1);
+    background: #20ba5a;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+}
+
+/* --- Form Field Reset --- */
+.darkInput {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.darkInput:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* --- Form Submit Button --- */
+.submitButton {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #000000;
+    font-weight: 800;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+}
+
+.submitButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- Form Status Messaging --- */
+.message {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.success {
+    background-color: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    color: #44ea82;
+}
+
+.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+/* ==========================================
+   RESPONSIVENESS (1920, 1600, laptops, tablets, mobile)
+   ========================================== */
+
+/* Laptop screens (under 1600px) */
+@media (max-width: 1600px) {
+    .formAdvisorGrid {
+        gap: 3rem;
+    }
+}
+
+/* Small Laptops & Desktops (under 1200px) */
+@media (max-width: 1200px) {
+    .promoGrid {
+        gap: 1.5rem;
+    }
+    
+    .trustGrid {
+        gap: 1.5rem;
+    }
+
+    .projectsGrid {
+        gap: 2rem;
+    }
+    
+    .formAdvisorGrid {
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 2rem;
+    }
+    
+    .formSection {
+        padding: 2rem;
+    }
+}
+
+/* Tablets (under 992px) */
+@media (max-width: 992px) {
+    .promoGrid {
+        grid-template-columns: 1fr;
+        max-width: 550px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .trustGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        max-width: 550px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .projectsGrid {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .formAdvisorGrid {
+        grid-template-columns: 1fr;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 4rem;
+    }
+
+    .projectImgContainer {
+        height: 280px;
+    }
+}
+
+/* Mobile Devices (under 600px) */
+@media (max-width: 600px) {
+    .hero {
+        padding: 6rem 0 3rem 0;
+    }
+
+    .countdownGrid {
+        gap: 0.75rem;
+    }
+
+    .countdownWrapper {
+        padding: 1.25rem;
+    }
+
+    .trustGrid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .projectContent {
+        padding: 1.5rem;
+    }
+
+    .financeDetails {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .formSection {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .advisorCard {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .advisorImg {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .advisorName {
+        font-size: 1.05rem;
+    }
+}

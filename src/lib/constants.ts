@@ -17,11 +17,11 @@ export const SITE = {
 } as const
 
 export const CONTEST = {
-    endDate: '2026-05-10',
-    tag: 'Especial Día de la Madre 🌸',
-    message: 'Todas las mamás que nos visiten el sábado 9 y domingo 10 de mayo se llevarán una sorpresa',
-    cta: 'Agenda tu visita',
-    link: '/reunion'
+    endDate: '2026-05-31',
+    tag: '🔥 Cyber Monday',
+    message: '¡Tu terreno con facilidades únicas! Pie en 3 cuotas sin interés y asesoría gratis.',
+    cta: 'Ver Promoción',
+    link: '/cyber'
 } as const
 
 
