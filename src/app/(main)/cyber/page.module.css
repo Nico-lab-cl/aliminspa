@@ -6,9 +6,10 @@
     --color-gold: #C5A059;
     --color-gold-light: #f3e5ab;
     --color-dark-bg: #0a1824;
-    --color-card-bg: rgba(255, 255, 255, 0.75);
+    --color-dark-section: #07131e;
+    --color-card-bg: rgba(255, 255, 255, 0.03);
     
-    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.08);
+    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.3);
     --shadow-glow: 0 0 25px rgba(197, 160, 89, 0.35);
     --radius-lg: 24px;
     --radius-md: 16px;
@@ -16,8 +17,8 @@
 }
 
 .page {
-    background-color: #ffffff;
-    color: #2c3e50;
+    background-color: var(--color-dark-bg);
+    color: #cbd5e1;
     min-height: 100vh;
     overflow-x: hidden;
     font-family: var(--font);
@@ -97,7 +98,7 @@
 }
 
 .heroContent {
-    max-width: 850px;
+    max-width: 900px;
     margin: 0 auto;
     position: relative;
     z-index: 2;
@@ -136,9 +137,9 @@
 }
 
 .title {
-    font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
     font-weight: 900;
-    line-height: 1.15;
+    line-height: 1.2;
     margin-bottom: 1.5rem;
     letter-spacing: -0.02em;
     color: #ffffff;
@@ -160,6 +161,7 @@
     max-width: 720px;
     margin: 0 auto 3.5rem auto;
     line-height: 1.6;
+    text-align: justify;
 }
 
 /* --- Countdown Timer (Glassmorphic) --- */
@@ -265,10 +267,10 @@
     box-shadow: 0 10px 30px rgba(197, 160, 89, 0.5), 0 0 15px rgba(197, 160, 89, 0.25);
 }
 
-/* --- Offer Benefits Grid (Asymmetric Bento Grid) --- */
+/* --- Offer Benefits Grid (Asymmetric Bento Grid with Dark Theme) --- */
 .promoSection {
     padding: 7rem 0;
-    background-color: #ffffff;
+    background-color: var(--color-dark-bg);
 }
 
 .promoGrid {
@@ -279,14 +281,14 @@
 }
 
 .promoCard {
-    background: #ffffff;
-    border: 1px solid rgba(24, 56, 99, 0.08);
+    background: var(--color-card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     padding: 3rem 2.2rem;
     transition: var(--transition-smooth);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
 }
@@ -298,15 +300,15 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-teal) 100%);
+    background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-teal-light) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .promoCard:hover {
     transform: translateY(-6px);
-    border-color: rgba(197, 160, 89, 0.3);
-    box-shadow: 0 20px 40px rgba(24, 56, 99, 0.06);
+    border-color: rgba(197, 160, 89, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 .promoCard:hover::before {
@@ -316,10 +318,9 @@
 /* Bento Card Large spanning 2 columns on desktop */
 .bentoLarge {
     grid-column: span 2;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal) 100%);
-    color: #ffffff;
-    border: none;
-    box-shadow: 0 10px 30px rgba(24, 56, 99, 0.15);
+    background: linear-gradient(135deg, #102d4b 0%, #0d463f 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 .bentoLarge .promoCardTitle {
@@ -330,7 +331,7 @@
 .bentoLarge .promoCardDesc {
     color: rgba(255, 255, 255, 0.85);
     font-size: 1rem;
-    max-width: 90%;
+    max-width: 95%;
 }
 
 .bentoLarge .promoIcon {
@@ -356,15 +357,35 @@
 .promoCardTitle {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: #ffffff;
     margin-bottom: 0.85rem;
     font-family: var(--font-heading);
 }
 
 .promoCardDesc {
     font-size: 0.95rem;
-    color: rgba(44, 62, 80, 0.75);
+    color: #cbd5e1;
     line-height: 1.6;
+    text-align: justify;
+}
+
+/* Override inline colors for subtitles and descriptions inside sections */
+.promoSection :global(.container) > p,
+.projectsHeader p {
+    color: #cbd5e1 !important;
+    text-align: justify;
+}
+
+.sectionHeading {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    color: #ffffff;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    font-family: var(--font-heading);
+}
+
+.sectionHeading span {
+    color: var(--color-gold);
 }
 
 /* --- Trust Belt (Sophisticated Dark Teal/Green) --- */
@@ -423,29 +444,18 @@
     color: #e2e8f0;
     max-width: 220px;
     line-height: 1.45;
+    text-align: justify;
 }
 
-/* --- Projects Section (Soft Light Gray) --- */
+/* --- Projects Section (Deeps Dark Blue Background) --- */
 .projectsSection {
     padding: 7rem 0;
-    background-color: #F4F6F8;
+    background-color: var(--color-dark-section);
 }
 
 .projectsHeader {
     text-align: center;
     margin-bottom: 4.5rem;
-}
-
-.sectionHeading {
-    font-size: clamp(2rem, 4vw, 2.6rem);
-    color: var(--color-primary);
-    font-weight: 800;
-    margin-bottom: 1rem;
-    font-family: var(--font-heading);
-}
-
-.sectionHeading span {
-    color: var(--color-gold);
 }
 
 .projectsGrid {
@@ -455,12 +465,12 @@
 }
 
 .projectCard {
-    background: #ffffff;
-    border: 1px solid rgba(24, 56, 99, 0.05);
+    background: var(--color-card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: var(--transition-smooth);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -468,8 +478,8 @@
 
 .projectCard:hover {
     transform: translateY(-10px);
-    border-color: rgba(197, 160, 89, 0.3);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+    border-color: rgba(197, 160, 89, 0.4);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
 }
 
 .projectImgContainer {
@@ -544,7 +554,7 @@
 .projectName {
     font-size: 1.9rem;
     font-weight: 800;
-    color: var(--color-primary);
+    color: #ffffff;
     margin-bottom: 0.5rem;
     font-family: var(--font-heading);
 }
@@ -561,10 +571,11 @@
 
 .projectDesc {
     font-size: 0.98rem;
-    color: rgba(44, 62, 80, 0.78);
+    color: #cbd5e1;
     line-height: 1.65;
     margin-bottom: 2rem;
     flex-grow: 1;
+    text-align: justify;
 }
 
 .featuresList {
@@ -579,9 +590,9 @@
     align-items: center;
     gap: 0.35rem;
     font-size: 0.8rem;
-    background: #F4F6F8;
-    border: 1px solid rgba(24, 56, 99, 0.06);
-    color: #2c3e50;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
     padding: 0.4rem 0.95rem;
     border-radius: 50px;
     font-weight: 600;
@@ -589,8 +600,8 @@
 }
 
 .featureBadge:hover {
-    background: rgba(20, 105, 95, 0.05);
-    border-color: rgba(20, 105, 95, 0.2);
+    background: rgba(20, 105, 95, 0.1);
+    border-color: rgba(20, 105, 95, 0.3);
 }
 
 .featureCheck {
@@ -599,8 +610,8 @@
 }
 
 .projectFinancing {
-    background: #F4F6F8;
-    border: 1px solid rgba(24, 56, 99, 0.05);
+    background: rgba(11, 26, 36, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-md);
     padding: 1.75rem;
     margin-bottom: 2rem;
@@ -609,11 +620,11 @@
 .financeTitle {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-gold);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 1.25rem;
-    border-bottom: 1px solid rgba(24, 56, 99, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 0.5rem;
 }
 
@@ -630,14 +641,14 @@
 
 .financeLabel {
     font-size: 0.75rem;
-    color: rgba(44, 62, 80, 0.6);
+    color: rgba(255, 255, 255, 0.5);
     margin-bottom: 0.15rem;
 }
 
 .financeValue {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: #ffffff;
 }
 
 .highlightValue {
@@ -665,41 +676,52 @@
 }
 
 .lomasBtnSecondary {
-    border: 2px solid rgba(24, 56, 99, 0.15) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
     background: transparent !important;
-    color: var(--color-primary) !important;
+    color: #ffffff !important;
     font-weight: 600 !important;
     transition: var(--transition-smooth) !important;
 }
 
 .lomasBtnSecondary:hover {
-    border-color: var(--color-primary) !important;
-    background: rgba(24, 56, 99, 0.03) !important;
+    border-color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.05) !important;
     transform: translateY(-2px) !important;
 }
 
-/* --- Testimonials Section (Clean White) --- */
+/* --- Testimonials Section (Overrides target Carousel component to Dark) --- */
 .testimonialsSection {
-    padding: 7rem 0;
-    background-color: #ffffff;
-    border-top: 1px solid rgba(0,0,0,0.03);
+    padding: 7rem 0 2rem;
+    background-color: var(--color-dark-bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* --- Form & Advisor Section (Glassmorphic Forms & Hover Premium) --- */
+.testimonialsSection :global(section) {
+    background-color: var(--color-dark-bg) !important;
+    padding: 0 0 4rem !important;
+}
+
+/* --- Form & Advisor Section (Glassmorphic Forms on Dark Theme) --- */
+.contactSection {
+    background-color: var(--color-dark-section);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 7rem 0;
+    color: #ffffff;
+}
+
 .formAdvisorGrid {
     display: grid;
     grid-template-columns: 1.25fr 0.75fr;
     gap: 4.5rem;
     align-items: start;
-    padding: 7rem 0;
 }
 
 .formSection {
-    background: #ffffff;
-    border: 1px solid rgba(24, 56, 99, 0.08);
+    background: rgba(11, 26, 36, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     padding: 3.5rem;
-    box-shadow: 0 30px 60px rgba(24, 56, 99, 0.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
 }
@@ -718,16 +740,17 @@
 .formTitle {
     font-size: 2.1rem;
     font-weight: 800;
-    color: var(--color-primary);
+    color: #ffffff;
     margin-bottom: 0.75rem;
     font-family: var(--font-heading);
 }
 
 .formSubtitle {
     font-size: 0.98rem;
-    color: rgba(44, 62, 80, 0.75);
+    color: #cbd5e1;
     margin-bottom: 2.5rem;
     line-height: 1.6;
+    text-align: justify;
 }
 
 .advisorsColumn {
@@ -743,40 +766,42 @@
 .advisorsTitle {
     font-size: 1.9rem;
     font-weight: 800;
-    color: var(--color-primary);
+    color: #ffffff;
     margin-bottom: 0.5rem;
     font-family: var(--font-heading);
 }
 
 .advisorsSubtitle {
     font-size: 0.95rem;
-    color: rgba(44, 62, 80, 0.75);
+    color: #cbd5e1;
     line-height: 1.55;
+    text-align: justify;
 }
 
 .advisorCard {
-    background: #ffffff;
-    border: 1px solid rgba(24, 56, 99, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
     display: flex;
     gap: 1.5rem;
     align-items: center;
     transition: var(--transition-smooth);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .advisorCard:hover {
-    border-color: rgba(197, 160, 89, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(197, 160, 89, 0.35);
     transform: translateX(8px);
-    box-shadow: 0 15px 35px rgba(24, 56, 99, 0.06);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 .advisorImg {
     border-radius: 50%;
     border: 3px solid var(--color-gold);
     object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .advisorInfo {
@@ -786,7 +811,7 @@
 .advisorName {
     font-size: 1.25rem;
     font-weight: 800;
-    color: var(--color-primary);
+    color: #ffffff;
     margin-bottom: 0.25rem;
     font-family: var(--font-heading);
 }
@@ -803,7 +828,7 @@
 
 .advisorPhone {
     font-size: 0.85rem;
-    color: rgba(44, 62, 80, 0.6);
+    color: #cbd5e1;
     font-family: monospace;
 }
 
@@ -826,19 +851,28 @@
     box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
 }
 
-/* --- Form Input Refinements --- */
+/* --- Form Input Refinements (Dark Transparent Fields) --- */
 .darkInput {
-    background: #ffffff;
-    border: 1px solid rgba(24, 56, 99, 0.12);
-    color: #2c3e50;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
     transition: all 0.25s ease;
     border-radius: 8px;
     padding: 0.8rem 1rem;
 }
 
+.darkInput::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.darkInput option {
+    background-color: var(--color-dark-section);
+    color: #ffffff;
+}
+
 .darkInput:focus {
-    border-color: var(--color-teal-light);
-    box-shadow: 0 0 0 4px rgba(26, 138, 125, 0.12);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15);
     outline: none;
 }
 

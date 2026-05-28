@@ -125,7 +125,7 @@ function CyberForm() {
     return (
         <form className={styles.form} onSubmit={handleSubmit} id="cyber-form">
             <div className="input-group">
-                <label htmlFor="cyber-nombre" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Nombre completo</label>
+                <label htmlFor="cyber-nombre" className="input-label" style={{ color: '#ffffff', fontWeight: 600 }}>Nombre completo</label>
                 <input
                     id="cyber-nombre"
                     type="text"
@@ -138,7 +138,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-email" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Correo electrónico</label>
+                <label htmlFor="cyber-email" className="input-label" style={{ color: '#ffffff', fontWeight: 600 }}>Correo electrónico</label>
                 <input
                     id="cyber-email"
                     type="email"
@@ -151,7 +151,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-celular" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Celular</label>
+                <label htmlFor="cyber-celular" className="input-label" style={{ color: '#ffffff', fontWeight: 600 }}>Celular</label>
                 <input
                     id="cyber-celular"
                     type="tel"
@@ -164,7 +164,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-ciudad" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Ciudad de residencia</label>
+                <label htmlFor="cyber-ciudad" className="input-label" style={{ color: '#ffffff', fontWeight: 600 }}>Ciudad de residencia</label>
                 <input
                     id="cyber-ciudad"
                     type="text"
@@ -177,7 +177,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-proyecto" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Proyecto de interés</label>
+                <label htmlFor="cyber-proyecto" className="input-label" style={{ color: '#ffffff', fontWeight: 600 }}>Proyecto de interés</label>
                 <select
                     id="cyber-proyecto"
                     className={`input ${styles.darkInput}`}
@@ -301,8 +301,8 @@ export default function CyberPageClient() {
                         </motion.div>
                         
                         <motion.h1 variants={fadeInUp} className={styles.title}>
-                            Asegura Tu Terreno con <br />
-                            <span className={styles.textGlow}>Facilidades Únicas</span>
+                            Asegura Tu Terreno <br />
+                            con <span className={styles.textGlow}>Facilidades Únicas</span>
                         </motion.h1>
                         
                         <motion.p variants={fadeInUp} className={styles.subtitle}>
@@ -639,7 +639,7 @@ export default function CyberPageClient() {
             </section>
 
             {/* --- FORM AND SALES TEAM SECTION (Glassmorphic inputs and floating cards) --- */}
-            <section className="section" id="cyber-contacto" style={{ backgroundColor: '#F4F6F8', borderTop: '1px solid rgba(24, 56, 99, 0.05)' }}>
+            <section className={styles.contactSection} id="cyber-contacto">
                 <div className="container">
                     <div className={styles.formAdvisorGrid}>
                         {/* Form Column */}
@@ -688,7 +688,7 @@ export default function CyberPageClient() {
                                     <div className={styles.advisorInfo}>
                                         <span className={styles.advisorRole}>{adv.role}</span>
                                         <h4 className={styles.advisorName}>{adv.name}</h4>
-                                        <p style={{ fontSize: '0.85rem', color: 'rgba(44, 62, 80, 0.75)', marginBottom: '0.5rem' }}>{adv.description}</p>
+                                        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', textAlign: 'justify' }}>{adv.description}</p>
                                         <div className={styles.advisorPhone}>
                                             <Phone size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle', color: '#C5A059' }} />
                                             {adv.phone}
