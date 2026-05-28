@@ -32,6 +32,7 @@ export default function Navbar() {
         { href: '/#beneficios', label: 'Beneficios' },
         { href: '/#ubicacion', label: 'Ubicación' },
         { href: '/quienes-somos', label: 'Quiénes Somos' },
+        { href: '/blog', label: 'Blog' },
         { href: '/reunion', label: 'Agenda tu Visita' },
     ]
 
