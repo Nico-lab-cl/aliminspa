@@ -25,11 +25,13 @@ export default function PromoBanner() {
 
     if (!isVisible) return null
 
+    const isExternal = CONTEST.link.startsWith('http') && !CONTEST.link.includes('aliminspa.cl')
+
     return (
         <Link 
             href={CONTEST.link} 
-            target={CONTEST.link.startsWith('http') ? "_blank" : undefined}
-            rel={CONTEST.link.startsWith('http') ? "noopener noreferrer" : undefined}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
             className={styles.bannerLink}
         >
             <div className={styles.banner}>

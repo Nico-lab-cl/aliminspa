@@ -642,6 +642,12 @@
     font-weight: 800;
 }
 
+.projectButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
 /* Premium Project CTA Button Shimmers */
 .lomasBtnPrimary {
     background: linear-gradient(135deg, var(--color-gold) 0%, #b38e44 100%) !important;
@@ -776,11 +782,13 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.advisorCard:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(197, 160, 89, 0.35);
-    transform: translateX(8px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+@media (hover: hover) {
+    .advisorCard:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(197, 160, 89, 0.35);
+        transform: translateX(8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
 }
 
 .advisorImg {
@@ -1056,5 +1064,49 @@
     
     .advisorName {
         font-size: 1.1rem;
+    }
+}
+
+/* Extra Small Mobile Devices (under 480px) */
+@media (max-width: 480px) {
+    .projectButtons {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .advisorCard {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .advisorImg {
+        margin: 0 auto;
+    }
+
+    .advisorInfo {
+        text-align: center;
+    }
+
+    .advisorPhone {
+        justify-content: center;
+    }
+
+    .whatsappButton {
+        margin-top: 0.5rem;
+        width: 100%;
+        border-radius: 30px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .whatsappButton::after {
+        content: 'Contactar por WhatsApp';
+        font-weight: 600;
+        font-size: 0.9rem;
     }
 }

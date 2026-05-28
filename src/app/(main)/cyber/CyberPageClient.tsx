@@ -455,7 +455,7 @@ export default function CyberPageClient() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className={styles.projectButtons}>
                                     <a 
                                         href={getLomasLink()} 
                                         target="_blank" 
@@ -545,7 +545,7 @@ export default function CyberPageClient() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className={styles.projectButtons}>
                                     <Link 
                                         href="/proyectos/arena-y-sol" 
                                         className={`btn ${styles.lomasBtnSecondary}`} 
@@ -692,42 +692,49 @@ export default function CyberPageClient() {
                                 </p>
                             </div>
 
-                            {ADVISORS.map((adv, idx) => (
-                                <motion.div 
-                                    key={adv.name} 
-                                    initial={{ opacity: 0, x: 30 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ type: "spring", stiffness: 80, damping: 15, delay: idx * 0.1 }}
-                                    className={styles.advisorCard}
-                                >
-                                    <Image
-                                        src={adv.image}
-                                        alt={adv.name}
-                                        width={75}
-                                        height={75}
-                                        className={styles.advisorImg}
-                                    />
-                                    <div className={styles.advisorInfo}>
-                                        <span className={styles.advisorRole}>{adv.role}</span>
-                                        <h4 className={styles.advisorName}>{adv.name}</h4>
-                                        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', textAlign: 'justify' }}>{adv.description}</p>
-                                        <div className={styles.advisorPhone}>
-                                            <Phone size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle', color: '#C5A059' }} />
-                                            {adv.phone}
-                                        </div>
-                                    </div>
-                                    <a
-                                        href={adv.whatsapp}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={styles.whatsappButton}
-                                        aria-label={`Hablar por WhatsApp con ${adv.name}`}
+                            {ADVISORS.map((adv, idx) => {
+                                const cleanPhone = adv.phone.replace(/[^0-9]/g, '')
+                                const projectLabel = proyectoInteres ? `proyecto(${proyectoInteres})` : 'proyecto(general)'
+                                const waMessage = `vengo de la web aprovechando el cyber - ${projectLabel} necesito mas informacion`
+                                const dynamicWhatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMessage)}`
+
+                                return (
+                                    <motion.div 
+                                        key={adv.name} 
+                                        initial={{ opacity: 0, x: 30 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ type: "spring", stiffness: 80, damping: 15, delay: idx * 0.1 }}
+                                        className={styles.advisorCard}
                                     >
-                                        <MessageCircle size={22} />
-                                    </a>
-                                </motion.div>
-                            ))}
+                                        <Image
+                                            src={adv.image}
+                                            alt={adv.name}
+                                            width={75}
+                                            height={75}
+                                            className={styles.advisorImg}
+                                        />
+                                        <div className={styles.advisorInfo}>
+                                            <span className={styles.advisorRole}>{adv.role}</span>
+                                            <h4 className={styles.advisorName}>{adv.name}</h4>
+                                            <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', textAlign: 'justify' }}>{adv.description}</p>
+                                            <div className={styles.advisorPhone}>
+                                                <Phone size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle', color: '#C5A059' }} />
+                                                {adv.phone}
+                                            </div>
+                                        </div>
+                                        <a
+                                            href={dynamicWhatsappUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={styles.whatsappButton}
+                                            aria-label={`Hablar por WhatsApp con ${adv.name}`}
+                                        >
+                                            <MessageCircle size={22} />
+                                        </a>
+                                    </motion.div>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
