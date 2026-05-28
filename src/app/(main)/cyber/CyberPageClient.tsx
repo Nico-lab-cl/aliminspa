@@ -14,7 +14,7 @@ import styles from './page.module.css'
 const ADVISORS = [
     {
         name: "Marcela Escobar",
-        role: "Asesora Inmobiliaria",
+        role: "Asesora inmobiliaria",
         image: "/images/asesores/Marcela.png",
         phone: "+56 9 5665 4833",
         whatsapp: "https://wa.me/56956654833?text=Hola%20Marcela,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20la%20promoci%C3%B3n%20Cyber%20Monday%20de%20terrenos%20%F0%9F%94%A5",
@@ -22,7 +22,7 @@ const ADVISORS = [
     },
     {
         name: "Bárbara Arias",
-        role: "Asesora Inmobiliaria",
+        role: "Asesora inmobiliaria",
         image: "/images/asesores/Barbara.png",
         phone: "+56 9 4877 5227",
         whatsapp: "https://wa.me/56948775227?text=Hola%20B%C3%A1rbara,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20la%20promoci%C3%B3n%20Cyber%20Monday%20de%20terrenos%20%F0%9F%94%A5",
@@ -30,7 +30,7 @@ const ADVISORS = [
     },
     {
         name: "Orlando Costa",
-        role: "Asesor Inmobiliario",
+        role: "Asesor inmobiliario",
         image: "/images/asesores/Orlando.png",
         phone: "+56 9 7307 7128",
         whatsapp: "https://wa.me/56973077128?text=Hola%20Orlando,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20la%20promoci%C3%B3n%20Cyber%20Monday%20de%20terrenos%20%F0%9F%94%A5",
@@ -214,7 +214,7 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
                 style={{ width: '100%', marginTop: '2rem' }}
                 disabled={status === 'loading'}
             >
-                {status === 'loading' ? 'Enviando...' : 'Asegurar mi Promoción'}
+                {status === 'loading' ? 'Enviando...' : 'Asegurar mi promoción'}
             </motion.button>
 
             {status === 'success' && (
@@ -304,7 +304,7 @@ export default function CyberPageClient() {
         <main className={styles.page}>
             <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Cyber Monday Promotion Landing' }} />
             
-            {/* --- HERO SECTION --- */}
+            {/* --- HERO SECTION (Two-column layout displaying the ad image in full on desktop) --- */}
             <section className={styles.hero}>
                 <div className={styles.heroGlowContainer}>
                     <div className={styles.glowSphere1}></div>
@@ -317,62 +317,63 @@ export default function CyberPageClient() {
                         initial="hidden"
                         animate="visible"
                         variants={staggerContainer}
-                        className={styles.heroContent}
+                        className={styles.heroGrid}
                     >
-                        <motion.div variants={fadeInUp} className={styles.badge}>
-                            <span className={styles.cyberDot} /> ¡Oferta Súper Cyber! 🔥
+                        {/* Left column: Ad Poster */}
+                        <motion.div variants={fadeInUp} className={styles.heroImageContainer}>
+                            <Image 
+                                src="/images/hero/cyber-hero-ad.jpg" 
+                                alt="Asegura tu terreno en este Cyber"
+                                width={500}
+                                height={625}
+                                className={styles.heroImage}
+                                priority
+                            />
                         </motion.div>
-                        
-                        <motion.h1 variants={fadeInUp} className={styles.title}>
-                            Asegura Tu Terreno <br />
-                            con <span className={styles.textGlow}>Facilidades Únicas</span>
-                        </motion.h1>
-                        
-                        <motion.p variants={fadeInUp} className={styles.subtitle}>
-                            Los terrenos se están agotando rápidamente y los precios están por subir. 
-                            Reserva hoy sin pagar de más y obtén financiamiento directo exclusivo para ti.
-                        </motion.p>
 
-                        {/* Countdown */}
-                        <motion.div variants={fadeInUp} className={styles.countdownWrapper}>
-                            <span className={styles.countdownLabel}>La promoción termina en:</span>
-                            <div className={styles.countdownGrid}>
-                                <div className={styles.countdownItem}>
-                                    <div className={styles.countdownValue}>{timeLeft.days}</div>
-                                    <div className={styles.countdownUnit}>Días</div>
-                                </div>
-                                <div className={styles.countdownItem}>
-                                    <div className={styles.countdownValue}>{timeLeft.hours}</div>
-                                    <div className={styles.countdownUnit}>Horas</div>
-                                </div>
-                                <div className={styles.countdownItem}>
-                                    <div className={styles.countdownValue}>{timeLeft.minutes}</div>
-                                    <div className={styles.countdownUnit}>Min</div>
-                                </div>
-                                <div className={styles.countdownItem}>
-                                    <div className={styles.countdownValue}>{timeLeft.seconds}</div>
-                                    <div className={styles.countdownUnit}>Seg</div>
+                        {/* Right column: Active Cyber Elements */}
+                        <motion.div variants={fadeInUp} className={styles.heroActions}>
+                            {/* Countdown (Glassmorphic border/background) */}
+                            <div className={styles.countdownWrapper}>
+                                <span className={styles.countdownLabel}>La promoción termina en:</span>
+                                <div className={styles.countdownGrid}>
+                                    <div className={styles.countdownItem}>
+                                        <div className={styles.countdownValue}>{timeLeft.days}</div>
+                                        <div className={styles.countdownUnit}>días</div>
+                                    </div>
+                                    <div className={styles.countdownItem}>
+                                        <div className={styles.countdownValue}>{timeLeft.hours}</div>
+                                        <div className={styles.countdownUnit}>horas</div>
+                                    </div>
+                                    <div className={styles.countdownItem}>
+                                        <div className={styles.countdownValue}>{timeLeft.minutes}</div>
+                                        <div className={styles.countdownUnit}>min</div>
+                                    </div>
+                                    <div className={styles.countdownItem}>
+                                        <div className={styles.countdownValue}>{timeLeft.seconds}</div>
+                                        <div className={styles.countdownUnit}>seg</div>
+                                    </div>
                                 </div>
                             </div>
-                        </motion.div>
 
-                        <motion.a 
-                            variants={fadeInUp}
-                            href="#cyber-contacto" 
-                            onClick={scrollToForm} 
-                            className={styles.shimmerBtn}
-                        >
-                            Reservar Con Descuento <ArrowRight size={18} />
-                        </motion.a>
+                            <a 
+                                href="#cyber-contacto" 
+                                onClick={scrollToForm} 
+                                className={styles.shimmerBtn}
+                                style={{ width: '100%', justifyContent: 'center' }}
+                            >
+                                Reservar con descuento <ArrowRight size={18} />
+                            </a>
+                        </motion.div>
                     </motion.div>
                 </div>
             </section>
 
-            {/* --- PROJECTS IN PROMO SECTION (Moved immediately after Hero) --- */}
+            {/* --- PROJECTS IN PROMO SECTION --- */}
             <section className={styles.projectsSection}>
                 <div className="container">
                     <div className={styles.projectsHeader}>
-                        <h2 className={styles.sectionHeading}>Proyectos en <span>Promoción Cyber</span></h2>
+                        <h2 className={styles.sectionHeading}>Proyectos en <span>promoción Cyber</span></h2>
                         <p style={{ color: 'rgba(255, 255, 255, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
                             Opciones exclusivas ubicadas en las zonas con mayor plusvalía de El Tabo.
                         </p>
@@ -408,7 +409,7 @@ export default function CyberPageClient() {
                                 >
                                     <source src="/videos/lomas-del-mar/lomas cel optimized.mp4" type="video/mp4" />
                                 </video>
-                                <span className={styles.projectTag}>🔥 ¡SÓLO 25% DISPONIBLE!</span>
+                                <span className={styles.projectTag}>🔥 ¡Sólo 25% disponible!</span>
                             </div>
                             <div className={styles.projectContent}>
                                 <h3 className={styles.projectName}>Lomas del Mar</h3>
@@ -419,16 +420,16 @@ export default function CyberPageClient() {
                                 
                                 <div className={styles.featuresList}>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Rol Propio
+                                        <span className={styles.featureCheck}>✓</span> Rol propio
                                     </span>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Agua Certificada
+                                        <span className={styles.featureCheck}>✓</span> Agua certificada
                                     </span>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Luz Eléctrica
+                                        <span className={styles.featureCheck}>✓</span> Luz eléctrica
                                     </span>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Portón Automático
+                                        <span className={styles.featureCheck}>✓</span> Portón automático
                                     </span>
                                 </div>
 
@@ -436,11 +437,11 @@ export default function CyberPageClient() {
                                     <h4 className={styles.financeTitle}>Opciones Cyber Lomas</h4>
                                     <div className={styles.financeDetails}>
                                         <div className={styles.financeItem}>
-                                            <span className={styles.financeLabel}>Valor Contado Especial:</span>
+                                            <span className={styles.financeLabel}>Valor contado especial:</span>
                                             <span className={`${styles.financeValue} ${styles.highlightValue}`}>Desde $26.000.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
-                                            <span className={styles.financeLabel}>Pago con Financiamiento:</span>
+                                            <span className={styles.financeLabel}>Pago con financiamiento:</span>
                                             <span className={styles.financeValue}>Total $29.990.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
@@ -448,7 +449,7 @@ export default function CyberPageClient() {
                                             <span className={styles.financeValue}>Pie $5.500.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
-                                            <span className={styles.financeLabel}>Dimensiones Terreno:</span>
+                                            <span className={styles.financeLabel}>Dimensiones terreno:</span>
                                             <span className={styles.financeValue}>200 m² - 390 m²</span>
                                         </div>
                                     </div>
@@ -462,7 +463,7 @@ export default function CyberPageClient() {
                                         className={`btn ${styles.lomasBtnSecondary}`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        Ver Detalles
+                                        Ver detalles
                                     </a>
                                     <a 
                                         href="#cyber-contacto" 
@@ -470,7 +471,7 @@ export default function CyberPageClient() {
                                         className={`btn ${styles.lomasBtnPrimary}`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        Cotizar Promo
+                                        Cotizar promo
                                     </a>
                                 </div>
                             </div>
@@ -498,7 +499,7 @@ export default function CyberPageClient() {
                                         sizes="(max-width: 992px) 100vw, 50vw"
                                     />
                                 </motion.div>
-                                <span className={styles.projectTag} style={{ backgroundColor: '#ef4444', color: '#ffffff' }}>🔥 ¡ÚLTIMAS UNIDADES!</span>
+                                <span className={styles.projectTag} style={{ backgroundColor: '#ef4444', color: '#ffffff' }}>🔥 ¡Últimas unidades!</span>
                             </div>
                             <div className={styles.projectContent}>
                                 <h3 className={styles.projectName}>Arena y Sol</h3>
@@ -509,16 +510,16 @@ export default function CyberPageClient() {
 
                                 <div className={styles.featuresList}>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Rol Propio
+                                        <span className={styles.featureCheck}>✓</span> Rol propio
                                     </span>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Agua Certificada
+                                        <span className={styles.featureCheck}>✓</span> Agua certificada
                                     </span>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Luz Eléctrica
+                                        <span className={styles.featureCheck}>✓</span> Luz eléctrica
                                     </span>
                                     <span className={styles.featureBadge}>
-                                        <span className={styles.featureCheck}>✓</span> Acceso Pavimentado
+                                        <span className={styles.featureCheck}>✓</span> Acceso pavimentado
                                     </span>
                                 </div>
 
@@ -526,11 +527,11 @@ export default function CyberPageClient() {
                                     <h4 className={styles.financeTitle}>Opciones Cyber Arena</h4>
                                     <div className={styles.financeDetails}>
                                         <div className={styles.financeItem}>
-                                            <span className={styles.financeLabel}>Valor Contado Especial:</span>
+                                            <span className={styles.financeLabel}>Valor contado especial:</span>
                                             <span className={`${styles.financeValue} ${styles.highlightValue}`}>Desde $39.000.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
-                                            <span className={styles.financeLabel}>Financiamiento / Pie:</span>
+                                            <span className={styles.financeLabel}>Financiamiento / pie:</span>
                                             <span className={styles.financeValue}>Total $42.000.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
@@ -538,7 +539,7 @@ export default function CyberPageClient() {
                                             <span className={styles.financeValue}>Pie $20.000.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
-                                            <span className={styles.financeLabel}>Dimensiones Terreno:</span>
+                                            <span className={styles.financeLabel}>Dimensiones terreno:</span>
                                             <span className={styles.financeValue}>200 m²</span>
                                         </div>
                                     </div>
@@ -550,7 +551,7 @@ export default function CyberPageClient() {
                                         className={`btn ${styles.lomasBtnSecondary}`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        Ver Detalles
+                                        Ver detalles
                                     </Link>
                                     <a 
                                         href="#cyber-contacto" 
@@ -558,7 +559,7 @@ export default function CyberPageClient() {
                                         className={`btn ${styles.lomasBtnPrimary}`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        Cotizar Promo
+                                        Cotizar promo
                                     </a>
                                 </div>
                             </div>
@@ -571,7 +572,7 @@ export default function CyberPageClient() {
             <section className={styles.promoSection}>
                 <div className="container">
                     <div className={styles.projectsHeader}>
-                        <h2 className={styles.sectionHeading}>¿En qué consiste la <span>Promo Cyber</span>?</h2>
+                        <h2 className={styles.sectionHeading}>¿En qué consiste la <span>promoción Cyber</span>?</h2>
                         <p style={{ color: 'rgba(255, 255, 255, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
                             Descubre los beneficios exclusivos de comprar tu terreno durante esta campaña.
                         </p>
@@ -589,7 +590,7 @@ export default function CyberPageClient() {
                             <div className={styles.promoIcon}>
                                 <Tag size={24} />
                             </div>
-                            <h3 className={styles.promoCardTitle}>Pie en 3 Cuotas Sin Interés</h3>
+                            <h3 className={styles.promoCardTitle}>Pie en 3 cuotas sin interés</h3>
                             <p className={styles.promoCardDesc}>
                                 Flexibilidad total para tu pago inicial. Cancela el pie de tu terreno en 3 cuotas mensuales sin ningún recargo, reajuste ni necesidad de crédito bancario. Diseñado para simplificar tu inversión en el litoral.
                             </p>
@@ -599,7 +600,7 @@ export default function CyberPageClient() {
                             <div className={styles.promoIcon}>
                                 <ShieldCheck size={24} />
                             </div>
-                            <h3 className={styles.promoCardTitle}>Gestión Legal Gratuita</h3>
+                            <h3 className={styles.promoCardTitle}>Gestión legal gratuita</h3>
                             <p className={styles.promoCardDesc}>
                                 Nos hacemos cargo del estudio de títulos, redacción de escrituras y gestiones legales 100% sin costo para ti.
                             </p>
@@ -609,7 +610,7 @@ export default function CyberPageClient() {
                             <div className={styles.promoIcon}>
                                 <Lock size={24} />
                             </div>
-                            <h3 className={styles.promoCardTitle}>Proceso Digital Seguro</h3>
+                            <h3 className={styles.promoCardTitle}>Proceso digital seguro</h3>
                             <p className={styles.promoCardDesc}>
                                 Rápido, transparente y 100% seguro. Reserva tu terreno e inicia el proceso desde la comodidad de tu hogar.
                             </p>
@@ -621,34 +622,34 @@ export default function CyberPageClient() {
             {/* --- TRUST BELT --- */}
             <section className={styles.trustBelt}>
                 <div className="container">
-                    <h3 className={styles.trustBeltTitle}>Nuestros Sellos de Confianza y Seguridad</h3>
+                    <h3 className={styles.trustBeltTitle}>Nuestros sellos de confianza y seguridad</h3>
                     <div className={styles.trustGrid}>
                         <div className={styles.trustItem}>
                             <div className={styles.trustIcon}>
                                 <ShieldCheck size={36} />
                             </div>
-                            <h4 className={styles.trustName}>Rol Propio</h4>
+                            <h4 className={styles.trustName}>Rol propio</h4>
                             <p className={styles.trustDesc}>Individualizado e inscrito en el Conservador de Bienes Raíces</p>
                         </div>
                         <div className={styles.trustItem}>
                             <div className={styles.trustIcon}>
                                 <Droplet size={36} />
                             </div>
-                            <h4 className={styles.trustName}>Agua Certificada</h4>
+                            <h4 className={styles.trustName}>Agua certificada</h4>
                             <p className={styles.trustDesc}>Aprobada por la SEREMI de Salud para consumo humano</p>
                         </div>
                         <div className={styles.trustItem}>
                             <div className={styles.trustIcon}>
                                 <Zap size={36} />
                             </div>
-                            <h4 className={styles.trustName}>Luz Eléctrica</h4>
+                            <h4 className={styles.trustName}>Luz eléctrica</h4>
                             <p className={styles.trustDesc}>Empalme instalado en el frontis de cada lote</p>
                         </div>
                         <div className={styles.trustItem}>
                             <div className={styles.trustIcon}>
                                 <Lock size={36} />
                             </div>
-                            <h4 className={styles.trustName}>Compra Segura</h4>
+                            <h4 className={styles.trustName}>Compra segura</h4>
                             <p className={styles.trustDesc}>Reserva 100% digital respaldada con contrato notarial</p>
                         </div>
                     </div>
@@ -672,7 +673,7 @@ export default function CyberPageClient() {
                             transition={{ type: "spring", stiffness: 80, damping: 15 }}
                             className={styles.formSection}
                         >
-                            <h2 className={styles.formTitle}>Asegura tu Terreno Cyber</h2>
+                            <h2 className={styles.formTitle}>Asegura tu terreno Cyber</h2>
                             <p className={styles.formSubtitle}>
                                 Completa el formulario de contacto para recibir toda la información legal, de precios y financiamiento en minutos. Un asesor te guiará.
                             </p>
@@ -685,7 +686,7 @@ export default function CyberPageClient() {
                         {/* Advisors Column */}
                         <div className={styles.advisorsColumn}>
                             <div className={styles.advisorsHeader}>
-                                <h2 className={styles.advisorsTitle}>Equipo Comercial</h2>
+                                <h2 className={styles.advisorsTitle}>Equipo comercial</h2>
                                 <p className={styles.advisorsSubtitle}>
                                     Ponte en contacto directo con nuestros asesores comerciales por WhatsApp para reservar de inmediato o resolver tus dudas.
                                 </p>
