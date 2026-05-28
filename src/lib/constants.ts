@@ -21,7 +21,7 @@ export const CONTEST = {
     tag: '🔥 Cyber Monday',
     message: '¡Tu terreno con facilidades únicas! Pie en 3 cuotas sin interés y asesoría gratis.',
     cta: 'Ver promoción',
-    link: 'https://aliminlomasdelmar.com'
+    link: '/cyber?utm_source=cyber_banner&utm_medium=banner&utm_campaign=cyber_monday_2026'
 } as const
 
 
