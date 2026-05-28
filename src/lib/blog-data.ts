@@ -181,7 +181,7 @@ export const BLOG_POSTS: BlogPost[] = [
         metaTitle: 'Guía de Compra de Terrenos en el Litoral Central | Alimin Inmobiliaria',
         metaDescription: 'Todo lo que necesitas saber antes de comprar tu parcela o lote en la costa chilena. Requisitos legales, factibilidad de servicios y consejos de expertos.',
         content: `
-            <p>Cumplir el sueño de tener una casa en la playa, a pocos minutos del mar y rodeado de naturaleza, comienza por una decisión fundamental: **comprar el terreno indicado**. El Litoral Central de Chile, que abarca balnearios emblemáticos como El Tabo, El Quisco y Algarrobo, ofrece excelentes opciones, pero requiere actuar con cautela y conocimiento técnico.</p>
+            <p>Cumplir el sueño de tener una casa en la playa, a pocos minutos del mar y rodeado de naturaleza, comienza por una decisión fundamental: <strong>comprar el terreno indicado</strong>. El Litoral Central de Chile, que abarca balnearios emblemáticos como El Tabo, El Quisco y Algarrobo, ofrece excelentes opciones, pero requiere actuar con cautela y conocimiento técnico.</p>
             
             <p>En esta guía definitiva, hemos consolidado el paso a paso que todo comprador primerizo debe seguir para realizar una compra 100% segura.</p>
 
@@ -232,6 +232,266 @@ export const BLOG_POSTS: BlogPost[] = [
 
             <h2>¡Estás listo para dar el paso!</h2>
             <p>Seguir esta guía te evitará dolores de cabeza y te garantizará una inversión exitosa. Si quieres asesoría personalizada para encontrar tu lote soñado en El Tabo, no dudes en contactar a nuestros asesores comerciales. Estamos listos para guiarte en cada paso del camino.</p>
+        `
+    },
+    {
+        id: '4',
+        slug: 'comprar-terreno-financiamiento-directo-dicom',
+        title: '¿Puedo comprar mi terreno con financiamiento directo si estoy en DICOM?',
+        excerpt: 'Descubre cómo acceder al financiamiento directo en Alimin Inmobiliaria sin evaluaciones bancarias ni trabas comerciales, incluso si estás registrado en DICOM.',
+        coverImage: '/images/blog/blog_terrenos.png',
+        category: 'Inversión Inmobiliaria',
+        author: 'Finanzas Alimin',
+        date: '2026-05-28',
+        readTime: '4 min de lectura',
+        tags: ['Financiamiento', 'DICOM', 'Crédito Directo', 'Inversión', 'El Tabo'],
+        metaTitle: 'Comprar Terreno con DICOM y Financiamiento Directo | Alimin Inmobiliaria',
+        metaDescription: '¿Estás en DICOM y sueñas con tu terreno? En Alimin Inmobiliaria ofrecemos financiamiento directo sin requisitos bancarios para parcelas en El Tabo.',
+        content: `
+            <p>Una de las barreras más grandes para cumplir el sueño del terreno propio en Chile son las estrictas exigencias de la banca tradicional. Si tienes algún antecedente comercial desfavorable o estás en DICOM, conseguir un crédito hipotecario para una parcela de agrado se vuelve una tarea prácticamente imposible.</p>
+
+            <p>En <strong>Alimin Inmobiliaria</strong> creemos que los antecedentes financieros pasados no deben truncar tu derecho a construir un patrimonio sólido para tu familia. Por eso, hemos diseñado una alternativa inclusiva y viable: el <strong>financiamiento directo</strong>.</p>
+
+            <h2>¿Qué es el Financiamiento Directo y cómo funciona?</h2>
+            <p>El financiamiento directo es un modelo de compra a crédito donde la misma inmobiliaria actúa como el ente financiador, sin intermediación de bancos ni cooperativas. Los términos de pago, cuotas y plazos se acuerdan directamente en el contrato de promesa de compraventa.</p>
+            
+            <p>Los principales beneficios de este sistema en Alimin incluyen:</p>
+            <ul>
+                <li><strong>Sin evaluación de DICOM:</strong> No solicitamos informes comerciales ni rechazamos compradores por deudas pasadas.</li>
+                <li><strong>Requisitos mínimos:</strong> Solo necesitas acreditar tu identidad, una fuente de ingresos regular (sea como dependiente o independiente) y contar con el pie mínimo establecido.</li>
+                <li><strong>Aprobación inmediata:</strong> Al no depender de comités bancarios, el crédito se aprueba en menos de 24 horas tras definir tu lote.</li>
+            </ul>
+
+            <div class="blog-callout">
+                <strong>Facilidades Especiales Cyber:</strong> Durante periodos promocionales, ofrecemos facilidades de hasta 3 cuotas sin interés para pagar el pie de tu parcela o terrenos seleccionados, haciendo la entrada aún más accesible.
+            </div>
+
+            <h2>¿Cómo es el proceso de compra con financiamiento directo en Alimin?</h2>
+            <p>El proceso es extremadamente transparente, rápido y seguro:</p>
+            <ol>
+                <li><strong>Selección del terreno:</strong> Eliges el lote de tu preferencia en cualquiera de nuestros proyectos activos (como <em>Lomas del Mar</em> o <em>Arena y Sol</em>).</li>
+                <li><strong>Definición del Plan de Pagos:</strong> Acuerdas con nuestros asesores el monto del pie inicial y la cantidad de cuotas mensuales en las que deseas dividir el saldo restante.</li>
+                <li><strong>Firma en Notaría:</strong> Se suscribe una Promesa de Compraventa ante notario que detalla el plan de pagos convenido.</li>
+                <li><strong>Entrega y Escrituración:</strong> Una vez completado el plan de pagos (o según el acuerdo particular de entrega), se procede a la firma de la escritura de compraventa definitiva y su inscripción en el Conservador de Bienes Raíces a tu nombre.</li>
+            </ol>
+
+            <h2>¿Es seguro comprar un terreno bajo este modelo?</h2>
+            <p>Absolutamente, siempre y cuando lo hagas con una inmobiliaria formalizada y dueña de los terrenos. En Alimin todos nuestros loteos cuentan con Roles Propios individuales del SII inscritos vigentes en el Conservador de Bienes Raíces. Todo el dinero abonado queda respaldado en instrumentos jurídicos notariales que protegen tu inversión de principio a fin.</p>
+
+            <h2>Conclusión</h2>
+            <p>Estar en DICOM no es un impedimento para convertirte en propietario en el Litoral Central. Con nuestro financiamiento directo, te saltas la burocracia bancaria y accedes a plazos cómodos que se adaptan a tu presupuesto real. Contáctanos hoy y cotiza el plan a tu medida.</p>
+        `
+    },
+    {
+        id: '5',
+        slug: 'certificacion-agua-seremi-salud',
+        title: '¿Cómo funciona la certificación de agua por la SEREMI de Salud?',
+        excerpt: 'Te explicamos los requisitos sanitarios, técnicos y legales detrás de la factibilidad y certificación de agua potable para terrenos en el Litoral Central.',
+        coverImage: '/images/blog/blog_guia_compra.png',
+        category: 'Guía del Comprador',
+        author: 'Equipo Técnico Alimin',
+        date: '2026-05-28',
+        readTime: '5 min de lectura',
+        tags: ['Agua Potable', 'SEREMI de Salud', 'Urbanización', 'El Tabo', 'Regulación'],
+        metaTitle: 'Certificación de Agua SEREMI de Salud en Parcelas | Alimin Inmobiliaria',
+        metaDescription: 'Descubre qué significa que un loteo cuente con resolución de agua certificada por la SEREMI de Salud y por qué es obligatorio para construir de forma legal.',
+        content: `
+            <p>Cuando cotizas parcelas o terrenos en la costa de Chile, el suministro de agua suele ser la principal preocupación técnica. Muchos proyectos informales ofrecen "factibilidad por camión aljibe" o "pozo comunitario" sin contar con ninguna regulación legal. Sin embargo, para construir y vivir con total tranquilidad, es vital contar con **agua potable certificada por la SEREMI de Salud**.</p>
+
+            <p>En esta publicación te explicamos qué implica este certificado y por qué es un estándar obligatorio que exigimos en todos los desarrollos de Alimin Inmobiliaria.</p>
+
+            <h2>¿Qué es la certificación de la SEREMI de Salud?</h2>
+            <p>Es la resolución sanitaria oficial emitida por la Secretaría Regional Ministerial (SEREMI) de Salud que aprueba la instalación, funcionamiento y calidad del agua de un sistema de abastecimiento potable particular o colectivo.</p>
+            
+            <p>Para obtener esta aprobación, la inmobiliaria debe someter el proyecto a rigurosos estudios:</p>
+            <ul>
+                <li><strong>Análisis Fisicoquímico y Bacteriológico:</strong> Laboratorios certificados analizan muestras del agua para garantizar que está 100% libre de metales pesados, bacterias (como coliformes) y contaminantes nocivos, asegurando que es apta para el consumo humano.</li>
+                <li><strong>Cálculo de Caudal y Presión:</strong> Se evalúa la ingeniería del sistema de pozos o estanques de acumulación para garantizar que el flujo de agua sea constante y suficiente para todos los lotes, incluso en temporadas de alta demanda (verano).</li>
+                <li><strong>Sistemas de Cloración y Filtrado:</strong> Se exige la instalación de maquinaria automatizada para la desinfección continua del recurso.</li>
+            </ul>
+
+            <div class="blog-callout">
+                <strong>¿Sabías qué?</strong> Sin la resolución sanitaria aprobada de tu fuente de agua potable, la Dirección de Obras Municipales (DOM) no otorgará el permiso de edificación ni la recepción final de tu vivienda, impidiendo que obtengas patente de habitabilidad legal.
+            </div>
+
+            <h2>Diferencias en el suministro de agua</h2>
+            <p>Es crucial saber diferenciar la calidad y legalidad del agua al comprar un terreno:</p>
+            
+            <table class="blog-table">
+                <thead>
+                    <tr>
+                        <th>Tipo de Suministro</th>
+                        <th>Calidad Garantizada</th>
+                        <th>Estatus Legal / Municipal</th>
+                        <th>Seguridad de Abastecimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Agua Certificada SEREMI (Alimin)</strong></td>
+                        <td>Apta para consumo, testeada químicamente.</td>
+                        <td>100% legal, permite recepcionar obras.</td>
+                        <td>Flujo continuo mediante red presurizada.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Camiones Aljibe Informales</strong></td>
+                        <td>Desconocida, alto riesgo de contaminación.</td>
+                        <td>No sirve para permisos de edificación.</td>
+                        <td>Sujeto a tarifas variables y disponibilidad física.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pozos sin Derechos DGA</strong></td>
+                        <td>Sin filtrar, puede contener sarro o bacterias.</td>
+                        <td>Ilegal, riesgo de multas y clausuras.</td>
+                        <td>Riesgo inminente de sequía por napas no reguladas.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Nuestra Garantía en El Tabo</h2>
+            <p>Para brindar el estándar más alto a nuestros propietarios, Alimin Inmobiliaria entrega cada lote urbanizado en proyectos como <em>Lomas del Mar</em> con factibilidad de agua potable certificada directamente conectada al arranque de tu terreno. Nos encargamos de la totalidad de las obras de captación, cloración y distribución, entregando la carpeta de resoluciones sanitarias al día para que puedas tramitar tu casa de inmediato.</p>
+
+            <h2>Conclusión</h2>
+            <p>El agua no es un extra; es un derecho básico y un requisito legal ineludible. Al momento de comprar tu terreno, exige siempre la resolución sanitaria de la SEREMI. No pongas en juego la salud de los tuyos ni la viabilidad de tu casa soñada.</p>
+        `
+    },
+    {
+        id: '6',
+        slug: 'que-es-loteo-irregular-brujo',
+        title: '¿Qué es un loteo irregular o "loteo brujo" y cómo evitarlo?',
+        excerpt: 'Aprende a identificar las señales de advertencia de los loteos ilegales en Chile y protege tu patrimonio familiar de fraudes inmobiliarios comunes.',
+        coverImage: '/images/blog/blog_rol_propio.png',
+        category: 'Educación Legal',
+        author: 'Equipo Legal Alimin',
+        date: '2026-05-28',
+        readTime: '6 min de lectura',
+        tags: ['Loteo Brujo', 'Aspectos Legales', 'Derechos', 'CBR', 'Evitar Estafas'],
+        metaTitle: 'Loteos Brujos e Irregulares en Chile: Guía Legal | Alimin Inmobiliaria',
+        metaDescription: '¿Qué es un loteo irregular o brujo? Conoce la ley general de urbanismo, por qué vender cesión de derechos es ilegal y cómo protegerte al comprar terrenos.',
+        content: `
+            <p>La oferta de parcelas baratas en el campo o cerca de la playa en Chile ha crecido exponencialmente en los últimos años. Lamentablemente, junto a este auge, también han aumentado las estafas asociadas a los llamados <strong>"loteos brujos" o loteos irregulares</strong>. Comprar en estos sectores no solo te impide ser el dueño legal de tu lote, sino que constituye un delito sancionado por la ley chilena.</p>
+
+            <p>En este artículo, nuestro equipo jurídico desglosa en qué consisten estas subdivisiones ilegales, cuáles son los riesgos asociados y cómo puedes detectarlos a tiempo.</p>
+
+            <h2>¿Qué es un Loteo Irregular (Loteo Brujo)?</h2>
+            <p>Un loteo irregular se genera cuando un terreno rústico o agrícola se subdivide de facto en porciones más pequeñas de lo permitido por la ley (en áreas rurales, el tamaño mínimo legal de subdivisión regulado por el SAG es de <strong>5.000 metros cuadrados o media hectárea</strong>), y se comercializan sin contar con la aprobación de los organismos oficiales correspondientes (SAG, SEREMI de Agricultura y Dirección de Obras Municipales).</p>
+            
+            <p>Dado que no se pueden inscribir lotes menores a 5.000 m² de forma individual en el Conservador de Bienes Raíces (salvo excepciones muy específicas de zonas urbanas), los loteadores ilegales recurren a la figura de la <strong>venta de acciones y derechos</strong>.</p>
+
+            <div class="blog-callout">
+                <strong>Recuerda:</strong> Comprar "acciones y derechos" de un terreno matriz significa que eres co-propietario de un porcentaje del campo global, pero jurídicamente NO eres dueño exclusivo de ninguna porción física de la parcela que te mostraron.
+            </div>
+
+            <h2>¿Por qué los loteos brujos son un delito en Chile?</h2>
+            <p>De acuerdo al artículo 138 de la <strong>Ley General de Urbanismo y Construcciones (LGUC)</strong>, realizar subdivisiones de hecho sin aprobación y venderlas bajo cualquier título (como derechos) es un delito penado con cárcel (presidio menor en su grado medio a máximo). La ley busca prevenir la creación de poblaciones flotantes sin urbanización básica (alcantarillado, luz, agua) que generen problemas sanitarios y de seguridad social.</p>
+
+            <h2>Consecuencias y peligros para el comprador</h2>
+            <p>Quienes adquieren un terreno en un loteo brujo suelen enfrentar graves problemas a corto y mediano plazo:</p>
+            <ol>
+                <li><strong>Orden de demolición:</strong> Las municipalidades locales tienen la facultad de demoler construcciones levantadas en zonas no autorizadas sin derecho a indemnización.</li>
+                <li><strong>Corte de servicios:</strong> Las compañías eléctricas y distribuidoras de agua tienen prohibido por ley instalar empalmes en propiedades sin Rol Propio individual.</li>
+                <li><strong>Cero financiamiento bancario:</strong> Ninguna entidad bancaria te otorgará un crédito o aceptará como garantía hipotecaria una cesión de derechos sobre un loteo brujo.</li>
+                <li><strong>Desalojos y multas:</strong> El comprador puede verse envuelto en procesos de desalojo judicial o recibir costosas infracciones municipales.</li>
+            </ol>
+
+            <h2>Señales de alerta para identificar un Loteo Brujo</h2>
+            <p>Desconfía de inmediato si detectas alguno de los siguientes patrones en la oferta inmobiliaria:</p>
+            <ul>
+                <li>El precio del lote está muy por debajo del promedio de mercado (por ejemplo, parcelas a 5 o 10 millones de pesos).</li>
+                <li>La inmobiliaria te ofrece firmar escrituras de "Derechos" o "Cesión de Derechos" en lugar de compraventa con Rol Propio.</li>
+                <li>Los caminos interiores son informales, no cuentan con luminaria pública y no hay postación eléctrica regular.</li>
+                <li>El vendedor te presiona para firmar contratos rápidos en notarías fuera de la jurisdicción local.</li>
+            </ul>
+
+            <h2>Invierte Seguro con Alimin</h2>
+            <p>En Alimin Inmobiliaria rechazamos de forma categórica las prácticas informales de subdivisión. Todos nuestros proyectos en El Tabo cuentan con loteos debidamente visados por el SAG, roles individuales registrados y asignados por el SII y factibilidades reales de urbanización básica. Con nosotros, compras con escritura pública inscrita en el Conservador a tu nombre y garantizas el patrimonio de tu familia.</p>
+        `
+    },
+    {
+        id: '7',
+        slug: 'como-verificar-legalidad-terreno-antes-de-comprar',
+        title: '¿Cómo verificar la legalidad de un terreno antes de comprar?',
+        excerpt: 'Lista de verificación rápida con los documentos legales obligatorios que debes exigir al vendedor para garantizar que el terreno es 100% legal en Chile.',
+        coverImage: '/images/blog/blog_guia_compra.png',
+        category: 'Educación Legal',
+        author: 'Equipo Legal Alimin',
+        date: '2026-05-28',
+        readTime: '5 min de lectura',
+        tags: ['Aspectos Legales', 'CBR', 'SII', 'Checklist', 'El Tabo'],
+        metaTitle: 'Cómo Verificar la Legalidad de un Terreno | Alimin Inmobiliaria',
+        metaDescription: 'Guía práctica para validar la legalidad de un terreno. Revisa los certificados del Conservador de Bienes Raíces (CBR) y evita estafas inmobiliarias en Chile.',
+        content: `
+            <p>La compra de un terreno es un hito emocionante, pero también una transacción financiera de gran envergadura. Desafortunadamente, la falta de información legal expone a muchos compradores a caer en ofertas irregulares o estafas directas. Para proteger tu dinero, es fundamental que adoptes una postura activa y verifiques exhaustivamente la legalidad del predio antes de firmar cualquier compromiso.</p>
+
+            <p>Aquí te presentamos la <strong>lista de verificación legal obligatoria</strong> de 4 pasos que todo inversionista inmobiliario serio debe aplicar.</p>
+
+            <h2>Paso 1: Exige el Certificado de Dominio Vigente</h2>
+            <p>Este es el documento de identidad más importante del terreno. Debe ser emitido por el Conservador de Bienes Raíces (CBR) correspondiente a la comuna donde se ubica el terreno (en el caso de El Tabo, corresponde al CBR de San Antonio) y su fecha de emisión no debe superar los 30 días.</p>
+            <p>Este certificado te indicará:</p>
+            <ul>
+                <li>Quién es el dueño legal actual de la propiedad matriz o del lote.</li>
+                <li>Si la persona o empresa que te está vendiendo tiene la facultad legal de firmar y transferir el dominio.</li>
+            </ul>
+
+            <h2>Paso 2: Solicita el Certificado de GP (Hipotecas y Gravámenes)</h2>
+            <p>Emitido también por el Conservador de Bienes Raíces, el Certificado de Gravámenes y Prohibiciones (GP) te garantiza que la propiedad está "limpia" jurídicamente. Busca confirmar que el terreno:</p>
+            <ul>
+                <li>No tenga hipotecas vigentes con bancos u otras instituciones.</li>
+                <li>No posea embargos judiciales ni prohibiciones de venta por litigios activos de herencias o deudas.</li>
+                <li>No cuente con servidumbres de paso informales o no declaradas que restrinjan el uso del predio.</li>
+            </ul>
+
+            <div class="blog-callout">
+                <strong>Consejo de Oro:</strong> Aunque la inmobiliaria te entregue copias de estos documentos, siempre es recomendable que ingreses de manera independiente a la web del Conservador de Bienes Raíces con los datos de Foja, Número y Año para corroborar que la información es auténtica y está actualizada.
+            </div>
+
+            <h2>Paso 3: Confirma la existencia del Rol Único Tributario (SII)</h2>
+            <p>Ingresa al sitio oficial del Servicio de Impuestos Internos (SII) y consulta el número de rol del lote. Deberás verificar que el rol esté asociado a una propiedad individual y no a un predio matriz general. Si el SII arroja que el rol corresponde a una hectárea global donde se emplazan 20 o más lotes sin subdivisión aprobada, estás frente a un loteo irregular.</p>
+
+            <h2>Paso 4: Certificado de Informaciones Previas (CIP) municipal</h2>
+            <p>Solicita en la Dirección de Obras Municipales (DOM) del sector el Certificado de Informaciones Previas. Este documento te entregará información técnica invaluable:</p>
+            <ul>
+                <li><strong>Límites de edificación:</strong> Altura permitida de construcción y distanciamientos exigidos con los vecinos.</li>
+                <li><strong>Zona de riesgo:</strong> Si el loteo se encuentra ubicado en zonas propensas a incendios forestales, áreas inundables por marejadas o zonas de remoción de tierras.</li>
+                <li><strong>Exigencias de urbanización:</strong> Si la calle de acceso es pública o servidumbre privada y los requisitos para conectar servicios básicos.</li>
+            </ul>
+
+            <h2>Checklist de Resumen Rápido</h2>
+            <p>Antes de firmar o transferir, asegúrate de marcar con un "sí" todas las siguientes preguntas:</p>
+            <table class="blog-table">
+                <thead>
+                    <tr>
+                        <th>Pregunta de Control</th>
+                        <th>Estado Ideal</th>
+                        <th>¿Por qué importa?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>¿El terreno tiene Rol Propio individual?</td>
+                        <td><strong>SÍ</strong></td>
+                        <td>Garantiza la posesión del 100% de tu lote delimitado.</td>
+                    </tr>
+                    <tr>
+                        <td>¿El dominio está inscrito a nombre del vendedor?</td>
+                        <td><strong>SÍ</strong></td>
+                        <td>Evita fraudes de intermediación o venta de predios ajenos.</td>
+                    </tr>
+                    <tr>
+                        <td>¿El Certificado de GP está libre de gravámenes?</td>
+                        <td><strong>SÍ</strong></td>
+                        <td>Evita que compres una propiedad con deudas o embargos.</td>
+                    </tr>
+                    <tr>
+                        <td>¿El loteo cuenta con planos archivados en el CBR?</td>
+                        <td><strong>SÍ</strong></td>
+                        <td>Asegura que los deslindes físicos son idénticos a los legales.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Conclusión</h2>
+            <p>Verificar la legalidad de un terreno es un proceso metódico, pero sumamente necesario para proteger tu capital. En Alimin Inmobiliaria entregamos carpetas legales completas para cada proyecto, permitiendo a tu abogado de confianza revisar y visar el estudio de títulos con total soltura. Invierte seguro, invierte con Alimin.</p>
         `
     }
 ];

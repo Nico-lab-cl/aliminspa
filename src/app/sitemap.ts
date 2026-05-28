@@ -41,6 +41,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
         ...blogRoutes,
         {
+            url: `${baseUrl}/cyber`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
+        {
             url: `${baseUrl}/quienes-somos`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
