@@ -1,6 +1,6 @@
 .articlePage {
-    background-color: #fafbfd;
-    color: #2C3E50;
+    background-color: var(--bg-alt);
+    color: var(--text);
     min-height: 100vh;
     padding-bottom: 6rem;
 }
@@ -28,11 +28,11 @@
 }
 
 .breadcrumbLink:hover {
-    color: #14695F;
+    color: var(--teal-dark);
 }
 
 .activeBreadcrumb {
-    color: #C5A059;
+    color: var(--gold);
     font-weight: 600;
     pointer-events: none;
 }
@@ -45,7 +45,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #14695F;
+    color: var(--teal-dark);
     font-size: 0.88rem;
     font-weight: 700;
     text-decoration: none;
@@ -69,7 +69,7 @@
 .categoryBadge {
     display: inline-block;
     background: rgba(20, 105, 95, 0.08);
-    color: #14695F;
+    color: var(--teal-dark);
     font-size: 0.75rem;
     font-weight: 700;
     padding: 0.35rem 0.9rem;
@@ -107,7 +107,7 @@
 .authorAvatar {
     width: 42px;
     height: 42px;
-    background: linear-gradient(135deg, #14695F 0%, #C5A059 100%);
+    background: linear-gradient(135deg, var(--teal-dark) 0%, var(--gold) 100%);
     color: #ffffff;
     font-weight: 800;
     border-radius: 50%;
@@ -219,7 +219,7 @@
 /* Callout Styling inside Blog content */
 .articleBody :global(.blog-callout) {
     background-color: rgba(197, 160, 89, 0.06);
-    border-left: 4px solid #C5A059;
+    border-left: 4px solid var(--gold);
     border-radius: 0 12px 12px 0;
     padding: 1.5rem;
     margin: 2.2rem 0;
@@ -241,7 +241,7 @@
 }
 
 .articleBody :global(.blog-table th) {
-    background-color: #14695F;
+    background-color: var(--teal-dark);
     color: #ffffff;
     font-weight: 700;
     text-align: left;
@@ -429,7 +429,7 @@
 .sidebarProjectLabel {
     display: block;
     font-size: 0.75rem;
-    color: #14695F;
+    color: var(--teal-dark);
     font-weight: 600;
     margin-bottom: 0.75rem;
 }
@@ -440,7 +440,7 @@
     gap: 0.25rem;
     font-size: 0.8rem;
     font-weight: 700;
-    color: #C5A059;
+    color: var(--gold);
     text-decoration: none;
     transition: transform 0.2s ease;
 }
@@ -510,7 +510,7 @@
 .relatedCardCategory {
     font-size: 0.68rem;
     font-weight: 700;
-    color: #14695F;
+    color: var(--teal-dark);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.5rem;
@@ -536,7 +536,7 @@
 }
 
 .relatedCardTitle a:hover {
-    color: #14695F;
+    color: var(--teal-dark);
 }
 
 .relatedCardLinkBtn {
@@ -545,7 +545,7 @@
     gap: 0.25rem;
     font-size: 0.8rem;
     font-weight: 700;
-    color: #C5A059;
+    color: var(--gold);
     text-decoration: none;
     transition: transform 0.2s ease;
 }

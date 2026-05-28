@@ -8,11 +8,39 @@ import { Search, Calendar, Clock, User, ArrowRight, BookOpen, SearchSlash, Mail 
 import { BLOG_POSTS, BLOG_CATEGORIES, BlogPost } from '@/lib/blog-data'
 import styles from './blog.module.css'
 
+const BLOG_FAQS = [
+    {
+        question: '¿Qué es el Rol Propio y por qué es obligatorio?',
+        answer: 'El Rol Propio es el número identificador único asignado a una propiedad por el SII y registrado en el Conservador de Bienes Raíces. Es el único documento que garantiza que eres el dueño exclusivo de tu terreno, permitiéndote solicitar servicios básicos independientes y permisos de edificación.'
+    },
+    {
+        question: '¿Qué diferencia hay entre comprar un terreno con Rol Propio y comprar Acciones y Derechos?',
+        answer: 'Con Rol Propio eres dueño del 100% de tu lote delimitado. Al comprar Acciones y Derechos, solo adquieres un porcentaje de un terreno matriz compartido con otros dueños, lo cual no te da dominio exclusivo sobre una porción física y suele considerarse un loteo irregular o "brujo".'
+    },
+    {
+        question: '¿Puedo comprar mi terreno con financiamiento directo si estoy en DICOM?',
+        answer: 'Sí. En Alimin Inmobiliaria ofrecemos financiamiento directo para nuestros proyectos (como Lomas del Mar) sin evaluar tus antecedentes comerciales en DICOM. Creemos en dar facilidades reales de acceso a la vivienda.'
+    },
+    {
+        question: '¿Cómo funciona la certificación de agua por la SEREMI de Salud?',
+        answer: 'Nuestros proyectos urbanizados cuentan con agua potable certificada y autorizada por la SEREMI de Salud de Valparaíso. Esto garantiza que el agua es apta para el consumo humano y cumple con los estándares sanitarios necesarios para construir de forma legal.'
+    },
+    {
+        question: '¿Qué es un loteo irregular o "loteo brujo"?',
+        answer: 'Es una subdivisión de terrenos rurales por debajo del mínimo legal (generalmente menos de 5.000 m²) realizada sin aprobación del SAG ni de la Municipalidad. Vender y comprar en estos loteos es ilegal en Chile y conlleva riesgos de demolición y multas.'
+    },
+    {
+        question: '¿Cómo puedo verificar la legalidad de un terreno antes de comprar?',
+        answer: 'Debes exigir tres documentos clave: el Certificado de Dominio Vigente del Conservador de Bienes Raíces (CBR) de San Antonio, el Certificado de Hipotecas, Gravámenes y Prohibiciones (GP) del mismo CBR, y el número de Rol en el portal del SII.'
+    }
+];
+
 export default function BlogClient() {
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedCategory, setSelectedCategory] = useState<string>('Todo')
     const [email, setEmail] = useState('')
     const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const [activeFaq, setActiveFaq] = useState<number | null>(null)
 
     // Find the featured post (e.g., the first post)
     const featuredPost = useMemo(() => {
@@ -229,6 +257,48 @@ export default function BlogClient() {
                             </motion.div>
                         )}
                     </AnimatePresence>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section className={styles.faqSection}>
+                <div className="container">
+                    <div className={styles.faqHeader}>
+                        <span className={styles.faqLabel}>Preguntas Frecuentes</span>
+                        <h2 className={styles.faqTitle}>Dudas comunes sobre <span>Terrenos y Leyes</span></h2>
+                        <p className={styles.faqSubtitle}>
+                            Resolvemos tus inquietudes técnicas y legales para que inviertas con total seguridad.
+                        </p>
+                    </div>
+
+                    <div className={styles.faqGrid}>
+                        {BLOG_FAQS.map((faq, idx) => {
+                            const isOpen = activeFaq === idx
+                            return (
+                                <div key={idx} className={`${styles.faqCard} ${isOpen ? styles.faqCardOpen : ''}`}>
+                                    <button 
+                                        className={styles.faqQuestionRow}
+                                        onClick={() => setActiveFaq(isOpen ? null : idx)}
+                                    >
+                                        <h4 className={styles.faqQuestion}>{faq.question}</h4>
+                                        <span className={`${styles.faqArrow} ${isOpen ? styles.faqArrowOpen : ''}`}>
+                                            ▼
+                                        </span>
+                                    </button>
+                                    <motion.div 
+                                        initial={false}
+                                        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                        className={styles.faqAnswerContainer}
+                                    >
+                                        <div className={styles.faqAnswer}>
+                                            {faq.answer}
+                                        </div>
+                                    </motion.div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </section>
 
