@@ -376,7 +376,7 @@
 
 /* --- Trust Belt (Sophisticated Dark Emerald/Black) --- */
 .trustBelt {
-    background: #041412;
+    background-color: var(--color-dark-bg);
     padding: 4rem 0;
     border-top: 1px solid rgba(255,255,255,0.04);
     border-bottom: 3px solid var(--color-gold);
