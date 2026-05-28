@@ -58,8 +58,12 @@ const staggerContainer = {
     }
 } as const
 
+interface CyberFormProps {
+    proyectoInteres: string;
+    setProyectoInteres: (proyecto: string) => void;
+}
 
-function CyberForm() {
+function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
     const searchParams = useSearchParams()
     const router = useRouter()
     
@@ -71,6 +75,13 @@ function CyberForm() {
         proyecto: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+    // Sync lifted state to form's select value
+    useEffect(() => {
+        if (proyectoInteres) {
+            setForm(prev => ({ ...prev, proyecto: proyectoInteres }))
+        }
+    }, [proyectoInteres])
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -183,7 +194,10 @@ function CyberForm() {
                     className={`input ${styles.darkInput}`}
                     required
                     value={form.proyecto}
-                    onChange={(e) => setForm({ ...form, proyecto: e.target.value })}
+                    onChange={(e) => {
+                        setForm({ ...form, proyecto: e.target.value })
+                        setProyectoInteres(e.target.value)
+                    }}
                 >
                     <option value="">Selecciona un proyecto</option>
                     <option value="Lomas del Mar">Lomas del Mar (Desde $29.990.000)</option>
@@ -220,6 +234,7 @@ function CyberForm() {
 export default function CyberPageClient() {
     const searchParams = useSearchParams()
     const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' })
+    const [proyectoInteres, setProyectoInteres] = useState('')
 
     useEffect(() => {
         const targetDate = new Date('2026-05-31T23:59:59').getTime()
@@ -259,17 +274,25 @@ export default function CyberPageClient() {
         }
     }
 
-    // Capture current UTM params and forward to external domain
+    // Scroll and set selected project
+    const handleCotizar = (proyecto: string) => (e: React.MouseEvent) => {
+        e.preventDefault()
+        setProyectoInteres(proyecto)
+        const target = document.getElementById('cyber-contacto')
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }
+
+    // Capture current UTM params and forward to external domain for "Ver Detalles"
     const getLomasLink = () => {
         const baseUrl = 'https://aliminlomasdelmar.com'
         const params = new URLSearchParams()
         
-        // Populate standard UTM parameters from page URL if they exist
         searchParams.forEach((value, key) => {
             params.set(key, value)
         })
 
-        // Provide defaults for standard tracking parameters
         if (!params.has('utm_source')) params.set('utm_source', 'aliminspa')
         if (!params.has('utm_medium')) params.set('utm_medium', 'cyber_page')
         if (!params.has('utm_campaign')) params.set('utm_campaign', 'cyber_monday_2026')
@@ -281,7 +304,7 @@ export default function CyberPageClient() {
         <main className={styles.page}>
             <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Cyber Monday Promotion Landing' }} />
             
-            {/* --- HERO SECTION (With premium radial ocean blue gradient and floaters) --- */}
+            {/* --- HERO SECTION --- */}
             <section className={styles.hero}>
                 <div className={styles.heroGlowContainer}>
                     <div className={styles.glowSphere1}></div>
@@ -297,7 +320,7 @@ export default function CyberPageClient() {
                         className={styles.heroContent}
                     >
                         <motion.div variants={fadeInUp} className={styles.badge}>
-                            <span /> Oferta Especial Cyber Monday
+                            <span className={styles.cyberDot} /> ¡Oferta Súper Cyber! 🔥
                         </motion.div>
                         
                         <motion.h1 variants={fadeInUp} className={styles.title}>
@@ -310,7 +333,7 @@ export default function CyberPageClient() {
                             Reserva hoy sin pagar de más y obtén financiamiento directo exclusivo para ti.
                         </motion.p>
 
-                        {/* Countdown (Glassmorphic border/background) */}
+                        {/* Countdown */}
                         <motion.div variants={fadeInUp} className={styles.countdownWrapper}>
                             <span className={styles.countdownLabel}>La promoción termina en:</span>
                             <div className={styles.countdownGrid}>
@@ -345,106 +368,18 @@ export default function CyberPageClient() {
                 </div>
             </section>
 
-            {/* --- BENEFITS SECTION (Bento Grid layout) --- */}
-            <section className={styles.promoSection}>
-                <div className="container">
-                    <div className={styles.projectsHeader}>
-                        <h2 className={styles.sectionHeading}>¿En qué consiste la <span>Promo Cyber</span>?</h2>
-                        <p style={{ color: 'rgba(44, 62, 80, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
-                            Descubre los beneficios exclusivos de comprar tu terreno durante esta campaña.
-                        </p>
-                    </div>
-
-                    <motion.div 
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={staggerContainer}
-                        className={styles.promoGrid}
-                    >
-                        {/* BENTO LARGE CARD */}
-                        <motion.div variants={fadeInUp} className={`${styles.promoCard} ${styles.bentoLarge}`}>
-                            <div className={styles.promoIcon}>
-                                <Tag size={24} />
-                            </div>
-                            <h3 className={styles.promoCardTitle}>Pie en 3 Cuotas Sin Interés</h3>
-                            <p className={styles.promoCardDesc}>
-                                Flexibilidad total para tu pago inicial. Cancela el pie de tu terreno en 3 cuotas mensuales sin ningún recargo, reajuste ni necesidad de crédito bancario. Diseñado para simplificar tu inversión en el litoral.
-                            </p>
-                        </motion.div>
-
-                        <motion.div variants={fadeInUp} className={styles.promoCard}>
-                            <div className={styles.promoIcon}>
-                                <ShieldCheck size={24} />
-                            </div>
-                            <h3 className={styles.promoCardTitle}>Gestión Legal Gratuita</h3>
-                            <p className={styles.promoCardDesc}>
-                                Nos hacemos cargo del estudio de títulos, redacción de escrituras y gestiones legales 100% sin costo para ti.
-                            </p>
-                        </motion.div>
-
-                        <motion.div variants={fadeInUp} className={styles.promoCard}>
-                            <div className={styles.promoIcon}>
-                                <Lock size={24} />
-                            </div>
-                            <h3 className={styles.promoCardTitle}>Proceso Digital Seguro</h3>
-                            <p className={styles.promoCardDesc}>
-                                Rápido, transparente y 100% seguro. Reserva tu terreno e inicia el proceso desde la comodidad de tu hogar.
-                            </p>
-                        </motion.div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* --- TRUST BELT (CINTURÓN DE CONFIANZA) --- */}
-            <section className={styles.trustBelt}>
-                <div className="container">
-                    <h3 className={styles.trustBeltTitle}>Nuestros Sellos de Confianza y Seguridad</h3>
-                    <div className={styles.trustGrid}>
-                        <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>
-                                <ShieldCheck size={36} />
-                            </div>
-                            <h4 className={styles.trustName}>Rol Propio</h4>
-                            <p className={styles.trustDesc}>Individualizado e inscrito en el Conservador de Bienes Raíces</p>
-                        </div>
-                        <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>
-                                <Droplet size={36} />
-                            </div>
-                            <h4 className={styles.trustName}>Agua Certificada</h4>
-                            <p className={styles.trustDesc}>Aprobada por la SEREMI de Salud para consumo humano</p>
-                        </div>
-                        <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>
-                                <Zap size={36} />
-                            </div>
-                            <h4 className={styles.trustName}>Luz Eléctrica</h4>
-                            <p className={styles.trustDesc}>Empalme instalado en el frontis de cada lote</p>
-                        </div>
-                        <div className={styles.trustItem}>
-                            <div className={styles.trustIcon}>
-                                <Lock size={36} />
-                            </div>
-                            <h4 className={styles.trustName}>Compra Segura</h4>
-                            <p className={styles.trustDesc}>Reserva 100% digital respaldada con contrato notarial</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- PROJECTS IN PROMO SECTION --- */}
+            {/* --- PROJECTS IN PROMO SECTION (Moved immediately after Hero) --- */}
             <section className={styles.projectsSection}>
                 <div className="container">
                     <div className={styles.projectsHeader}>
                         <h2 className={styles.sectionHeading}>Proyectos en <span>Promoción Cyber</span></h2>
-                        <p style={{ color: 'rgba(44, 62, 80, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
+                        <p style={{ color: 'rgba(255, 255, 255, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
                             Opciones exclusivas ubicadas en las zonas con mayor plusvalía de El Tabo.
                         </p>
                     </div>
 
                     <div className={styles.projectsGrid}>
-                        {/* PROJECT 1: LOMAS DEL MAR (With dynamic loop video) */}
+                        {/* PROJECT 1: LOMAS DEL MAR */}
                         <motion.div 
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -453,7 +388,6 @@ export default function CyberPageClient() {
                             className={styles.projectCard}
                         >
                             <div className={styles.projectImgContainer}>
-                                {/* Autoplay video loops (both desktop and mobile optimized versions) */}
                                 <video
                                     className={`${styles.projectVideo} ${styles.desktopVideo}`}
                                     autoPlay
@@ -474,7 +408,7 @@ export default function CyberPageClient() {
                                 >
                                     <source src="/videos/lomas-del-mar/lomas cel optimized.mp4" type="video/mp4" />
                                 </video>
-                                <span className={styles.projectTag}>¡Sólo 25% Disponible!</span>
+                                <span className={styles.projectTag}>🔥 ¡SÓLO 25% DISPONIBLE!</span>
                             </div>
                             <div className={styles.projectContent}>
                                 <h3 className={styles.projectName}>Lomas del Mar</h3>
@@ -526,16 +460,15 @@ export default function CyberPageClient() {
                                         target="_blank" 
                                         rel="noopener noreferrer" 
                                         className={`btn ${styles.lomasBtnSecondary}`} 
-                                        style={{ width: '100%', textDecoration: 'none' }}
+                                        style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
                                         Ver Detalles
                                     </a>
                                     <a 
-                                        href={getLomasLink()} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
+                                        href="#cyber-contacto" 
+                                        onClick={handleCotizar('Lomas del Mar')}
                                         className={`btn ${styles.lomasBtnPrimary}`} 
-                                        style={{ width: '100%', textDecoration: 'none' }}
+                                        style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
                                         Cotizar Promo
                                     </a>
@@ -543,7 +476,7 @@ export default function CyberPageClient() {
                             </div>
                         </motion.div>
 
-                        {/* PROJECT 2: ARENA Y SOL (Redirection to internal route) */}
+                        {/* PROJECT 2: ARENA Y SOL */}
                         <motion.div 
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -565,7 +498,7 @@ export default function CyberPageClient() {
                                         sizes="(max-width: 992px) 100vw, 50vw"
                                     />
                                 </motion.div>
-                                <span className={styles.projectTag} style={{ backgroundColor: '#ef4444', color: '#ffffff' }}>Últimos Terrenos</span>
+                                <span className={styles.projectTag} style={{ backgroundColor: '#ef4444', color: '#ffffff' }}>🔥 ¡ÚLTIMAS UNIDADES!</span>
                             </div>
                             <div className={styles.projectContent}>
                                 <h3 className={styles.projectName}>Arena y Sol</h3>
@@ -619,16 +552,105 @@ export default function CyberPageClient() {
                                     >
                                         Ver Detalles
                                     </Link>
-                                    <Link 
-                                        href="/proyectos/arena-y-sol" 
+                                    <a 
+                                        href="#cyber-contacto" 
+                                        onClick={handleCotizar('Arena y Sol')}
                                         className={`btn ${styles.lomasBtnPrimary}`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
                                         Cotizar Promo
-                                    </Link>
+                                    </a>
                                 </div>
                             </div>
                         </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- BENEFITS SECTION --- */}
+            <section className={styles.promoSection}>
+                <div className="container">
+                    <div className={styles.projectsHeader}>
+                        <h2 className={styles.sectionHeading}>¿En qué consiste la <span>Promo Cyber</span>?</h2>
+                        <p style={{ color: 'rgba(255, 255, 255, 0.7)', maxWidth: '600px', margin: '0.5rem auto 0 auto' }}>
+                            Descubre los beneficios exclusivos de comprar tu terreno durante esta campaña.
+                        </p>
+                    </div>
+
+                    <motion.div 
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={staggerContainer}
+                        className={styles.promoGrid}
+                    >
+                        {/* BENTO LARGE CARD */}
+                        <motion.div variants={fadeInUp} className={`${styles.promoCard} ${styles.bentoLarge}`}>
+                            <div className={styles.promoIcon}>
+                                <Tag size={24} />
+                            </div>
+                            <h3 className={styles.promoCardTitle}>Pie en 3 Cuotas Sin Interés</h3>
+                            <p className={styles.promoCardDesc}>
+                                Flexibilidad total para tu pago inicial. Cancela el pie de tu terreno en 3 cuotas mensuales sin ningún recargo, reajuste ni necesidad de crédito bancario. Diseñado para simplificar tu inversión en el litoral.
+                            </p>
+                        </motion.div>
+
+                        <motion.div variants={fadeInUp} className={styles.promoCard}>
+                            <div className={styles.promoIcon}>
+                                <ShieldCheck size={24} />
+                            </div>
+                            <h3 className={styles.promoCardTitle}>Gestión Legal Gratuita</h3>
+                            <p className={styles.promoCardDesc}>
+                                Nos hacemos cargo del estudio de títulos, redacción de escrituras y gestiones legales 100% sin costo para ti.
+                            </p>
+                        </motion.div>
+
+                        <motion.div variants={fadeInUp} className={styles.promoCard}>
+                            <div className={styles.promoIcon}>
+                                <Lock size={24} />
+                            </div>
+                            <h3 className={styles.promoCardTitle}>Proceso Digital Seguro</h3>
+                            <p className={styles.promoCardDesc}>
+                                Rápido, transparente y 100% seguro. Reserva tu terreno e inicia el proceso desde la comodidad de tu hogar.
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* --- TRUST BELT --- */}
+            <section className={styles.trustBelt}>
+                <div className="container">
+                    <h3 className={styles.trustBeltTitle}>Nuestros Sellos de Confianza y Seguridad</h3>
+                    <div className={styles.trustGrid}>
+                        <div className={styles.trustItem}>
+                            <div className={styles.trustIcon}>
+                                <ShieldCheck size={36} />
+                            </div>
+                            <h4 className={styles.trustName}>Rol Propio</h4>
+                            <p className={styles.trustDesc}>Individualizado e inscrito en el Conservador de Bienes Raíces</p>
+                        </div>
+                        <div className={styles.trustItem}>
+                            <div className={styles.trustIcon}>
+                                <Droplet size={36} />
+                            </div>
+                            <h4 className={styles.trustName}>Agua Certificada</h4>
+                            <p className={styles.trustDesc}>Aprobada por la SEREMI de Salud para consumo humano</p>
+                        </div>
+                        <div className={styles.trustItem}>
+                            <div className={styles.trustIcon}>
+                                <Zap size={36} />
+                            </div>
+                            <h4 className={styles.trustName}>Luz Eléctrica</h4>
+                            <p className={styles.trustDesc}>Empalme instalado en el frontis de cada lote</p>
+                        </div>
+                        <div className={styles.trustItem}>
+                            <div className={styles.trustIcon}>
+                                <Lock size={36} />
+                            </div>
+                            <h4 className={styles.trustName}>Compra Segura</h4>
+                            <p className={styles.trustDesc}>Reserva 100% digital respaldada con contrato notarial</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -638,7 +660,7 @@ export default function CyberPageClient() {
                 <Testimonials />
             </section>
 
-            {/* --- FORM AND SALES TEAM SECTION (Glassmorphic inputs and floating cards) --- */}
+            {/* --- FORM AND SALES TEAM SECTION --- */}
             <section className={styles.contactSection} id="cyber-contacto">
                 <div className="container">
                     <div className={styles.formAdvisorGrid}>
@@ -656,7 +678,7 @@ export default function CyberPageClient() {
                             </p>
                             
                             <Suspense fallback={<div>Cargando formulario...</div>}>
-                                <CyberForm />
+                                <CyberForm proyectoInteres={proyectoInteres} setProyectoInteres={setProyectoInteres} />
                             </Suspense>
                         </motion.div>
 
