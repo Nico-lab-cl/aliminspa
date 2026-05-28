@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { Clock, ShieldCheck, Check, CheckCircle, MessageCircle, Phone, ArrowRight, Tag, Sparkles, Droplet, Zap, Lock } from 'lucide-react'
 import { SITE, PROJECTS } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
@@ -36,6 +37,27 @@ const ADVISORS = [
         description: "Te acompaña paso a paso para encontrar el lote ideal para tu familia."
     }
 ]
+
+// Animation Variants
+const fadeInUp = {
+    hidden: { opacity: 0, y: 35 },
+    visible: { 
+        opacity: 1, 
+        y: 0,
+        transition: { type: "spring", stiffness: 80, damping: 15 }
+    }
+} as const
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.12
+        }
+    }
+} as const
+
 
 function CyberForm() {
     const searchParams = useSearchParams()
@@ -103,7 +125,7 @@ function CyberForm() {
     return (
         <form className={styles.form} onSubmit={handleSubmit} id="cyber-form">
             <div className="input-group">
-                <label htmlFor="cyber-nombre" className="input-label" style={{ color: '#183863' }}>Nombre completo</label>
+                <label htmlFor="cyber-nombre" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Nombre completo</label>
                 <input
                     id="cyber-nombre"
                     type="text"
@@ -116,7 +138,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-email" className="input-label" style={{ color: '#183863' }}>Correo electrónico</label>
+                <label htmlFor="cyber-email" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Correo electrónico</label>
                 <input
                     id="cyber-email"
                     type="email"
@@ -129,7 +151,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-celular" className="input-label" style={{ color: '#183863' }}>Celular</label>
+                <label htmlFor="cyber-celular" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Celular</label>
                 <input
                     id="cyber-celular"
                     type="tel"
@@ -142,7 +164,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-ciudad" className="input-label" style={{ color: '#183863' }}>Ciudad de residencia</label>
+                <label htmlFor="cyber-ciudad" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Ciudad de residencia</label>
                 <input
                     id="cyber-ciudad"
                     type="text"
@@ -155,7 +177,7 @@ function CyberForm() {
             </div>
 
             <div className="input-group" style={{ marginTop: '1.25rem' }}>
-                <label htmlFor="cyber-proyecto" className="input-label" style={{ color: '#183863' }}>Proyecto de interés</label>
+                <label htmlFor="cyber-proyecto" className="input-label" style={{ color: '#183863', fontWeight: 600 }}>Proyecto de interés</label>
                 <select
                     id="cyber-proyecto"
                     className={`input ${styles.darkInput}`}
@@ -170,14 +192,16 @@ function CyberForm() {
                 </select>
             </div>
 
-            <button
+            <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit"
                 className={`btn btn-primary btn-lg ${styles.submitButton}`}
                 style={{ width: '100%', marginTop: '2rem' }}
                 disabled={status === 'loading'}
             >
                 {status === 'loading' ? 'Enviando...' : 'Asegurar mi Promoción'}
-            </button>
+            </motion.button>
 
             {status === 'success' && (
                 <div className={`${styles.message} ${styles.success}`}>
@@ -194,6 +218,7 @@ function CyberForm() {
 }
 
 export default function CyberPageClient() {
+    const searchParams = useSearchParams()
     const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' })
 
     useEffect(() => {
@@ -234,28 +259,59 @@ export default function CyberPageClient() {
         }
     }
 
+    // Capture current UTM params and forward to external domain
+    const getLomasLink = () => {
+        const baseUrl = 'https://aliminlomasdelmar.com'
+        const params = new URLSearchParams()
+        
+        // Populate standard UTM parameters from page URL if they exist
+        searchParams.forEach((value, key) => {
+            params.set(key, value)
+        })
+
+        // Provide defaults for standard tracking parameters
+        if (!params.has('utm_source')) params.set('utm_source', 'aliminspa')
+        if (!params.has('utm_medium')) params.set('utm_medium', 'cyber_page')
+        if (!params.has('utm_campaign')) params.set('utm_campaign', 'cyber_monday_2026')
+
+        return `${baseUrl}?${params.toString()}`
+    }
+
     return (
         <main className={styles.page}>
             <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Cyber Monday Promotion Landing' }} />
             
-            {/* --- HERO SECTION --- */}
+            {/* --- HERO SECTION (With premium radial ocean blue gradient and floaters) --- */}
             <section className={styles.hero}>
+                <div className={styles.heroGlowContainer}>
+                    <div className={styles.glowSphere1}></div>
+                    <div className={styles.glowSphere2}></div>
+                    <div className={styles.glowSphere3}></div>
+                </div>
+
                 <div className="container">
-                    <div className={styles.heroContent}>
-                        <div className={styles.badge}>
+                    <motion.div 
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerContainer}
+                        className={styles.heroContent}
+                    >
+                        <motion.div variants={fadeInUp} className={styles.badge}>
                             <span /> Oferta Especial Cyber Monday
-                        </div>
-                        <h1 className={styles.title}>
+                        </motion.div>
+                        
+                        <motion.h1 variants={fadeInUp} className={styles.title}>
                             Asegura Tu Terreno con <br />
                             <span className={styles.textGlow}>Facilidades Únicas</span>
-                        </h1>
-                        <p className={styles.subtitle}>
+                        </motion.h1>
+                        
+                        <motion.p variants={fadeInUp} className={styles.subtitle}>
                             Los terrenos se están agotando rápidamente y los precios están por subir. 
                             Reserva hoy sin pagar de más y obtén financiamiento directo exclusivo para ti.
-                        </p>
+                        </motion.p>
 
-                        {/* Countdown */}
-                        <div className={styles.countdownWrapper}>
+                        {/* Countdown (Glassmorphic border/background) */}
+                        <motion.div variants={fadeInUp} className={styles.countdownWrapper}>
                             <span className={styles.countdownLabel}>La promoción termina en:</span>
                             <div className={styles.countdownGrid}>
                                 <div className={styles.countdownItem}>
@@ -275,16 +331,21 @@ export default function CyberPageClient() {
                                     <div className={styles.countdownUnit}>Seg</div>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        <a href="#cyber-contacto" onClick={scrollToForm} className="btn btn-primary btn-lg">
+                        <motion.a 
+                            variants={fadeInUp}
+                            href="#cyber-contacto" 
+                            onClick={scrollToForm} 
+                            className={styles.shimmerBtn}
+                        >
                             Reservar Con Descuento <ArrowRight size={18} />
-                        </a>
-                    </div>
+                        </motion.a>
+                    </motion.div>
                 </div>
             </section>
 
-            {/* --- BENEFITS SECTION --- */}
+            {/* --- BENEFITS SECTION (Bento Grid layout) --- */}
             <section className={styles.promoSection}>
                 <div className="container">
                     <div className={styles.projectsHeader}>
@@ -294,17 +355,25 @@ export default function CyberPageClient() {
                         </p>
                     </div>
 
-                    <div className={styles.promoGrid}>
-                        <div className={styles.promoCard}>
+                    <motion.div 
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={staggerContainer}
+                        className={styles.promoGrid}
+                    >
+                        {/* BENTO LARGE CARD */}
+                        <motion.div variants={fadeInUp} className={`${styles.promoCard} ${styles.bentoLarge}`}>
                             <div className={styles.promoIcon}>
                                 <Tag size={24} />
                             </div>
                             <h3 className={styles.promoCardTitle}>Pie en 3 Cuotas Sin Interés</h3>
                             <p className={styles.promoCardDesc}>
-                                Flexibilidad total para tu pago inicial. Cancela el pie de tu terreno en 3 cuotas mensuales sin ningún recargo ni reajuste.
+                                Flexibilidad total para tu pago inicial. Cancela el pie de tu terreno en 3 cuotas mensuales sin ningún recargo, reajuste ni necesidad de crédito bancario. Diseñado para simplificar tu inversión en el litoral.
                             </p>
-                        </div>
-                        <div className={styles.promoCard}>
+                        </motion.div>
+
+                        <motion.div variants={fadeInUp} className={styles.promoCard}>
                             <div className={styles.promoIcon}>
                                 <ShieldCheck size={24} />
                             </div>
@@ -312,17 +381,18 @@ export default function CyberPageClient() {
                             <p className={styles.promoCardDesc}>
                                 Nos hacemos cargo del estudio de títulos, redacción de escrituras y gestiones legales 100% sin costo para ti.
                             </p>
-                        </div>
-                        <div className={styles.promoCard}>
+                        </motion.div>
+
+                        <motion.div variants={fadeInUp} className={styles.promoCard}>
                             <div className={styles.promoIcon}>
                                 <Lock size={24} />
                             </div>
-                            <h3 className={styles.promoCardTitle}>Proceso de Compra Digital</h3>
+                            <h3 className={styles.promoCardTitle}>Proceso Digital Seguro</h3>
                             <p className={styles.promoCardDesc}>
                                 Rápido, transparente y 100% seguro. Reserva tu terreno e inicia el proceso desde la comodidad de tu hogar.
                             </p>
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
                 </div>
             </section>
 
@@ -374,16 +444,36 @@ export default function CyberPageClient() {
                     </div>
 
                     <div className={styles.projectsGrid}>
-                        {/* PROJECT 1: LOMAS DEL MAR */}
-                        <div className={styles.projectCard}>
+                        {/* PROJECT 1: LOMAS DEL MAR (With dynamic loop video) */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ type: "spring", stiffness: 60, damping: 15 }}
+                            className={styles.projectCard}
+                        >
                             <div className={styles.projectImgContainer}>
-                                <Image
-                                    src="/images/projects/lomas-del-mar-v2.jpg"
-                                    alt="Proyecto Lomas del Mar"
-                                    fill
-                                    className={styles.projectImg}
-                                    sizes="(max-width: 992px) 100vw, 50vw"
-                                />
+                                {/* Autoplay video loops (both desktop and mobile optimized versions) */}
+                                <video
+                                    className={`${styles.projectVideo} ${styles.desktopVideo}`}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    poster="/images/projects/lomas-del-mar-poster-premium.png"
+                                >
+                                    <source src="/videos/lomas-del-mar/Lomas web optimized.mp4" type="video/mp4" />
+                                </video>
+                                <video
+                                    className={`${styles.projectVideo} ${styles.mobileVideo}`}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    poster="/images/projects/lomas-del-mar-poster-premium.png"
+                                >
+                                    <source src="/videos/lomas-del-mar/lomas cel optimized.mp4" type="video/mp4" />
+                                </video>
                                 <span className={styles.projectTag}>¡Sólo 25% Disponible!</span>
                             </div>
                             <div className={styles.projectContent}>
@@ -431,26 +521,50 @@ export default function CyberPageClient() {
                                 </div>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <Link href="/proyectos/lomas-del-mar" className="btn btn-secondary" style={{ width: '100%' }}>
+                                    <a 
+                                        href={getLomasLink()} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className={`btn ${styles.lomasBtnSecondary}`} 
+                                        style={{ width: '100%', textDecoration: 'none' }}
+                                    >
                                         Ver Detalles
-                                    </Link>
-                                    <a href="#cyber-contacto" onClick={scrollToForm} className="btn btn-primary" style={{ width: '100%' }}>
+                                    </a>
+                                    <a 
+                                        href={getLomasLink()} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className={`btn ${styles.lomasBtnPrimary}`} 
+                                        style={{ width: '100%', textDecoration: 'none' }}
+                                    >
                                         Cotizar Promo
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        {/* PROJECT 2: ARENA Y SOL */}
-                        <div className={styles.projectCard}>
+                        {/* PROJECT 2: ARENA Y SOL (Redirection to internal route) */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ type: "spring", stiffness: 60, damping: 15, delay: 0.1 }}
+                            className={styles.projectCard}
+                        >
                             <div className={styles.projectImgContainer}>
-                                <Image
-                                    src="/images/projects/arena-y-sol-v2.jpg"
-                                    alt="Proyecto Arena y Sol"
-                                    fill
-                                    className={styles.projectImg}
-                                    sizes="(max-width: 992px) 100vw, 50vw"
-                                />
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                    style={{ width: '100%', height: '100%', position: 'relative' }}
+                                >
+                                    <Image
+                                        src="/images/projects/arena-y-sol-v2.jpg"
+                                        alt="Proyecto Arena y Sol"
+                                        fill
+                                        className={styles.projectImg}
+                                        sizes="(max-width: 992px) 100vw, 50vw"
+                                    />
+                                </motion.div>
                                 <span className={styles.projectTag} style={{ backgroundColor: '#ef4444', color: '#ffffff' }}>Últimos Terrenos</span>
                             </div>
                             <div className={styles.projectContent}>
@@ -498,15 +612,23 @@ export default function CyberPageClient() {
                                 </div>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <Link href="/proyectos/arena-y-sol" className="btn btn-secondary" style={{ width: '100%' }}>
+                                    <Link 
+                                        href="/proyectos/arena-y-sol" 
+                                        className={`btn ${styles.lomasBtnSecondary}`} 
+                                        style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                    >
                                         Ver Detalles
                                     </Link>
-                                    <a href="#cyber-contacto" onClick={scrollToForm} className="btn btn-primary" style={{ width: '100%' }}>
+                                    <Link 
+                                        href="/proyectos/arena-y-sol" 
+                                        className={`btn ${styles.lomasBtnPrimary}`} 
+                                        style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                    >
                                         Cotizar Promo
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
@@ -516,12 +638,18 @@ export default function CyberPageClient() {
                 <Testimonials />
             </section>
 
-            {/* --- FORM AND SALES TEAM SECTION --- */}
+            {/* --- FORM AND SALES TEAM SECTION (Glassmorphic inputs and floating cards) --- */}
             <section className="section" id="cyber-contacto" style={{ backgroundColor: '#F4F6F8', borderTop: '1px solid rgba(24, 56, 99, 0.05)' }}>
                 <div className="container">
                     <div className={styles.formAdvisorGrid}>
                         {/* Form Column */}
-                        <div className={styles.formSection}>
+                        <motion.div 
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ type: "spring", stiffness: 80, damping: 15 }}
+                            className={styles.formSection}
+                        >
                             <h2 className={styles.formTitle}>Asegura tu Terreno Cyber</h2>
                             <p className={styles.formSubtitle}>
                                 Completa el formulario de contacto para recibir toda la información legal, de precios y financiamiento en minutos. Un asesor te guiará.
@@ -530,7 +658,7 @@ export default function CyberPageClient() {
                             <Suspense fallback={<div>Cargando formulario...</div>}>
                                 <CyberForm />
                             </Suspense>
-                        </div>
+                        </motion.div>
 
                         {/* Advisors Column */}
                         <div className={styles.advisorsColumn}>
@@ -541,8 +669,15 @@ export default function CyberPageClient() {
                                 </p>
                             </div>
 
-                            {ADVISORS.map((adv) => (
-                                <div key={adv.name} className={styles.advisorCard}>
+                            {ADVISORS.map((adv, idx) => (
+                                <motion.div 
+                                    key={adv.name} 
+                                    initial={{ opacity: 0, x: 30 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ type: "spring", stiffness: 80, damping: 15, delay: idx * 0.1 }}
+                                    className={styles.advisorCard}
+                                >
                                     <Image
                                         src={adv.image}
                                         alt={adv.name}
@@ -568,7 +703,7 @@ export default function CyberPageClient() {
                                     >
                                         <MessageCircle size={22} />
                                     </a>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>

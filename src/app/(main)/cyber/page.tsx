@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { SITE } from '@/lib/constants'
 import { BreadcrumbSchema } from '@/components/seo/JsonLd'
@@ -18,7 +19,10 @@ export default function CyberPage() {
                     { name: 'Cyber Monday', url: `${SITE.url}/cyber` },
                 ]}
             />
-            <CyberPageClient />
+            <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0a1824', color: '#ffffff' }}>Cargando...</div>}>
+                <CyberPageClient />
+            </Suspense>
         </>
     )
 }
+
