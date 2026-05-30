@@ -125,6 +125,86 @@ export default function RootLayout({
             `,
           }}
         />
+        
+        {/* CRM Activity Tracker */}
+        <Script
+          id="crm-activity-tracker"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const CRM_API_URL = 'https://marketing.aliminlomasdelmar.com/api/track/activity';
+                const urlParams = new URLSearchParams(window.location.search);
+                let leadId = urlParams.get('lead_id');
+                
+                if (leadId) {
+                  localStorage.setItem('crm_lead_id', leadId);
+                } else {
+                  leadId = localStorage.getItem('crm_lead_id');
+                }
+
+                window.trackCRMEvent = function(eventType, details) {
+                  if (!leadId) return;
+                  const payload = {
+                    lead_id: leadId,
+                    event_type: eventType,
+                    page_url: window.location.href,
+                    page_title: document.title,
+                    details: details || {}
+                  };
+                  fetch(CRM_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    mode: 'cors'
+                  }).catch(err => console.error('[CRM Tracker] Error:', err));
+                };
+
+                if (leadId) {
+                  if (document.readyState === 'complete') {
+                    trackCRMEvent('PAGE_VIEW');
+                  } else {
+                    window.addEventListener('load', function() {
+                      trackCRMEvent('PAGE_VIEW');
+                    });
+                  }
+                }
+
+                document.addEventListener('submit', function(e) {
+                  if (!leadId) return;
+                  const form = e.target;
+                  const formId = form.id || form.getAttribute('name') || 'Formulario sin ID';
+                  const formData = {};
+                  const inputs = form.querySelectorAll('input, select, textarea');
+                  inputs.forEach(input => {
+                    const name = input.name || input.id;
+                    if (name && input.type !== 'password' && input.type !== 'hidden') {
+                      formData[name] = input.value;
+                    }
+                  });
+                  trackCRMEvent('FORM_SUBMIT', {
+                    form_name: formId,
+                    form_action: form.getAttribute('action') || '',
+                    data: formData
+                  });
+                });
+
+                document.addEventListener('click', function(e) {
+                  if (!leadId) return;
+                  const target = e.target.closest('.crm-track-click');
+                  if (target) {
+                    const buttonName = target.getAttribute('data-crm-name') || target.innerText || 'Botón';
+                    const buttonCategory = target.getAttribute('data-crm-category') || 'General';
+                    trackCRMEvent('CLICK_BUTTON', {
+                      element_name: buttonName,
+                      category: buttonCategory
+                    });
+                  }
+                });
+              })();
+            `,
+          }}
+        />
       </head>
       <body>
         {/* Google Tag Manager (noscript) */}
