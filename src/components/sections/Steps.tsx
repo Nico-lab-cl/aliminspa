@@ -53,9 +53,11 @@ export default function Steps() {
                     </Link>
                     <Link
                         href={`https://wa.me/${SITE.whatsapp}?text=Hola,%20quiero%20información%20sobre%20terrenos`}
-                        className={styles.btnWhatsApp}
+                        className={`${styles.btnWhatsApp} crm-track-click`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        data-crm-name="WhatsApp Cotizar - Seccion Pasos"
+                        data-crm-category="Cotizacion"
                     >
                         Cotizar por WhatsApp
                     </Link>

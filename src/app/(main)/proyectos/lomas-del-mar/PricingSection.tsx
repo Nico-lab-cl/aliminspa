@@ -101,7 +101,9 @@ export default function PricingSection() {
                             href="https://aliminlomasdelmar.com/?utm_source=aliminspa.cl&utm_medium=website&utm_campaign=lomas-del-mar"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={styles.btnGold}
+                            className={`${styles.btnGold} crm-track-click`}
+                            data-crm-name="Ver Disponibilidad - Lomas Pricing CTA"
+                            data-crm-category="Exploracion Disponibilidad"
                         >
                             Ver Disponibilidad
                         </Link>
@@ -110,7 +112,9 @@ export default function PricingSection() {
                             href="https://wa.me/56956654833?text=Hola,%20vengo%20desde%20la%20web%20y%20me%20interesa%20saber%20mas%20del%20proyecto%20Lomas%20del%20Mar"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={styles.btnGreen}
+                            className={`${styles.btnGreen} crm-track-click`}
+                            data-crm-name="WhatsApp Asesor - Lomas Pricing CTA"
+                            data-crm-category="Contacto Asesor"
                         >
                             Hablar con un asesor
                         </Link>

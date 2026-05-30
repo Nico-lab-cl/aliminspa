@@ -24,7 +24,9 @@ export default function LyaCTA() {
                 <div className={styles.lyaCTAButtons}>
                     <Link 
                         href="#cotizar"
-                        className={styles.lyaBtnGold}
+                        className={`${styles.lyaBtnGold} crm-track-click`}
+                        data-crm-name="Ver Disponibilidad - Libertad CTA"
+                        data-crm-category="Exploracion Disponibilidad"
                     >
                         Ver Disponibilidad
                     </Link>
@@ -32,7 +34,9 @@ export default function LyaCTA() {
                         href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={styles.lyaBtnGreen}
+                        className={`${styles.lyaBtnGreen} crm-track-click`}
+                        data-crm-name="WhatsApp Asesor - Libertad CTA"
+                        data-crm-category="Contacto Asesor"
                     >
                         Hablar con un asesor
                     </Link>

@@ -356,11 +356,13 @@ export default function CyberPageClient() {
                                 </div>
                             </div>
 
-                            <a 
+                             <a 
                                 href="#cyber-contacto" 
                                 onClick={scrollToForm} 
-                                className={styles.shimmerBtn}
+                                className={`${styles.shimmerBtn} crm-track-click`}
                                 style={{ width: '100%', justifyContent: 'center' }}
+                                data-crm-name="Reservar Descuento - Cyber Hero"
+                                data-crm-category="Cyber Promotion"
                             >
                                 Reservar con descuento <ArrowRight size={18} />
                             </a>
@@ -460,16 +462,20 @@ export default function CyberPageClient() {
                                         href={getLomasLink()} 
                                         target="_blank" 
                                         rel="noopener noreferrer" 
-                                        className={`btn ${styles.lomasBtnSecondary}`} 
+                                        className={`btn ${styles.lomasBtnSecondary} crm-track-click`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        data-crm-name="Ver Detalles Lomas - Cyber Card"
+                                        data-crm-category="Exploracion Proyecto"
                                     >
                                         Ver detalles
                                     </a>
                                     <a 
                                         href="#cyber-contacto" 
                                         onClick={handleCotizar('Lomas del Mar')}
-                                        className={`btn ${styles.lomasBtnPrimary}`} 
+                                        className={`btn ${styles.lomasBtnPrimary} crm-track-click`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        data-crm-name="Cotizar Promo Lomas - Cyber Card"
+                                        data-crm-category="Cotizacion Cyber"
                                     >
                                         Cotizar promo
                                     </a>
@@ -548,16 +554,20 @@ export default function CyberPageClient() {
                                 <div className={styles.projectButtons}>
                                     <Link 
                                         href="/proyectos/arena-y-sol" 
-                                        className={`btn ${styles.lomasBtnSecondary}`} 
+                                        className={`btn ${styles.lomasBtnSecondary} crm-track-click`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        data-crm-name="Ver Detalles Arena - Cyber Card"
+                                        data-crm-category="Exploracion Proyecto"
                                     >
                                         Ver detalles
                                     </Link>
                                     <a 
                                         href="#cyber-contacto" 
                                         onClick={handleCotizar('Arena y Sol')}
-                                        className={`btn ${styles.lomasBtnPrimary}`} 
+                                        className={`btn ${styles.lomasBtnPrimary} crm-track-click`} 
                                         style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        data-crm-name="Cotizar Promo Arena - Cyber Card"
+                                        data-crm-category="Cotizacion Cyber"
                                     >
                                         Cotizar promo
                                     </a>
@@ -727,7 +737,9 @@ export default function CyberPageClient() {
                                             href={dynamicWhatsappUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={styles.whatsappButton}
+                                            className={`${styles.whatsappButton} crm-track-click`}
+                                            data-crm-name={`WhatsApp Asesor - Cyber Bottom - ${adv.name}`}
+                                            data-crm-category="Contacto Asesor Cyber"
                                             aria-label={`Hablar por WhatsApp con ${adv.name}`}
                                         >
                                             <MessageCircle size={22} />

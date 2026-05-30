@@ -38,14 +38,16 @@ export default function AysCTA() {
 
                 <AnimatedSection delay={400}>
                     <div className={styles.ctaButtonGroup}>
-                        <Link href="#contacto" className={styles.btnGold}>
+                        <Link href="#contacto" className={`${styles.btnGold} crm-track-click`} data-crm-name="Ver Disponibilidad - Arena CTA" data-crm-category="Exploracion Disponibilidad">
                             Ver Disponibilidad
                         </Link>
                         <Link 
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={styles.btnGreen}
+                            className={`${styles.btnGreen} crm-track-click`}
+                            data-crm-name="WhatsApp Asesor - Arena CTA"
+                            data-crm-category="Contacto Asesor"
                         >
                             Hablar con un asesor
                         </Link>

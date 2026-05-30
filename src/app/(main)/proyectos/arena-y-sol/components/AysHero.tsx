@@ -58,14 +58,16 @@ export default function AysHero() {
                     </span>
                     
                     <div className={styles.ctaGroupCentered}>
-                        <Link href="#contacto" className={styles.buttonPillPrimary}>
+                        <Link href="#contacto" className={`${styles.buttonPillPrimary} crm-track-click`} data-crm-name="Ver Disponibilidad - Arena Hero" data-crm-category="Exploracion Disponibilidad">
                             Ver Disponibilidad
                         </Link>
                         <Link 
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer" 
-                            className={styles.buttonPillSecondary}
+                            className={`${styles.buttonPillSecondary} crm-track-click`}
+                            data-crm-name="WhatsApp Asesor - Arena Hero"
+                            data-crm-category="Contacto Asesor"
                         >
                             Hablar con un asesor
                         </Link>

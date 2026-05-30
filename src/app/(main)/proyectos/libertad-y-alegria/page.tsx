@@ -65,14 +65,16 @@ export default function LibertadYAlegriaPage() {
                             <p className={styles.heroDistance}>A 10 MINUTOS DE LA PLAYA DEL TABO</p>
                             
                             <div className={styles.ctaGroupCentered}>
-                                <Link href="#cotizar" className={styles.buttonPillPrimary}>
+                                <Link href="#cotizar" className={`${styles.buttonPillPrimary} crm-track-click`} data-crm-name="Ver Disponibilidad - Libertad Hero" data-crm-category="Exploracion Disponibilidad">
                                     Ver Disponibilidad
                                 </Link>
                                 <Link 
                                     href={whatsappUrl}
                                     target="_blank"
                                     rel="noopener noreferrer" 
-                                    className={styles.buttonPillSecondary}
+                                    className={`${styles.buttonPillSecondary} crm-track-click`}
+                                    data-crm-name="WhatsApp Asesor - Libertad Hero"
+                                    data-crm-category="Contacto Asesor"
                                 >
                                     Hablar con un asesor
                                 </Link>

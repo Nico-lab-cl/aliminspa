@@ -85,8 +85,8 @@ export default function LomasDelMarPage() {
                         </p>
                         
                         <div className={styles.heroButtons}>
-                            <a href="#disponibilidad" className={styles.btnDisponibilidad}>Ver Disponibilidad</a>
-                            <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola, vengo desde la web. Me interesa el proyecto ${project.name} y quiero solicitar más información. 🏢`)}`} target="_blank" rel="noopener noreferrer" className={styles.btnAsesor}>Hablar con un asesor</a>
+                            <a href="#disponibilidad" className={`${styles.btnDisponibilidad} crm-track-click`} data-crm-name="Ver Disponibilidad - Lomas Hero" data-crm-category="Exploracion Disponibilidad">Ver Disponibilidad</a>
+                            <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola, vengo desde la web. Me interesa el proyecto ${project.name} y quiero solicitar más información. 🏢`)}`} target="_blank" rel="noopener noreferrer" className={`${styles.btnAsesor} crm-track-click`} data-crm-name="WhatsApp Asesor - Lomas Hero" data-crm-category="Contacto Asesor">Hablar con un asesor</a>
                         </div>
                     </div>
                 </section>

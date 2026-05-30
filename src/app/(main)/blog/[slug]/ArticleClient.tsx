@@ -127,8 +127,10 @@ export default function ArticleClient({ post }: ArticleClientProps) {
                                             href={`https://wa.me/?text=${shareText}%20${shareUrl}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={`${styles.shareButton} ${styles.shareWhatsapp}`}
+                                            className={`${styles.shareButton} ${styles.shareWhatsapp} crm-track-click`}
                                             aria-label="Compartir en WhatsApp"
+                                            data-crm-name={`Compartir Whatsapp - Blog [${post.title}]`}
+                                            data-crm-category="Social Share"
                                         >
                                             <MessageCircle size={18} />
                                         </a>
@@ -173,7 +175,9 @@ export default function ArticleClient({ post }: ArticleClientProps) {
                                         href={`https://wa.me/${SITE.whatsapp}?text=Hola,%20vengo%20del%20blog%20de%20Alimin%20y%20necesito%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20terrenos`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-whatsapp"
+                                        className="btn btn-whatsapp crm-track-click"
+                                        data-crm-name={`WhatsApp Asesor - Blog Body CTA - [${post.title}]`}
+                                        data-crm-category="Contacto Asesor"
                                     >
                                         <MessageCircle size={18} /> Hablar con un Asesor
                                     </a>
@@ -195,7 +199,9 @@ export default function ArticleClient({ post }: ArticleClientProps) {
                                     href={`https://wa.me/${SITE.whatsapp}?text=Hola,%20tengo%20dudas%20legales%20sobre%20compra%20de%20terrenos`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`${styles.sidebarButton} btn btn-primary`}
+                                    className={`${styles.sidebarButton} btn btn-primary crm-track-click`}
+                                    data-crm-name={`WhatsApp Legal - Blog Sidebar CTA - [${post.title}]`}
+                                    data-crm-category="Contacto Legal"
                                 >
                                     Consúltanos aquí
                                 </a>

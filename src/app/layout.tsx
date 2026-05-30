@@ -133,33 +133,56 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                // 1. CONFIGURACIÓN: Endpoint de tu CRM ya integrado
                 const CRM_API_URL = 'https://marketing.aliminlomasdelmar.com/api/track/activity';
+
+                // 2. EXTRAER Y GUARDAR EL LEAD ID
+                // Si el usuario llega desde un enlace de correo (ej: ?lead_id=xxxxx), guardamos su ID
                 const urlParams = new URLSearchParams(window.location.search);
                 let leadId = urlParams.get('lead_id');
                 
                 if (leadId) {
                   localStorage.setItem('crm_lead_id', leadId);
                 } else {
+                  // Si no viene en la URL, intentamos recuperarlo de sesiones anteriores
                   leadId = localStorage.getItem('crm_lead_id');
                 }
 
-                window.trackCRMEvent = function(eventType, details) {
-                  if (!leadId) return;
+                // 3. FUNCIÓN GLOBAL PARA REPORTAR EVENTOS AL CRM
+                // Puedes usar esta función en cualquier parte de tu código de la web
+                window.trackCRMEvent = function(eventType, details = {}) {
+                  if (!leadId) {
+                    console.log('[CRM Tracker] Evento omitido: El visitante no está identificado como lead.');
+                    return;
+                  }
+
                   const payload = {
                     lead_id: leadId,
                     event_type: eventType,
                     page_url: window.location.href,
                     page_title: document.title,
-                    details: details || {}
+                    details: details
                   };
+
                   fetch(CRM_API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(payload),
                     mode: 'cors'
-                  }).catch(err => console.error('[CRM Tracker] Error:', err));
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    console.log('[CRM Tracker] Evento registrado con éxito:', eventType, data);
+                  })
+                  .catch(error => {
+                    console.error('[CRM Tracker] Error al reportar evento:', error);
+                  });
                 };
 
+                // 4. SEGUIMIENTO AUTOMÁTICO DE VISITAS DE PÁGINA (PAGE VIEWS)
+                // Se ejecuta automáticamente al cargar cualquier página donde esté este script
                 if (leadId) {
                   if (document.readyState === 'complete') {
                     trackCRMEvent('PAGE_VIEW');
@@ -170,10 +193,14 @@ export default function RootLayout({
                   }
                 }
 
+                // 5. SEGUIMIENTO AUTOMÁTICO DE ENVÍO DE FORMULARIOS
+                // Escucha todos los formularios en tu web. Si se envían, los registra en tu CRM
                 document.addEventListener('submit', function(e) {
                   if (!leadId) return;
                   const form = e.target;
                   const formId = form.id || form.getAttribute('name') || 'Formulario sin ID';
+                  
+                  // Captura los valores de forma segura (ignora contraseñas y campos ocultos)
                   const formData = {};
                   const inputs = form.querySelectorAll('input, select, textarea');
                   inputs.forEach(input => {
@@ -182,6 +209,7 @@ export default function RootLayout({
                       formData[name] = input.value;
                     }
                   });
+
                   trackCRMEvent('FORM_SUBMIT', {
                     form_name: formId,
                     form_action: form.getAttribute('action') || '',
@@ -189,12 +217,15 @@ export default function RootLayout({
                   });
                 });
 
+                // 6. SEGUIMIENTO AUTOMÁTICO DE CLICS EN BOTONES DE INTERÉS
+                // Añade la clase CSS 'crm-track-click' a los botones que quieras medir
                 document.addEventListener('click', function(e) {
                   if (!leadId) return;
                   const target = e.target.closest('.crm-track-click');
                   if (target) {
                     const buttonName = target.getAttribute('data-crm-name') || target.innerText || 'Botón';
                     const buttonCategory = target.getAttribute('data-crm-category') || 'General';
+                    
                     trackCRMEvent('CLICK_BUTTON', {
                       element_name: buttonName,
                       category: buttonCategory
