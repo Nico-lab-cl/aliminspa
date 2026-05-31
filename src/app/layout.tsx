@@ -134,7 +134,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 // 1. CONFIGURACIÓN: Endpoint de tu CRM ya integrado
-                const CRM_API_URL = 'https://marketing.aliminlomasdelmar.com/api/track/activity';
+                const CRM_API_URL = 'https://marketing.aliminspa.cl/api/track/activity';
 
                 // 2. EXTRAER Y GUARDAR EL LEAD ID
                 // Si el usuario llega desde un enlace de correo (ej: ?lead_id=xxxxx), guardamos su ID
@@ -182,15 +182,30 @@ export default function RootLayout({
                 };
 
                 // 4. SEGUIMIENTO AUTOMÁTICO DE VISITAS DE PÁGINA (PAGE VIEWS)
-                // Se ejecuta automáticamente al cargar cualquier página donde esté este script
                 if (leadId) {
-                  if (document.readyState === 'complete') {
-                    trackCRMEvent('PAGE_VIEW');
-                  } else {
-                    window.addEventListener('load', function() {
+                  // Track initial page view
+                  trackCRMEvent('PAGE_VIEW');
+
+                  // Escuchar cambios de ruta client-side en Next.js (SPA)
+                  const originalPushState = history.pushState;
+                  history.pushState = function() {
+                    originalPushState.apply(this, arguments);
+                    setTimeout(() => {
                       trackCRMEvent('PAGE_VIEW');
-                    });
-                  }
+                    }, 150);
+                  };
+
+                  const originalReplaceState = history.replaceState;
+                  history.replaceState = function() {
+                    originalReplaceState.apply(this, arguments);
+                    setTimeout(() => {
+                      trackCRMEvent('PAGE_VIEW');
+                    }, 150);
+                  };
+
+                  window.addEventListener('popstate', function() {
+                    trackCRMEvent('PAGE_VIEW');
+                  });
                 }
 
                 // 5. SEGUIMIENTO AUTOMÁTICO DE ENVÍO DE FORMULARIOS
@@ -218,17 +233,41 @@ export default function RootLayout({
                 });
 
                 // 6. SEGUIMIENTO AUTOMÁTICO DE CLICS EN BOTONES DE INTERÉS
-                // Añade la clase CSS 'crm-track-click' a los botones que quieras medir
                 document.addEventListener('click', function(e) {
                   if (!leadId) return;
-                  const target = e.target.closest('.crm-track-click');
-                  if (target) {
-                    const buttonName = target.getAttribute('data-crm-name') || target.innerText || 'Botón';
-                    const buttonCategory = target.getAttribute('data-crm-category') || 'General';
+                  
+                  // Buscar el elemento clickeado o su ancestro más cercano de tipo botón/enlace/clase especial
+                  const target = e.target.closest('.crm-track-click, button, a');
+                  if (!target) return;
+
+                  // Evitar registrar clics en enlaces de navegación normales vacíos o sin texto
+                  const text = (target.innerText || target.textContent || '').trim();
+                  const href = target.getAttribute('href') || '';
+                  
+                  // Determinar si es un botón de interés
+                  const isCrmClass = target.classList.contains('crm-track-click');
+                  const isButton = target.tagName === 'BUTTON';
+                  const isCTA = target.tagName === 'A' && (
+                    href.includes('wa.me') || 
+                    href.includes('whatsapp') || 
+                    href.includes('lomas-del-mar') || 
+                    href.includes('arena-y-sol') ||
+                    target.classList.contains('btn') || 
+                    target.classList.contains('button') ||
+                    text.toLowerCase().includes('cotizar') ||
+                    text.toLowerCase().includes('contacto') ||
+                    text.toLowerCase().includes('ver ') ||
+                    text.toLowerCase().includes('reserva')
+                  );
+
+                  if (isCrmClass || isButton || isCTA) {
+                    const buttonName = target.getAttribute('data-crm-name') || text || href || 'Elemento Clickeado';
+                    const buttonCategory = target.getAttribute('data-crm-category') || (href.includes('wa') ? 'WhatsApp' : 'General');
                     
                     trackCRMEvent('CLICK_BUTTON', {
                       element_name: buttonName,
-                      category: buttonCategory
+                      category: buttonCategory,
+                      href: href
                     });
                   }
                 });
