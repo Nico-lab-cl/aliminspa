@@ -42,6 +42,15 @@ export default function BlogClient() {
                 body: JSON.stringify({ email }),
             })
             if (!res.ok) throw new Error('Subscription failed')
+
+            // Registrar en el CRM Alimin
+            if (typeof window !== 'undefined' && (window as any).AliminCRM) {
+                ;(window as any).AliminCRM.identify({
+                    email: email,
+                    source: 'Blog Newsletter'
+                }).catch((err: any) => console.error('Error de tracking CRM:', err))
+            }
+
             setSubscribeStatus('success')
             setEmail('')
         } catch {

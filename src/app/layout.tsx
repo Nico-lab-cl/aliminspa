@@ -132,28 +132,25 @@ export default function RootLayout({
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              (function() {
-                // 1. CONFIGURACIÓN: Endpoint de tu CRM ya integrado
-                const CRM_API_URL = 'https://marketing.aliminspa.cl/api/track/activity';
+              window.AliminCRM = (function() {
+                const CRM_API_URL = 'https://marketing.aliminspa.cl';
 
-                // 2. EXTRAER Y GUARDAR EL LEAD ID
-                // Si el usuario llega desde un enlace de correo (ej: ?lead_id=xxxxx), guardamos su ID
-                const urlParams = new URLSearchParams(window.location.search);
-                let leadId = urlParams.get('lead_id');
-                
-                if (leadId) {
-                  localStorage.setItem('crm_lead_id', leadId);
-                } else {
-                  // Si no viene en la URL, intentamos recuperarlo de sesiones anteriores
-                  leadId = localStorage.getItem('crm_lead_id');
+                function saveLeadId(id) {
+                  if (id) {
+                    localStorage.setItem('crm_lead_id', id);
+                  }
                 }
 
-                // 3. FUNCIÓN GLOBAL PARA REPORTAR EVENTOS AL CRM
-                // Puedes usar esta función en cualquier parte de tu código de la web
-                window.trackCRMEvent = function(eventType, details = {}) {
+                function getLeadId() {
+                  return localStorage.getItem('crm_lead_id');
+                }
+
+                function trackEvent(eventType, details) {
+                  if (!details) details = {};
+                  const leadId = getLeadId();
                   if (!leadId) {
-                    console.log('[CRM Tracker] Evento omitido: El visitante no está identificado como lead.');
-                    return;
+                    console.log('[AliminCRM] Evento omitido: El visitante no está identificado como lead.');
+                    return Promise.resolve();
                   }
 
                   const payload = {
@@ -164,113 +161,144 @@ export default function RootLayout({
                     details: details
                   };
 
-                  fetch(CRM_API_URL, {
+                  return fetch(CRM_API_URL + '/api/track/activity', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(payload),
-                    mode: 'cors'
+                    body: JSON.stringify(payload)
                   })
-                  .then(response => response.json())
-                  .then(data => {
-                    console.log('[CRM Tracker] Evento registrado con éxito:', eventType, data);
+                  .then(function(res) { return res.json(); })
+                  .then(function(data) {
+                    console.log('[AliminCRM] Evento ' + eventType + ' registrado:', data);
+                    return data;
                   })
-                  .catch(error => {
-                    console.error('[CRM Tracker] Error al reportar evento:', error);
-                  });
-                };
+                  .catch(function(err) { console.error('[AliminCRM] Error al registrar evento ' + eventType + ':', err); });
+                }
 
-                // 4. SEGUIMIENTO AUTOMÁTICO DE VISITAS DE PÁGINA (PAGE VIEWS)
-                if (leadId) {
-                  // Track initial page view
-                  trackCRMEvent('PAGE_VIEW');
+                function trackPageView() {
+                  const urlParams = new URLSearchParams(window.location.search);
+                  var leadId = urlParams.get('lead_id');
+                  if (leadId) {
+                    saveLeadId(leadId);
+                  }
+                  
+                  var currentLeadId = getLeadId();
+                  if (currentLeadId) {
+                    trackEvent('PAGE_VISIT', {
+                      referrer: document.referrer,
+                      userAgent: navigator.userAgent
+                    });
+                  }
+                }
 
-                  // Escuchar cambios de ruta client-side en Next.js (SPA)
-                  const originalPushState = history.pushState;
-                  history.pushState = function() {
-                    originalPushState.apply(this, arguments);
-                    setTimeout(() => {
-                      trackCRMEvent('PAGE_VIEW');
-                    }, 150);
-                  };
+                function identify(contactData) {
+                  if (!contactData || !contactData.email) {
+                    console.warn('[AliminCRM] Para identificar al lead se requiere al menos un correo electrónico (email).');
+                    return Promise.reject('Email requerido');
+                  }
+                  if (!contactData.source) {
+                    contactData.source = 'Sitio Web';
+                  }
 
-                  const originalReplaceState = history.replaceState;
-                  history.replaceState = function() {
-                    originalReplaceState.apply(this, arguments);
-                    setTimeout(() => {
-                      trackCRMEvent('PAGE_VIEW');
-                    }, 150);
-                  };
-
-                  window.addEventListener('popstate', function() {
-                    trackCRMEvent('PAGE_VIEW');
+                  console.log('[AliminCRM] Enviando datos de contacto al CRM...', contactData);
+                  return fetch(CRM_API_URL + '/api/leads', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contactData)
+                  })
+                  .then(function(res) { return res.json(); })
+                  .then(function(data) {
+                    if (data.success && data.lead && data.lead.id) {
+                      saveLeadId(data.lead.id);
+                      console.log('[AliminCRM] Contacto identificado exitosamente. ID:', data.lead.id);
+                      trackPageView();
+                      return data.lead;
+                    } else {
+                      throw new Error(data.message || 'Error en respuesta del CRM');
+                    }
+                  })
+                  .catch(function(err) {
+                    console.error('[AliminCRM] Error al identificar contacto:', err);
+                    throw err;
                   });
                 }
 
-                // 5. SEGUIMIENTO AUTOMÁTICO DE ENVÍO DE FORMULARIOS
-                // Escucha todos los formularios en tu web. Si se envían, los registra en tu CRM
-                document.addEventListener('submit', function(e) {
-                  if (!leadId) return;
-                  const form = e.target;
-                  const formId = form.id || form.getAttribute('name') || 'Formulario sin ID';
-                  
-                  // Captura los valores de forma segura (ignora contraseñas y campos ocultos)
-                  const formData = {};
-                  const inputs = form.querySelectorAll('input, select, textarea');
-                  inputs.forEach(input => {
-                    const name = input.name || input.id;
-                    if (name && input.type !== 'password' && input.type !== 'hidden') {
-                      formData[name] = input.value;
-                    }
-                  });
+                if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                  trackPageView();
+                } else {
+                  document.addEventListener('DOMContentLoaded', trackPageView);
+                }
 
-                  trackCRMEvent('FORM_SUBMIT', {
-                    form_name: formId,
-                    form_action: form.getAttribute('action') || '',
-                    data: formData
-                  });
+                const originalPushState = history.pushState;
+                history.pushState = function() {
+                  originalPushState.apply(this, arguments);
+                  setTimeout(function() {
+                    trackPageView();
+                  }, 150);
+                };
+
+                const originalReplaceState = history.replaceState;
+                history.replaceState = function() {
+                  originalReplaceState.apply(this, arguments);
+                  setTimeout(function() {
+                    trackPageView();
+                  }, 150);
+                };
+
+                window.addEventListener('popstate', function() {
+                  trackPageView();
                 });
 
-                // 6. SEGUIMIENTO AUTOMÁTICO DE CLICS EN BOTONES DE INTERÉS
                 document.addEventListener('click', function(e) {
+                  const leadId = getLeadId();
                   if (!leadId) return;
-                  
-                  // Buscar el elemento clickeado o su ancestro más cercano de tipo botón/enlace/clase especial
+
                   const target = e.target.closest('.crm-track-click, button, a');
                   if (!target) return;
 
-                  // Evitar registrar clics en enlaces de navegación normales vacíos o sin texto
                   const text = (target.innerText || target.textContent || '').trim();
                   const href = target.getAttribute('href') || '';
                   
-                  // Determinar si es un botón de interés
                   const isCrmClass = target.classList.contains('crm-track-click');
                   const isButton = target.tagName === 'BUTTON';
                   const isCTA = target.tagName === 'A' && (
-                    href.includes('wa.me') || 
-                    href.includes('whatsapp') || 
-                    href.includes('lomas-del-mar') || 
-                    href.includes('arena-y-sol') ||
+                    href.indexOf('wa.me') !== -1 || 
+                    href.indexOf('whatsapp') !== -1 || 
+                    href.indexOf('lomas-del-mar') !== -1 || 
+                    href.indexOf('arena-y-sol') !== -1 ||
                     target.classList.contains('btn') || 
                     target.classList.contains('button') ||
-                    text.toLowerCase().includes('cotizar') ||
-                    text.toLowerCase().includes('contacto') ||
-                    text.toLowerCase().includes('ver ') ||
-                    text.toLowerCase().includes('reserva')
+                    text.toLowerCase().indexOf('cotizar') !== -1 ||
+                    text.toLowerCase().indexOf('contacto') !== -1 ||
+                    text.toLowerCase().indexOf('ver ') !== -1 ||
+                    text.toLowerCase().indexOf('reserva') !== -1
                   );
 
                   if (isCrmClass || isButton || isCTA) {
                     const buttonName = target.getAttribute('data-crm-name') || text || href || 'Elemento Clickeado';
-                    const buttonCategory = target.getAttribute('data-crm-category') || (href.includes('wa') ? 'WhatsApp' : 'General');
+                    const buttonCategory = target.getAttribute('data-crm-category') || (href.indexOf('wa') !== -1 ? 'WhatsApp' : 'General');
                     
-                    trackCRMEvent('CLICK_BUTTON', {
+                    trackEvent('CLICK_BUTTON', {
                       element_name: buttonName,
                       category: buttonCategory,
                       href: href
                     });
                   }
                 });
+
+                window.trackCRMEvent = function(eventType, details) {
+                  trackEvent(eventType, details);
+                };
+
+                return {
+                  identify: identify,
+                  trackPageView: trackPageView,
+                  trackEvent: trackEvent,
+                  getLeadId: getLeadId
+                };
               })();
             `,
           }}

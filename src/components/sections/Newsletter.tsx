@@ -20,6 +20,14 @@ export default function Newsletter() {
 
             if (!res.ok) throw new Error('Error')
 
+            // Registrar en el CRM Alimin
+            if (typeof window !== 'undefined' && (window as any).AliminCRM) {
+                ;(window as any).AliminCRM.identify({
+                    email: email,
+                    source: 'Newsletter'
+                }).catch((err: any) => console.error('Error de tracking CRM:', err))
+            }
+
             setStatus('success')
             setEmail('')
             setTimeout(() => setStatus('idle'), 5000)

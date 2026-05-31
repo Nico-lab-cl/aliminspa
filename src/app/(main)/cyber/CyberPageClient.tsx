@@ -121,6 +121,21 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
 
             if (!res.ok) throw new Error('Error al enviar')
 
+            // Registrar en el CRM Alimin
+            if (typeof window !== 'undefined' && (window as any).AliminCRM) {
+                const nameParts = form.nombre.trim().split(/\s+/)
+                const firstName = nameParts[0] || ''
+                const lastName = nameParts.slice(1).join(' ') || ''
+                ;(window as any).AliminCRM.identify({
+                    email: form.email,
+                    firstName,
+                    lastName,
+                    phone: form.celular,
+                    project: form.proyecto || 'Cyber Monday',
+                    source: 'Sitio Web'
+                }).catch((err: any) => console.error('Error de tracking CRM:', err))
+            }
+
             setStatus('success')
             setForm({ nombre: '', email: '', celular: '', ciudad: '', proyecto: '' })
 
