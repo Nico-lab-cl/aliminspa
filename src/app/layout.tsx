@@ -293,32 +293,27 @@ export default function RootLayout({
 
                   const text = (target.innerText || target.textContent || '').trim();
                   const href = target.getAttribute('href') || '';
+                  const tagName = target.tagName;
                   
-                  const isCrmClass = target.classList.contains('crm-track-click');
-                  const isButton = target.tagName === 'BUTTON';
-                  const isCTA = target.tagName === 'A' && (
-                    href.indexOf('wa.me') !== -1 || 
-                    href.indexOf('whatsapp') !== -1 || 
-                    href.indexOf('lomas-del-mar') !== -1 || 
-                    href.indexOf('arena-y-sol') !== -1 ||
-                    target.classList.contains('btn') || 
-                    target.classList.contains('button') ||
-                    text.toLowerCase().indexOf('cotizar') !== -1 ||
-                    text.toLowerCase().indexOf('contacto') !== -1 ||
-                    text.toLowerCase().indexOf('ver ') !== -1 ||
-                    text.toLowerCase().indexOf('reserva') !== -1
-                  );
-
-                  if (isCrmClass || isButton || isCTA) {
-                    const buttonName = target.getAttribute('data-crm-name') || text || href || 'Elemento Clickeado';
-                    const buttonCategory = target.getAttribute('data-crm-category') || (href.indexOf('wa') !== -1 ? 'WhatsApp' : 'General');
-                    
-                    trackEvent('CLICK_BUTTON', {
-                      element_name: buttonName,
-                      category: buttonCategory,
-                      href: href
-                    });
+                  const buttonName = target.getAttribute('data-crm-name') || text || href || 'Elemento Clickeado';
+                  
+                  let buttonCategory = target.getAttribute('data-crm-category') || 'General';
+                  if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp') !== -1) {
+                    buttonCategory = 'WhatsApp';
+                  } else if (href.startsWith('#')) {
+                    buttonCategory = 'Sección Hash';
+                  } else if (tagName === 'A') {
+                    buttonCategory = 'Enlace Navegación';
+                  } else if (tagName === 'BUTTON') {
+                    buttonCategory = 'Botón Acción';
                   }
+
+                  trackEvent('CLICK_BUTTON', {
+                    element_name: buttonName,
+                    category: buttonCategory,
+                    href: href,
+                    tag: tagName
+                  });
                 });
 
                 window.trackCRMEvent = function(eventType, details) {
