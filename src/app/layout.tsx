@@ -145,16 +145,41 @@ export default function RootLayout({
                   return localStorage.getItem('crm_lead_id');
                 }
 
+                function getOrCreateAnonymousId() {
+                  let anonId = localStorage.getItem('crm_anonymous_id');
+                  if (!anonId) {
+                    anonId = 'anon_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                    localStorage.setItem('crm_anonymous_id', anonId);
+                  }
+                  return anonId;
+                }
+
+                function associate(leadId, anonymousId) {
+                  if (!leadId || !anonymousId) return Promise.resolve();
+                  console.log('[AliminCRM] Asociando lead_id ' + leadId + ' con anonymous_id ' + anonymousId);
+                  return fetch(CRM_API_URL + '/api/track/associate', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ lead_id: leadId, anonymous_id: anonymousId })
+                  })
+                  .then(function(res) { return res.json(); })
+                  .then(function(data) {
+                    console.log('[AliminCRM] Asociación completada:', data);
+                    return data;
+                  })
+                  .catch(function(err) { console.error('[AliminCRM] Error al asociar identidad:', err); });
+                }
+
                 function trackEvent(eventType, details) {
                   if (!details) details = {};
                   const leadId = getLeadId();
-                  if (!leadId) {
-                    console.log('[AliminCRM] Evento omitido: El visitante no está identificado como lead.');
-                    return Promise.resolve();
-                  }
+                  const anonymousId = getOrCreateAnonymousId();
 
                   const payload = {
-                    lead_id: leadId,
+                    lead_id: leadId || null,
+                    anonymous_id: anonymousId,
                     event_type: eventType,
                     page_url: window.location.href,
                     page_title: document.title,
@@ -178,13 +203,18 @@ export default function RootLayout({
 
                 function trackPageView() {
                   const urlParams = new URLSearchParams(window.location.search);
-                  var leadId = urlParams.get('lead_id');
-                  if (leadId) {
-                    saveLeadId(leadId);
-                  }
-                  
-                  var currentLeadId = getLeadId();
-                  if (currentLeadId) {
+                  var urlLeadId = urlParams.get('lead_id');
+                  var anonId = getOrCreateAnonymousId();
+
+                  if (urlLeadId) {
+                    saveLeadId(urlLeadId);
+                    associate(urlLeadId, anonId).then(function() {
+                      trackEvent('PAGE_VISIT', {
+                        referrer: document.referrer,
+                        userAgent: navigator.userAgent
+                      });
+                    });
+                  } else {
                     trackEvent('PAGE_VISIT', {
                       referrer: document.referrer,
                       userAgent: navigator.userAgent
@@ -212,10 +242,15 @@ export default function RootLayout({
                   .then(function(res) { return res.json(); })
                   .then(function(data) {
                     if (data.success && data.lead && data.lead.id) {
-                      saveLeadId(data.lead.id);
-                      console.log('[AliminCRM] Contacto identificado exitosamente. ID:', data.lead.id);
-                      trackPageView();
-                      return data.lead;
+                      const newLeadId = data.lead.id;
+                      saveLeadId(newLeadId);
+                      console.log('[AliminCRM] Contacto identificado exitosamente. ID:', newLeadId);
+                      
+                      const anonId = getOrCreateAnonymousId();
+                      return associate(newLeadId, anonId).then(function() {
+                        trackPageView();
+                        return data.lead;
+                      });
                     } else {
                       throw new Error(data.message || 'Error en respuesta del CRM');
                     }
@@ -253,9 +288,6 @@ export default function RootLayout({
                 });
 
                 document.addEventListener('click', function(e) {
-                  const leadId = getLeadId();
-                  if (!leadId) return;
-
                   const target = e.target.closest('.crm-track-click, button, a');
                   if (!target) return;
 
@@ -297,7 +329,8 @@ export default function RootLayout({
                   identify: identify,
                   trackPageView: trackPageView,
                   trackEvent: trackEvent,
-                  getLeadId: getLeadId
+                  getLeadId: getLeadId,
+                  getOrCreateAnonymousId: getOrCreateAnonymousId
                 };
               })();
             `,
