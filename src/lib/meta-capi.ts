@@ -44,6 +44,26 @@ function hash(data: string | undefined): string | null {
 }
 
 /**
+ * Hashes data using SHA256 according to Meta's strict normalization requirements.
+ * See: https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-properties
+ */
+function normalizeAndHash(data: string | undefined, type: 'email' | 'phone' | 'text'): string | null {
+    if (!data || data.trim() === '') return null;
+    
+    let normalized = data.trim().toLowerCase();
+    
+    if (type === 'phone') {
+        // Remove all non-digit characters (keep only numbers)
+        normalized = normalized.replace(/\D/g, '');
+    } else if (type === 'text') {
+        // Remove all spaces, punctuation, and symbols
+        normalized = normalized.replace(/[\s\p{P}\p{S}]/gu, '');
+    }
+    
+    return crypto.createHash('sha256').update(normalized).digest('hex');
+}
+
+/**
  * Sends an event to Meta Conversions API.
  */
 export async function sendMetaEvent(
@@ -53,28 +73,26 @@ export async function sendMetaEvent(
     eventSourceUrl: string,
     eventId?: string
 ) {
-    const pixelId = process.env.META_PIXEL_ID;
+    const pixelId = process.env.META_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID;
     const accessToken = process.env.META_ACCESS_TOKEN;
     const testCode = process.env.META_TEST_EVENT_CODE;
 
     if (!pixelId || !accessToken) {
-        if (process.env.NODE_ENV !== 'production') {
-            console.warn('Meta CAPI: Missing META_PIXEL_ID or META_ACCESS_TOKEN');
-        }
+        console.error('Meta CAPI Error: Missing META_PIXEL_ID / NEXT_PUBLIC_META_PIXEL_ID or META_ACCESS_TOKEN in environment variables.');
         return null;
     }
 
-    // Prepare User Data (Hashing sensitive fields)
+    // Prepare User Data (Hashing sensitive fields with proper Meta normalization)
     const normalizedUserData = {
-        em: hash(userData.em),
-        ph: hash(userData.ph),
-        fn: hash(userData.fn),
-        ln: hash(userData.ln),
-        ct: hash(userData.ct),
-        st: hash(userData.st),
-        cy: hash(userData.cy),
-        zp: hash(userData.zp),
-        sex: hash(userData.sex),
+        em: normalizeAndHash(userData.em, 'email'),
+        ph: normalizeAndHash(userData.ph, 'phone'),
+        fn: normalizeAndHash(userData.fn, 'text'),
+        ln: normalizeAndHash(userData.ln, 'text'),
+        ct: normalizeAndHash(userData.ct, 'text'),
+        st: normalizeAndHash(userData.st, 'text'),
+        cy: normalizeAndHash(userData.cy, 'text'),
+        zp: normalizeAndHash(userData.zp, 'text'),
+        sex: normalizeAndHash(userData.sex, 'text'),
         external_id: hash(userData.external_id), 
         // DO NOT HASH THESE (As per Meta docs and user instructions)
         client_ip_address: userData.client_ip_address,

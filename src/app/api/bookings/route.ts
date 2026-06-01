@@ -50,22 +50,26 @@ export async function POST(request: NextRequest) {
         const client_user_agent = request.headers.get('user-agent') || ''
         const eventSourceUrl = request.headers.get('referer') || 'https://aliminspa.cl'
 
-        sendMetaEvent(
-            'Schedule',
-            {
-                em: email,
-                ph: celular,
-                fn: nombre,
-                external_id: booking.id,
-                client_ip_address,
-                client_user_agent,
-            },
-            {
-                content_name: proyecto,
-                content_category: 'Real Estate Visit',
-            },
-            eventSourceUrl
-        ).catch(err => console.error('Error sending Meta Schedule event:', err))
+        try {
+            await sendMetaEvent(
+                'Schedule',
+                {
+                    em: email,
+                    ph: celular,
+                    fn: nombre,
+                    external_id: booking.id,
+                    client_ip_address,
+                    client_user_agent,
+                },
+                {
+                    content_name: proyecto,
+                    content_category: 'Real Estate Visit',
+                },
+                eventSourceUrl
+            )
+        } catch (err) {
+            console.error('Error sending Meta Schedule event:', err)
+        }
 
         return NextResponse.json({
             success: true,

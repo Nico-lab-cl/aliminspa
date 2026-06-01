@@ -46,26 +46,29 @@ export async function POST(request: NextRequest) {
         const client_user_agent = request.headers.get('user-agent') || ''
         const eventSourceUrl = request.headers.get('referer') || 'https://aliminspa.cl'
 
-        // Ejecutar en segundo plano para no retrasar la respuesta al usuario
-        sendMetaEvent(
-            'Lead',
-            {
-                em: email,
-                ph: celular,
-                fn: nombre,
-                ct: ciudad,
-                external_id: lead.id,
-                client_ip_address,
-                client_user_agent,
-                fbp,
-                fbc,
-            },
-            {
-                content_name: proyecto || 'General',
-                content_category: 'Real Estate',
-            },
-            eventSourceUrl
-        ).catch(err => console.error('Error sending Meta Lead event:', err))
+        try {
+            await sendMetaEvent(
+                'Lead',
+                {
+                    em: email,
+                    ph: celular,
+                    fn: nombre,
+                    ct: ciudad,
+                    external_id: lead.id,
+                    client_ip_address,
+                    client_user_agent,
+                    fbp,
+                    fbc,
+                },
+                {
+                    content_name: proyecto || 'General',
+                    content_category: 'Real Estate',
+                },
+                eventSourceUrl
+            )
+        } catch (err) {
+            console.error('Error sending Meta Lead event:', err)
+        }
 
         return NextResponse.json({ success: true, id: lead.id }, { status: 201 })
     } catch (error: any) {
