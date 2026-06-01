@@ -2,28 +2,41 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import styles from './PromoBanner.module.css'
 import { CONTEST } from '@/lib/constants'
 
 export default function PromoBanner() {
     const [isVisible, setIsVisible] = useState(false)
+    const pathname = usePathname()
 
     useEffect(() => {
         const checkVisibility = () => {
             const now = new Date()
-            const end = new Date(CONTEST.endDate)
-            // Set end time to 23:59:59 of that day
-            end.setHours(23, 59, 59, 999)
-            
-            if (now <= end) {
-                setIsVisible(true)
+            const dateParts = CONTEST.endDate.split('-')
+            if (dateParts.length === 3) {
+                const end = new Date(
+                    parseInt(dateParts[0]),
+                    parseInt(dateParts[1]) - 1,
+                    parseInt(dateParts[2]),
+                    23,
+                    59,
+                    59,
+                    999
+                )
+                
+                if (now <= end) {
+                    setIsVisible(true)
+                } else {
+                    setIsVisible(false)
+                }
             }
         }
 
         checkVisibility()
     }, [])
 
-    if (!isVisible) return null
+    if (!isVisible || pathname === '/cyber') return null
 
     const isExternal = CONTEST.link.startsWith('http') && !CONTEST.link.includes('aliminspa.cl')
 

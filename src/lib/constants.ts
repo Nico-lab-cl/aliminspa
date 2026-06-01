@@ -17,11 +17,11 @@ export const SITE = {
 } as const
 
 export const CONTEST = {
-    endDate: '2026-05-31',
-    tag: '🔥 Cyber Monday',
+    endDate: '2026-06-07',
+    tag: '⚡ Cyber Day',
     message: '¡Tu terreno con facilidades únicas! Pie en 3 cuotas sin interés y asesoría gratis.',
     cta: 'Ver promoción',
-    link: 'https://aliminspa.cl/cyber'
+    link: '/cyber'
 } as const
 
 

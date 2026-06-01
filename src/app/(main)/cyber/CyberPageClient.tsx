@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Clock, ShieldCheck, Check, CheckCircle, MessageCircle, Phone, ArrowRight, Tag, Sparkles, Droplet, Zap, Lock } from 'lucide-react'
-import { SITE, PROJECTS } from '@/lib/constants'
+import { SITE, PROJECTS, CONTEST } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import Testimonials from '@/components/sections/Testimonials'
 import styles from './page.module.css'
@@ -252,7 +252,18 @@ export default function CyberPageClient() {
     const [proyectoInteres, setProyectoInteres] = useState('')
 
     useEffect(() => {
-        const targetDate = new Date('2026-05-31T23:59:59').getTime()
+        const dateParts = CONTEST.endDate.split('-')
+        const targetDate = dateParts.length === 3
+            ? new Date(
+                parseInt(dateParts[0]),
+                parseInt(dateParts[1]) - 1,
+                parseInt(dateParts[2]),
+                23,
+                59,
+                59,
+                999
+            ).getTime()
+            : new Date().getTime()
 
         const updateCountdown = () => {
             const now = new Date().getTime()
