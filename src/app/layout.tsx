@@ -8,11 +8,6 @@ import { RealEstateAgentSchema, LocalBusinessSchema } from '@/components/seo/Jso
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  icons: {
-    icon: '/favicon.ico?v=1',
-    shortcut: '/favicon.ico?v=1',
-    apple: '/favicon.ico?v=1',
-  },
   title: {
     default: `Terrenos en Venta en El Tabo con Rol Propio | ${SITE.name}`,
     template: `%s | ${SITE.name}`,
