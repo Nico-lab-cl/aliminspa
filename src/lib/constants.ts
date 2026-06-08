@@ -24,6 +24,15 @@ export const CONTEST = {
     link: '/cyber'
 } as const
 
+export const FATHERS_DAY_PROMO = {
+    endDate: '2026-06-21',
+    tag: '🎁 Día del Padre',
+    message: '¡Ven a visitarnos para este Día del Padre y recibe tu regalo secreto! 👔',
+    cta: 'Agendar Visita',
+    link: '/reunion'
+} as const
+
+
 
 export const PROJECTS = [
     {

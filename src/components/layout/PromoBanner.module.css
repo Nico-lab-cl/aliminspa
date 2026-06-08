@@ -173,12 +173,122 @@
     background: linear-gradient(135deg, #2ae0cc 0%, #167a6e 100%);
 }
 
-.bannerLink:hover .cta svg {
-    transform: translate(2px, -2px);
+
+/* Father's Day Banner Styles */
+.fathersDayBanner {
+    background: linear-gradient(90deg, #0d1b2a 0%, #1b263b 30%, #e0a96d 50%, #1b263b 70%, #0d1b2a 100%);
+    background-size: 200% auto;
+    animation: gradientShift 6s ease infinite;
+}
+
+.fathersDayBanner:hover {
+    background: linear-gradient(90deg, #132238 0%, #22324d 30%, #ecb77f 50%, #22324d 70%, #132238 100%);
+    background-size: 200% auto;
+}
+
+.fathersDayBanner::after {
+    background: linear-gradient(90deg, #e0a96d, #3b82f6, #f3e5ab, #e0a96d);
+    background-size: 300% 100%;
+}
+
+.fathersDayTag {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    animation: pulseBlueGlow 1.8s infinite alternate;
+}
+
+@keyframes pulseBlueGlow {
+    0% {
+        box-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
+        transform: scale(0.97);
+    }
+    100% {
+        box-shadow: 0 0 14px rgba(59, 130, 246, 0.7);
+        transform: scale(1.03);
+    }
+}
+
+.fathersDayCta {
+    background: linear-gradient(135deg, #e0a96d 0%, #b45309 100%);
+    box-shadow: 0 2px 6px rgba(224, 169, 109, 0.3);
+}
+
+.bannerLink:hover .fathersDayCta {
+    background: linear-gradient(135deg, #f3e5ab 0%, #e0a96d 100%) !important;
+    box-shadow: 0 4px 12px rgba(224, 169, 109, 0.6) !important;
+}
+
+/* Floating Elements */
+.floatingContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.floatingIcon {
+    position: absolute;
+    font-size: 0.9rem;
+    opacity: 0.75;
+    user-select: none;
+    pointer-events: none;
+    top: 25%;
+}
+
+.icon1 {
+    left: 8%;
+    animation: floatAround1 6s ease-in-out infinite;
+}
+
+.icon2 {
+    left: 38%;
+    animation: floatAround2 8s ease-in-out infinite;
+}
+
+.icon3 {
+    left: 68%;
+    animation: floatAround3 5s ease-in-out infinite;
+}
+
+.icon4 {
+    left: 88%;
+    animation: floatAround4 7s ease-in-out infinite;
+}
+
+@keyframes floatAround1 {
+    0% { transform: translateY(-3px) rotate(0deg); }
+    50% { transform: translateY(3px) rotate(10deg); }
+    100% { transform: translateY(-3px) rotate(0deg); }
+}
+
+@keyframes floatAround2 {
+    0% { transform: translateY(3px) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(-10deg); }
+    100% { transform: translateY(3px) rotate(0deg); }
+}
+
+@keyframes floatAround3 {
+    0% { transform: scale(0.9) rotate(0deg) translateY(0px); opacity: 0.6; }
+    50% { transform: scale(1.1) rotate(180deg) translateY(-2px); opacity: 0.9; }
+    100% { transform: scale(0.9) rotate(360deg) translateY(0px); opacity: 0.6; }
+}
+
+@keyframes floatAround4 {
+    0% { transform: translateY(-2px) translateX(0px); }
+    50% { transform: translateY(2px) translateX(5px); }
+    100% { transform: translateY(-2px) translateX(0px); }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .floatingContainer {
+        display: none;
+    }
+
     .banner {
         padding: 0.5rem 0.5rem;
     }
