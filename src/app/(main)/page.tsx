@@ -1,4 +1,5 @@
 import Hero from '@/components/sections/Hero'
+import FathersDaySection from '@/components/sections/FathersDaySection'
 import Benefits from '@/components/sections/Benefits'
 import Testimonials from '@/components/sections/Testimonials'
 import Steps from '@/components/sections/Steps'
@@ -14,6 +15,7 @@ export default function HomePage() {
     <>
       <FAQSchema />
       <Hero />
+      <FathersDaySection />
       <Benefits />
       <Testimonials />
       <Steps />
