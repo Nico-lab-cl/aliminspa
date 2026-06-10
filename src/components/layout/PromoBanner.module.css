@@ -76,6 +76,7 @@
     position: relative;
     align-items: center;
     mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    z-index: 2;
 }
 
 .marqueeTrack {
@@ -233,7 +234,7 @@
 .floatingIcon {
     position: absolute;
     font-size: 0.9rem;
-    opacity: 0.75;
+    opacity: 0.25;
     user-select: none;
     pointer-events: none;
     top: 25%;
