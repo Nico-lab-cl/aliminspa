@@ -1,0 +1,129 @@
+.section {
+    background-color: #365759;
+    padding: 3rem 1.5rem 6rem;
+    color: white;
+}
+
+.title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4rem;
+    letter-spacing: -0.5px;
+}
+
+.title span {
+    color: #E2B230; /* Dorado */
+}
+
+.title sup {
+    font-size: 0.5em;
+    vertical-align: super;
+    color: white;
+}
+
+.carouselWrapper {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.carousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 1rem 0; /* ensure shadow is not cut off */
+    /* hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.card {
+    scroll-snap-align: start;
+    flex: 0 0 280px;
+    background-color: #406062; /* Slightly lighter than section background */
+    border-radius: 8px;
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 220px;
+    /* Simulate the gold border effect on right and bottom, and thin border on top/left */
+    border-left: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid #E2B230;
+    border-right: 2px solid #E2B230;
+    border-bottom: 2px solid #E2B230;
+}
+
+.iconWrapper {
+    margin-bottom: 1.5rem;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    object-fit: contain;
+}
+
+.cardLabel {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.navButton {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: white;
+    color: #406062;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navButton:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.prevButton {
+    left: -24px;
+}
+
+.nextButton {
+    right: -24px;
+}
+
+@media (max-width: 768px) {
+    .navButton {
+        display: none; /* Hide arrows on mobile because they can just swipe horizontally */
+    }
+    .carousel {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    .card {
+        flex: 0 0 250px;
+    }
+}

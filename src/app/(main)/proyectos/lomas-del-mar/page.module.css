@@ -1,0 +1,460 @@
+.page {
+    /* Eliminamos padding-top para que el video pueda tocar el fondo del header si es necesario, o lo mantenemos si el header es solido */
+    overflow-x: hidden;
+    background-color: #365759; /* #365759 */
+    color: white;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    /* Altura ajustada considerando que el navbar ya está. Para que el hero se vea como en la foto, se requiere buen alto */
+    height: calc(100vh - var(--navbar-height)); 
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #1a1a1a;
+}
+
+.videoDesktop, .videoMobile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.videoMobile {
+    display: none;
+}
+
+/* Gradiente oscuro sobre el video para que el texto sea legible (como se ve sutilmente en la imagen) */
+.heroOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 1.5rem;
+}
+
+.heroProjectSubtitle {
+    color: #E2B230; /* Dorado */
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.heroProjectTitle {
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    font-weight: 500; /* Font is relatively thin/regular in the screenshot */
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.heroDivider {
+    width: 50px;
+    height: 2px;
+    background-color: white;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.heroDescription {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+}
+
+.heroFinancing {
+    color: #E2B230;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+}
+
+.heroButtons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.btnDisponibilidad, .btnAsesor {
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid transparent; /* Just for spacing consistency */
+}
+
+.btnDisponibilidad {
+    background-color: #365759; /* Verde oscuro grisaceo */
+    color: #E2B230; /* Dorado */
+}
+
+.btnAsesor {
+    background-color: #5AC438; /* Verde brillante */
+    color: white;
+}
+
+.btnDisponibilidad:hover, .btnAsesor:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .videoDesktop {
+        display: none;
+    }
+    .videoMobile {
+        display: block;
+    }
+    .heroButtons {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .btnDisponibilidad, .btnAsesor {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+
+/* Sections Configuration */
+.contentSection {
+    background-color: #365759;
+}
+
+/* Intro Section */
+.introSection {
+    background-color: #365759; /* Fondo verde oscuro */
+    padding: 6rem 1.5rem 3rem;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.introTop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.introSubtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 400;
+    margin: 0;
+}
+
+.introSubtitle strong {
+    color: #E2B230; /* Dorado */
+    font-weight: 700;
+}
+
+.introGreeting {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    color: #f0f0f0;
+}
+
+.introDivider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+.introLine {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #E2B230;
+    opacity: 0.7;
+}
+
+.introLogo {
+    margin: 0 1.5rem;
+    position: relative;
+    width: 250px;
+    height: 80px;
+}
+
+.introMainText {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.introMainText strong {
+    font-weight: 700;
+}
+
+/* Stats Section */
+.statsSection {
+    background-color: #365759; /* Continuous background from intro */
+    padding: 0 1.5rem 6rem;
+    display: flex;
+    justify-content: center;
+}
+
+.statsCard {
+    background-color: #243e40;
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: 10px 10px 0px 0px #b18b45; /* The gold offset */
+    color: white;
+    width: 100%;
+}
+
+.statsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.statsTitleBox {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.statsIcon {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+}
+
+.statsTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.statsSubtitle {
+    font-size: 0.85rem;
+    color: #a0b2b3;
+    margin: 0;
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.liveDot {
+    width: 6px;
+    height: 6px;
+    background-color: #E2B230; /* Can be green or gold, using gold to match theme */
+    border-radius: 50%;
+    box-shadow: 0 0 8px #E2B230;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.statsPercentage {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.statsPercentage span {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.statBox {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.statLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a0b2b3;
+    letter-spacing: 1px;
+}
+
+.statValue {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progressBarContainer {
+    width: 100%;
+}
+
+.progressBarTrack {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    height: 12px;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progressBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffffff 0%, #e2b230 100%);
+    border-radius: 50px;
+    position: relative;
+    box-shadow: inset -5px 0 10px rgba(255,255,255,0.5);
+}
+
+.progressLabels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #a0b2b3;
+}
+
+@media (max-width: 768px) {
+    .statsHeader {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    .statsTitleBox {
+        flex-direction: column;
+    }
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Benefits Grid */
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.benefitCard {
+    background: #243e40;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border);
+}
+
+.benefitCard:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--gold);
+}
+
+.benefitIcon {
+    margin-bottom: 1.5rem;
+    width: 80px;
+    height: 80px;
+    position: relative;
+}
+
+.benefitIcon img {
+    object-fit: contain;
+}
+
+.benefitLabel {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+}
+
+/* Attractions */
+.attractionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.attractionCard {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background: #243e40;
+}
+
+.attractionImageContainer {
+    width: 100%;
+    height: 250px;
+    position: relative;
+}
+
+.attractionImageContainer img {
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.attractionCard:hover .attractionImageContainer img {
+    transform: scale(1.05);
+}
+
+.ctaSection {
+    background-color: var(--gold);
+    color: #1a1a1a;
+    text-align: center;
+    padding: 4rem 1.5rem;
+}

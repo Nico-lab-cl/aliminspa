@@ -1,0 +1,16 @@
+﻿Para exportar 1200 comentarios sin pagar una versiÃ³n "Pro" de herramientas como Comment Picker, la mejor opciÃ³n es usar un pequeÃ±o **script en la consola de tu navegador** (Chrome o Edge). Es un truco tÃ©cnico, gratuito y muy efectivo.
+
+AquÃ­ tienes los pasos exactos:
+
+### Paso 1: Cargar los comentarios en Instagram Web
+1. Entra a Instagram desde tu computadora y abre la publicaciÃ³n del sorteo.
+2. Haz clic en el Ã­cono de **"+"** o "Cargar mÃ¡s comentarios" repetidamente hasta que todos los comentarios estÃ©n visibles. 
+   *   *Tip:* Si son 1200, te tomarÃ¡ un par de minutos. TambiÃ©n puedes dejar presionada la tecla `Espacio` o `Fin` para que baje rÃ¡pido, pero Instagram suele requerir que hagas clic en el Ã­cono de cargar mÃ¡s.
+
+### Paso 2: Ejecutar el Extractor
+Una vez que veas la mayorÃ­a de los comentarios cargados:
+1. Presiona la tecla `F12` (o clic derecho -> **Inspeccionar**).
+2. Ve a la pestaÃ±a que dice **Console** (Consola).
+3. Copia y pega el siguiente cÃ³digo y presiona `Enter`:
+
+<truncated 1687 bytes>

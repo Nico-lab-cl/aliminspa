@@ -1,13 +1,49 @@
-# ── Etapa 1: usar nginx liviano (Alpine) ──────────────────────────────────────
-FROM nginx:alpine
+# ── Etapa 1: Instalar dependencias ──────────────────────
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --only=production && npm cache clean --force
 
-# Copiar la página al directorio público de nginx
-COPY index.html /usr/share/nginx/html/index.html
+# ── Etapa 2: Build ─────────────────────────────────────
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
 
-# Copiar configuración personalizada de nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Generate Prisma Client
+RUN npx prisma generate
 
-# Exponer el puerto 80
-EXPOSE 80
+# Build Next.js
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
 
-CMD ["nginx", "-g", "daemon off;"]
+# ── Etapa 3: Runner ────────────────────────────────────
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+# Standalone output
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Prisma client
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/prisma ./prisma
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

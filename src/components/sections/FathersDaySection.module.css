@@ -1,0 +1,320 @@
+.section {
+    padding: clamp(4rem, 8vw, 7rem) 0;
+    background: linear-gradient(135deg, #0a1921 0%, #050c10 100%);
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Add an ambient gold orb in the background */
+.section::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(197, 160, 89, 0.08) 0%, transparent 70%);
+    filter: blur(50px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #C5A059; /* Gold */
+}
+
+.label::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    background: #C5A059;
+}
+
+.title {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.highlight {
+    color: #C5A059;
+    background: linear-gradient(135deg, #C5A059 0%, #E2C284 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #f3e5ab; /* Light gold/cream */
+    font-weight: 500;
+}
+
+.description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+.featureItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.featureCheck {
+    color: #C5A059;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: rgba(197, 160, 89, 0.1);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(197, 160, 89, 0.2);
+}
+
+.featureText {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.featureText strong {
+    color: #ffffff;
+}
+
+.ctaWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.btnCta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.1rem 2.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #C5A059 0%, #9E7D3B 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(197, 160, 89, 0.25);
+    transition: all 0.3s ease;
+    align-self: flex-start;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btnCta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(197, 160, 89, 0.45);
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+}
+
+.btnCta svg {
+    transition: transform 0.3s ease;
+}
+
+.btnCta:hover svg {
+    transform: translateX(4px);
+}
+
+.ctaNote {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* Showcase styles */
+.showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mainImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(197, 160, 89, 0.25);
+    background: #050d11;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.activeSlide {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.image {
+    object-fit: cover;
+    transition: transform 6s ease;
+}
+
+.activeSlide .image {
+    transform: scale(1.03);
+}
+
+.imageOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+    padding: 2rem 1.5rem 1.5rem;
+    color: #ffffff;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.imageTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: #C5A059;
+}
+
+.imageDesc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.thumbnailBtn {
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 70px;
+    height: 70px;
+}
+
+.activeThumbnail {
+    border-color: #C5A059;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+}
+
+.thumbnailImgWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.thumbnailImg {
+    object-fit: cover;
+    transition: filter 0.3s ease;
+    filter: brightness(0.6);
+}
+
+.activeThumbnail .thumbnailImg,
+.thumbnailBtn:hover .thumbnailImg {
+    filter: brightness(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .grid {
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 4rem 0;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .content {
+        order: 2;
+    }
+    
+    .showcase {
+        order: 1;
+        max-width: 480px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    
+    .btnCta {
+        width: 100%;
+        align-self: stretch;
+    }
+}

@@ -1,0 +1,99 @@
+
+.graciasPage {
+  background-color: #ffffff;
+  min-height: 80vh;
+}
+
+.hero {
+  padding: 100px 0 60px;
+  background: linear-gradient(135deg, #2F4F4F 0%, #1a2e26 100%);
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.bgOrb {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(234, 179, 8, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background: #eab308;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(234, 179, 8, 0.3);
+}
+
+.title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 700px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #2F4F4F;
+}
+
+.sectionDivider {
+  width: 80px;
+  height: 4px;
+  background: #eab308;
+  margin: 0 auto 48px;
+  border-radius: 2px;
+}
+
+.infoSection {
+  padding: 80px 0;
+  background-color: #f8fafc;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 80px 0 40px;
+  }
+}

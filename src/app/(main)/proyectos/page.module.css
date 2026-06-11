@@ -1,0 +1,145 @@
+.page {
+    padding-top: calc(var(--navbar-height) + 3rem);
+    padding-bottom: var(--section-gap);
+    background-color: #2F4F4F; /* Matching navbar and footer */
+    color: white;
+    min-height: 100vh;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.titleLine {
+    height: 2px;
+    background-color: var(--gold);
+    width: 60px; /* Adjust as needed */
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    font-family: var(--font);
+    color: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.projectTitle {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 2.8rem;
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.imageWrapper {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 2rem;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.card:hover .image {
+    transform: scale(1.02);
+}
+
+.subtitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.lotInfo {
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    max-width: 90%;
+}
+
+.buttonContainer {
+    margin-top: auto; /* Push to bottom */
+}
+
+.btnAction {
+    background-color: #E2B230; /* Bright gold from the screenshot */
+    color: #1a1a1a;
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-full);
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btnAction:hover {
+    background-color: var(--gold-light);
+    transform: translateY(-2px);
+}
+
+/* responsive */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .titleLine {
+        width: 30px;
+    }
+    
+    .projectTitle {
+        font-size: 2.2rem;
+    }
+}

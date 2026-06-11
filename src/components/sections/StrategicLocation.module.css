@@ -1,0 +1,215 @@
+.section {
+    padding: 6rem 0;
+    background-color: #2F4F4F; /* Unified standard theme color */
+    color: white;
+}
+
+.fluidContainer {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.title::before, .title::after {
+    content: '';
+    flex: 1;
+    max-width: 150px;
+    height: 2px;
+    background-color: #eab308;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.mapColumn {
+    flex: 1 1 700px; /* Force even larger base width */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mapTitleWrapper {
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.mapTitle {
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.palmIcon {
+    width: 80px;
+    height: 80px;
+    color: white;
+}
+
+.mapDecorativeWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 1rem;
+    background: transparent;
+}
+
+.infoColumn {
+    flex: 1 1 600px; /* Allow right content to scale huge */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.infoBox {
+    margin-bottom: 2rem;
+    max-width: 650px;
+}
+
+.infoTitle {
+    font-size: 2.2rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+.highlight {
+    color: #eab308;
+    font-weight: 600;
+}
+
+.infoDesc {
+    font-size: 1.4rem;  /* Larger supporting text */
+    line-height: 1.6;
+    color: white;
+}
+
+.projectsGraphicWrapper {
+    width: 100%;
+    max-width: 850px; /* Explode graphic max limit */
+    margin-top: 1rem;
+}
+
+@media (max-width: 1024px) {
+    .mapColumn, .infoColumn {
+        flex: 1 1 100%;
+    }
+    .projectsGraphicWrapper {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 4rem 0;
+    }
+
+    /* Change layout context to arrange nested children independently */
+    .content {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .mapColumn, .infoColumn {
+        display: contents; /* Strip out intermediate columns to order children directly */
+    }
+
+    .title {
+        font-size: 1.4rem;
+        gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    .title::before, .title::after {
+        max-width: 40px;
+        height: 1px;
+    }
+    .header {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Order 1: Title */
+    .mapTitleWrapper {
+        order: 1;
+        justify-content: center;
+        text-align: center;
+    }
+    .mapTitle {
+        font-size: 1.7rem;
+        line-height: 1.2;
+    }
+
+    /* Order 2: Subtitle Text */
+    .infoBox {
+        order: 2;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+    }
+    .infoDesc {
+        font-size: 1.15rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .highlight {
+        color: white; /* "En El Tabo" should be white on mobile per specific design */
+    }
+
+    /* Order 3: Image with Gold trim */
+    .mapDecorativeWrapper {
+        order: 3;
+        padding: 0 1rem;
+        margin-top: 1rem;
+    }
+    
+    .imageWrapper::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 30%;
+        height: 60px;
+        background-color: #d4a946;
+        z-index: 1;
+    }
+    
+    .imageWrapper::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: -6px;
+        width: 30%;
+        height: 60px;
+        background-color: #d4a946;
+        z-index: 1;
+    }
+
+    /* Items hidden purely on mobile to match minimal mockup */
+    .palmIcon, .infoTitle, .projectsGraphicWrapper {
+        display: none;
+    }
+}
