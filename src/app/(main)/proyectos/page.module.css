@@ -54,6 +54,10 @@
     font-weight: 500;
     margin-bottom: 1.5rem;
     color: white;
+    min-height: 7.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .imageWrapper {
@@ -81,12 +85,20 @@
     font-style: italic;
     margin-bottom: 0.5rem;
     color: white;
+    min-height: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .lotInfo {
     font-size: 1.05rem;
     margin-bottom: 1.5rem;
     color: white;
+    min-height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .description {
@@ -95,6 +107,10 @@
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 2rem;
     max-width: 90%;
+    min-height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .buttonContainer {
@@ -141,5 +157,10 @@
     
     .projectTitle {
         font-size: 2.2rem;
+        min-height: auto;
+    }
+
+    .subtitle, .lotInfo, .description {
+        min-height: auto;
     }
 }
