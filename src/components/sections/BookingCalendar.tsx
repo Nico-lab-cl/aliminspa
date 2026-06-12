@@ -19,7 +19,8 @@ const PROJECTS_LIST = [
         status: 'Terrenos Disponibles',
         image: '/images/projects/lomas-del-mar-v3.jpg',
         video: '/videos/lomas-del-mar/Lomas web optimized.mp4',
-        features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático']
+        features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
+        googleMapsUrl: 'https://maps.app.goo.gl/gvsmU1zsa2phRiUD7'
     },
     { 
         id: 'arena-y-sol', 
@@ -31,7 +32,8 @@ const PROJECTS_LIST = [
         status: 'Últimos Terrenos',
         image: '/images/projects/arena-y-sol-v2.jpg',
         video: null,
-        features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático']
+        features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
+        googleMapsUrl: 'https://maps.app.goo.gl/h7gaaTCV1J4F2zCAA'
     },
     { 
         id: 'libertad-y-alegria', 
@@ -43,7 +45,8 @@ const PROJECTS_LIST = [
         status: 'Proyecto Vendido',
         image: '/images/projects/libertad-y-alegria.webp',
         video: '/videos/Hero-pagina-libertad-y-alegria.mp4',
-        features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Acceso Pavimentado']
+        features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Acceso Pavimentado'],
+        googleMapsUrl: 'https://maps.app.goo.gl/SukbRpoNdZHuKZLM8'
     },
 ]
 
@@ -57,7 +60,8 @@ const GENERAL_SHOWCASE = {
     status: 'Proyectos Activos',
     image: '/images/og-image.webp',
     video: '/hero-video.mp4',
-    features: ['Terrenos Urbanizados', 'Agua Certificada', 'Luz Eléctrica', 'Financiamiento Directo']
+    features: ['Terrenos Urbanizados', 'Agua Certificada', 'Luz Eléctrica', 'Financiamiento Directo'],
+    googleMapsUrl: null
 }
 
 /** Availability schedule. Day: 0=Sun, 1=Mon, ..., 6=Sat */
@@ -332,7 +336,19 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                 <div className={styles.showcaseMeta}>
                                     <span className={styles.metaItem}>
                                         <MapPin size={14} color="#d4a946" />
-                                        {showcaseProject.location}
+                                        {'googleMapsUrl' in showcaseProject && showcaseProject.googleMapsUrl ? (
+                                            <a 
+                                                href={showcaseProject.googleMapsUrl as string} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className={styles.mapLink}
+                                                title="Ver ubicación en Google Maps"
+                                            >
+                                                {showcaseProject.location} <span className={styles.mapLinkHint}>(Ver mapa)</span>
+                                            </a>
+                                        ) : (
+                                            showcaseProject.location
+                                        )}
                                     </span>
                                     <span className={styles.metaItem}>
                                         <strong>Lotes:</strong> {showcaseProject.lotSize}
@@ -606,6 +622,22 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                             <Mail size={20} color="#d4a946" />
                                             <p>Revisa tu correo <strong>{form.email}</strong> para la invitación con el evento y link de Google Meet.</p>
                                         </div>
+                                        {project?.googleMapsUrl && (
+                                            <div className={styles.mapNotice}>
+                                                <MapPin size={20} color="#d4a946" />
+                                                <p>
+                                                    <strong>Indicaciones de viaje:</strong> Para saber cómo llegar al terreno, puedes ver su ubicación en{' '}
+                                                    <a 
+                                                        href={project.googleMapsUrl} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer"
+                                                        className={styles.mapLink}
+                                                    >
+                                                        Google Maps aquí
+                                                    </a>.
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
