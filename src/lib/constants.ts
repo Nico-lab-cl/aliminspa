@@ -48,7 +48,7 @@ export const PROJECTS = [
         status: 'Terrenos Disponibles',
         soldPercentage: 25,
         externalUrl: null,
-        image: '/images/projects/lomas-del-mar-v2.jpg',
+        image: '/images/projects/lomas-del-mar-v3.jpg',
         color: '#006D77', // Deep sea teal
         isFeatured: true,
         financing: {
@@ -60,7 +60,7 @@ export const PROJECTS = [
                     pie: '$5.500.000',
                     valorTotal: '$29.990.000',
                     cuotaReferencial: '$550.000',
-                    plazo: '63 Cuotas',
+                    plazo: '45 Cuotas',
                     pagoContado: '$26.000.000'
                 },
                 {
@@ -68,7 +68,7 @@ export const PROJECTS = [
                     pie: '$7.500.000',
                     valorTotal: '$37.990.000',
                     cuotaReferencial: '$550.000',
-                    plazo: '76 Cuotas',
+                    plazo: '56 Cuotas',
                     pagoContado: '$35.000.000'
                 }
             ]

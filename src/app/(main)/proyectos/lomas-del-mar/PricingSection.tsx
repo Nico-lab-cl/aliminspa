@@ -13,7 +13,7 @@ export default function PricingSection() {
                     <div className={`${styles.pricingCard} ${styles.cardFrameLeft}`}>
                         <div className={styles.imageWrapper}>
                             <Image 
-                                src="/images/projects/lomas-del-mar-v2.jpg" 
+                                src="/images/projects/lomas-del-mar-v3.jpg" 
                                 alt="Terrenos Lomas del Mar" 
                                 fill 
                                 className={styles.cardImage}
@@ -36,7 +36,7 @@ export default function PricingSection() {
                             <ul className={styles.featuresList}>
                                 <li>Valor total: <span>$29.990.000</span></li>
                                 <li>Cuota referencial: <span>$550.000</span></li>
-                                <li>Plazo aproximado: <span>63 cuotas</span></li>
+                                <li>Plazo aproximado: <span>45 cuotas</span></li>
                                 <li>Precio de contado: <span className={styles.goldText}>$26.000.000</span></li>
                             </ul>
 
@@ -74,7 +74,7 @@ export default function PricingSection() {
                             <ul className={styles.featuresList}>
                                 <li>Valor total: <span>$37.990.000</span></li>
                                 <li>Cuota referencial: <span>$550.000</span></li>
-                                <li>Plazo aproximado: <span>76 cuotas</span></li>
+                                <li>Plazo aproximado: <span>56 cuotas</span></li>
                                 <li>Precio de contado: <span className={styles.goldText}>$35.000.000</span></li>
                             </ul>
 

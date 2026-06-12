@@ -17,7 +17,7 @@ const PROJECTS_LIST = [
         tagline: 'Tu refugio cerca al mar',
         lotSize: '200 m² - 390 m²',
         status: 'Terrenos Disponibles',
-        image: '/images/projects/lomas-del-mar-v2.jpg',
+        image: '/images/projects/lomas-del-mar-v3.jpg',
         video: '/videos/lomas-del-mar/Lomas web optimized.mp4',
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático']
     },

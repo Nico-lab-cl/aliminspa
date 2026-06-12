@@ -7,7 +7,7 @@ const NEW_PROJECTS = [
     {
         id: 'lomas',
         title: 'Lomas del Mar',
-        image: '/images/projects/lomas-del-mar-v2.jpg',
+        image: '/images/projects/lomas-del-mar-v3.jpg',
         tagline: 'Tu refugio cerca al mar',
         subdesc: 'Terrenos urbanizados de 200 m² - 390 m²',
         desc: 'Una inversión inteligente. Terrenos urbanizados en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía.',
