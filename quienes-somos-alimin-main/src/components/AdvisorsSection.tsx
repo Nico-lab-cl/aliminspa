@@ -10,13 +10,6 @@ const advisors = [
     whatsapp: "https://wa.me/56956654833?text=Hola%20Marcela,%20me%20comunico%20desde%20aliminspa.cl%20%F0%9F%91%8B",
   },
   {
-    name: "Bárbara Arias",
-    role: "Asesora Inmobiliaria",
-    image: "/images/asesores/Barbara.png",
-    description: "Energía contagiosa y enfoque profesional. Te entrega toda la información que necesitas para invertir con confianza.",
-    whatsapp: "https://wa.me/56948775227?text=Hola%20B%C3%A1rbara,%20me%20comunico%20desde%20aliminspa.cl%20%F0%9F%91%8B",
-  },
-  {
     name: "Orlando Costa",
     role: "Asesor Inmobiliario",
     image: "/images/asesores/Orlando.png",

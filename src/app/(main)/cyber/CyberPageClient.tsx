@@ -21,14 +21,6 @@ const ADVISORS = [
         description: "Te asesora con soluciones rápidas y transparentes para asegurar tu inversión."
     },
     {
-        name: "Bárbara Arias",
-        role: "Asesora inmobiliaria",
-        image: "/images/asesores/Barbara.png",
-        phone: "+56 9 4877 5227",
-        whatsapp: "https://wa.me/56948775227?text=Hola%20B%C3%A1rbara,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20la%20promoci%C3%B3n%20Cyber%20Monday%20de%20terrenos%20%F0%9F%94%A5",
-        description: "Especialista en proyectos del litoral, lista para resolver todas tus dudas."
-    },
-    {
         name: "Orlando Costa",
         role: "Asesor inmobiliario",
         image: "/images/asesores/Orlando.png",
