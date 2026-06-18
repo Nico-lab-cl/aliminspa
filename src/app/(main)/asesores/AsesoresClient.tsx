@@ -44,6 +44,12 @@ export default function AsesoresClient() {
 
   return (
     <div className={styles.page}>
+      {/* Animated Background Spheres */}
+      <div className={styles.heroGlowContainer}>
+        <div className={styles.glowSphere1} />
+        <div className={styles.glowSphere2} />
+      </div>
+
       {/* Hero Header */}
       <section className={styles.hero}>
         <div className="container">
@@ -165,7 +171,7 @@ export default function AsesoresClient() {
           </div>
           
           <div className={styles.projectsGrid}>
-            {PROJECTS.map((project) => {
+            {PROJECTS.filter(project => project.id !== 'lomas-del-mar').map((project) => {
               const isAvailable = project.status !== 'Proyecto Vendido';
               return (
                 <div key={project.id} className={styles.projectCard}>
@@ -209,7 +215,7 @@ export default function AsesoresClient() {
 
                     {isAvailable && (
                       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.50rem' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textAlign: 'center', display: 'block', marginBottom: '0.2rem' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#ffffff', textAlign: 'center', display: 'block', marginBottom: '0.2rem' }}>
                           Consultar por este proyecto:
                         </span>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>

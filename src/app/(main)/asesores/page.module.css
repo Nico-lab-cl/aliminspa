@@ -1,16 +1,63 @@
 .page {
   padding-top: 100px;
-  background-color: var(--bg-alt);
+  background-color: #082823; /* Dark green matching navbar/footer */
   min-height: 100vh;
   overflow-x: hidden;
-  color: var(--text);
+  color: #e2e8f0;
+  position: relative;
+}
+
+/* Floating light spheres background */
+.heroGlowContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glowSphere1 {
+  position: absolute;
+  top: 5%;
+  left: 15%;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26, 138, 125, 0.25) 0%, rgba(20, 105, 95, 0.08) 60%, transparent 100%);
+  filter: blur(80px);
+  animation: float1 25s infinite alternate ease-in-out;
+}
+
+.glowSphere2 {
+  position: absolute;
+  bottom: 20%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, rgba(26, 138, 125, 0.05) 60%, transparent 100%);
+  filter: blur(95px);
+  animation: float2 30s infinite alternate ease-in-out;
+}
+
+@keyframes float1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(60px, 90px) scale(1.15); }
+}
+
+@keyframes float2 {
+  0% { transform: translate(0, 0) scale(1.1); }
+  100% { transform: translate(-80px, -60px) scale(0.9); }
 }
 
 .hero {
   position: relative;
   padding: 5rem 0 3rem 0;
   text-align: center;
-  background: linear-gradient(180deg, rgba(20, 105, 95, 0.04) 0%, rgba(255, 255, 255, 0) 100%);
+  z-index: 2;
 }
 
 .heroContent {
@@ -22,7 +69,7 @@
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--gold-dark);
+  color: var(--gold);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-bottom: 1rem;
@@ -31,28 +78,30 @@
 .heroTitle {
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5vw, 3.2rem);
-  color: var(--text-secondary);
+  color: #ffffff;
   font-weight: 800;
   margin-bottom: 1.25rem;
   line-height: 1.2;
 }
 
 .heroTitle span {
-  color: var(--teal);
+  color: var(--gold-light);
 }
 
 .heroSubtitle {
   font-size: 1.15rem;
-  color: var(--text);
+  color: #cbd5e1;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 /* Advisors grid styles */
 .advisorsSection {
   padding: 4rem 0;
+  position: relative;
+  z-index: 2;
 }
 
 .advisorsGrid {
@@ -71,18 +120,19 @@
 }
 
 .advisorCard {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
   text-align: center;
   transition: all var(--transition-base);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 
 .advisorCard::after {
@@ -99,8 +149,8 @@
 
 .advisorCard:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(197, 160, 89, 0.3);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+  border-color: rgba(197, 160, 89, 0.4);
 }
 
 .advisorCard:hover::after {
@@ -118,8 +168,8 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 4px solid var(--surface);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   object-fit: cover;
   transition: transform var(--transition-base);
 }
@@ -133,7 +183,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--gold-dark);
+  color: var(--gold);
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
 }
@@ -142,13 +192,13 @@
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: #ffffff;
   margin-bottom: 0.75rem;
 }
 
 .advisorDesc {
   font-size: 0.95rem;
-  color: var(--text-muted);
+  color: #cbd5e1;
   line-height: 1.5;
   margin-bottom: 1.75rem;
   max-width: 320px;
@@ -187,20 +237,21 @@
 }
 
 .callBtn {
-  background: var(--bg-alt);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .callBtn:hover {
-  background: var(--border);
-  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
 }
 
 /* Father's Day Promo styles */
 .fathersDayPromo {
   padding: 4rem 0;
+  position: relative;
+  z-index: 2;
 }
 
 .fathersDayCard {
@@ -301,7 +352,9 @@
 /* Projects Showcase Section */
 .projectsSection {
   padding: 5rem 0;
-  background: #ffffff;
+  background: #051f1b; /* Deeper dark green for contrast */
+  position: relative;
+  z-index: 2;
 }
 
 .sectionHeader {
@@ -313,7 +366,7 @@
   display: inline-block;
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--gold-dark);
+  color: var(--gold);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin-bottom: 0.75rem;
@@ -323,7 +376,7 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 800;
-  color: var(--text-secondary);
+  color: #ffffff;
 }
 
 .projectsGrid {
@@ -342,21 +395,21 @@
 }
 
 .projectCard {
-  background: var(--surface-light);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: all var(--transition-base);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
   height: 100%;
 }
 
 .projectCard:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(197, 160, 89, 0.2);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  border-color: rgba(197, 160, 89, 0.35);
 }
 
 .projectImageWrapper {
@@ -410,14 +463,14 @@
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: #ffffff;
   margin-bottom: 0.25rem;
 }
 
 .projectDistance {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--gold-dark);
+  color: var(--gold-light);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 1rem;
@@ -425,7 +478,7 @@
 
 .projectDesc {
   font-size: 0.92rem;
-  color: var(--text-muted);
+  color: #cbd5e1;
   line-height: 1.5;
   margin-bottom: 1.5rem;
   flex: 1;
@@ -440,9 +493,9 @@
 
 .featureTag {
   font-size: 0.75rem;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
   padding: 0.35rem 0.75rem;
   border-radius: 50px;
   font-weight: 600;
@@ -452,14 +505,15 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .projectMetaLabel {
   font-size: 0.7rem;
-  color: var(--text-muted);
+  color: #cbd5e1;
+  opacity: 0.6;
   text-transform: uppercase;
   margin-bottom: 0.15rem;
 }
@@ -467,14 +521,14 @@
 .projectMetaVal {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: #ffffff;
 }
 
 .askAsesorBtn {
   width: 100%;
-  background: var(--surface);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
   padding: 0.85rem;
   font-size: 0.88rem;
@@ -487,15 +541,17 @@
 }
 
 .askAsesorBtn:hover {
-  background: var(--text-secondary);
-  color: #ffffff;
-  border-color: var(--text-secondary);
+  background: #ffffff;
+  color: #082823;
+  border-color: #ffffff;
 }
 
 /* FAQ Section */
 .faqSection {
   padding: 5rem 0;
-  background: var(--bg-alt);
+  background: #082823;
+  position: relative;
+  z-index: 2;
 }
 
 .faqWrap {
@@ -504,8 +560,8 @@
 }
 
 .faqItem {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
   margin-bottom: 1rem;
   overflow: hidden;
@@ -513,12 +569,12 @@
 }
 
 .faqItem:hover {
-  border-color: rgba(197, 160, 89, 0.3);
+  border-color: rgba(197, 160, 89, 0.35);
 }
 
 .faqActive {
   border-color: rgba(197, 160, 89, 0.5);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .faqQuestionButton {
@@ -536,7 +592,7 @@
 .faqQuestion {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: #ffffff;
   line-height: 1.4;
 }
 
@@ -564,7 +620,7 @@
 .faqAnswer {
   padding: 0 1.5rem 1.5rem 1.5rem;
   font-size: 0.95rem;
-  color: var(--text);
+  color: #cbd5e1;
   line-height: 1.6;
-  opacity: 0.85;
+  opacity: 0.9;
 }
