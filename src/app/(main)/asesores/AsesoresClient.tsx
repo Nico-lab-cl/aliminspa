@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { MessageCircle, Phone, Sparkles, HelpCircle, ArrowRight, Home, Check } from 'lucide-react';
+import { MessageCircle, Phone, Sparkles, HelpCircle, Check } from 'lucide-react';
 import { PROJECTS, FAQ_ITEMS, FATHERS_DAY_PROMO } from '@/lib/constants';
+import MetaTrackPageView from '@/components/analytics/MetaTrackPageView';
+import { trackMetaEvent } from '@/lib/track';
 import styles from './page.module.css';
 
 const ADVISORS = [
@@ -15,7 +17,7 @@ const ADVISORS = [
     phone: "+56 9 5665 4833",
     cleanPhone: "56956654833",
     description: "Experta en entender necesidades y convertirlas en decisiones seguras. Siempre con una sonrisa y soluciones prácticas.",
-    message: "Hola Marcela, vengo del correo y me gustaría conversar sobre los terrenos en El Tabo 👋"
+    message: "Hola Marcela, vengo del correo por el Especial del Día del Padre y me interesa el Mystery Box 🎁"
   },
   {
     name: "Orlando Costa",
@@ -24,7 +26,7 @@ const ADVISORS = [
     phone: "+56 9 7307 7128",
     cleanPhone: "56973077128",
     description: "Cercano, claro y confiable. Te acompaña paso a paso para encontrar el terreno perfecto según tus metas.",
-    message: "Hola Orlando, vengo del correo y me gustaría conversar sobre los terrenos en El Tabo 👋"
+    message: "Hola Orlando, vengo del correo por el Especial del Día del Padre y me interesa el Mystery Box 🎁"
   }
 ];
 
@@ -42,34 +44,79 @@ export default function AsesoresClient() {
     }
   };
 
+  const trackContactClick = (method: 'WhatsApp' | 'Phone', advisorName: string, projectName: string = 'General') => {
+    // 1. Server-side tracking via Meta Conversions API (CAPI)
+    trackMetaEvent('Contact', {}, {
+      method,
+      advisor: advisorName,
+      project: projectName,
+      page: 'asesores_landing'
+    });
+
+    // 2. Client-side tracking via Meta Pixel
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Contact', {
+        content_category: 'Advisors Landing Campaign',
+        content_name: `Contact ${advisorName} via ${method}`,
+        content_ids: [projectName],
+        value: method === 'WhatsApp' ? 12 : 6,
+        currency: 'USD'
+      });
+    }
+  };
+
   return (
     <div className={styles.page}>
+      {/* Meta Pixel & Conversions API Page View Event */}
+      <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Fathers Day Mystery Box Advisors Campaign' }} />
+
       {/* Animated Background Spheres */}
       <div className={styles.heroGlowContainer}>
         <div className={styles.glowSphere1} />
         <div className={styles.glowSphere2} />
       </div>
 
-      {/* Hero Header */}
+      {/* Hero Header - Father's Day & Mystery Box Special */}
       <section className={styles.hero}>
         <div className="container">
           <div className={styles.heroContent}>
-            <span className={styles.heroLabel}>
-              Contacto Directo
-            </span>
+            <div className={styles.fathersDayTag}>
+              <Sparkles size={14} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle' }} />
+              {FATHERS_DAY_PROMO.tag}
+            </div>
             <h1 className={styles.heroTitle}>
-              Encuentra tu terreno ideal <br /> con la ayuda de <span>nuestros asesores</span>
+              ¡Mystery Box de Regalo <br /> para Papá en su día! 🎁
             </h1>
             <p className={styles.heroSubtitle}>
-              Estamos listos para ayudarte de inmediato. Resuelve tus dudas sobre financiamiento, visitas y el proceso legal de compra con un solo click.
+              Este Día del Padre, llévate una Mystery Box exclusiva al reservar o comprar tu terreno directamente con nosotros. ¡Asegura tu lote hoy y celebra con el mejor regalo!
             </p>
+            <div style={{ marginTop: '2.5rem', display: 'flex', gap: '1.2rem', flexWrap: 'wrap' }}>
+              <button onClick={handleScrollToAdvisors} className={styles.scheduleBtn}>
+                Hablar con un asesor de una
+              </button>
+              <a 
+                href="#projects-section" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
+                }} 
+                className={styles.callBtn} 
+                style={{ padding: '1.1rem 2rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                Ver terrenos disponibles
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Advisors Grid Section */}
+      {/* Advisors Grid Section (Moved right after Hero) */}
       <section id="advisors-section" className={styles.advisorsSection}>
         <div className="container">
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionLabel}>Contacto Directo</span>
+            <h2 className={styles.sectionTitle} style={{ color: '#ffffff' }}>Nuestros Asesores Inmobiliarios</h2>
+          </div>
           <div className={styles.advisorsGrid}>
             {ADVISORS.map((advisor, index) => {
               const waUrl = `https://wa.me/${advisor.cleanPhone}?text=${encodeURIComponent(advisor.message)}`;
@@ -78,7 +125,8 @@ export default function AsesoresClient() {
                   key={advisor.name}
                   className={styles.advisorCard}
                   initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.15 }}
                 >
                   <div className={styles.avatarWrapper}>
@@ -88,7 +136,6 @@ export default function AsesoresClient() {
                       width={130}
                       height={130}
                       className={styles.avatar}
-                      priority
                     />
                   </div>
                   <span className={styles.advisorRole}>{advisor.role}</span>
@@ -101,6 +148,7 @@ export default function AsesoresClient() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`${styles.actionBtn} ${styles.whatsappBtn} crm-track-click`}
+                      onClick={() => trackContactClick('WhatsApp', advisor.name)}
                       data-crm-name={`WhatsApp Asesor - asesores page - ${advisor.name}`}
                       data-crm-category="Contacto Asesor"
                     >
@@ -110,6 +158,7 @@ export default function AsesoresClient() {
                     <a
                       href={`tel:${advisor.phone.replace(/\s+/g, '')}`}
                       className={`${styles.actionBtn} ${styles.callBtn} crm-track-click`}
+                      onClick={() => trackContactClick('Phone', advisor.name)}
                       data-crm-name={`Llamar Asesor - asesores page - ${advisor.name}`}
                       data-crm-category="Llamada Asesor"
                     >
@@ -124,46 +173,8 @@ export default function AsesoresClient() {
         </div>
       </section>
 
-      {/* Father's Day Special Section */}
-      <section className={styles.fathersDayPromo}>
-        <div className="container">
-          <motion.div 
-            className={styles.fathersDayCard}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className={styles.fathersDayInfo}>
-              <div className={styles.fathersDayTag}>
-                <Sparkles size={14} />
-                {FATHERS_DAY_PROMO.tag}
-              </div>
-              <h2 className={styles.fathersDayTitle}>¡Mystery Box de Regalo! 🎁</h2>
-              <p className={styles.fathersDayMessage}>
-                Este Día del Padre, llévate una Mystery Box exclusiva al reservar o comprar tu terreno directamente con nosotros. ¡Asegura tu lote hoy!
-              </p>
-            </div>
-            
-            <div className={styles.fathersDayActions}>
-              <a
-                href={FATHERS_DAY_PROMO.link}
-                className={`${styles.scheduleBtn} crm-track-click`}
-                data-crm-name="Agendar Visita - Dia del Padre - Pagina Asesores"
-                data-crm-category="Agendamiento"
-              >
-                {FATHERS_DAY_PROMO.cta}
-              </a>
-              <span onClick={handleScrollToAdvisors} className={styles.contactTeamLink}>
-                Hablar con un asesor primero
-              </span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Projects Section */}
-      <section className={styles.projectsSection}>
+      <section id="projects-section" className={styles.projectsSection}>
         <div className="container">
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Nuestros Lotes</span>
@@ -220,7 +231,7 @@ export default function AsesoresClient() {
                         </span>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                           {ADVISORS.map((adv) => {
-                            const projectMsg = `Hola ${adv.name}, vengo del correo y me interesa obtener más información sobre el proyecto ${project.name} 🏠`;
+                            const projectMsg = `Hola ${adv.name}, vengo del correo y me interesa obtener más información sobre el proyecto ${project.name} por la promo del Día del Padre 🏠`;
                             const projectWaUrl = `https://wa.me/${adv.cleanPhone}?text=${encodeURIComponent(projectMsg)}`;
                             return (
                               <a
@@ -229,6 +240,7 @@ export default function AsesoresClient() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={`${styles.askAsesorBtn} crm-track-click`}
+                                onClick={() => trackContactClick('WhatsApp', adv.name, project.name)}
                                 data-crm-name={`Consultar Proyecto ${project.name} - ${adv.name}`}
                                 data-crm-category="Contacto Proyecto"
                                 style={{ fontSize: '0.8rem', padding: '0.7rem' }}
