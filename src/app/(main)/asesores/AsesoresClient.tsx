@@ -90,21 +90,45 @@ export default function AsesoresClient() {
 
       {/* Hero Header - Father's Day & Mystery Box Special */}
       <section className={styles.hero}>
-        <div className="container">
+        {/* Full-bleed background image */}
+        <Image
+          src="/images/hero/asesores-hero.png"
+          alt="Nuestros Asesores Inmobiliarios en El Tabo"
+          fill
+          priority
+          unoptimized
+          className={styles.heroBgImage}
+          sizes="100vw"
+        />
+        {/* Dark gradient overlay */}
+        <div className={styles.heroOverlay} />
+
+        <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroContent}>
             <div className={styles.fathersDayTag}>
               <Sparkles size={14} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle' }} />
               {FATHERS_DAY_PROMO.tag}
             </div>
             <h1 className={styles.heroTitle}>
-              ¡Mystery Box de Regalo <br /> para Papá en su día! 🎁
+              <span className={styles.desktopText}>
+                ¡Feliz Día del Padre! 🎁
+              </span>
+              <span className={styles.mobileText}>
+                ¡Feliz Día <br /> del Padre! 🎁
+              </span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Este Día del Padre, llévate una Mystery Box exclusiva al reservar o comprar tu terreno directamente con nosotros. ¡Asegura tu lote hoy y celebra con el mejor regalo!
+              <span className={styles.desktopText}>
+                Reserva tu terreno con Alimin este 20 y 21 de Junio y recibe una Mystery Box exclusiva de regalo. ¡Celebra con el mejor regalo!
+              </span>
+              <span className={styles.mobileText}>
+                Reserva este 20 y 21 de Junio y recibe tu Mystery Box.
+              </span>
             </p>
-            <div style={{ marginTop: '2.5rem', display: 'flex', gap: '1.2rem', flexWrap: 'wrap' }}>
+            <div className={styles.heroButtons}>
               <button onClick={handleScrollToAdvisors} className={styles.scheduleBtn}>
-                Hablar con un asesor de una
+                <span className={styles.desktopText}>Hablar con un asesor de una</span>
+                <span className={styles.mobileText}>Hablar con asesor</span>
               </button>
               <a 
                 href="#projects-section" 
@@ -112,15 +136,16 @@ export default function AsesoresClient() {
                   e.preventDefault();
                   document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
                 }} 
-                className={styles.callBtn} 
-                style={{ padding: '1.1rem 2rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                className={styles.callBtn}
               >
-                Ver terrenos disponibles
+                <span className={styles.desktopText}>Ver terrenos disponibles</span>
+                <span className={styles.mobileText}>Ver terrenos</span>
               </a>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Advisors Grid Section (Moved right after Hero) */}
       <section id="advisors-section" className={styles.advisorsSection}>
@@ -224,7 +249,6 @@ export default function AsesoresClient() {
                         </span>
                       ))}
                     </div>
-                    
                     <div className={styles.projectMetaGrid}>
                       <div>
                         <div className={styles.projectMetaLabel}>Tamaño lotes</div>
@@ -237,11 +261,11 @@ export default function AsesoresClient() {
                     </div>
 
                     {isAvailable && (
-                      <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.50rem' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#ffffff', textAlign: 'center', display: 'block', marginBottom: '0.2rem' }}>
+                      <div className={styles.consultContainer}>
+                        <span className={styles.consultTitle}>
                           Consultar por este proyecto:
                         </span>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                        <div className={styles.consultAdvisorsGrid}>
                           {ADVISORS.map((adv) => {
                             const projectMsg = `Hola ${adv.name}, vengo del correo y me interesa obtener más información sobre el proyecto ${project.name} por la promo del Día del Padre 🏠`;
                             const projectWaUrl = `https://wa.me/${adv.cleanPhone}?text=${encodeURIComponent(projectMsg)}`;
@@ -255,7 +279,6 @@ export default function AsesoresClient() {
                                 onClick={() => trackContactClick('WhatsApp', adv.name, project.name)}
                                 data-crm-name={`Consultar Proyecto ${project.name} - ${adv.name}`}
                                 data-crm-category="Contacto Proyecto"
-                                style={{ fontSize: '0.8rem', padding: '0.7rem' }}
                               >
                                 <WhatsAppIcon size={14} />
                                 con {adv.name.split(' ')[0]}
