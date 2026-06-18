@@ -29,7 +29,7 @@ export const FATHERS_DAY_PROMO = {
     tag: '🎁 Día del Padre',
     message: '¡Ven a visitarnos para este Día del Padre y recibe tu regalo secreto! 👔',
     cta: 'Agendar Visita',
-    link: '/reunion'
+    link: '/asesores'
 } as const
 
 

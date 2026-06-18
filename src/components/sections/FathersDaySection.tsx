@@ -89,7 +89,7 @@ export default function FathersDaySection() {
 
                         <div className={styles.ctaWrapper}>
                             <Link 
-                                href="/reunion" 
+                                href="/asesores" 
                                 className={`${styles.btnCta} crm-track-click`}
                                 data-crm-name="Agenda tu visita - Seccion Dia Padre"
                                 data-crm-category="Contacto Agendamiento"
