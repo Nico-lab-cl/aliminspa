@@ -58,7 +58,7 @@ export default function AsesoresClient() {
               Contacto Directo
             </span>
             <h1 className={styles.heroTitle}>
-              Encuentra tu terreno ideal con la ayuda de <span>nuestros asesores</span>
+              Encuentra tu terreno ideal <br /> con la ayuda de <span>nuestros asesores</span>
             </h1>
             <p className={styles.heroSubtitle}>
               Estamos listos para ayudarte de inmediato. Resuelve tus dudas sobre financiamiento, visitas y el proceso legal de compra con un solo click.
@@ -139,9 +139,9 @@ export default function AsesoresClient() {
                 <Sparkles size={14} />
                 {FATHERS_DAY_PROMO.tag}
               </div>
-              <h2 className={styles.fathersDayTitle}>¡Regalo Secreto para Papá!</h2>
+              <h2 className={styles.fathersDayTitle}>¡Mystery Box de Regalo! 🎁</h2>
               <p className={styles.fathersDayMessage}>
-                {FATHERS_DAY_PROMO.message} Agenda tu visita guiada con cualquiera de nuestros asesores para este fin de semana y reclama un obsequio especial al concretar tu recorrido.
+                Este Día del Padre, llévate una Mystery Box exclusiva al reservar o comprar tu terreno directamente con nosotros. ¡Asegura tu lote hoy!
               </p>
             </div>
             
@@ -171,8 +171,8 @@ export default function AsesoresClient() {
           </div>
           
           <div className={styles.projectsGrid}>
-            {PROJECTS.filter(project => project.id !== 'lomas-del-mar').map((project) => {
-              const isAvailable = project.status !== 'Proyecto Vendido';
+            {PROJECTS.filter(project => project.id !== 'libertad-y-alegria').map((project) => {
+              const isAvailable = (project.status as string) !== 'Proyecto Vendido';
               return (
                 <div key={project.id} className={styles.projectCard}>
                   <div className={styles.projectImageWrapper}>
