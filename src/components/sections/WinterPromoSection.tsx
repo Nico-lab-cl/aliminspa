@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from './FathersDaySection.module.css'
+import styles from './WinterPromoSection.module.css'
 
 const IMAGES = [
     {
@@ -14,19 +14,19 @@ const IMAGES = [
     },
     {
         src: '/images/fathers-day/gift_giving.jpg',
-        alt: 'Entrega de regalo especial del Día del Padre',
-        title: 'Una sorpresa especial para papá',
-        description: 'Porque algunas sorpresas no se cuentan... Se descubren.'
+        alt: 'Entrega de regalo especial Mystery Box',
+        title: 'Premios para toda la familia',
+        description: 'Porque algunas sorpresas no se cuentan... Se descubren en familia.'
     },
     {
         src: '/images/fathers-day/box_on_land.jpg',
         alt: 'Mystery Box de Alimin en el proyecto',
-        title: 'Mystery Box Exclusiva',
-        description: 'Durante junio, agenda tu visita y recibe tu Mystery Box.'
+        title: 'Mystery Box Extendida',
+        description: 'Durante todo junio, agenda tu visita de vacaciones y recibe tu Mystery Box.'
     }
 ]
 
-export default function FathersDaySection() {
+export default function WinterPromoSection() {
     const [activeIndex, setActiveIndex] = useState(0)
 
     useEffect(() => {
@@ -37,26 +37,26 @@ export default function FathersDaySection() {
     }, [])
 
     return (
-        <section className={styles.section} id="dia-del-padre">
+        <section className={styles.section} id="vacaciones-de-invierno">
             <div className={`container ${styles.container}`}>
                 <div className={styles.grid}>
                     <div className={styles.content}>
-                        <span className={styles.label}>Especial de Junio</span>
+                        <span className={styles.label}>Especial de Invierno</span>
                         <h2 className={styles.title}>
-                            Este Día del Padre... <br />
-                            <span className={styles.highlight}>Tu terreno es el regalo</span>
+                            Vacaciones de Invierno <br />
+                            <span className={styles.highlight}>¡Y Mystery Box de Regalo!</span>
                         </h2>
                         
                         <div className={styles.intro}>
                             <p className={styles.lead}>
-                                Hay regalos que se olvidan con el tiempo. <br />
-                                <strong>Pero hay decisiones que permanecen para siempre.</strong>
+                                Disfruta en familia y asegura tu futuro. <br />
+                                <strong>El Día del Padre terminó, ¡pero extendemos la Mystery Box por todo Junio!</strong>
                             </p>
                             <p className={styles.description}>
-                                Este mes queremos celebrar a quienes construyen el futuro de su familia. 
-                                Durante todo junio, todos los papás que agenden una visita a nuestros proyectos 
-                                recibirán una <strong>Mystery Box exclusiva de Alimin</strong>. 
-                                La caja guarda una sorpresa, pero tu terreno guarda tu futuro.
+                                Queremos que estas vacaciones de invierno sean inolvidables. 
+                                A quienes nos visiten junto a su familia durante este mes y reserven su terreno, 
+                                les entregaremos una <strong>Mystery Box exclusiva de Alimin</strong> repleta de premios y sorpresas. 
+                                ¡La mejor inversión para tu familia está aquí!
                             </p>
                         </div>
 
@@ -82,7 +82,7 @@ export default function FathersDaySection() {
                             <div className={styles.featureItem}>
                                 <div className={styles.featureCheck}>🎁</div>
                                 <div className={styles.featureText}>
-                                    <strong>Mystery Box Exclusiva:</strong> Un regalo especial que se descubre en tu visita.
+                                    <strong>Mystery Box Extendida:</strong> Premios y sorpresas para quienes nos visiten y reserven.
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ export default function FathersDaySection() {
                             <Link 
                                 href="/asesores" 
                                 className={`${styles.btnCta} crm-track-click`}
-                                data-crm-name="Agenda tu visita - Seccion Dia Padre"
+                                data-crm-name="Agenda tu visita - Seccion Vacaciones de Invierno"
                                 data-crm-category="Contacto Agendamiento"
                             >
                                 AGENDA TU VISITA

@@ -175,48 +175,50 @@
 }
 
 
-/* Father's Day Banner Styles */
-.fathersDayBanner {
-    background: linear-gradient(90deg, #0d1b2a 0%, #1b263b 30%, #e0a96d 50%, #1b263b 70%, #0d1b2a 100%);
+/* Winter Banner Styles */
+.winterBanner {
+    background: linear-gradient(90deg, #0b1d33 0%, #1e3d59 30%, #76dbde 50%, #1e3d59 70%, #0b1d33 100%);
     background-size: 200% auto;
     animation: gradientShift 6s ease infinite;
 }
 
-.fathersDayBanner:hover {
-    background: linear-gradient(90deg, #132238 0%, #22324d 30%, #ecb77f 50%, #22324d 70%, #132238 100%);
+.winterBanner:hover {
+    background: linear-gradient(90deg, #112740 0%, #294e70 30%, #87ecee 50%, #294e70 70%, #112740 100%);
     background-size: 200% auto;
 }
 
-.fathersDayBanner::after {
-    background: linear-gradient(90deg, #e0a96d, #3b82f6, #f3e5ab, #e0a96d);
+.winterBanner::after {
+    background: linear-gradient(90deg, #76dbde, #1a8a7d, #ffffff, #76dbde);
     background-size: 300% 100%;
 }
 
-.fathersDayTag {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-    animation: pulseBlueGlow 1.8s infinite alternate;
+.winterTag {
+    background: linear-gradient(135deg, #0f4c81 0%, #1a8a7d 100%);
+    box-shadow: 0 0 10px rgba(26, 138, 125, 0.4);
+    animation: pulseTealGlow 1.8s infinite alternate;
 }
 
-@keyframes pulseBlueGlow {
+@keyframes pulseTealGlow {
     0% {
-        box-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 0 4px rgba(26, 138, 125, 0.3);
         transform: scale(0.97);
     }
     100% {
-        box-shadow: 0 0 14px rgba(59, 130, 246, 0.7);
+        box-shadow: 0 0 14px rgba(26, 138, 125, 0.7);
         transform: scale(1.03);
     }
 }
 
-.fathersDayCta {
-    background: linear-gradient(135deg, #e0a96d 0%, #b45309 100%);
-    box-shadow: 0 2px 6px rgba(224, 169, 109, 0.3);
+.winterCta {
+    background: linear-gradient(135deg, #1a8a7d 0%, #76dbde 100%);
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(118, 219, 222, 0.3);
 }
 
-.bannerLink:hover .fathersDayCta {
-    background: linear-gradient(135deg, #f3e5ab 0%, #e0a96d 100%) !important;
-    box-shadow: 0 4px 12px rgba(224, 169, 109, 0.6) !important;
+.bannerLink:hover .winterCta {
+    background: linear-gradient(135deg, #76dbde 0%, #ffffff 100%) !important;
+    color: #0b1d33 !important;
+    box-shadow: 0 4px 12px rgba(118, 219, 222, 0.6) !important;
 }
 
 /* Floating Elements */

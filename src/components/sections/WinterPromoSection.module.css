@@ -6,7 +6,7 @@
     position: relative;
 }
 
-/* Add an ambient gold orb in the background */
+/* Add an ambient cool teal/cyan orb in the background */
 .section::before {
     content: '';
     position: absolute;
@@ -15,7 +15,7 @@
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(197, 160, 89, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(118, 219, 222, 0.08) 0%, transparent 70%);
     filter: blur(50px);
     pointer-events: none;
     z-index: 0;

@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import styles from './PromoBanner.module.css'
-import { CONTEST, FATHERS_DAY_PROMO } from '@/lib/constants'
+import { CONTEST, WINTER_PROMO } from '@/lib/constants'
 
-type PromoType = typeof CONTEST | typeof FATHERS_DAY_PROMO
+type PromoType = typeof CONTEST | typeof WINTER_PROMO
 
 export default function PromoBanner() {
     const [isVisible, setIsVisible] = useState(false)
@@ -32,8 +32,8 @@ export default function PromoBanner() {
                 return now <= end
             }
 
-            if (isPromoActive(FATHERS_DAY_PROMO.endDate)) {
-                setActivePromo(FATHERS_DAY_PROMO)
+            if (isPromoActive(WINTER_PROMO.endDate)) {
+                setActivePromo(WINTER_PROMO)
                 setIsVisible(true)
             } else if (isPromoActive(CONTEST.endDate)) {
                 setActivePromo(CONTEST)
@@ -49,7 +49,7 @@ export default function PromoBanner() {
     if (!isVisible || !activePromo || pathname === '/cyber') return null
 
     const isExternal = activePromo.link.startsWith('http') && !activePromo.link.includes('aliminspa.cl')
-    const isFathersDay = activePromo.tag.includes('Padre')
+    const isWinterPromo = activePromo.tag.includes('Invierno')
 
     return (
         <Link 
@@ -58,14 +58,14 @@ export default function PromoBanner() {
             rel={isExternal ? "noopener noreferrer" : undefined}
             className={styles.bannerLink}
         >
-            <div className={`${styles.banner} ${isFathersDay ? styles.fathersDayBanner : ''}`}>
-                {/* Floating animated sparkles and icons for Father's Day */}
-                {isFathersDay && (
+            <div className={`${styles.banner} ${isWinterPromo ? styles.winterBanner : ''}`}>
+                {/* Floating animated sparkles and icons for Winter Promo */}
+                {isWinterPromo && (
                     <div className={styles.floatingContainer}>
-                        <span className={`${styles.floatingIcon} ${styles.icon1}`}>🎁</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon2}`}>👔</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon3}`}>✨</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon4}`}>👑</span>
+                        <span className={`${styles.floatingIcon} ${styles.icon1}`}>❄️</span>
+                        <span className={`${styles.floatingIcon} ${styles.icon2}`}>⛄</span>
+                        <span className={`${styles.floatingIcon} ${styles.icon3}`}>🎁</span>
+                        <span className={`${styles.floatingIcon} ${styles.icon4}`}>✨</span>
                     </div>
                 )}
                 
@@ -73,13 +73,13 @@ export default function PromoBanner() {
                     <div className={styles.marqueeTrack}>
                         {[1, 2, 3, 4].map((i) => (
                             <div key={i} className={styles.marqueeGroup} aria-hidden={i > 1 ? "true" : undefined}>
-                                <span className={`${styles.tag} ${isFathersDay ? styles.fathersDayTag : ''}`}>
+                                <span className={`${styles.tag} ${isWinterPromo ? styles.winterTag : ''}`}>
                                     {activePromo.tag}
                                 </span>
                                 <span className={styles.message}>
                                     {activePromo.message}
                                 </span>
-                                <span className={`${styles.cta} ${isFathersDay ? styles.fathersDayCta : ''}`}>
+                                <span className={`${styles.cta} ${isWinterPromo ? styles.winterCta : ''}`}>
                                     {activePromo.cta}
                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                         <line x1="7" y1="17" x2="17" y2="7"></line>

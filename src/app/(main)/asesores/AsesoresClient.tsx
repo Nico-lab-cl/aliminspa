@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { MessageCircle, Phone, Sparkles, HelpCircle, Check } from 'lucide-react';
-import { PROJECTS, FAQ_ITEMS, FATHERS_DAY_PROMO } from '@/lib/constants';
+import { PROJECTS, FAQ_ITEMS, WINTER_PROMO } from '@/lib/constants';
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView';
 import { trackMetaEvent } from '@/lib/track';
 import styles from './page.module.css';
@@ -29,7 +29,7 @@ const ADVISORS = [
     phone: "+56 9 5665 4833",
     cleanPhone: "56956654833",
     description: "Experta en entender necesidades y convertirlas en decisiones seguras. Siempre con una sonrisa y soluciones prácticas.",
-    message: "Hola Marcela, vengo del correo por el Especial del Día del Padre y me interesa el Mystery Box 🎁"
+    message: "Hola Marcela, me interesa agendar una visita por la promo de Vacaciones de Invierno y conocer la Mystery Box 🎁"
   },
   {
     name: "Orlando Costa",
@@ -38,7 +38,7 @@ const ADVISORS = [
     phone: "+56 9 7307 7128",
     cleanPhone: "56973077128",
     description: "Cercano, claro y confiable. Te acompaña paso a paso para encontrar el terreno perfecto según tus metas.",
-    message: "Hola Orlando, vengo del correo por el Especial del Día del Padre y me interesa el Mystery Box 🎁"
+    message: "Hola Orlando, me interesa agendar una visita por la promo de Vacaciones de Invierno y conocer la Mystery Box 🎁"
   }
 ];
 
@@ -80,7 +80,7 @@ export default function AsesoresClient() {
   return (
     <div className={styles.page}>
       {/* Meta Pixel & Conversions API Page View Event */}
-      <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Fathers Day Mystery Box Advisors Campaign' }} />
+      <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Winter Vacation Mystery Box Advisors Campaign' }} />
 
       {/* Animated Background Spheres */}
       <div className={styles.heroGlowContainer}>
@@ -107,22 +107,22 @@ export default function AsesoresClient() {
           <div className={styles.heroContent}>
             <div className={styles.fathersDayTag}>
               <Sparkles size={14} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle' }} />
-              {FATHERS_DAY_PROMO.tag}
+              {WINTER_PROMO.tag}
             </div>
             <h1 className={styles.heroTitle}>
               <span className={styles.desktopText}>
-                ¡Feliz Día del Padre! 🎁
+                Vacaciones de Invierno: ¡Mystery Box! 🎁
               </span>
               <span className={styles.mobileText}>
-                ¡Feliz Día <br /> del Padre! 🎁
+                Vacaciones: <br /> ¡Mystery Box! 🎁
               </span>
             </h1>
             <p className={styles.heroSubtitle}>
               <span className={styles.desktopText}>
-                Reserva tu terreno con Alimin este 20 y 21 de Junio y recibe una Mystery Box exclusiva de regalo. ¡Celebra con el mejor regalo!
+                El Día del Padre terminó, pero extendemos la Mystery Box por todo Junio. ¡Visítanos junto a tu familia estas vacaciones y reserva tu terreno!
               </span>
               <span className={styles.mobileText}>
-                Reserva este 20 y 21 de Junio y recibe tu Mystery Box.
+                ¡Extendemos la Mystery Box por todo Junio! Visítanos estas vacaciones.
               </span>
             </p>
             <div className={styles.heroButtons}>
@@ -267,7 +267,7 @@ export default function AsesoresClient() {
                         </span>
                         <div className={styles.consultAdvisorsGrid}>
                           {ADVISORS.map((adv) => {
-                            const projectMsg = `Hola ${adv.name}, vengo del correo y me interesa obtener más información sobre el proyecto ${project.name} por la promo del Día del Padre 🏠`;
+                            const projectMsg = `Hola ${adv.name}, me interesa obtener más información sobre el proyecto ${project.name} por la promo de Vacaciones de Invierno 🏠`;
                             const projectWaUrl = `https://wa.me/${adv.cleanPhone}?text=${encodeURIComponent(projectMsg)}`;
                             return (
                               <a
