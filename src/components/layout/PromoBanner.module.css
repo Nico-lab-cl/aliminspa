@@ -221,6 +221,53 @@
     box-shadow: 0 4px 12px rgba(118, 219, 222, 0.6) !important;
 }
 
+/* MiniPie Banner Styles */
+.minipieBanner {
+    background: linear-gradient(90deg, #0a2a0a 0%, #1a4d1a 28%, #76d845 50%, #1a4d1a 72%, #0a2a0a 100%);
+    background-size: 200% auto;
+    animation: gradientShift 6s ease infinite;
+}
+
+.minipieBanner:hover {
+    background: linear-gradient(90deg, #0f3a0f 0%, #246624 28%, #8be85a 50%, #246624 72%, #0f3a0f 100%);
+    background-size: 200% auto;
+}
+
+.minipieBanner::after {
+    background: linear-gradient(90deg, #76d845, #4ba646, #c8f5a0, #76d845);
+    background-size: 300% 100%;
+}
+
+.minipieTag {
+    background: linear-gradient(135deg, #4ba646 0%, #76d845 100%);
+    box-shadow: 0 0 10px rgba(118, 216, 69, 0.45);
+    animation: pulseGreenGlow 1.8s infinite alternate;
+}
+
+@keyframes pulseGreenGlow {
+    0% {
+        box-shadow: 0 0 4px rgba(118, 216, 69, 0.3);
+        transform: scale(0.97);
+    }
+    100% {
+        box-shadow: 0 0 16px rgba(118, 216, 69, 0.75);
+        transform: scale(1.03);
+    }
+}
+
+.minipieCta {
+    background: linear-gradient(135deg, #4ba646 0%, #76d845 100%);
+    color: #0a2a0a !important;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(118, 216, 69, 0.35);
+}
+
+.bannerLink:hover .minipieCta {
+    background: linear-gradient(135deg, #8be85a 0%, #ffffff 100%) !important;
+    color: #0a2a0a !important;
+    box-shadow: 0 4px 12px rgba(118, 216, 69, 0.6) !important;
+}
+
 /* Floating Elements */
 .floatingContainer {
     position: absolute;

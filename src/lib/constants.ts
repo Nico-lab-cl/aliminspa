@@ -32,6 +32,14 @@ export const WINTER_PROMO = {
     link: '/asesores'
 } as const
 
+export const MINIPIE_PROMO = {
+    endDate: '2026-08-31',
+    tag: '🔥 Pie Mínimo',
+    message: '¡Tu terreno en el Litoral Central con el pie más bajo del mercado! Pie desde $1.500.000 · Sin banco · No nos importa tu Dicom.',
+    cta: 'Ver promoción',
+    link: '/minipie?utm_source=banner&utm_medium=web&utm_campaign=minipie'
+} as const
+
 
 
 export const PROJECTS = [
