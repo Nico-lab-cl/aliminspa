@@ -157,6 +157,38 @@
   border-color: transparent;
 }
 
+.linkFeatured {
+  background: linear-gradient(135deg, #1a4d1a 0%, #4ba646 50%, #1a4d1a 100%);
+  background-size: 200% auto;
+  border: 1px solid rgba(118, 216, 69, 0.55);
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 6px 22px rgba(118, 216, 69, 0.3);
+  animation: featuredPulse 2s ease-in-out infinite;
+}
+
+.linkFeatured:hover {
+  transform: translateY(-4px);
+  background: linear-gradient(135deg, #246624 0%, #76d845 50%, #246624 100%);
+  background-size: 200% auto;
+  color: #0a2a0a;
+  border-color: transparent;
+  box-shadow: 0 12px 30px rgba(118, 216, 69, 0.5);
+}
+
+.linkFeatured:hover svg {
+  transform: translateX(2px) scale(1.1);
+}
+
+@keyframes featuredPulse {
+  0%, 100% {
+    box-shadow: 0 6px 18px rgba(118, 216, 69, 0.25);
+  }
+  50% {
+    box-shadow: 0 6px 28px rgba(118, 216, 69, 0.55);
+  }
+}
+
 .link svg {
   transition: transform 0.3s ease;
 }

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Globe, Map, Sunset, Trees, Calendar, MessageCircle, ShieldCheck, Users, PiggyBank } from 'lucide-react';
+import { Globe, Map, Sunset, Trees, Calendar, MessageCircle, ShieldCheck, Users, PiggyBank, Flame } from 'lucide-react';
 import styles from './page.module.css';
 
 export const metadata = {
@@ -39,6 +39,12 @@ const LinkedinIcon = ({ size }: { size: number }) => (
 
 export default function LinkInBio() {
   const links = [
+    {
+      title: 'PROMOCIÓN MINIPIE — Pie desde $1.500.000',
+      url: '/minipie?utm_source=linkinbio&utm_medium=bio&utm_campaign=minipie',
+      icon: <Flame size={20} />,
+      featured: true,
+    },
     {
       title: 'Página Web Oficial',
       url: '/',
@@ -128,7 +134,11 @@ export default function LinkInBio() {
 
       <section className={styles.linksContainer}>
         {links.map((link) => (
-          <Link key={link.url} href={link.url} className={styles.link}>
+          <Link
+            key={link.url}
+            href={link.url}
+            className={`${styles.link} ${link.featured ? styles.linkFeatured : ''}`}
+          >
             {link.icon}
             <span>{link.title}</span>
           </Link>
