@@ -1953,19 +1953,19 @@ export default function MiniPieClient() {
         <img src="/assets/minipie/favicon (1).png" alt="Alimin" style={{"width":"54px","height":"54px","objectFit":"contain","display":"block"}} />
         <div>
           <div style={{"font":"900 28px/1 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.02em"}}>ALIMIN</div>
-          <div style={{"font":"500 12px 'Roboto',sans-serif","color":"#76d845","marginTop":"3px"}}>Inmobiliaria SpA</div>
-          <div style={{"font":"400 11px 'Roboto',sans-serif","color":"rgba(255,255,255,.35)","marginTop":"1px"}}>Litoral Central, Chile</div>
+          <div style={{"font":"700 12px 'Roboto',sans-serif","color":"#0a2a0a","marginTop":"3px"}}>Inmobiliaria SpA</div>
+          <div style={{"font":"600 11px 'Roboto',sans-serif","color":"rgba(255,255,255,.9)","marginTop":"1px"}}>Litoral Central, Chile</div>
         </div>
       </div>
       
       <div style={{"display":"flex","flexDirection":"column","gap":"14px"}}>
         <div style={{"display":"flex","alignItems":"center","gap":"9px"}}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#76d845" strokeWidth="2" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <a href="mailto:bienesraices@aliminspa.cl" style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.75)","textDecoration":"none"}}>bienesraices@aliminspa.cl</a>
+          <a href="mailto:bienesraices@aliminspa.cl" style={{"font":"700 14px 'Roboto',sans-serif","color":"#fff","textDecoration":"none"}}>bienesraices@aliminspa.cl</a>
         </div>
         
         <div style={{"display":"flex","gap":"12px","alignItems":"center"}}>
-          <span style={{"font":"500 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.35)"}}>Síguenos:</span>
+          <span style={{"font":"700 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.9)"}}>Síguenos:</span>
           <a href="https://www.instagram.com/aliminspa" target="_blank" rel="noopener" style={{"width":"36px","height":"36px","background":"rgba(255,255,255,.08)","border":"1px solid rgba(255,255,255,.12)","borderRadius":"10px","display":"flex","alignItems":"center","justifyContent":"center","color":"#fff","transition":"background .2s"}} >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg>
           </a>
@@ -1980,8 +1980,8 @@ export default function MiniPieClient() {
     </div>
     
     <div className="footer-bottom">
-      <span style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.3)"}}>© 2026 Alimin SpA · aliminspa.cl/minipie · Todos los derechos reservados</span>
-      <span style={{"font":"400 11px 'Roboto',sans-serif","color":"rgba(255,255,255,.18)"}}>Promoción sujeta a disponibilidad de cupos</span>
+      <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.85)"}}>© 2026 Alimin SpA · aliminspa.cl/minipie · Todos los derechos reservados</span>
+      <span style={{"font":"600 11px 'Roboto',sans-serif","color":"rgba(255,255,255,.7)"}}>Promoción sujeta a disponibilidad de cupos</span>
     </div>
   </div>
 </footer>
