@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, FormEvent, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -9,6 +9,7 @@ import { Clock, ShieldCheck, Check, CheckCircle, MessageCircle, Phone, ArrowRigh
 import { SITE, PROJECTS, CONTEST } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import Testimonials from '@/components/sections/Testimonials'
+import { getUtmParams } from '@/lib/track'
 import styles from './page.module.css'
 
 const ADVISORS = [
@@ -56,7 +57,6 @@ interface CyberFormProps {
 }
 
 function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
-    const searchParams = useSearchParams()
     const router = useRouter()
     
     const [form, setForm] = useState({
@@ -91,13 +91,11 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
             const fbp = getCookie('_fbp')
             const fbc = getCookie('_fbc')
 
-            const utm_data = {
-                utm_source: searchParams.get('utm_source') || 'cyber_monday_landing',
-                utm_medium: searchParams.get('utm_medium') || 'web',
-                utm_campaign: searchParams.get('utm_campaign') || 'cyber_monday_2026',
-                utm_content: searchParams.get('utm_content'),
-                utm_term: searchParams.get('utm_term'),
-            }
+            const utm_data = getUtmParams({
+                utm_source: 'cyber_monday_landing',
+                utm_medium: 'web',
+                utm_campaign: 'cyber_monday_2026',
+            })
 
             const res = await fetch('/api/leads', {
                 method: 'POST',
@@ -239,7 +237,6 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
 }
 
 export default function CyberPageClient() {
-    const searchParams = useSearchParams()
     const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' })
     const [proyectoInteres, setProyectoInteres] = useState('')
 
@@ -305,11 +302,7 @@ export default function CyberPageClient() {
     // Capture current UTM params and forward to external domain for "Ver Detalles"
     const getLomasLink = () => {
         const baseUrl = 'https://aliminlomasdelmar.com'
-        const params = new URLSearchParams()
-        
-        searchParams.forEach((value, key) => {
-            params.set(key, value)
-        })
+        const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
 
         if (!params.has('utm_source')) params.set('utm_source', 'aliminspa')
         if (!params.has('utm_medium')) params.set('utm_medium', 'cyber_page')
@@ -351,6 +344,9 @@ export default function CyberPageClient() {
 
                         {/* Right column: Active Cyber Elements */}
                         <motion.div variants={fadeInUp} className={styles.heroActions}>
+                            <h1 style={{ font: "800 clamp(1.5rem,3.4vw,2.3rem)/1.15 'Montserrat', sans-serif", color: '#ffffff', letterSpacing: '-0.02em', margin: '0 0 4px' }}>
+                                Cyber Inmobiliario: Terrenos en El Tabo con Rol Propio y Sin Banco
+                            </h1>
                             {/* Countdown (Glassmorphic border/background) */}
                             <div className={styles.countdownWrapper}>
                                 <span className={styles.countdownLabel}>La promoción termina en:</span>

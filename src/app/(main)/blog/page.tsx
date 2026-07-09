@@ -4,7 +4,7 @@ import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import BlogClient from './BlogClient'
 
 export const metadata: Metadata = {
-    title: 'Blog Inmobiliario: Consejos, Guías y Aspectos Legales | Alimin Inmobiliaria',
+    title: 'Blog Inmobiliario: Consejos, Guías y Aspectos Legales',
     description: 'Aprende todo lo necesario para comprar parcelas y terrenos en El Tabo y el Litoral Central. Guías de Rol Propio, plusvalía, urbanización y consejos legales.',
     alternates: { canonical: `${SITE.url}/blog` },
     openGraph: {

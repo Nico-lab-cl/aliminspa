@@ -1,15 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { trackMetaEvent } from '@/lib/track'
+import { trackMetaEvent, getUtmParams } from '@/lib/track'
 
 export default function MiniPieClient() {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   // Form State
   const [form, setForm] = useState({
@@ -78,13 +77,11 @@ export default function MiniPieClient() {
       const fbp = getCookie('_fbp')
       const fbc = getCookie('_fbc')
 
-      const utm_data = {
-        utm_source: searchParams.get('utm_source') || 'minipie_landing',
-        utm_medium: searchParams.get('utm_medium') || 'web',
-        utm_campaign: searchParams.get('utm_campaign') || 'minipie_2026',
-        utm_content: searchParams.get('utm_content'),
-        utm_term: searchParams.get('utm_term'),
-      }
+      const utm_data = getUtmParams({
+        utm_source: 'minipie_landing',
+        utm_medium: 'web',
+        utm_campaign: 'minipie_2026',
+      })
 
       // Map telefono to celular, concatenate region to ciudad, send campaign data in project
       const mappedPayload = {

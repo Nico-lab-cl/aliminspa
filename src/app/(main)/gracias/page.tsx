@@ -8,7 +8,7 @@ import { AdvisorsSection } from '@/components/sections/AdvisorsSection'
 import styles from './Gracias.module.css'
 
 export const metadata: Metadata = {
-    title: '¡Gracias por contactarnos! - Alimin Inmobiliaria',
+    title: '¡Gracias por contactarnos!',
     description: 'Hemos recibido tus datos con éxito. Un asesor de Alimin Inmobiliaria se pondrá en contacto contigo a la brevedad.',
     robots: 'noindex, follow', // Perfect for Google Ads conversion pages
 }

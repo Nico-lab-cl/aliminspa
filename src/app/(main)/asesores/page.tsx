@@ -5,7 +5,7 @@ import { BreadcrumbSchema } from '@/components/seo/JsonLd';
 import AsesoresClient from './AsesoresClient';
 
 export const metadata: Metadata = {
-    title: 'Nuestros Asesores Comerciales | Alimin Inmobiliaria',
+    title: 'Nuestros Asesores Comerciales',
     description: 'Ponte en contacto directo y al instante con nuestros asesores comerciales por WhatsApp o teléfono. Consulta sobre terrenos y financiamiento en El Tabo.',
     alternates: { canonical: `${SITE.url}/asesores` },
 };

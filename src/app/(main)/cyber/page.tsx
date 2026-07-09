@@ -5,7 +5,7 @@ import { BreadcrumbSchema } from '@/components/seo/JsonLd'
 import CyberPageClient from './CyberPageClient'
 
 export const metadata: Metadata = {
-    title: 'Cyber Monday: Terrenos con Facilidades en El Tabo | Alimin Inmobiliaria',
+    title: 'Cyber Monday: Terrenos con Facilidades en El Tabo',
     description: 'Aprovecha nuestra promoción Cyber: Terrenos con Rol Propio en El Tabo. Pago del pie en 3 cuotas sin interés y asesoría legal 100% gratuita. ¡Reserva hoy!',
     alternates: { canonical: `${SITE.url}/cyber` },
 }

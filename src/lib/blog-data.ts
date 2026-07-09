@@ -33,7 +33,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '6 min de lectura',
         tags: ['Rol Propio', 'Aspectos Legales', 'Conservador de Bienes Raíces', 'Inversión Segura'],
-        metaTitle: '¿Qué es el Rol Propio en Chile? Guía Legal Completa | Alimin Inmobiliaria',
+        metaTitle: '¿Qué es el Rol Propio en Chile? Guía Legal Completa',
         metaDescription: 'Evita estafas inmobiliarias. Conoce qué es el Rol Propio, cómo se inscribe un terreno en el CBR y por qué es fundamental para ser el dueño exclusivo de tu lote.',
         content: `
             <p>Al buscar terrenos en venta en el Litoral Central o en cualquier región de Chile, una de las frases más repetidas por las inmobiliarias serias es: <strong>"Terrenos con Rol Propio"</strong>. Pero, ¿sabes realmente qué significa este término y por qué comprar un lote sin él puede convertirse en la peor pesadilla financiera de tu vida?</p>
@@ -127,7 +127,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '5 min de lectura',
         tags: ['Inversión', 'Terrenos Urbanizados', 'El Tabo', 'Plusvalía', 'Litoral Central'],
-        metaTitle: '5 Ventajas de Terrenos Urbanizados en El Tabo | Alimin Inmobiliaria',
+        metaTitle: '5 Ventajas de Terrenos Urbanizados en El Tabo',
         metaDescription: '¿Vale la pena comprar terrenos urbanizados? Descubre las ventajas de contar con agua certificada por la Seremi, luz eléctrica y rol propio en El Tabo, Chile.',
         content: `
             <p>El Litoral Central de Chile, y en particular la comuna de <strong>El Tabo</strong>, se ha consolidado como uno de los polos de atracción inmobiliaria más dinámicos del país. Con el aumento del teletrabajo y el deseo de escapar del estrés de Santiago, la demanda de terrenos en la costa se ha disparado. Sin embargo, no todos los terrenos son iguales.</p>
@@ -178,7 +178,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '7 min de lectura',
         tags: ['Guía del Comprador', 'Litoral Central', 'Primer Terreno', 'Checklist', 'El Tabo'],
-        metaTitle: 'Guía de Compra de Terrenos en el Litoral Central | Alimin Inmobiliaria',
+        metaTitle: 'Guía de Compra de Terrenos en el Litoral Central',
         metaDescription: 'Todo lo que necesitas saber antes de comprar tu parcela o lote en la costa chilena. Requisitos legales, factibilidad de servicios y consejos de expertos.',
         content: `
             <p>Cumplir el sueño de tener una casa en la playa, a pocos minutos del mar y rodeado de naturaleza, comienza por una decisión fundamental: <strong>comprar el terreno indicado</strong>. El Litoral Central de Chile, que abarca balnearios emblemáticos como El Tabo, El Quisco y Algarrobo, ofrece excelentes opciones, pero requiere actuar con cautela y conocimiento técnico.</p>
@@ -245,7 +245,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '4 min de lectura',
         tags: ['Financiamiento', 'DICOM', 'Crédito Directo', 'Inversión', 'El Tabo'],
-        metaTitle: 'Comprar Terreno con DICOM y Financiamiento Directo | Alimin Inmobiliaria',
+        metaTitle: 'Comprar Terreno con DICOM y Financiamiento Directo',
         metaDescription: '¿Estás en DICOM y sueñas con tu terreno? En Alimin Inmobiliaria ofrecemos financiamiento directo sin requisitos bancarios para parcelas en El Tabo.',
         content: `
             <p>Una de las barreras más grandes para cumplir el sueño del terreno propio en Chile son las estrictas exigencias de la banca tradicional. Si tienes algún antecedente comercial desfavorable o estás en DICOM, conseguir un crédito hipotecario para una parcela de agrado se vuelve una tarea prácticamente imposible.</p>
@@ -293,7 +293,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '5 min de lectura',
         tags: ['Agua Potable', 'SEREMI de Salud', 'Urbanización', 'El Tabo', 'Regulación'],
-        metaTitle: 'Certificación de Agua SEREMI de Salud en Parcelas | Alimin Inmobiliaria',
+        metaTitle: 'Certificación de Agua SEREMI de Salud en Parcelas',
         metaDescription: 'Descubre qué significa que un loteo cuente con resolución de agua certificada por la SEREMI de Salud y por qué es obligatorio para construir de forma legal.',
         content: `
             <p>Cuando cotizas parcelas o terrenos en la costa de Chile, el suministro de agua suele ser la principal preocupación técnica. Muchos proyectos informales ofrecen "factibilidad por camión aljibe" o "pozo comunitario" sin contar con ninguna regulación legal. Sin embargo, para construir y vivir con total tranquilidad, es vital contar con **agua potable certificada por la SEREMI de Salud**.</p>
@@ -366,7 +366,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '6 min de lectura',
         tags: ['Loteo Brujo', 'Aspectos Legales', 'Derechos', 'CBR', 'Evitar Estafas'],
-        metaTitle: 'Loteos Brujos e Irregulares en Chile: Guía Legal | Alimin Inmobiliaria',
+        metaTitle: 'Loteos Brujos e Irregulares en Chile: Guía Legal',
         metaDescription: '¿Qué es un loteo irregular o brujo? Conoce la ley general de urbanismo, por qué vender cesión de derechos es ilegal y cómo protegerte al comprar terrenos.',
         content: `
             <p>La oferta de parcelas baratas en el campo o cerca de la playa en Chile ha crecido exponencialmente en los últimos años. Lamentablemente, junto a este auge, también han aumentado las estafas asociadas a los llamados <strong>"loteos brujos" o loteos irregulares</strong>. Comprar en estos sectores no solo te impide ser el dueño legal de tu lote, sino que constituye un delito sancionado por la ley chilena.</p>
@@ -418,7 +418,7 @@ export const BLOG_POSTS: BlogPost[] = [
         date: '2026-05-28',
         readTime: '5 min de lectura',
         tags: ['Aspectos Legales', 'CBR', 'SII', 'Checklist', 'El Tabo'],
-        metaTitle: 'Cómo Verificar la Legalidad de un Terreno | Alimin Inmobiliaria',
+        metaTitle: 'Cómo Verificar la Legalidad de un Terreno',
         metaDescription: 'Guía práctica para validar la legalidad de un terreno. Revisa los certificados del Conservador de Bienes Raíces (CBR) y evita estafas inmobiliarias en Chile.',
         content: `
             <p>La compra de un terreno es un hito emocionante, pero también una transacción financiera de gran envergadura. Desafortunadamente, la falta de información legal expone a muchos compradores a caer en ofertas irregulares o estafas directas. Para proteger tu dinero, es fundamental que adoptes una postura activa y verifiques exhaustivamente la legalidad del predio antes de firmar cualquier compromiso.</p>

@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, CSSProperties } from 'react'
-import { useSearchParams } from 'next/navigation'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { trackMetaEvent } from '@/lib/track'
+import { trackMetaEvent, getUtmParams } from '@/lib/track'
 import { REGIONES } from './regiones'
 import { FAQS } from './faqs'
 
@@ -49,8 +48,6 @@ const JLABELS = [
 ]
 
 export default function VentaTerrenosClient() {
-    const searchParams = useSearchParams()
-
     const [form, setForm] = useState({
         nombre: '', telefono: '', email: '', proyecto: '', tamano: '', region: '', comuna: '', como: '',
     })
@@ -124,13 +121,11 @@ export default function VentaTerrenosClient() {
             const fbp = getCookie('_fbp')
             const fbc = getCookie('_fbc')
 
-            const utm_data = {
-                utm_source: searchParams.get('utm_source') || 'venta_terrenos_seo',
-                utm_medium: searchParams.get('utm_medium') || 'organic',
-                utm_campaign: searchParams.get('utm_campaign') || 'venta_terrenos_litoral_central',
-                utm_content: searchParams.get('utm_content'),
-                utm_term: searchParams.get('utm_term'),
-            }
+            const utm_data = getUtmParams({
+                utm_source: 'venta_terrenos_seo',
+                utm_medium: 'organic',
+                utm_campaign: 'venta_terrenos_litoral_central',
+            })
 
             const detalle = [form.proyecto, form.tamano].filter(Boolean).join(' ')
             const payload = {

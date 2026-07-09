@@ -3,6 +3,31 @@
  * Calls the /api/track endpoint to trigger server-to-server events.
  */
 
+/**
+ * Reads UTM parameters from the current URL on the client.
+ * Used instead of next/navigation's useSearchParams(), which forces the whole
+ * page into a Suspense fallback and prevents server-side rendering of content
+ * (bad for SEO — crawlers see an empty page). Call this at submit time.
+ */
+export const getUtmParams = (defaults: Record<string, string> = {}) => {
+    const empty = {
+        utm_source: defaults.utm_source || null,
+        utm_medium: defaults.utm_medium || null,
+        utm_campaign: defaults.utm_campaign || null,
+        utm_content: (defaults.utm_content as string) || null,
+        utm_term: (defaults.utm_term as string) || null,
+    }
+    if (typeof window === 'undefined') return empty
+    const p = new URLSearchParams(window.location.search)
+    return {
+        utm_source: p.get('utm_source') || empty.utm_source,
+        utm_medium: p.get('utm_medium') || empty.utm_medium,
+        utm_campaign: p.get('utm_campaign') || empty.utm_campaign,
+        utm_content: p.get('utm_content') || empty.utm_content,
+        utm_term: p.get('utm_term') || empty.utm_term,
+    }
+}
+
 export const trackMetaEvent = async (
     eventName: string,
     userData: any = {},
