@@ -84,6 +84,11 @@ function JsonLd() {
             {
                 '@type': 'Product',
                 name: 'Terreno urbanizado Lomas del Mar, El Tabo (Litoral Central)',
+                image: [
+                    `${SITE.url}/assets/venta-terrenos/gallery/g10.webp`,
+                    `${SITE.url}/assets/venta-terrenos/gallery/g11.webp`,
+                    `${SITE.url}/assets/venta-terrenos/plano-lomas-del-mar.webp`,
+                ],
                 description:
                     'Terreno urbanizado de 200 a 390 m² en El Tabo, Litoral Central, con rol propio, agua y luz certificadas. Financiamiento directo sin banco ni DICOM.',
                 brand: { '@type': 'Brand', name: 'Alimin Inmobiliaria' },
@@ -100,6 +105,11 @@ function JsonLd() {
             {
                 '@type': 'Product',
                 name: 'Terreno urbanizado Arena y Sol, El Tabo (Litoral Central)',
+                image: [
+                    `${SITE.url}/assets/venta-terrenos/gallery/g01.webp`,
+                    `${SITE.url}/assets/venta-terrenos/gallery/g02.webp`,
+                    `${SITE.url}/assets/venta-terrenos/plano-arena-y-sol.webp`,
+                ],
                 description:
                     'Terreno urbanizado de 200 m² en El Tabo, Litoral Central, con rol propio, agua y luz certificadas. Últimos cupos, financiamiento directo sin banco.',
                 brand: { '@type': 'Brand', name: 'Alimin Inmobiliaria' },
