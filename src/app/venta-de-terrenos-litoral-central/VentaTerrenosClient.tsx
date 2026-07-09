@@ -274,7 +274,7 @@ export default function VentaTerrenosClient() {
 
                         <div style={s("display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px")}>
                             <a href="#terrenos" className="al-hero-proj" style={s("position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;border:1.5px solid rgba(118,216,69,.4);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .3s")}>
-                                <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-lomas-del-mar.webp'} alt="Loteo Lomas del Mar, terrenos en venta en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s ease")} /></div>
+                                <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-arena-y-sol.webp'} alt="Loteo Lomas del Mar, terrenos en venta en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s ease")} /></div>
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(8,16,24,.92) 6%,rgba(8,16,24,.15) 55%,transparent)")}></div>
                                 <div style={s("position:absolute;top:10px;left:10px;background:rgba(118,216,69,.9);color:#0e1a24;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>🔥 Promo Mini Pie</div>
                                 <div style={s("position:absolute;bottom:12px;left:13px;right:13px")}>
@@ -283,7 +283,7 @@ export default function VentaTerrenosClient() {
                                 </div>
                             </a>
                             <a href="#terrenos" className="al-hero-proj" style={s("position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;border:1.5px solid rgba(197,160,89,.4);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .3s")}>
-                                <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-arena-y-sol.webp'} alt="Arena y Sol, terrenos con vista al mar en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;transition:transform .5s ease")} /></div>
+                                <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-lomas-del-mar.webp'} alt="Arena y Sol, terrenos con vista al mar en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;transition:transform .5s ease")} /></div>
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(8,16,24,.92) 6%,rgba(8,16,24,.15) 55%,transparent)")}></div>
                                 <div style={s("position:absolute;top:10px;left:10px;background:rgba(239,68,68,.85);color:#fff;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>⚠ 90% vendido</div>
                                 <div style={s("position:absolute;bottom:12px;left:13px;right:13px")}>
