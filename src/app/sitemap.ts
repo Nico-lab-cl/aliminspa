@@ -53,6 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
+            url: `${baseUrl}/venta-de-terrenos-litoral-central`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
             url: `${baseUrl}/quienes-somos`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
