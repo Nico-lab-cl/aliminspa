@@ -56,7 +56,7 @@ export const PROJECTS = [
         status: 'Terrenos Disponibles',
         soldPercentage: 25,
         externalUrl: null,
-        image: '/images/projects/lomas-del-mar-v3.jpg',
+        image: '/images/projects/lomas-del-mar-flyer.jpg',
         color: '#006D77', // Deep sea teal
         isFeatured: true,
         financing: {
