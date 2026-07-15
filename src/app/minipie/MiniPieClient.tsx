@@ -1085,7 +1085,7 @@ export default function MiniPieClient() {
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Plazo</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>71 + 1 cuotas</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>72 cuotas</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Última cuota</span>
@@ -1220,7 +1220,7 @@ export default function MiniPieClient() {
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Plazo</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>87 + 1 cuotas</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>88 cuotas</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Última cuota</span>
@@ -1688,11 +1688,11 @@ export default function MiniPieClient() {
             <div className="terreno-btns">
               <button type="button" onClick={onTerreno200} style={{"background":t200SelectedBg,"border":t200SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t200SelectedColor,"marginBottom":"2px"}}>200 m²</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $1.500.000 · 71+1 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $1.500.000 · 72 cuotas $550K</div>
               </button>
               <button type="button" onClick={onTerreno390} style={{"background":t390SelectedBg,"border":t390SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t390SelectedColor,"marginBottom":"2px"}}>390 m² ✦</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $3.000.000 · 87+1 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $3.000.000 · 88 cuotas $550K</div>
               </button>
             </div>
           </div>
@@ -1841,7 +1841,7 @@ export default function MiniPieClient() {
           <span style={{"font":"700 22px 'Montserrat',sans-serif","color":"#4ba646","flexShrink":"0"}}>{faq1icon}</span>
         </button>
         <div style={{"maxHeight":faq1h,"overflow":"hidden","transition":"max-height .35s cubic-bezier(.16,1,.3,1)"}}>
-          <p style={{"padding":"0 22px 18px","font":"400 14px/1.7 'Roboto',sans-serif","color":"#4B5563"}}>Pagas el pie inicial y el saldo se financia directamente con Alimin. Sin banco, sin aval. El saldo se divide en cuotas mensuales de $550.000 a 0% de interés: 71+1 cuotas para 200 m² y 87+1 cuotas para 390 m².</p>
+          <p style={{"padding":"0 22px 18px","font":"400 14px/1.7 'Roboto',sans-serif","color":"#4B5563"}}>Pagas el pie inicial y el saldo se financia directamente con Alimin. Sin banco, sin aval. El saldo se divide en cuotas mensuales de $550.000 a 0% de interés: 72 cuotas para 200 m² y 88 cuotas para 390 m².</p>
         </div>
       </div>
       
