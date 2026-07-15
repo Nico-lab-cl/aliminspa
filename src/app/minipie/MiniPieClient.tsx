@@ -1085,7 +1085,11 @@ export default function MiniPieClient() {
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Plazo</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>71 cuotas</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>71 + 1 cuotas</span>
+              </div>
+              <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
+                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Última cuota</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$440.000</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Al contado</span>
@@ -1216,7 +1220,11 @@ export default function MiniPieClient() {
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Plazo</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>87 cuotas</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>87 + 1 cuotas</span>
+              </div>
+              <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
+                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Última cuota</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$140.000</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Al contado</span>
@@ -1680,11 +1688,11 @@ export default function MiniPieClient() {
             <div className="terreno-btns">
               <button type="button" onClick={onTerreno200} style={{"background":t200SelectedBg,"border":t200SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t200SelectedColor,"marginBottom":"2px"}}>200 m²</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $1.500.000 · 71 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $1.500.000 · 71+1 cuotas $550K</div>
               </button>
               <button type="button" onClick={onTerreno390} style={{"background":t390SelectedBg,"border":t390SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t390SelectedColor,"marginBottom":"2px"}}>390 m² ✦</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $3.000.000 · 87 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $3.000.000 · 87+1 cuotas $550K</div>
               </button>
             </div>
           </div>
