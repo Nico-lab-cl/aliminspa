@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { forwardNewsletterSubscriberToCrm } from '@/lib/crm-webhook'
 
 export async function POST(request: Request) {
     try {
@@ -19,6 +20,9 @@ export async function POST(request: Request) {
             update: { active: true },
             create: { email },
         })
+
+        // Enviar suscriptor al CRM en tiempo real (best-effort, nunca bloquea ni rompe el guardado)
+        await forwardNewsletterSubscriberToCrm({ email })
 
         return NextResponse.json({ success: true, id: subscriber.id }, { status: 201 })
     } catch (error) {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendMetaEvent } from '@/lib/meta-capi'
+import { forwardLeadToCrm } from '@/lib/crm-webhook'
 
 export async function POST(request: NextRequest) {
     try {
@@ -39,6 +40,20 @@ export async function POST(request: NextRequest) {
                 utm_content: utm_content || null,
                 utm_term: utm_term || null,
             },
+        })
+
+        // Enviar lead al CRM en tiempo real (best-effort, nunca bloquea ni rompe el guardado)
+        await forwardLeadToCrm({
+            nombre,
+            email,
+            celular,
+            ciudad,
+            proyecto,
+            utm_source,
+            utm_medium,
+            utm_campaign,
+            utm_content,
+            utm_term,
         })
 
         // Enviar evento a Meta Conversions API
