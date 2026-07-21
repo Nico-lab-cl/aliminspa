@@ -1,0 +1,66 @@
+'use client'
+
+import { useState, FormEvent } from 'react'
+import styles from './HomeNewsletter.module.css'
+
+export default function HomeNewsletter() {
+    const [email, setEmail] = useState('')
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        setStatus('loading')
+
+        try {
+            const res = await fetch('/api/newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            })
+
+            if (!res.ok) throw new Error('Error')
+
+            if (typeof window !== 'undefined' && (window as any).AliminCRM) {
+                ;(window as any).AliminCRM.identify({
+                    email: email,
+                    source: 'Newsletter',
+                }).catch((err: any) => console.error('Error de tracking CRM:', err))
+            }
+
+            setStatus('success')
+            setEmail('')
+            setTimeout(() => setStatus('idle'), 5000)
+        } catch {
+            setStatus('error')
+            setTimeout(() => setStatus('idle'), 4000)
+        }
+    }
+
+    return (
+        <section className={styles.section} id="newsletter">
+            <div className={styles.wrapper}>
+                <h3 className={styles.title}>Recibe las mejores oportunidades de terrenos</h3>
+                <p className={styles.desc}>Suscríbete y sé el primero en conocer nuevos proyectos y precios exclusivos.</p>
+
+                <form className={styles.form} onSubmit={handleSubmit} id="form-newsletter-home">
+                    <div className={styles.inputRow}>
+                        <input
+                            type="email"
+                            className={styles.input}
+                            placeholder="Tu correo electrónico"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            aria-label="Correo electrónico para newsletter"
+                        />
+                        <button type="submit" className={styles.btn} disabled={status === 'loading'}>
+                            {status === 'loading' ? '...' : 'Suscribirme'}
+                        </button>
+                    </div>
+                    {status === 'success' && <span className={styles.success}>✅ ¡Suscrito correctamente!</span>}
+                    {status === 'error' && <span className={styles.error}>❌ Error. Intenta de nuevo.</span>}
+                </form>
+            </div>
+        </section>
+    )
+}

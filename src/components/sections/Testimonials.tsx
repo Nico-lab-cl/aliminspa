@@ -1,101 +1,143 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import styles from './Testimonials.module.css'
 
-const TESTIMONIALS = [
-    { id: 1, src: '/images/testimonials/testimonio-1.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 2, src: '/images/testimonials/testimonio-2.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 3, src: '/images/testimonials/testimonio-3.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 4, src: '/images/testimonials/testimonio-4.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 5, src: '/images/testimonials/testimonio-5.webp', alt: 'Familia satisfecha Alimin' },
-    { id: 6, src: '/images/testimonials/testimonio-6.webp', alt: 'Familia satisfecha Alimin' },
-] as const
+const REVIEWS = [
+    {
+        initials: 'LB',
+        name: 'Liz Beth',
+        meta: 'Local Guide · 14 opiniones',
+        time: 'Hace 16 semanas',
+        gradient: 'linear-gradient(135deg,#4ba646,#325366)',
+        text: 'Excelente experiencia. Trámite rápido, ágil y muy confiable. Todo fue claro y bien gestionado 😊',
+    },
+    {
+        initials: 'RC',
+        name: 'Romina Cabrera',
+        meta: '2 opiniones · 11 fotos',
+        time: 'Hace 16 semanas',
+        gradient: 'linear-gradient(135deg,#76d845,#4ba646)',
+        text: 'Excelente experiencia, la gestión fue rápida y eficaz, me tenían al tanto de todo. ¡Feliz con mi inversión!',
+    },
+    {
+        initials: 'AP',
+        name: 'Álvaro Pinto',
+        meta: '2 opiniones',
+        time: 'Hace 16 semanas',
+        gradient: 'linear-gradient(135deg,#325366,#6ac28f)',
+        text: 'Muy responsables, todo genial. La gestión fue fantástica y el terreno está en perfectas condiciones.',
+    },
+    {
+        initials: 'RB',
+        name: 'Reina Barrios',
+        meta: 'Local Guide · 16 opiniones',
+        time: 'Hace 3 meses',
+        gradient: 'linear-gradient(135deg,#4ba646,#76d845)',
+        text: 'Muy buenos los proyectos, cerca al centro del Tabo, opciones de pago y fácil de llegar.',
+    },
+]
+
+const CLIENT_PHOTOS = [1, 2, 3, 4, 5, 6]
 
 export default function Testimonials() {
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const [itemsToShow, setItemsToShow] = useState(4)
-    const [selectedImage, setSelectedImage] = useState<typeof TESTIMONIALS[number] | null>(null)
+    const videoRef = useRef<HTMLVideoElement>(null)
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 1024) setItemsToShow(4)
-            else if (window.innerWidth >= 768) setItemsToShow(2)
-            else setItemsToShow(1)
-        }
-        handleResize()
-        window.addEventListener('resize', handleResize)
-        return () => window.removeEventListener('resize', handleResize)
-    }, [])
-
-    const goToPrev = () => {
-        setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - itemsToShow : prev - 1))
-    }
-
-    const goToNext = () => {
-        setCurrentIndex((prev) => (prev >= TESTIMONIALS.length - itemsToShow ? 0 : prev + 1))
+    const toggleVideo = () => {
+        const el = videoRef.current
+        if (!el) return
+        if (el.paused) el.play(); else el.pause()
     }
 
     return (
         <section className={styles.section} id="testimonios">
-            <div className="container">
+            <div className={styles.orb} />
+            <div className={`container ${styles.inner}`}>
                 <div className={styles.header}>
-                    <h2 className={styles.title}>
-                        +100 familias<br/>
-                        <span className={styles.highlight}>han invertido con nosotros</span>
-                    </h2>
+                    <span className={styles.kicker}>Clientes felices</span>
+                    <h2 className={styles.title}>Lo que dicen nuestros clientes</h2>
                 </div>
 
-                <div className={styles.carouselWrapper}>
-                    <button className={styles.navButton} onClick={goToPrev} aria-label="Anterior">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                    </button>
-
-                    <div className={styles.carouselContainer}>
-                        <div 
-                            className={styles.carouselTrack} 
-                            style={{ transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)` }}
-                        >
-                            {TESTIMONIALS.map((testimonial, i) => (
-                                <div 
-                                    key={testimonial.id} 
-                                    className={styles.slide}
-                                    style={{ flex: `0 0 ${100 / itemsToShow}%`, padding: '0 8px' }}
-                                >
-                                    <div className={styles.card} onClick={() => setSelectedImage(testimonial)}>
-                                        <Image
-                                            src={testimonial.src}
-                                            alt={testimonial.alt}
-                                            width={500}
-                                            height={600}
-                                            className={styles.image}
-                                        />
-                                    </div>
-                                </div>
-                            ))}
+                <div className={styles.featuredGrid}>
+                    <div className={styles.videoCard}>
+                        <video
+                            ref={videoRef}
+                            src="/assets/homepage-v2/video-testimonio-cliente.mp4"
+                            playsInline
+                            className={styles.video}
+                        />
+                        <div className={styles.videoClickArea} onClick={toggleVideo} />
+                        <div className={styles.videoGradient} />
+                        <div className={styles.playBtn} onClick={toggleVideo}>
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" style={{ marginLeft: 4 }}>
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        </div>
+                        <div className={styles.videoCaption}>
+                            <div className={styles.videoCaptionTitle}>Un cliente de Arena y Sol</div>
+                            <div className={styles.videoCaptionDesc}>Su experiencia invirtiendo con Alimin</div>
                         </div>
                     </div>
 
-                    <button className={styles.navButton} onClick={goToNext} aria-label="Siguiente">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-                    </button>
+                    <div className={styles.quoteCard}>
+                        <div className={styles.quoteMark}>&ldquo;</div>
+                        <p className={styles.quoteText}>
+                            Excelente lugar, amo mi terreno aquí en El Tabo. Me costó confiar al principio, pero di
+                            el primer paso y hoy estoy feliz con mi inversión.
+                        </p>
+                        <div className={styles.quoteFooter}>
+                            <div className={styles.quoteAvatar}>SU</div>
+                            <div>
+                                <div className={styles.quoteName}>Sebastián Ullbrish</div>
+                                <div className={styles.quoteMeta}>2 opiniones · 18 fotos · Hace 50 semanas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.reviewsGrid}>
+                    {REVIEWS.map((r) => (
+                        <div key={r.name} className={styles.reviewCard}>
+                            <div className={styles.reviewHeader}>
+                                <div className={styles.reviewAvatar} style={{ background: r.gradient }}>
+                                    {r.initials}
+                                </div>
+                                <div>
+                                    <div className={styles.reviewName}>{r.name}</div>
+                                    <div className={styles.reviewMeta}>{r.meta}</div>
+                                </div>
+                            </div>
+                            <p className={styles.reviewText}>{r.text}</p>
+                            <div className={styles.reviewTime}>{r.time}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            {selectedImage && (
-                <div className={styles.lightbox} onClick={() => setSelectedImage(null)}>
-                    <button className={styles.closeBtn} onClick={() => setSelectedImage(null)}>✕</button>
-                    <div className={styles.lightboxContent}>
-                        <Image
-                            src={selectedImage.src}
-                            alt={selectedImage.alt}
-                            fill
-                            className={styles.lightboxImage}
-                        />
+            <div className={styles.marqueeBand}>
+                <h3 className={styles.marqueeTitle}>Nuestros nuevos clientes en Lomas del Mar</h3>
+                <div className={styles.marqueeMask}>
+                    <div className={styles.marqueeTrack}>
+                        {[...CLIENT_PHOTOS, ...CLIENT_PHOTOS].map((n, i) => (
+                            <div key={i} className={styles.marqueeCard}>
+                                <Image
+                                    src={`/assets/venta-terrenos/clients/testimonio-${n}.webp`}
+                                    alt="Cliente Alimin en Lomas del Mar"
+                                    width={200}
+                                    height={250}
+                                    className={styles.marqueeImg}
+                                />
+                                <div className={styles.marqueeGradient} />
+                                <div className={styles.marqueeTag}>
+                                    <span className={styles.marqueeTagDot} />
+                                    Cliente verificado
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
-            )}
+            </div>
         </section>
     )
 }

@@ -8,14 +8,7 @@ import { SITE } from '@/lib/constants'
 import PromoBanner from './PromoBanner'
 
 export default function Navbar() {
-    const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
-
-    useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 40)
-        window.addEventListener('scroll', handleScroll, { passive: true })
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
 
     useEffect(() => {
         if (isMobileOpen) {
@@ -29,26 +22,26 @@ export default function Navbar() {
     const navLinks = [
         { href: '/', label: 'Inicio' },
         { href: '/proyectos', label: 'Proyectos' },
-        { href: '/#beneficios', label: 'Beneficios' },
-        { href: '/#ubicacion', label: 'Ubicación' },
-        { href: '/quienes-somos', label: 'Quiénes Somos' },
+        { href: '/quienes-somos', label: 'Quiénes somos' },
+        { href: '/asesores', label: 'Asesores' },
         { href: '/blog', label: 'Blog' },
-        { href: '/reunion', label: 'Agenda tu Visita' },
+        { href: '/#formulario', label: 'Contacto' },
     ]
 
     return (
-        <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+        <header className={styles.header}>
             <PromoBanner />
             <nav className={styles.nav} aria-label="Navegación principal">
                 <Link href="/" className={styles.logo} aria-label={`${SITE.shortName} - Inicio`}>
                     <Image
-                        src="/images/home_redesign/logo.png.webp"
-                        alt={`${SITE.shortName} Inmobiliaria`}
-                        width={200}
-                        height={50}
+                        src="/assets/homepage-v2/logo-alimin-icon.webp"
+                        alt="Alimin"
+                        width={40}
+                        height={40}
                         style={{ objectFit: 'contain' }}
                         priority
                     />
+                    <span className={styles.wordmark}>ALIMIN</span>
                 </Link>
 
                 <ul className={`${styles.links} ${isMobileOpen ? styles.open : ''}`}>
@@ -63,30 +56,44 @@ export default function Navbar() {
                             </Link>
                         </li>
                     ))}
+                    <li className={styles.mobileCta}>
+                        <Link
+                            href="/reunion"
+                            className={`${styles.ctaButtonOutline} crm-track-click`}
+                            data-crm-name="Agendar - Menu Superior"
+                            data-crm-category="Navegacion"
+                            onClick={() => setIsMobileOpen(false)}
+                        >
+                            Agendar
+                        </Link>
+                        <Link
+                            href="/#formulario"
+                            className={`${styles.ctaButton} crm-track-click`}
+                            data-crm-name="Cotizar - Menu Superior"
+                            data-crm-category="Navegacion"
+                            onClick={() => setIsMobileOpen(false)}
+                        >
+                            Cotizar →
+                        </Link>
+                    </li>
                 </ul>
 
                 <div className={styles.actions}>
                     <Link
                         href="/reunion"
-                        className={`${styles.agendaButton} crm-track-click`}
-                        data-crm-name="Agendar Visita - Menu Superior"
+                        className={`${styles.ctaButtonOutline} crm-track-click`}
+                        data-crm-name="Agendar - Menu Superior"
                         data-crm-category="Navegacion"
                     >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
                         Agendar
                     </Link>
                     <Link
-                        href="/contacto"
+                        href="/#formulario"
                         className={`${styles.ctaButton} crm-track-click`}
-                        data-crm-name="Contacto - Menu Superior"
+                        data-crm-name="Cotizar - Menu Superior"
                         data-crm-category="Navegacion"
                     >
-                        Contacto
+                        Cotizar →
                     </Link>
 
                     <button

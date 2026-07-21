@@ -21,7 +21,9 @@ export const CONTEST = {
     tag: '⚡ Cyber Day',
     message: '¡Tu terreno con facilidades únicas! Pie en 3 cuotas sin interés y asesoría gratis.',
     cta: 'Ver promoción',
-    link: '/cyber'
+    link: '/cyber',
+    badge: '⚡ Oferta',
+    segments: ['¡Tu terreno con facilidades únicas!', 'Pie en 3 cuotas sin interés'],
 } as const
 
 export const WINTER_PROMO = {
@@ -29,7 +31,9 @@ export const WINTER_PROMO = {
     tag: '❄️ Vacaciones de Invierno',
     message: '¡Visítanos estas vacaciones junto a tu familia y disfruta de los distintos premios que tenemos! 🎁',
     cta: 'Agendar Visita',
-    link: '/asesores'
+    link: '/asesores',
+    badge: '❄️ Oferta',
+    segments: ['¡Visítanos estas vacaciones de invierno!', 'Premios para toda la familia'],
 } as const
 
 export const MINIPIE_PROMO = {
@@ -37,7 +41,10 @@ export const MINIPIE_PROMO = {
     tag: '🔥 Pie Mínimo',
     message: 'Vuelve la promoción MiniPie — Pie desde $1.500.000',
     cta: 'Ver promoción',
-    link: 'https://aliminspa.cl/minipie?utm_source=banner&utm_medium=web&utm_campaign=minipie'
+    link: 'https://aliminspa.cl/minipie?utm_source=banner&utm_medium=web&utm_campaign=minipie',
+    badge: '⚡ Oferta',
+    segments: ['Cupos limitados en nuestros proyectos activos', 'Financiamiento directo sin banco'],
+    ctaMarquee: 'Conoce MINI PIE',
 } as const
 
 

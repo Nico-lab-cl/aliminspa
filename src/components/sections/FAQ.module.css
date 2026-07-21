@@ -1,28 +1,49 @@
+.section {
+    background: linear-gradient(160deg, var(--bg-mint-2) 0%, #e4f5d4 100%);
+    padding: 72px 24px;
+}
+
+.header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 40px;
+}
+
+.title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    line-height: 1.2;
+    color: var(--text-heading-light);
+    margin: 0;
+}
+
+.subtitle {
+    font-family: var(--font);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-secondary-light);
+    margin: 14px 0 0;
+}
+
 .list {
-    max-width: 760px;
+    max-width: 800px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 12px;
 }
 
 .item {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    background: #fff;
+    border-radius: 16px;
     overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
-}
-
-.item:hover {
-    border-color: var(--border-hover);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 20px rgba(50, 83, 102, 0.07);
+    transition: box-shadow 0.2s ease;
 }
 
 .item.open {
-    border-color: var(--gold);
-    background: var(--bg-card);
+    box-shadow: 0 8px 28px rgba(118, 216, 69, 0.18);
 }
 
 .question {
@@ -31,12 +52,15 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1.2rem 1.5rem;
+    padding: 1.15rem 1.4rem;
     text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-heading-light);
     cursor: pointer;
+    background: none;
+    border: none;
 }
 
 .icon {
@@ -47,29 +71,32 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgba(197, 160, 89, 0.1);
-    color: var(--gold-dark);
+    background: rgba(118, 216, 69, 0.12);
+    color: var(--verde-solido);
     transition: transform 0.3s ease;
 }
 
 .open .icon {
     transform: rotate(180deg);
+    background: var(--verde-lima);
+    color: #0e1a24;
 }
 
 .answer {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.35s ease, padding 0.35s ease;
-    padding: 0 1.5rem;
+    padding: 0 1.4rem;
 }
 
 .open .answer {
     max-height: 300px;
-    padding: 0 1.5rem 1.2rem;
+    padding: 0 1.4rem 1.2rem;
 }
 
 .answer p {
-    font-size: 0.92rem;
-    color: var(--text-secondary);
+    font-family: var(--font);
+    font-size: 0.88rem;
+    color: var(--text-secondary-light);
     line-height: 1.7;
 }

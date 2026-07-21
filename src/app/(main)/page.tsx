@@ -1,29 +1,27 @@
 import Hero from '@/components/sections/Hero'
-import WinterPromoSection from '@/components/sections/WinterPromoSection'
 import Benefits from '@/components/sections/Benefits'
-import Testimonials from '@/components/sections/Testimonials'
-import Steps from '@/components/sections/Steps'
-import StrategicLocation from '@/components/sections/StrategicLocation'
 import Projects from '@/components/sections/Projects'
-import ContactForm from '@/components/sections/ContactForm'
-import FAQAndMap from '@/components/sections/FAQAndMap'
-import Newsletter from '@/components/sections/Newsletter'
+import StrategicLocation from '@/components/sections/StrategicLocation'
+import Testimonials from '@/components/sections/Testimonials'
+import NearbyPlaces from '@/components/sections/NearbyPlaces'
+import HomeContactForm from '@/components/sections/HomeContactForm'
+import FAQ from '@/components/sections/FAQ'
+import HomeNewsletter from '@/components/sections/HomeNewsletter'
 import { FAQSchema } from '@/components/seo/JsonLd'
 
 export default function HomePage() {
-  return (
-    <>
-      <FAQSchema />
-      <Hero />
-      <WinterPromoSection />
-      <Benefits />
-      <Testimonials />
-      <Steps />
-      <StrategicLocation />
-      <Projects />
-      <ContactForm />
-      <FAQAndMap />
-      <Newsletter />
-    </>
-  )
+    return (
+        <>
+            <FAQSchema />
+            <Hero />
+            <Benefits />
+            <Projects />
+            <StrategicLocation />
+            <Testimonials />
+            <NearbyPlaces />
+            <HomeContactForm />
+            <FAQ />
+            <HomeNewsletter />
+        </>
+    )
 }

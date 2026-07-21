@@ -4,99 +4,114 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    transition: all 0.3s ease;
-    background-color: #2F4F4F;
     display: flex;
     flex-direction: column;
-}
-
-.scrolled {
-    background-color: #2F4F4F;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #3a9e48 0%, #4ba646 42%, #62c247 100%);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
 }
 
 .nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    min-height: 80px;
+    gap: 24px;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 22px;
+    height: 64px;
 }
 
 .logo {
     display: flex;
     align-items: center;
+    gap: 10px;
     text-decoration: none;
     z-index: 101;
+    flex: none;
+}
+
+.wordmark {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 21px;
+    color: #fff;
+    letter-spacing: -0.02em;
 }
 
 .links {
     display: flex;
+    gap: 26px;
+    align-items: center;
+    margin-left: auto;
+    flex-wrap: wrap;
     list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 2rem;
 }
 
 .link {
-    color: white;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.92);
     text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    position: relative;
-    padding: 0.5rem 0;
-    transition: color 0.2s;
+    white-space: nowrap;
+    transition: color 0.2s ease;
 }
 
 .link:hover {
-    color: var(--gold);
+    color: #fff;
+}
+
+.mobileCta {
+    display: none;
 }
 
 .actions {
     display: flex;
     align-items: center;
+    gap: 12px;
+    margin-left: auto;
     z-index: 101;
 }
 
 .ctaButton {
-    background-color: #d4af37; /* The exact gold from the image */
-    color: #2F4F4F;
-    padding: 0.6rem 2rem;
-    border-radius: 50px;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    background: #fff;
+    color: #2d7a3a;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 100px;
     text-decoration: none;
-    transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    transition: transform 0.2s ease;
 }
 
 .ctaButton:hover {
-    background-color: #f3e5ab; /* Lighter gold */
+    transform: translateY(-1px);
 }
 
-.agendaButton {
+.ctaButtonOutline {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.55rem 1.25rem;
-    border-radius: 50px;
-    border: 1.5px solid rgba(212, 175, 55, 0.5);
-    color: #d4af37;
-    font-weight: 600;
-    font-size: 0.85rem;
+    background: transparent;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 100px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
     text-decoration: none;
-    transition: all 0.3s;
-    margin-right: 0.75rem;
+    white-space: nowrap;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.agendaButton:hover {
-    background-color: rgba(212, 175, 55, 0.1);
-    border-color: #d4af37;
-}
-
-.agendaButton svg {
-    flex-shrink: 0;
+.ctaButtonOutline:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
 }
 
 .hamburger,
@@ -105,24 +120,46 @@
 }
 
 /* Mobile responsive */
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
+    .links {
+        display: none !important;
+    }
+
+    .nav {
+        margin-left: 0;
+    }
+
     .links {
         position: fixed;
         top: 0;
         right: -100%;
         bottom: 0;
         width: 300px;
-        background-color: #2F4F4F;
+        display: flex !important;
+        background: linear-gradient(160deg, #3a9e48 0%, #245e2e 100%);
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 1.5rem;
         transition: right 0.3s ease;
         z-index: 1000;
     }
 
     .links.open {
         right: 0;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .link {
+        font-size: 1.1rem;
+    }
+
+    .mobileCta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
     }
 
     .hamburger {
@@ -141,7 +178,7 @@
     .hamburger span {
         width: 100%;
         height: 3px;
-        background-color: #d4a946; /* Gold color requested */
+        background-color: #fff;
         border-radius: 10px;
         transition: all 0.3s linear;
         position: relative;
@@ -159,12 +196,12 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 999;
     }
 
-    .ctaButton,
-    .agendaButton {
-        display: none; /* Hide on mobile as per mockup */
+    .actions .ctaButton,
+    .actions .ctaButtonOutline {
+        display: none;
     }
 }

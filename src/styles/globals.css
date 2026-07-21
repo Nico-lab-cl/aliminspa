@@ -79,6 +79,17 @@
 
   /* Navbar */
   --navbar-height: 80px;
+
+  /* Homepage v2 (Alimin Design System — verde lima / navy) */
+  --verde-lima: #76d845;
+  --verde-solido: #4ba646;
+  --navy-deep: #0e1a24;
+  --navy-deeper: #0a1520;
+  --navy-mid: #12253a;
+  --bg-mint: #f5f9f0;
+  --bg-mint-2: #edf7e0;
+  --text-heading-light: #1a2b3d;
+  --text-secondary-light: #4B5563;
 }
 
 /* ── BASE ──────────────────────────────────────────────── */
@@ -539,7 +550,7 @@ h4 {
 /* ── BOOKING FLOATING BUTTON ──────────────────────────── */
 .booking-float {
   position: fixed;
-  bottom: calc(1.5rem + 60px + 1rem); /* Above WhatsApp button */
+  bottom: calc(1.5rem + 220px + 0.5rem); /* Above Ali 3D character */
   right: 1.5rem;
   width: 60px;
   height: 60px;

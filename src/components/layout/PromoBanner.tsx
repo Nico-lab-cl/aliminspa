@@ -16,7 +16,7 @@ export default function PromoBanner() {
     useEffect(() => {
         const checkVisibility = () => {
             const now = new Date()
-            
+
             const isPromoActive = (endDateStr: string) => {
                 const dateParts = endDateStr.split('-')
                 if (dateParts.length !== 3) return false
@@ -55,59 +55,41 @@ export default function PromoBanner() {
     if (isMiniPiePromo && pathname === '/minipie') return null
 
     const isExternal = activePromo.link.startsWith('http') && !activePromo.link.includes('aliminspa.cl')
-    const isWinterPromo = activePromo.tag.includes('Invierno')
+    const marqueeCta = 'ctaMarquee' in activePromo ? activePromo.ctaMarquee : activePromo.cta
+
+    const group = (key: string | number) => (
+        <span className={styles.group} key={key} aria-hidden={key !== 0 ? true : undefined}>
+            <span className={styles.pulseWrapper}>
+                <span className={styles.pulseDot} />
+            </span>
+            {activePromo.segments.map((segment, i) => (
+                <span key={i} className={styles.segmentGroup}>
+                    <span className={styles.segment}>{segment}</span>
+                    <span className={styles.bullet}>✦</span>
+                </span>
+            ))}
+            <span className={styles.cta}>
+                {marqueeCta} <span>→</span>
+            </span>
+        </span>
+    )
 
     return (
-        <Link 
-            href={activePromo.link} 
-            target={isExternal ? "_blank" : undefined}
-            rel={isExternal ? "noopener noreferrer" : undefined}
+        <Link
+            href={activePromo.link}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
             className={styles.bannerLink}
         >
-            <div className={`${styles.banner} ${isWinterPromo ? styles.winterBanner : ''} ${isMiniPiePromo ? styles.minipieBanner : ''}`}>
-                {/* Floating animated sparkles and icons for Winter Promo */}
-                {isWinterPromo && (
-                    <div className={styles.floatingContainer}>
-                        <span className={`${styles.floatingIcon} ${styles.icon1}`}>❄️</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon2}`}>⛄</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon3}`}>🎁</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon4}`}>✨</span>
-                    </div>
-                )}
-                {/* Floating animated icons for MiniPie Promo */}
-                {isMiniPiePromo && (
-                    <div className={styles.floatingContainer}>
-                        <span className={`${styles.floatingIcon} ${styles.icon1}`}>🏡</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon2}`}>💰</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon3}`}>🔥</span>
-                        <span className={`${styles.floatingIcon} ${styles.icon4}`}>✨</span>
-                    </div>
-                )}
-                
-                <div className={styles.marqueeContainer}>
-                    <div className={styles.marqueeTrack}>
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className={styles.marqueeGroup} aria-hidden={i > 1 ? "true" : undefined}>
-                                <span className={`${styles.tag} ${isWinterPromo ? styles.winterTag : ''} ${isMiniPiePromo ? styles.minipieTag : ''}`}>
-                                    {activePromo.tag}
-                                </span>
-                                <span className={styles.message}>
-                                    {activePromo.message}
-                                </span>
-                                <span className={`${styles.cta} ${isWinterPromo ? styles.winterCta : ''} ${isMiniPiePromo ? styles.minipieCta : ''}`}>
-                                    {activePromo.cta}
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                                        <polyline points="7 7 17 7 17 17"></polyline>
-                                    </svg>
-                                </span>
-                                <span className={styles.bullet}>✦</span>
-                            </div>
-                        ))}
-                    </div>
+            <div className={styles.flag}>
+                <span className={styles.flagText}>{activePromo.badge}</span>
+            </div>
+            <div className={styles.marqueeViewport}>
+                <div className={styles.marqueeTrack}>
+                    {group(0)}
+                    {group(1)}
                 </div>
             </div>
         </Link>
     )
 }
-
