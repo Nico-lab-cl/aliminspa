@@ -196,7 +196,7 @@ export const MINI_BENEFITS = [
 export const FAQ_ITEMS = [
     {
         question: '¿Qué incluyen los terrenos en venta en El Tabo?',
-        answer: 'Nuestros terrenos incluyen rol propio inscrito en el Conservador de Bienes Raíces, agua certificada, luz eléctrica y acceso pavimentado. Están completamente urbanizados y listos para construir.',
+        answer: 'Nuestros terrenos incluyen rol propio, agua certificada, luz eléctrica y acceso pavimentado. Están completamente urbanizados y listos para construir.',
     },
     {
         question: '¿Cuánto cuestan los terrenos en El Tabo?',

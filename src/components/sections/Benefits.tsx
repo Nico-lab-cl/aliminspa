@@ -23,7 +23,7 @@ const BENEFITS_V2 = [
     },
     {
         label: 'Agua certificada',
-        desc: 'Con respaldo oficial de la SEREMI de Salud',
+        desc: 'Incluye empalme de agua certificado por la Seremi de Salud',
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--verde-lima)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2.69s-5 6.14-5 10.13a5 5 0 0 0 10 0c0-3.99-5-10.13-5-10.13z"></path>
@@ -32,7 +32,7 @@ const BENEFITS_V2 = [
     },
     {
         label: 'Luz eléctrica',
-        desc: 'Conexión disponible en todos los proyectos',
+        desc: 'Incluye empalme de luz, conexión disponible en todos los proyectos',
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--verde-lima)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>

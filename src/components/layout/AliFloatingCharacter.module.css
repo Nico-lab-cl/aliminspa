@@ -15,8 +15,8 @@
 .characterBox {
   pointer-events: auto;
   position: relative;
-  width: 448px;
-  height: 480px;
+  width: 280px;
+  height: 300px;
   cursor: pointer;
   filter: drop-shadow(0 12px 30px rgba(26, 138, 125, 0.35));
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -78,7 +78,7 @@
 .speechBubble {
   pointer-events: auto;
   position: absolute;
-  bottom: 440px;
+  bottom: 260px;
   right: 20px;
   white-space: nowrap;
   background: #ffffff;
@@ -147,7 +147,7 @@
 .chatModal {
   pointer-events: auto;
   position: absolute;
-  bottom: 450px;
+  bottom: 270px;
   right: 1rem;
   width: 360px;
   max-width: calc(100vw - 2rem);
@@ -448,34 +448,34 @@
 /* Responsive adjust */
 @media (max-width: 1024px) {
   .characterBox {
-    width: 532px;
-    height: 574px;
+    width: 220px;
+    height: 236px;
   }
 
   .speechBubble {
-    bottom: 564px;
-    right: 40px;
+    bottom: 200px;
+    right: 20px;
   }
 
   .chatModal {
-    bottom: 574px;
+    bottom: 210px;
   }
 }
 
 @media (max-width: 768px) {
   .characterBox {
-    width: 390px;
-    height: 429px;
+    width: 180px;
+    height: 193px;
   }
 
   .speechBubble {
-    bottom: 419px;
-    right: 20px;
+    bottom: 165px;
+    right: 14px;
     font-size: 12.5px;
   }
 
   .chatModal {
-    bottom: 429px;
+    bottom: 175px;
     right: 0.5rem;
   }
 }
@@ -487,24 +487,26 @@
   }
 
   .characterBox {
-    width: 288px;
-    height: 313px;
+    width: 140px;
+    height: 150px;
   }
 
   .speechBubble {
-    right: 10px;
-    bottom: 303px;
+    right: 8px;
+    bottom: 128px;
     font-size: 11.5px;
     padding: 8px 12px;
+    max-width: calc(100vw - 100px);
+    white-space: normal;
   }
 
   .speechBubble::after {
-    right: 35px;
+    right: 30px;
   }
 
   .chatModal {
     right: 0.25rem;
     width: calc(100vw - 1rem);
-    bottom: 313px;
+    bottom: 140px;
   }
 }
