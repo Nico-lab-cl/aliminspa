@@ -13,9 +13,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Payload JSON inválido' }, { status: 400 })
         }
 
-        const { 
+        const {
             nombre, email, celular, ciudad, proyecto,
-            fbp, fbc,
+            fbp, fbc, eventId,
             utm_source, utm_medium, utm_campaign, utm_content, utm_term
         } = body
 
@@ -79,7 +79,9 @@ export async function POST(request: NextRequest) {
                     content_name: proyecto || 'General',
                     content_category: 'Real Estate',
                 },
-                eventSourceUrl
+                eventSourceUrl,
+                // Mismo ID que el evento del navegador: Meta descarta la copia repetida
+                eventId
             )
         } catch (err) {
             console.error('Error sending Meta Lead event:', err)

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, CSSProperties } from 'react'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { trackMetaEvent, getUtmParams } from '@/lib/track'
+import { getUtmParams, newEventId } from '@/lib/track'
 import { REGIONES } from './regiones'
 import { FAQS } from './faqs'
 
@@ -127,6 +127,10 @@ export default function VentaTerrenosClient() {
                 utm_campaign: 'venta_terrenos_litoral_central',
             })
 
+            // Shared between the browser Pixel and the CAPI call below so Meta
+            // deduplicates them into a single Lead.
+            const eventId = newEventId()
+
             const detalle = [form.proyecto, form.tamano].filter(Boolean).join(' ')
             const payload = {
                 nombre: form.nombre,
@@ -137,6 +141,7 @@ export default function VentaTerrenosClient() {
                 ...utm_data,
                 fbp,
                 fbc,
+                eventId,
             }
 
             const res = await fetch('/api/leads', {
@@ -146,18 +151,15 @@ export default function VentaTerrenosClient() {
             })
             if (!res.ok) throw new Error('Error al enviar')
 
+            // The server-side counterpart is sent by /api/leads with the same
+            // eventId, so Meta keeps only one of the two.
             if (typeof window !== 'undefined' && (window as any).fbq) {
                 ;(window as any).fbq('track', 'Lead', {
                     content_name: 'Venta de Terrenos Litoral Central',
                     content_category: 'Real Estate',
                     currency: 'CLP',
-                })
+                }, { eventID: eventId })
             }
-            trackMetaEvent('Lead', { em: form.email, ph: form.telefono, fn: form.nombre }, {
-                content_name: 'Venta de Terrenos Litoral Central',
-                content_category: 'Real Estate',
-                currency: 'CLP',
-            })
 
             setStatus('success')
         } catch (err) {

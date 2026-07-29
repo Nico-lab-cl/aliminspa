@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { trackMetaEvent, getUtmParams } from '@/lib/track'
+import { getUtmParams, newEventId } from '@/lib/track'
 
 export default function MiniPieClient() {
   const router = useRouter()
@@ -83,6 +83,10 @@ export default function MiniPieClient() {
         utm_campaign: 'minipie_2026',
       })
 
+      // Shared between the browser Pixel and the CAPI call below so Meta
+      // deduplicates them into a single Lead.
+      const eventId = newEventId()
+
       // Map telefono to celular, concatenate region to ciudad, send campaign data in project
       const mappedPayload = {
         nombre: form.nombre,
@@ -92,7 +96,8 @@ export default function MiniPieClient() {
         proyecto: 'MINIPIE' + (form.terreno ? ' - ' + form.terreno : ''),
         ...utm_data,
         fbp,
-        fbc
+        fbc,
+        eventId
       }
 
       const res = await fetch('/api/leads', {
@@ -103,21 +108,15 @@ export default function MiniPieClient() {
 
       if (!res.ok) throw new Error('Error al enviar')
 
-      // Meta Pixel client-side Lead event
+      // Meta Pixel client-side Lead event. The server-side counterpart is sent
+      // by /api/leads with the same eventId, so Meta keeps only one of the two.
       if (typeof window !== 'undefined' && (window as any).fbq) {
         ;(window as any).fbq('track', 'Lead', {
           content_name: 'MINIPIE',
           content_category: 'Real Estate',
           currency: 'CLP',
-        })
+        }, { eventID: eventId })
       }
-
-      // Meta CAPI server-side Lead event (deduplication)
-      trackMetaEvent('Lead', { em: form.email, ph: form.telefono, fn: form.nombre }, {
-        content_name: 'MINIPIE',
-        content_category: 'Real Estate',
-        currency: 'CLP',
-      })
 
       // Identify with CRM
       if (typeof window !== 'undefined' && (window as any).AliminCRM) {

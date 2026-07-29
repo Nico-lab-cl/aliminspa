@@ -28,6 +28,19 @@ export const getUtmParams = (defaults: Record<string, string> = {}) => {
     }
 }
 
+/**
+ * Generates a unique ID for a single conversion, shared between the browser
+ * Pixel (`fbq(..., { eventID })`) and the server CAPI call. Meta uses it to
+ * collapse both copies into one event — without it every conversion is
+ * counted once per emitter.
+ */
+export const newEventId = (): string => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID()
+    }
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+}
+
 export const trackMetaEvent = async (
     eventName: string,
     userData: any = {},

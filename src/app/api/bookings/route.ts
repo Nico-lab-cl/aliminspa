@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Payload JSON inválido' }, { status: 400 })
         }
 
-        const { nombre, email, celular, proyecto, fecha, hora } = body
+        const { nombre, email, celular, proyecto, fecha, hora, eventId } = body
 
         if (!nombre || !email || !celular || !proyecto || !fecha || !hora) {
             return NextResponse.json(
@@ -65,7 +65,9 @@ export async function POST(request: NextRequest) {
                     content_name: proyecto,
                     content_category: 'Real Estate Visit',
                 },
-                eventSourceUrl
+                eventSourceUrl,
+                // Mismo ID que el evento del navegador: Meta descarta la copia repetida
+                eventId
             )
         } catch (err) {
             console.error('Error sending Meta Schedule event:', err)
