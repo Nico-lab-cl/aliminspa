@@ -194,10 +194,6 @@ export default function OverlaySorteo() {
 
           {/* El comentario del ganador no se muestra: muchos cuentan
               situaciones familiares y no corresponde exponerlas en vivo. */}
-          <p className={styles.regla}>
-            Participan <b>todas</b> las personas que comentaron ALIMIN
-            <span>una participación por persona</span>
-          </p>
         </main>
 
         <section className={styles.premios}>

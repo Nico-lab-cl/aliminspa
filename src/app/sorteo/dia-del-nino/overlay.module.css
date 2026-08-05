@@ -200,22 +200,6 @@
   text-transform: uppercase;
 }
 
-/* regla en pantalla, en vez del comentario del ganador */
-.regla {
-  margin-top: 3cqw;
-  text-align: center;
-  font-size: max(11px, 2.9cqw);
-  line-height: 1.5;
-  color: rgba(255, 255, 255, .72);
-}
-.regla b { color: var(--lima); }
-.regla span {
-  display: block;
-  margin-top: .6cqw;
-  font-size: max(10px, 2.4cqw);
-  color: rgba(255, 255, 255, .45);
-}
-
 /* ─────────── Tarjetas de premio ─────────── */
 .premios {
   display: grid;
