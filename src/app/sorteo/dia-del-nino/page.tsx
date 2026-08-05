@@ -192,9 +192,12 @@ export default function OverlaySorteo() {
             )}
           </div>
 
-          {!girando && ultimo?.comentario && (
-            <p className={styles.comentario}>“{ultimo.comentario}”</p>
-          )}
+          {/* El comentario del ganador no se muestra: muchos cuentan
+              situaciones familiares y no corresponde exponerlas en vivo. */}
+          <p className={styles.regla}>
+            Participan <b>todas</b> las personas que comentaron ALIMIN
+            <span>una participación por persona</span>
+          </p>
         </main>
 
         <section className={styles.premios}>
@@ -216,10 +219,13 @@ export default function OverlaySorteo() {
         </section>
 
         <footer className={styles.pie}>
+          <div className={styles.verifica}>
+            <span className={styles.verificaTitulo}>Comprueba que estás participando</span>
+            <span className={styles.verificaUrl}>aliminspa.cl/sorteo/participantes</span>
+          </div>
           {estado.hash && (
             <div className={styles.sello}>
-              <span className={styles.selloTitulo}>Sello de auditoría</span>
-              {estado.hash.slice(0, 32)}…
+              Sello {estado.hash.slice(0, 24)}…
             </div>
           )}
         </footer>
