@@ -1,8 +1,8 @@
 {
  "sorteo": "dia-del-nino-2026",
  "fuente": "https://www.instagram.com/p/DbMWykKt2G2/",
- "extraido": "2026-08-05T06:05:29.880Z",
- "congelado": "2026-08-05T06:22:36.845Z",
+ "congelado": "2026-08-05T20:02:33.653Z",
+ "origen": "unión de 2 extracciones (2026-08-05 06:05 y 20:00 UTC)",
  "reglas": {
   "palabra": "ALIMIN",
   "acepta_typos": false,
@@ -11,10 +11,10 @@
   "criterio_duplicados": "primer comentario cronológico"
  },
  "auditoria": {
-  "comentarios_analizados": 2188,
-  "comentarios_validos": 2011,
-  "participantes_unicos": 1049,
-  "hash_sha256": "eb95275696fe908dd95d6ccbde1e9691d2e0bb19891cd2a32ddd9058de7f38b9"
+  "comentarios_analizados": 2240,
+  "comentarios_validos": 2060,
+  "participantes_unicos": 1070,
+  "hash_sha256": "e5f069ca01a0cb2fc4207e6b5306d162ac8e6f591f2552dc090e26e1df83f11e"
  },
  "participantes": [
   {
@@ -7359,6 +7359,153 @@
    "user_id": "4110653962",
    "comentario": "Alimin",
    "fecha": "2026-08-05T05:45:46.000Z"
+  },
+  {
+   "n": 1050,
+   "username": "o.jitosbonitos_",
+   "user_id": "6022455482",
+   "comentario": "ALIMIN @__ethereal.___ @edi.alexander.7 @antoniaantoniets",
+   "fecha": "2026-08-05T08:17:31.000Z"
+  },
+  {
+   "n": 1051,
+   "username": "willray_13",
+   "user_id": "2295530749",
+   "comentario": "Alimin 🙏🙏🙌 ojalá pudiéramos ganar 🍀",
+   "fecha": "2026-08-05T10:50:43.000Z"
+  },
+  {
+   "n": 1052,
+   "username": "odiosa.rosaverde",
+   "user_id": "3280838170",
+   "comentario": "ALIMIN @p.ely_96 @alexia_antonia_ortiz @jusseph_ortiz_",
+   "fecha": "2026-08-05T11:51:50.000Z"
+  },
+  {
+   "n": 1053,
+   "username": "rominafuentesgutierres",
+   "user_id": "54223956678",
+   "comentario": "Alimin",
+   "fecha": "2026-08-05T13:08:38.000Z"
+  },
+  {
+   "n": 1054,
+   "username": "j.gmz._14",
+   "user_id": "32743124139",
+   "comentario": "ALIMIN",
+   "fecha": "2026-08-05T13:31:18.000Z"
+  },
+  {
+   "n": 1055,
+   "username": "__ngrita__",
+   "user_id": "260623293",
+   "comentario": "ALIMIN 😍❤️🙌 @connyaguilera @nancy.fuentver @jocelynfloresssm",
+   "fecha": "2026-08-05T13:48:20.000Z"
+  },
+  {
+   "n": 1056,
+   "username": "rafainfinite",
+   "user_id": "72799183659",
+   "comentario": "ALIMIN, @vivianavila2012 @divianapasteleria @akiva_79",
+   "fecha": "2026-08-05T13:58:05.000Z"
+  },
+  {
+   "n": 1057,
+   "username": "mayritaaa.aa",
+   "user_id": "62717450337",
+   "comentario": "ALIMIN 🍀@arielaa.rg @fran_estrella_22 @dayana76082",
+   "fecha": "2026-08-05T14:29:39.000Z"
+  },
+  {
+   "n": 1058,
+   "username": "li4mvrx",
+   "user_id": "31765330725",
+   "comentario": "ALIMIN",
+   "fecha": "2026-08-05T14:41:06.000Z"
+  },
+  {
+   "n": 1059,
+   "username": "sosa.__.mafia",
+   "user_id": "57149311730",
+   "comentario": "Alimin 🍀🎢 @898.alvaro._ @bby.jordan_ @shino_str69",
+   "fecha": "2026-08-05T14:54:01.000Z"
+  },
+  {
+   "n": 1060,
+   "username": "vivianavila2012",
+   "user_id": "1834035190",
+   "comentario": "ALIMIN @rafainfinite  @divianapasteleria @akiva_79",
+   "fecha": "2026-08-05T15:05:20.000Z"
+  },
+  {
+   "n": 1061,
+   "username": "sku.nx",
+   "user_id": "42450390028",
+   "comentario": "Alimin @_vv.vale @fassstlow @pvblop802 🎢🎢🎢",
+   "fecha": "2026-08-05T15:39:07.000Z"
+  },
+  {
+   "n": 1062,
+   "username": "rubby_cadenas",
+   "user_id": "1938514252",
+   "comentario": "Alimin @g.calquin.u @g.gabriel.c @joel.anderson._",
+   "fecha": "2026-08-05T16:34:03.000Z"
+  },
+  {
+   "n": 1063,
+   "username": "ojedatiare72",
+   "user_id": "12273822417",
+   "comentario": "ALIMIN🎢😍❤️",
+   "fecha": "2026-08-05T16:45:41.000Z"
+  },
+  {
+   "n": 1064,
+   "username": "clau._.39",
+   "user_id": "8750395030",
+   "comentario": "ALIMIN @samuel_10_30 @karolina.2025_ @natalycespedes",
+   "fecha": "2026-08-05T17:14:14.000Z"
+  },
+  {
+   "n": 1065,
+   "username": "urrajoselyn",
+   "user_id": "30046283419",
+   "comentario": "Alimin 🍀 ojalas ganar para ir con mis hijos",
+   "fecha": "2026-08-05T17:19:24.000Z"
+  },
+  {
+   "n": 1066,
+   "username": "xo.catalin_",
+   "user_id": "27383055539",
+   "comentario": "ALIMIN @oriazzz.z @maria2299isabel @joseoria6820 🎢❤️",
+   "fecha": "2026-08-05T17:53:37.000Z"
+  },
+  {
+   "n": 1067,
+   "username": "norambuena520",
+   "user_id": "65528523937",
+   "comentario": "Alimin 🎢🍀✨🙌",
+   "fecha": "2026-08-05T18:17:07.000Z"
+  },
+  {
+   "n": 1068,
+   "username": "vanessaleonbriones",
+   "user_id": "1654056643",
+   "comentario": "Alimin🙌🍀@isidroleonofficial @patoleivac @aylin.leon.briones",
+   "fecha": "2026-08-05T18:20:26.000Z"
+  },
+  {
+   "n": 1069,
+   "username": "fu._lan_.xi",
+   "user_id": "7392754863",
+   "comentario": "ALIMIN",
+   "fecha": "2026-08-05T19:20:52.000Z"
+  },
+  {
+   "n": 1070,
+   "username": "evelynfrancoaraya",
+   "user_id": "4096037782",
+   "comentario": "Alimin@@pxsscal @javivi_paz @claudio.lucas_facundo",
+   "fecha": "2026-08-05T19:42:18.000Z"
   }
  ]
 }
