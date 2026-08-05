@@ -14,11 +14,17 @@ export interface Ganador {
 
 interface Blob {
   ganadores: Ganador[];
+  /**
+   * Salieron sorteados pero no estaban en el vivo para recibir el premio.
+   * Se guardan para que no vuelvan a salir en el siguiente giro y para
+   * dejar registro de por qué se volvió a girar.
+   */
+  descartados: Ganador[];
   girando: number | null;
   hash: string;
 }
 
-const vacio: Blob = { ganadores: [], girando: null, hash: '' };
+const vacio: Blob = { ganadores: [], descartados: [], girando: null, hash: '' };
 
 function leerBlob(raw: string): Blob {
   try {
@@ -51,6 +57,7 @@ export async function GET(
       participantes,
       total: participantes.length,
       ganadores: blob.ganadores,
+      descartados: blob.descartados,
       girando: blob.girando,
       hash: blob.hash,
       status: sorteo.status as Estado,
@@ -69,7 +76,7 @@ export async function POST(
   const { id } = await params;
   try {
     const body = await request.json();
-    const { participantes, ganadores, girando, hash, status, adminKey } = body;
+    const { participantes, ganadores, descartados, girando, hash, status, adminKey } = body;
 
     if (adminKey !== ADMIN_KEY) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
@@ -82,6 +89,7 @@ export async function POST(
     // parciales (ej. solo "girando") sin pisar la lista de ganadores.
     const blob: Blob = {
       ganadores: ganadores ?? blobActual.ganadores,
+      descartados: descartados ?? blobActual.descartados,
       girando: girando !== undefined ? girando : blobActual.girando,
       hash: hash ?? blobActual.hash,
     };

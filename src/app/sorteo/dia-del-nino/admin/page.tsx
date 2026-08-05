@@ -14,14 +14,19 @@ function idDesdeUrl(): string {
   return limpio ? `dia-del-nino-${limpio}` : SORTEO_ID;
 }
 
+// En el orden en que se lanzan durante el vivo: se cierra con el premio mayor.
 const PREMIOS = [
-  { puesto: 1, medalla: '🥇', titulo: '1.er Lugar', detalle: 'Pack Familiar · 4 entradas' },
-  { puesto: 2, medalla: '🥈', titulo: '2.º Lugar', detalle: 'Pack Familiar · 2 adultos + 2 niños' },
-  { puesto: 3, medalla: '🥉', titulo: '3.er Lugar', detalle: '$50.000 en efectivo' },
+  { paso: 1, puesto: 3, medalla: '🥉', titulo: '3.er Lugar', detalle: '$50.000 en efectivo' },
+  { paso: 2, puesto: 2, medalla: '🥈', titulo: '2.º Lugar', detalle: 'Pack Familiar · 2 adultos + 2 niños' },
+  { paso: 3, puesto: 1, medalla: '🥇', titulo: '1.er Lugar', detalle: 'Pack Familiar · 4 entradas' },
 ];
 
 interface Ganador { puesto: number; username: string; comentario: string; fecha: string }
-interface Estado { participantes: string[]; total: number; ganadores: Ganador[]; girando: number | null; hash: string; status: string }
+interface Estado {
+  participantes: string[]; total: number;
+  ganadores: Ganador[]; descartados: Ganador[];
+  girando: number | null; hash: string; status: string;
+}
 
 /** Aleatoriedad criptográfica: Math.random() no sirve para repartir premios reales. */
 function elegirIndice(max: number): number {
@@ -85,18 +90,31 @@ export default function PanelSorteo() {
   };
 
   const girar = async (puesto: number) => {
-    if (!estado) return;
     setOcupado(true);
     setMsg(`🎰 Girando ${puesto}.º lugar…`);
-    await guardar({ girando: puesto, status: 'active' });
+
+    // se trabaja con lo que devuelve el servidor, no con el estado local:
+    // el panel puede estar abierto en dos pestañas durante el vivo
+    const previo = await guardar({ girando: puesto, status: 'active' });
+    if (!previo) { setOcupado(false); return; }
 
     await new Promise((r) => setTimeout(r, duracion * 1000));
 
-    // nadie puede ganar dos veces
-    const yaGanaron = new Set(estado.ganadores.map((g) => g.username));
-    const elegibles = datos.participantes.filter((p) => !yaGanaron.has(p.username));
-    const elegido = elegibles[elegirIndice(elegibles.length)];
+    // fuera quienes ya ganaron y quienes se descartaron por no estar en el vivo
+    const excluidos = new Set<string>([
+      ...(previo.ganadores || []).map((g: Ganador) => g.username),
+      ...(previo.descartados || []).map((g: Ganador) => g.username),
+    ]);
+    const elegibles = datos.participantes.filter((p) => !excluidos.has(p.username));
 
+    if (elegibles.length === 0) {
+      await guardar({ girando: null });
+      setMsg('❌ No quedan participantes elegibles');
+      setOcupado(false);
+      return;
+    }
+
+    const elegido = elegibles[elegirIndice(elegibles.length)];
     const ganador: Ganador = {
       puesto,
       username: elegido.username,
@@ -104,7 +122,7 @@ export default function PanelSorteo() {
       fecha: elegido.fecha,
     };
 
-    const nuevos = [...estado.ganadores.filter((g) => g.puesto !== puesto), ganador]
+    const nuevos = [...(previo.ganadores || []).filter((g: Ganador) => g.puesto !== puesto), ganador]
       .sort((a, b) => b.puesto - a.puesto);
 
     await guardar({
@@ -113,6 +131,22 @@ export default function PanelSorteo() {
       status: nuevos.length >= 3 ? 'finished' : 'active',
     });
     setMsg(`🏆 ${puesto}.º lugar: @${elegido.username}`);
+    setOcupado(false);
+  };
+
+  /** El ganador no estaba en el vivo: se descarta y el premio vuelve a estar en juego. */
+  const quitarGanador = async (puesto: number) => {
+    const g = estado?.ganadores.find((x) => x.puesto === puesto);
+    if (!g) return;
+    if (!confirm(`¿Descartar a @${g.username} del ${puesto}.º lugar?\n\nNo volverá a salir sorteado y el premio queda libre para girar de nuevo.`)) return;
+
+    setOcupado(true);
+    await guardar({
+      ganadores: estado!.ganadores.filter((x) => x.puesto !== puesto),
+      descartados: [...(estado!.descartados || []), g],
+      status: 'active',
+    });
+    setMsg(`↩ @${g.username} descartado. Puedes girar el ${puesto}.º lugar otra vez.`);
     setOcupado(false);
   };
 
@@ -175,6 +209,7 @@ export default function PanelSorteo() {
           return (
             <div key={p.puesto} className={styles.premio}>
               <div className={styles.premioCabecera}>
+                <span className={styles.paso}>Paso {p.paso}</span>
                 <span className={styles.medalla}>{p.medalla}</span>
                 <div>
                   <div className={styles.premioTitulo}>{p.titulo}</div>
@@ -182,7 +217,16 @@ export default function PanelSorteo() {
                 </div>
               </div>
               {g ? (
-                <div className={styles.ganador}>🏆 @{g.username}</div>
+                <>
+                  <div className={styles.ganador}>🏆 @{g.username}</div>
+                  <button
+                    className={styles.botonQuitar}
+                    onClick={() => quitarGanador(p.puesto)}
+                    disabled={ocupado || !clave}
+                  >
+                    No está en el vivo · descartar y volver a girar
+                  </button>
+                </>
               ) : (
                 <button
                   className={styles.botonGirar}
@@ -196,6 +240,16 @@ export default function PanelSorteo() {
           );
         })}
       </div>
+
+      {!!estado?.descartados?.length && (
+        <div className={styles.descartados}>
+          <b>Descartados por no estar en el vivo ({estado.descartados.length})</b>
+          {estado.descartados.map((d, i) => (
+            <span key={`${d.username}-${i}`}>@{d.username} · {d.puesto}.º lugar</span>
+          ))}
+          <em>No vuelven a salir sorteados.</em>
+        </div>
+      )}
 
       {msg && <div className={styles.mensaje}>{msg}</div>}
 
