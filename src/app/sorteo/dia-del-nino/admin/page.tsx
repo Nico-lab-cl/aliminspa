@@ -6,6 +6,14 @@ import styles from './admin.module.css';
 
 const SORTEO_ID = 'dia-del-nino-2026';
 
+/** ?sorteo=ensayo opera sobre un registro paralelo, sin tocar el sorteo real. */
+function idDesdeUrl(): string {
+  if (typeof window === 'undefined') return SORTEO_ID;
+  const p = new URLSearchParams(window.location.search).get('sorteo');
+  const limpio = (p || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 24);
+  return limpio ? `dia-del-nino-${limpio}` : SORTEO_ID;
+}
+
 const PREMIOS = [
   { puesto: 1, medalla: '🥇', titulo: '1.er Lugar', detalle: 'Pack Familiar · 4 entradas' },
   { puesto: 2, medalla: '🥈', titulo: '2.º Lugar', detalle: 'Pack Familiar · 2 adultos + 2 niños' },
@@ -30,16 +38,19 @@ export default function PanelSorteo() {
   const [msg, setMsg] = useState('');
   const [ocupado, setOcupado] = useState(false);
   const [duracion, setDuracion] = useState(7);
+  const [sorteoId, setSorteoId] = useState(SORTEO_ID);
+  const esEnsayo = sorteoId !== SORTEO_ID;
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search).get('key');
     if (p) setClave(p);
+    setSorteoId(idDesdeUrl());
   }, []);
 
   const cargar = useCallback(async () => {
-    const r = await fetch(`/api/sorteo/${SORTEO_ID}`, { cache: 'no-store' });
+    const r = await fetch(`/api/sorteo/${sorteoId}`, { cache: 'no-store' });
     if (r.ok) setEstado(await r.json());
-  }, []);
+  }, [sorteoId]);
 
   useEffect(() => {
     cargar();
@@ -48,7 +59,7 @@ export default function PanelSorteo() {
   }, [cargar]);
 
   const guardar = useCallback(async (cambios: Record<string, unknown>) => {
-    const r = await fetch(`/api/sorteo/${SORTEO_ID}`, {
+    const r = await fetch(`/api/sorteo/${sorteoId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...cambios, adminKey: clave }),
@@ -57,7 +68,7 @@ export default function PanelSorteo() {
     const data = await r.json();
     setEstado((p) => (p ? { ...p, ...data } : data));
     return data;
-  }, [clave]);
+  }, [clave, sorteoId]);
 
   const cargarParticipantes = async () => {
     setOcupado(true);
@@ -118,6 +129,12 @@ export default function PanelSorteo() {
     <div className={styles.panel}>
       <h1 className={styles.titulo}>Panel · Sorteo Día del Niño</h1>
 
+      {esEnsayo && (
+        <div className={styles.aviso}>
+          🧪 <b>MODO ENSAYO</b> — operando sobre <code>{sorteoId}</code>. El sorteo real no se toca.
+        </div>
+      )}
+
       <div className={styles.fila}>
         <input
           className={styles.campo}
@@ -126,7 +143,12 @@ export default function PanelSorteo() {
           value={clave}
           onChange={(e) => setClave(e.target.value)}
         />
-        <a className={styles.enlace} href={`/sorteo/dia-del-nino`} target="_blank" rel="noreferrer">
+        <a
+          className={styles.enlace}
+          href={esEnsayo ? `/sorteo/dia-del-nino?sorteo=${sorteoId.replace('dia-del-nino-', '')}` : '/sorteo/dia-del-nino'}
+          target="_blank"
+          rel="noreferrer"
+        >
           Abrir overlay ↗
         </a>
       </div>

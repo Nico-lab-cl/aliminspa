@@ -8,6 +8,17 @@ import styles from './overlay.module.css';
 const SORTEO_ID = 'dia-del-nino-2026';
 const POLL_MS = 1500;
 
+/**
+ * ?sorteo=ensayo apunta a un registro paralelo en la misma base.
+ * Permite ensayar el vivo completo sin tocar el sorteo real.
+ */
+function idDesdeUrl(): string {
+  if (typeof window === 'undefined') return SORTEO_ID;
+  const p = new URLSearchParams(window.location.search).get('sorteo');
+  const limpio = (p || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 24);
+  return limpio ? `dia-del-nino-${limpio}` : SORTEO_ID;
+}
+
 const PREMIOS = [
   { puesto: 1, medalla: '🥇', titulo: '1.er Lugar', detalle: 'Pack Familiar Fantasilandia · 4 entradas' },
   { puesto: 2, medalla: '🥈', titulo: '2.º Lugar', detalle: 'Pack Familiar Fantasilandia · 2+2' },
@@ -69,15 +80,18 @@ function useAjustarAlAncho(
 export default function OverlaySorteo() {
   const [estado, setEstado] = useState<Estado>(inicial);
   const [nombreRuleta, setNombreRuleta] = useState('');
+  const [sorteoId, setSorteoId] = useState(SORTEO_ID);
   const ganadosPrevios = useRef(0);
   const refGanador = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => setSorteoId(idDesdeUrl()), []);
 
   // ── polling del estado compartido ──
   useEffect(() => {
     let vivo = true;
     const cargar = async () => {
       try {
-        const r = await fetch(`/api/sorteo/${SORTEO_ID}`, { cache: 'no-store' });
+        const r = await fetch(`/api/sorteo/${sorteoId}`, { cache: 'no-store' });
         if (!r.ok) return;
         const data: Estado = await r.json();
         if (vivo) setEstado((prev) => ({ ...prev, ...data }));
@@ -88,7 +102,7 @@ export default function OverlaySorteo() {
     cargar();
     const t = setInterval(cargar, POLL_MS);
     return () => { vivo = false; clearInterval(t); };
-  }, []);
+  }, [sorteoId]);
 
   // ── nombres girando ──
   useEffect(() => {
