@@ -7,6 +7,11 @@ import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
 
+// Fin de la promoción Mini Pie: domingo 9 de agosto de 2026, 00:00 hrs de Chile
+// (UTC-4 en esa fecha). El offset va fijo para que el contador marque lo mismo
+// sin importar la zona horaria del visitante.
+const PROMO_END = new Date('2026-08-09T00:00:00-04:00').getTime()
+
 export default function MiniPieClient() {
   const router = useRouter()
 
@@ -24,6 +29,36 @@ export default function MiniPieClient() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [showPlan, setShowPlan] = useState(false)
+
+  // Contador regresivo del banner. Arranca en null para que el HTML del servidor
+  // y el del cliente coincidan; los valores reales llegan en el primer tick.
+  const [timeLeft, setTimeLeft] = useState<{ d: string; h: string; m: string; s: string } | null>(null)
+  const [promoEnded, setPromoEnded] = useState(false)
+
+  useEffect(() => {
+    const pad = (n: number) => String(n).padStart(2, '0')
+
+    const tick = () => {
+      const diff = PROMO_END - Date.now()
+
+      if (diff <= 0) {
+        setPromoEnded(true)
+        setTimeLeft({ d: '00', h: '00', m: '00', s: '00' })
+        return
+      }
+
+      setTimeLeft({
+        d: pad(Math.floor(diff / 86400000)),
+        h: pad(Math.floor((diff % 86400000) / 3600000)),
+        m: pad(Math.floor((diff % 3600000) / 60000)),
+        s: pad(Math.floor((diff % 60000) / 1000)),
+      })
+    }
+
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [])
 
   // Handlers
   const handleField = (field: string) => (e: any) => {
@@ -51,7 +86,8 @@ export default function MiniPieClient() {
   const toForm = () => {
     const el = document.getElementById('registro')
     if (el) {
-      const y = el.getBoundingClientRect().top + window.pageYOffset - 64
+      const bannerH = document.getElementById('promo-banner')?.offsetHeight ?? 0
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 64 - bannerH
       window.scrollTo({ top: y, behavior: 'smooth' })
     }
   }
@@ -433,7 +469,7 @@ export default function MiniPieClient() {
     #minipie-landing *{box-sizing:border-box}
     :where(#minipie-landing) *{margin:0;padding:0}
     #minipie-landing-html-not-used{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    #minipie-landing{font-family:'Roboto',sans-serif;background:#fff;color:#2C3E50;overflow-x:clip}
+    #minipie-landing{font-family:'Roboto',sans-serif;background:#fff;color:#2C3E50;overflow-x:clip;--mp-banner-h:56px}
     #minipie-landing a{color:inherit;text-decoration:none}
     #minipie-landing img{max-width:100%;display:block}
     #minipie-landing input,#minipie-landing select{font-family:'Roboto',sans-serif;font-size:1rem;transition:border-color .2s,box-shadow .2s}
@@ -478,6 +514,22 @@ export default function MiniPieClient() {
     #registro .form-2col>div:first-child>div{border:2px solid rgba(118,216,69,.3)!important}
 
     /* ══ RESPONSIVE SYSTEM ══ */
+
+    /* ── Banner promo + contador ── */
+    @keyframes promoDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
+    #promo-banner{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--mp-banner-h);background:linear-gradient(135deg,#9f1239 0%,#dc2626 45%,#f97316 100%);border-bottom:1px solid rgba(255,255,255,.22);box-shadow:0 4px 22px rgba(0,0,0,.42)}
+    .promo-inner{max-width:1220px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;justify-content:center;gap:20px}
+    .promo-copy{display:flex;align-items:center;gap:9px;min-width:0}
+    .promo-dot{width:8px;height:8px;border-radius:50%;background:#fff;flex-shrink:0;animation:promoDot 1.2s ease-in-out infinite}
+    .promo-title{font:800 13px 'Montserrat',sans-serif;color:#fff;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+    .promo-sub{font:400 12px 'Roboto',sans-serif;color:rgba(255,255,255,.82);white-space:nowrap}
+    .promo-countdown{display:flex;align-items:center;gap:6px;flex-shrink:0}
+    .promo-unit{min-width:44px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.28);border-radius:9px;padding:4px 5px;text-align:center}
+    .promo-unit-val{font:800 16px/1 'Montserrat',sans-serif;color:#fff;font-variant-numeric:tabular-nums}
+    .promo-unit-lbl{font:600 8px 'Montserrat',sans-serif;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.09em;margin-top:3px}
+    .promo-cta{background:#fff;color:#b91c1c;border:none;padding:9px 18px;border-radius:100px;font:700 12px 'Montserrat',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25);flex-shrink:0}
+    /* Los anclas (#terrenos, #registro…) no deben quedar bajo el banner fijo */
+    #minipie-landing section[id]{scroll-margin-top:calc(var(--mp-banner-h) + 8px)}
 
     /* Nav classes */
     .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1280px;margin:0 auto;padding:0 24px;height:64px;width:100%}
@@ -527,6 +579,7 @@ export default function MiniPieClient() {
 
     /* ── TABLET ≤ 1024px ── */
     @media(max-width:1024px){
+      .promo-sub{display:none}
       .loc-grid{grid-template-columns:1fr}
       .loc-left{padding:72px 32px 40px}
       .loc-right{height:320px}
@@ -540,6 +593,16 @@ export default function MiniPieClient() {
 
     /* ── MOBILE ≤ 768px ── */
     @media(max-width:768px){
+      /* Banner promo */
+      #minipie-landing{--mp-banner-h:52px}
+      .promo-inner{padding:0 12px;gap:10px;justify-content:space-between}
+      .promo-title{font-size:11px;letter-spacing:.04em;white-space:normal;line-height:1.25}
+      .promo-cta{display:none}
+      .promo-countdown{gap:4px}
+      .promo-unit{min-width:34px;padding:3px 4px;border-radius:7px}
+      .promo-unit-val{font-size:13px}
+      .promo-unit-lbl{font-size:7px;margin-top:2px}
+
       /* Nav */
       .nav-inner{padding:0 16px;height:56px}
       .nav-badge{display:none}
@@ -617,6 +680,9 @@ export default function MiniPieClient() {
 
     /* ── SMALL MOBILE ≤ 390px ── */
     @media(max-width:390px){
+      .promo-title{font-size:10px}
+      .promo-unit{min-width:30px}
+      .promo-unit-val{font-size:12px}
       .nav-cta span{display:none}
       .terreno-btns{grid-template-columns:1fr}
       .benefit-item .benefit-icon{width:36px!important;height:36px!important;min-width:36px}
@@ -637,6 +703,32 @@ export default function MiniPieClient() {
       .hero-panel-inner{padding:160px 60px 120px}
     }
   ` }} />
+
+      {/* Banner promo con contador regresivo */}
+      <div id="promo-banner">
+        <div className="promo-inner">
+          <div className="promo-copy">
+            <span className="promo-dot"></span>
+            <span className="promo-title">
+              {promoEnded ? 'La promoción Mini Pie ha finalizado' : 'Últimos días · Termina el domingo 9 de agosto'}
+            </span>
+            {!promoEnded && <span className="promo-sub">a las 00:00 hrs</span>}
+          </div>
+
+          {!promoEnded && (
+            <div className="promo-countdown">
+              {([['d', 'días'], ['h', 'hrs'], ['m', 'min'], ['s', 'seg']] as const).map(([key, label]) => (
+                <div key={key} className="promo-unit">
+                  <div className="promo-unit-val">{timeLeft ? timeLeft[key] : '--'}</div>
+                  <div className="promo-unit-lbl">{label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <button onClick={toForm} className="promo-cta">ASEGURAR MI CUPO →</button>
+        </div>
+      </div>
 
       {/* Body Content */}
       
@@ -833,7 +925,7 @@ export default function MiniPieClient() {
     </div>
 
     
-    <nav id="main-nav" style={{"position":"absolute","top":"0","left":"0","right":"0","zIndex":"20","background":"linear-gradient(to bottom,rgba(0,0,0,.52) 0%,transparent 100%)"}}>
+    <nav id="main-nav" style={{"position":"absolute","top":"var(--mp-banner-h)","left":"0","right":"0","zIndex":"20","background":"linear-gradient(to bottom,rgba(0,0,0,.52) 0%,transparent 100%)"}}>
       <div className="nav-inner">
         <div style={{"display":"flex","alignItems":"center","gap":"12px","flexShrink":"0"}}>
           <img src="/assets/minipie/favicon (1).png" alt="Alimin" style={{"width":"50px","height":"50px","objectFit":"contain","display":"block"}} />
@@ -849,7 +941,7 @@ export default function MiniPieClient() {
     </nav>
 
     
-    <div style={{"position":"absolute","top":"0","left":"0","right":"0","height":"3px","background":"rgba(255,255,255,.1)","zIndex":"25"}}>
+    <div style={{"position":"absolute","top":"var(--mp-banner-h)","left":"0","right":"0","height":"3px","background":"rgba(255,255,255,.1)","zIndex":"25"}}>
       <div id="progress-bar" style={{"height":"100%","width":"0%","background":"linear-gradient(90deg,#76d845,#4ba646)","borderRadius":"0 2px 2px 0","transition":"width .1s linear"}}></div>
     </div>
 
@@ -879,7 +971,7 @@ export default function MiniPieClient() {
 </div>
 
 
-<nav id="persistent-nav" style={{"position":"fixed","top":"0","left":"0","right":"0","zIndex":"200","background":"linear-gradient(135deg,#3a9e48 0%,#4ba646 40%,#62c247 100%)","backdropFilter":"blur(12px)","WebkitBackdropFilter":"blur(12px)","borderBottom":"2px solid rgba(255,255,255,.2)","transform":"translateY(-100%)","transition":"transform .4s cubic-bezier(.16,1,.3,1)","boxShadow":"0 4px 24px rgba(75,166,70,.5)"}}>
+<nav id="persistent-nav" style={{"position":"fixed","top":"var(--mp-banner-h)","left":"0","right":"0","zIndex":"200","background":"linear-gradient(135deg,#3a9e48 0%,#4ba646 40%,#62c247 100%)","backdropFilter":"blur(12px)","WebkitBackdropFilter":"blur(12px)","borderBottom":"2px solid rgba(255,255,255,.2)","transform":"translateY(-100%)","transition":"transform .4s cubic-bezier(.16,1,.3,1)","boxShadow":"0 4px 24px rgba(75,166,70,.5)"}}>
   <div style={{"maxWidth":"1160px","margin":"0 auto","padding":"0 24px","height":"68px","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px"}}>
     <div style={{"display":"flex","alignItems":"center","gap":"12px","flexShrink":"0"}}>
       <img src="/assets/minipie/favicon (1).png" alt="Alimin" style={{"width":"44px","height":"44px","objectFit":"contain","display":"block"}} />
