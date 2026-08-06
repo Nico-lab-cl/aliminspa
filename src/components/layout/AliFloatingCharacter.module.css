@@ -270,9 +270,9 @@
 }
 
 /* Option Card 1: Chat con IA (Pronto) */
-.optionCardDisabled {
+.optionCard {
   background: #ffffff;
-  border: 1.5px dashed #CBD5E1;
+  border: 1.5px solid #CBD5E1;
   border-radius: 16px;
   padding: 14px 16px;
   display: flex;
@@ -283,9 +283,10 @@
   position: relative;
 }
 
-.optionCardDisabled:hover {
+.optionCard:hover {
   border-color: #1A8A7D;
-  background: rgba(26, 138, 125, 0.02);
+  background: rgba(26, 138, 125, 0.03);
+  box-shadow: 0 4px 12px rgba(26, 138, 125, 0.1);
 }
 
 .optionHeader {
@@ -304,8 +305,8 @@
   color: #1E293B;
 }
 
-.prontoBadge {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+.enVivoBadge {
+  background: linear-gradient(135deg, #1A8A7D 0%, #0F766E 100%);
   color: white;
   font-size: 10px;
   font-weight: 800;
@@ -320,18 +321,6 @@
   color: #64748B;
   margin: 0;
   line-height: 1.4;
-}
-
-/* Inline Toast Message for "Chat Pronto" */
-.prontoNotice {
-  background: #FEF3C7;
-  border: 1px solid #FCD34D;
-  color: #92400E;
-  padding: 10px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  line-height: 1.4;
-  animation: fadeIn 0.25s ease;
 }
 
 /* Option Card 2: WhatsApp Asesores */

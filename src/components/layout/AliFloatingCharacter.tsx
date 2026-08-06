@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SITE } from '@/lib/constants';
+import AliChat from './AliChat';
 import styles from './AliFloatingCharacter.module.css';
 
 // Dynamic import of Spline to prevent SSR window/WebGL issues
@@ -35,7 +36,7 @@ const ADVISORS = [
 export default function AliFloatingCharacter() {
   const [showSpeechBubble, setShowSpeechBubble] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showProntoNotice, setShowProntoNotice] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [showAdvisors, setShowAdvisors] = useState(false);
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [shouldLoadScene, setShouldLoadScene] = useState(false);
@@ -66,8 +67,9 @@ export default function AliFloatingCharacter() {
     setShowSpeechBubble(false);
   };
 
-  const handleChatProntoClick = () => {
-    setShowProntoNotice((prev) => !prev);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setShowChat(false);
   };
 
   return (
@@ -88,7 +90,7 @@ export default function AliFloatingCharacter() {
             </div>
             <button
               className={styles.closeModalBtn}
-              onClick={() => setIsModalOpen(false)}
+              onClick={handleCloseModal}
               aria-label="Cerrar ventana"
             >
               ✕
@@ -97,33 +99,34 @@ export default function AliFloatingCharacter() {
 
           {/* Body */}
           <div className={styles.modalBody}>
+            {showChat ? (
+              <AliChat onVolver={() => setShowChat(false)} />
+            ) : (
+              <>
             {/* Ali Greeting Message */}
             <div className={styles.aliGreeting}>
               ¡Hola! 👋 Soy <strong>Ali</strong>, el asistente virtual de <strong>Alimin Inmobiliaria</strong>. ¿Cómo puedo ayudarte hoy con la cotización de tu terreno?
             </div>
 
-            {/* Option 1: Chat con IA (Pronto) */}
+            {/* Option 1: Chat en vivo con un asesor */}
             <div
-              className={styles.optionCardDisabled}
-              onClick={handleChatProntoClick}
+              className={`${styles.optionCard} crm-track-click`}
+              onClick={() => setShowChat(true)}
+              role="button"
+              tabIndex={0}
+              data-crm-name="Abrir chat en vivo"
+              data-crm-category="Chat Web"
             >
               <div className={styles.optionHeader}>
                 <div className={styles.optionTitle}>
-                  <span>🤖</span> Chat con Ali IA
+                  <span>💬</span> Chatear con un asesor
                 </div>
-                <span className={styles.prontoBadge}>Pronto 🚀</span>
+                <span className={styles.enVivoBadge}>En vivo</span>
               </div>
               <p className={styles.optionDesc}>
-                Conversa directamente en tiempo real con Ali para resolver dudas de terrenos, escrituración y financiamiento.
+                Escríbenos aquí mismo y resuelve tus dudas de terrenos, escrituración y financiamiento sin salir de la página.
               </p>
             </div>
-
-            {/* Pronto Inline Notice */}
-            {showProntoNotice && (
-              <div className={styles.prontoNotice}>
-                ⚡ <strong>¡Ali IA está en desarrollo!</strong> Muy pronto podrás interactuar directamente con nuestro chatbot inteligente. Por ahora, te conectamos de inmediato con un asesor humano.
-              </div>
-            )}
 
             {/* Option 2: Hablar por WhatsApp */}
             <div className={styles.whatsappOptionBox}>
@@ -188,9 +191,11 @@ export default function AliFloatingCharacter() {
             </div>
 
             {/* Option 3: Agendar Visita */}
-            <Link href="/reunion" className={styles.agendaLink} onClick={() => setIsModalOpen(false)}>
+            <Link href="/reunion" className={styles.agendaLink} onClick={handleCloseModal}>
               📅 Agendar Visita a los Terrenos
             </Link>
+              </>
+            )}
           </div>
         </div>
       )}
