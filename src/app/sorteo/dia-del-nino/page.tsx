@@ -81,10 +81,16 @@ export default function OverlaySorteo() {
   const [estado, setEstado] = useState<Estado>(inicial);
   const [nombreRuleta, setNombreRuleta] = useState('');
   const [sorteoId, setSorteoId] = useState(SORTEO_ID);
+  const [verContador, setVerContador] = useState(true);
   const ganadosPrevios = useRef(0);
   const refGanador = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => setSorteoId(idDesdeUrl()), []);
+  useEffect(() => {
+    setSorteoId(idDesdeUrl());
+    // ?contador=off para sorteos donde el total no aporta (ej. ruleta en vivo)
+    const p = new URLSearchParams(window.location.search).get('contador');
+    if (p === 'off' || p === '0') setVerContador(false);
+  }, []);
 
   // ── polling del estado compartido ──
   useEffect(() => {
@@ -164,10 +170,12 @@ export default function OverlaySorteo() {
             Sorteo Día del Niño
             <span className={styles.tituloAcento}>¡En Grande!</span>
           </h1>
-          <div className={styles.contador}>
-            <span className={styles.contadorNumero}>{estado.total.toLocaleString('es-CL')}</span>
-            <span className={styles.contadorTexto}>participantes</span>
-          </div>
+          {verContador && (
+            <div className={styles.contador}>
+              <span className={styles.contadorNumero}>{estado.total.toLocaleString('es-CL')}</span>
+              <span className={styles.contadorTexto}>participantes</span>
+            </div>
+          )}
         </header>
 
         <main className={styles.centro}>
