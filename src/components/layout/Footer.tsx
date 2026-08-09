@@ -16,7 +16,7 @@ export default function Footer() {
                             <Link href="/#proyectos">Lomas del Mar — El Tabo</Link>
                             <Link href="/#proyectos">Arena y Sol — El Tabo</Link>
                             <Link href="/#proyectos">Libertad y Alegría — El Tabo</Link>
-                            <Link href="https://aliminspa.cl/minipie">Promoción MINI PIE</Link>
+                            <Link href="/minipie">Lomas del Mar — Financiamiento directo</Link>
                         </div>
                     </div>
                     <div>

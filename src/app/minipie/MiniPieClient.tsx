@@ -7,11 +7,9 @@ import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
 
-// Fin de la promoción Mini Pie: domingo 9 de agosto de 2026, 00:00 hrs de Chile
-// (UTC-4 en esa fecha). El offset va fijo para que el contador marque lo mismo
-// sin importar la zona horaria del visitante.
-const PROMO_END = new Date('2026-08-09T00:00:00-04:00').getTime()
-
+// La promoción Mini Pie terminó el 9 de agosto de 2026. La landing se mantiene
+// en /minipie porque la URL sigue circulando en flyers, bio de Instagram y
+// campañas, pero ahora comunica la oferta permanente de Lomas del Mar.
 export default function MiniPieClient() {
   const router = useRouter()
 
@@ -29,36 +27,6 @@ export default function MiniPieClient() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [showPlan, setShowPlan] = useState(false)
-
-  // Contador regresivo del banner. Arranca en null para que el HTML del servidor
-  // y el del cliente coincidan; los valores reales llegan en el primer tick.
-  const [timeLeft, setTimeLeft] = useState<{ d: string; h: string; m: string; s: string } | null>(null)
-  const [promoEnded, setPromoEnded] = useState(false)
-
-  useEffect(() => {
-    const pad = (n: number) => String(n).padStart(2, '0')
-
-    const tick = () => {
-      const diff = PROMO_END - Date.now()
-
-      if (diff <= 0) {
-        setPromoEnded(true)
-        setTimeLeft({ d: '00', h: '00', m: '00', s: '00' })
-        return
-      }
-
-      setTimeLeft({
-        d: pad(Math.floor(diff / 86400000)),
-        h: pad(Math.floor((diff % 86400000) / 3600000)),
-        m: pad(Math.floor((diff % 3600000) / 60000)),
-        s: pad(Math.floor((diff % 60000) / 1000)),
-      })
-    }
-
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
-  }, [])
 
   // Handlers
   const handleField = (field: string) => (e: any) => {
@@ -231,7 +199,7 @@ export default function MiniPieClient() {
   const formVisible = status !== 'success'
   const successVisible = status === 'success'
   const statusError = status === 'error'
-  const submitText = isLoading ? 'Enviando...' : 'ASEGURAR MI CUPO →'
+  const submitText = isLoading ? 'Enviando...' : 'QUIERO QUE ME CONTACTEN →'
   const submitDisabled = isLoading
   const planVisible = showPlan
   const onSubmit = handleSubmit
@@ -242,11 +210,11 @@ export default function MiniPieClient() {
   const toggleFaq3 = toggleFaq(3)
   const toggleFaq4 = toggleFaq(4)
 
-  const faq0h = openFaq === 0 ? '150px' : '0px'
-  const faq1h = openFaq === 1 ? '150px' : '0px'
-  const faq2h = openFaq === 2 ? '150px' : '0px'
-  const faq3h = openFaq === 3 ? '150px' : '0px'
-  const faq4h = openFaq === 4 ? '150px' : '0px'
+  const faq0h = openFaq === 0 ? '320px' : '0px'
+  const faq1h = openFaq === 1 ? '320px' : '0px'
+  const faq2h = openFaq === 2 ? '320px' : '0px'
+  const faq3h = openFaq === 3 ? '320px' : '0px'
+  const faq4h = openFaq === 4 ? '320px' : '0px'
 
   const faq0icon = openFaq === 0 ? '−' : '+'
   const faq1icon = openFaq === 1 ? '−' : '+'
@@ -517,17 +485,13 @@ export default function MiniPieClient() {
 
     /* ── Banner promo + contador ── */
     @keyframes promoDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
-    #promo-banner{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--mp-banner-h);background:linear-gradient(135deg,#9f1239 0%,#dc2626 45%,#f97316 100%);border-bottom:1px solid rgba(255,255,255,.22);box-shadow:0 4px 22px rgba(0,0,0,.42)}
+    #promo-banner{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--mp-banner-h);background:linear-gradient(135deg,#2d7a3a 0%,#4ba646 45%,#76d845 100%);border-bottom:1px solid rgba(255,255,255,.22);box-shadow:0 4px 22px rgba(0,0,0,.42)}
     .promo-inner{max-width:1220px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;justify-content:center;gap:20px}
     .promo-copy{display:flex;align-items:center;gap:9px;min-width:0}
     .promo-dot{width:8px;height:8px;border-radius:50%;background:#fff;flex-shrink:0;animation:promoDot 1.2s ease-in-out infinite}
     .promo-title{font:800 13px 'Montserrat',sans-serif;color:#fff;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
     .promo-sub{font:400 12px 'Roboto',sans-serif;color:rgba(255,255,255,.82);white-space:nowrap}
-    .promo-countdown{display:flex;align-items:center;gap:6px;flex-shrink:0}
-    .promo-unit{min-width:44px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.28);border-radius:9px;padding:4px 5px;text-align:center}
-    .promo-unit-val{font:800 16px/1 'Montserrat',sans-serif;color:#fff;font-variant-numeric:tabular-nums}
-    .promo-unit-lbl{font:600 8px 'Montserrat',sans-serif;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.09em;margin-top:3px}
-    .promo-cta{background:#fff;color:#b91c1c;border:none;padding:9px 18px;border-radius:100px;font:700 12px 'Montserrat',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25);flex-shrink:0}
+    .promo-cta{background:#fff;color:#2d7a3a;border:none;padding:9px 18px;border-radius:100px;font:700 12px 'Montserrat',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25);flex-shrink:0}
     /* Los anclas (#terrenos, #registro…) no deben quedar bajo el banner fijo */
     #minipie-landing section[id]{scroll-margin-top:calc(var(--mp-banner-h) + 8px)}
 
@@ -597,11 +561,8 @@ export default function MiniPieClient() {
       #minipie-landing{--mp-banner-h:52px}
       .promo-inner{padding:0 12px;gap:10px;justify-content:space-between}
       .promo-title{font-size:11px;letter-spacing:.04em;white-space:normal;line-height:1.25}
-      .promo-cta{display:none}
-      .promo-countdown{gap:4px}
-      .promo-unit{min-width:34px;padding:3px 4px;border-radius:7px}
-      .promo-unit-val{font-size:13px}
-      .promo-unit-lbl{font-size:7px;margin-top:2px}
+      .promo-sub{display:none}
+      .promo-cta{padding:8px 14px;font-size:11px}
 
       /* Nav */
       .nav-inner{padding:0 16px;height:56px}
@@ -681,8 +642,7 @@ export default function MiniPieClient() {
     /* ── SMALL MOBILE ≤ 390px ── */
     @media(max-width:390px){
       .promo-title{font-size:10px}
-      .promo-unit{min-width:30px}
-      .promo-unit-val{font-size:12px}
+      .promo-cta{padding:7px 12px;font-size:10px}
       .nav-cta span{display:none}
       .terreno-btns{grid-template-columns:1fr}
       .benefit-item .benefit-icon{width:36px!important;height:36px!important;min-width:36px}
@@ -704,29 +664,16 @@ export default function MiniPieClient() {
     }
   ` }} />
 
-      {/* Banner promo con contador regresivo */}
+      {/* Barra superior con la propuesta permanente */}
       <div id="promo-banner">
         <div className="promo-inner">
           <div className="promo-copy">
             <span className="promo-dot"></span>
-            <span className="promo-title">
-              {promoEnded ? 'La promoción Mini Pie ha finalizado' : 'Últimos días · Termina el domingo 9 de agosto'}
-            </span>
-            {!promoEnded && <span className="promo-sub">a las 00:00 hrs</span>}
+            <span className="promo-title">Financiamiento directo Alimin</span>
+            <span className="promo-sub">Sin banco · Sin aval · Sin importar tu DICOM</span>
           </div>
 
-          {!promoEnded && (
-            <div className="promo-countdown">
-              {([['d', 'días'], ['h', 'hrs'], ['m', 'min'], ['s', 'seg']] as const).map(([key, label]) => (
-                <div key={key} className="promo-unit">
-                  <div className="promo-unit-val">{timeLeft ? timeLeft[key] : '--'}</div>
-                  <div className="promo-unit-lbl">{label}</div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <button onClick={toForm} className="promo-cta">ASEGURAR MI CUPO →</button>
+          <button onClick={toForm} className="promo-cta">COTIZAR MI TERRENO →</button>
         </div>
       </div>
 
@@ -761,44 +708,42 @@ export default function MiniPieClient() {
     
     <div id="panel-hero" style={{"position":"absolute","inset":"0","zIndex":"5","display":"flex","alignItems":"center","transition":"opacity .9s ease,transform .9s ease"}}>
       <div className="hero-panel-inner">
-        <div className="hero-promo-badge" style={{"animation":"fadeInUp .55s .05s ease both","display":"inline-flex","alignItems":"center","gap":"8px","background":"rgba(239,68,68,.18)","border":"1px solid rgba(239,68,68,.4)","borderRadius":"100px","padding":"5px 14px","marginBottom":"16px"}}>
-          <span style={{"width":"7px","height":"7px","background":"#FCA5A5","borderRadius":"50%","display":"inline-block"}}></span>
-          <span style={{"font":"700 12px 'Montserrat',sans-serif","color":"#FCA5A5","textTransform":"uppercase","letterSpacing":".1em"}}>Promoción limitada · Última edición</span>
+        <div className="hero-promo-badge" style={{"animation":"fadeInUp .55s .05s ease both","display":"inline-flex","alignItems":"center","gap":"8px","background":"rgba(118,216,69,.18)","border":"1px solid rgba(118,216,69,.4)","borderRadius":"100px","padding":"5px 14px","marginBottom":"16px"}}>
+          <span style={{"width":"7px","height":"7px","background":"#76d845","borderRadius":"50%","display":"inline-block"}}></span>
+          <span style={{"font":"700 12px 'Montserrat',sans-serif","color":"#b8f07a","textTransform":"uppercase","letterSpacing":".1em"}}>Lomas del Mar · El Tabo</span>
         </div>
         <h1 style={{"animation":"fadeInUp .55s .1s ease both","font":"900 clamp(3rem,8.5vw,6.2rem)/1.0 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.035em","marginBottom":"18px"}}>
-          VUELVE<br />
-          <em style={{"fontStyle":"normal","background":"linear-gradient(90deg, rgb(118, 216, 69), rgb(75, 166, 70), rgb(118, 216, 69)) 0% 0% / 200% text","WebkitTextFillColor":"transparent","animation":"3s linear 0s infinite normal none running shimmerGold"}}>MINI PIE</em>&nbsp;</h1>
+          TU TERRENO<br />
+          <em style={{"fontStyle":"normal","background":"linear-gradient(90deg, rgb(118, 216, 69), rgb(75, 166, 70), rgb(118, 216, 69)) 0% 0% / 200% text","WebkitTextFillColor":"transparent","animation":"3s linear 0s infinite normal none running shimmerGold"}}>SIN BANCO</em>&nbsp;</h1>
         <p style={{"animation":"fadeInUp .55s .2s ease both","font":"300 clamp(1rem,2.2vw,1.2rem)/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.65)","marginBottom":"32px","maxWidth":"540px"}}>
-          La última edición. Tu terreno en el litoral central con el pie más accesible del mercado. Sin banco, sin interés.
+          Terrenos urbanizados con rol propio en el Litoral Central. Financiamiento directo con Alimin, en pesos y sin evaluación bancaria.
         </p>
         <div className="price-cards-row" style={{"animation":"fadeInUp .55s .3s ease both","display":"flex","flexWrap":"wrap","gap":"12px","marginBottom":"40px"}}>
 
-          
+
           <div style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px"}}>
             <div style={{"font":"700 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.45)","textTransform":"uppercase","letterSpacing":".08em"}}>200 m²</div>
             <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
-              <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,100,100,.75)","textDecoration":"line-through"}}>$5.500.000</span>
-              <span style={{"font":"400 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.35)"}}>→</span>
-              <span style={{"font":"800 16px 'Montserrat',sans-serif","color":"#76d845"}}>$1.500.000</span>
+              <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>Pie</span>
+              <span style={{"font":"800 16px 'Montserrat',sans-serif","color":"#76d845"}}>$5.500.000</span>
             </div>
-            <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.7)"}}>Ahorra $4.000.000 en el pie</div>
+            <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.7)"}}>45 cuotas de $550.000</div>
           </div>
 
-          
+
           <div style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px"}}>
             <div style={{"font":"700 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.45)","textTransform":"uppercase","letterSpacing":".08em"}}>390 m²</div>
             <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
-              <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,100,100,.75)","textDecoration":"line-through"}}>$7.500.000</span>
-              <span style={{"font":"400 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.35)"}}>→</span>
-              <span style={{"font":"800 16px 'Montserrat',sans-serif","color":"#76d845"}}>$3.000.000</span>
+              <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>Pie</span>
+              <span style={{"font":"800 16px 'Montserrat',sans-serif","color":"#76d845"}}>$7.500.000</span>
             </div>
-            <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.7)"}}>Ahorra $4.500.000 en el pie</div>
+            <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.7)"}}>56 cuotas de $550.000</div>
           </div>
 
         </div>
         <div className="hero-ctas" style={{"animation":"fadeInUp .55s .4s ease both"}}>
           <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845 0%,#4ba646 100%)","color":"#fff","border":"none","padding":"15px 32px","borderRadius":"14px","font":"700 15px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 6px 28px rgba(118,216,69,.38)","transition":"transform .2s,box-shadow .2s","letterSpacing":".01em"}}>
-            ASEGURAR MI CUPO →
+            COTIZAR MI TERRENO →
           </button>
           <a href="#terrenos" style={{"background":"rgba(255,255,255,.09)","color":"rgba(255,255,255,.85)","border":"1px solid rgba(255,255,255,.18)","padding":"15px 26px","borderRadius":"14px","font":"600 15px 'Montserrat',sans-serif","cursor":"pointer","transition":"background .2s","display":"flex","alignItems":"center","gap":"6px"}}>
             Ver terrenos <span style={{"fontSize":"16px"}}>↓</span>
@@ -932,9 +877,9 @@ export default function MiniPieClient() {
           <div className="nav-name-text" style={{"font":"900 24px/1 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.02em"}}>ALIMIN</div>
         </div>
         <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
-          <div className="nav-badge" style={{"background":"rgba(239,68,68,.15)","border":"1px solid rgba(239,68,68,.35)","borderRadius":"100px","padding":"4px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#FCA5A5"}}>⚠ CUPOS LIMITADOS</div>
+          <div className="nav-badge" style={{"background":"rgba(118,216,69,.15)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"100px","padding":"4px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#b8f07a"}}>✓ Crédito directo</div>
           <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"10px 20px","borderRadius":"100px","font":"700 13px 'Montserrat',sans-serif","cursor":"pointer","whiteSpace":"nowrap","boxShadow":"0 4px 16px rgba(118,216,69,.4)"}}>
-            Asegurar Cupo
+            Cotizar
           </button>
         </div>
       </div>
@@ -951,7 +896,7 @@ export default function MiniPieClient() {
       <div style={{"display":"flex","alignItems":"center","gap":"20px"}}>
         <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"5px"}}>
           <div id="dot-0" style={{"width":"28px","height":"4px","background":"#76d845","borderRadius":"3px","transition":"all .45s ease","boxShadow":"0 0 8px rgba(118,216,69,.6)"}}></div>
-          <span id="label-0" style={{"font":"700 9px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".08em","transition":"opacity .45s ease","whiteSpace":"nowrap"}}>Mini Pie</span>
+          <span id="label-0" style={{"font":"700 9px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".08em","transition":"opacity .45s ease","whiteSpace":"nowrap"}}>El terreno</span>
         </div>
         <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"5px"}}>
           <div id="dot-1" style={{"width":"4px","height":"4px","background":"rgba(255,255,255,.3)","borderRadius":"3px","transition":"all .45s ease"}}></div>
@@ -982,10 +927,10 @@ export default function MiniPieClient() {
     <div style={{"display":"flex","alignItems":"center","gap":"10px"}}>
       <div className="nav-badge" style={{"display":"flex","alignItems":"center","gap":"7px","background":"rgba(0,0,0,.18)","border":"1px solid rgba(255,255,255,.3)","borderRadius":"100px","padding":"5px 14px","font":"700 11px 'Montserrat',sans-serif","color":"#fff"}}>
         <span style={{"width":"7px","height":"7px","background":"#fff","borderRadius":"50%","display":"inline-block","opacity":".85"}}></span>
-        CUPOS LIMITADOS
+        SIN BANCO · SIN AVAL
       </div>
       <button onClick={toForm} style={{"background":"#fff","color":"#2d7a3a","border":"none","padding":"10px 20px","borderRadius":"100px","font":"700 13px 'Montserrat',sans-serif","cursor":"pointer","whiteSpace":"nowrap","boxShadow":"0 4px 16px rgba(0,0,0,.2)","letterSpacing":".01em"}}>
-        Asegurar Cupo &rarr;
+        Cotizar &rarr;
       </button>
     </div>
   </div>
@@ -1006,8 +951,8 @@ export default function MiniPieClient() {
       </div>
       <div>
         <div style={{"font":"800 22px 'Montserrat',sans-serif","color":"#fff","lineHeight":"1","marginBottom":"3px"}}>Pie desde</div>
-        <div style={{"font":"700 11px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".06em","marginBottom":"4px"}}>$1.500.000 CLP</div>
-        <div style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","lineHeight":"1.5"}}>El pie más bajo<br />del litoral central</div>
+        <div style={{"font":"700 11px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".06em","marginBottom":"4px"}}>$5.500.000 CLP</div>
+        <div style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","lineHeight":"1.5"}}>El resto en cuotas<br />mensuales fijas</div>
       </div>
     </div>
 
@@ -1151,10 +1096,9 @@ export default function MiniPieClient() {
             <div style={{"background":"rgba(0,0,0,.4)","border":"1px solid rgba(118,216,69,.3)","borderRadius":"12px","padding":"8px 14px","textAlign":"right"}}>
               <div style={{"font":"600 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.45)","textTransform":"uppercase","letterSpacing":".08em","marginBottom":"3px"}}>Pie desde</div>
               <div style={{"display":"flex","alignItems":"center","gap":"7px"}}>
-                <span style={{"font":"600 13px 'Roboto',sans-serif","color":"rgba(255,100,100,.8)","textDecoration":"line-through"}}>$5.500.000</span>
-                <span style={{"font":"900 20px 'Montserrat',sans-serif","color":"#76d845"}}>$1.500.000</span>
+                <span style={{"font":"900 20px 'Montserrat',sans-serif","color":"#76d845"}}>$5.500.000</span>
               </div>
-              <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.75)","marginTop":"2px"}}>Ahorra $4.000.000</div>
+              <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.75)","marginTop":"2px"}}>Sin banco · Sin aval</div>
             </div>
           </div>
 
@@ -1164,11 +1108,11 @@ export default function MiniPieClient() {
             <div style={{"display":"flex","flexDirection":"column","gap":"9px"}}>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Valor total</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$40.990.000</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$29.990.000</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
-                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>% Financiado</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#76d845"}}>96,34%</span>
+                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Pie</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#76d845"}}>$5.500.000</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Cuota mensual</span>
@@ -1176,11 +1120,7 @@ export default function MiniPieClient() {
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Plazo</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>72 cuotas</span>
-              </div>
-              <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
-                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Última cuota</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$440.000</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>45 cuotas</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Al contado</span>
@@ -1286,10 +1226,9 @@ export default function MiniPieClient() {
             <div style={{"background":"rgba(0,0,0,.4)","border":"1px solid rgba(118,216,69,.3)","borderRadius":"12px","padding":"8px 14px","textAlign":"right"}}>
               <div style={{"font":"600 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.45)","textTransform":"uppercase","letterSpacing":".08em","marginBottom":"3px"}}>Pie desde</div>
               <div style={{"display":"flex","alignItems":"center","gap":"7px"}}>
-                <span style={{"font":"600 13px 'Roboto',sans-serif","color":"rgba(255,100,100,.8)","textDecoration":"line-through"}}>$7.500.000</span>
-                <span style={{"font":"900 20px 'Montserrat',sans-serif","color":"#76d845"}}>$3.000.000</span>
+                <span style={{"font":"900 20px 'Montserrat',sans-serif","color":"#76d845"}}>$7.500.000</span>
               </div>
-              <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.75)","marginTop":"2px"}}>Ahorra $4.500.000</div>
+              <div style={{"font":"500 10px 'Roboto',sans-serif","color":"rgba(118,216,69,.75)","marginTop":"2px"}}>Sin banco · Sin aval</div>
             </div>
           </div>
 
@@ -1299,11 +1238,11 @@ export default function MiniPieClient() {
             <div style={{"display":"flex","flexDirection":"column","gap":"9px"}}>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Valor total</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$50.990.000</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$37.990.000</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
-                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>% Financiado</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#76d845"}}>94,12%</span>
+                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Pie</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#76d845"}}>$7.500.000</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Cuota mensual</span>
@@ -1311,11 +1250,7 @@ export default function MiniPieClient() {
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Plazo</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>88 cuotas</span>
-              </div>
-              <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center","paddingBottom":"8px","borderBottom":"1px solid rgba(255,255,255,.08)"}}>
-                <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Última cuota</span>
-                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>$140.000</span>
+                <span style={{"font":"700 15px 'Montserrat',sans-serif","color":"#fff"}}>56 cuotas</span>
               </div>
               <div style={{"display":"flex","justifyContent":"space-between","alignItems":"center"}}>
                 <span style={{"font":"400 14px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Al contado</span>
@@ -1689,10 +1624,23 @@ export default function MiniPieClient() {
     <div style={{"textAlign":"center","marginBottom":"44px"}}>
       <div style={{"display":"inline-flex","alignItems":"center","gap":"10px","background":"rgba(118,216,69,.15)","border":"1px solid rgba(118,216,69,.3)","borderRadius":"100px","padding":"6px 18px","marginBottom":"18px"}}>
         <span style={{"width":"8px","height":"8px","background":"#76d845","borderRadius":"50%","animation":"pulseGreen 2s ease-in-out infinite","display":"inline-block"}}></span>
-        <span style={{"font":"600 12px 'Montserrat',sans-serif","color":"#4ba646","letterSpacing":".08em","textTransform":"uppercase"}}>CUPOS LIMITADOS · Regístrate ahora</span>
+        <span style={{"font":"600 12px 'Montserrat',sans-serif","color":"#4ba646","letterSpacing":".08em","textTransform":"uppercase"}}>Cotiza sin compromiso</span>
       </div>
-      <h2 style={{"font":"800 clamp(1.8rem,4vw,2.8rem)/1.1 'Montserrat',sans-serif","color":"#fff","marginBottom":"14px"}}>Asegura tu Cupo Mini Pie</h2>
+      <h2 style={{"font":"800 clamp(1.8rem,4vw,2.8rem)/1.1 'Montserrat',sans-serif","color":"#fff","marginBottom":"14px"}}>Reserva tu terreno en Lomas del Mar</h2>
       <p style={{"font":"400 15px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","maxWidth":"480px","margin":"0 auto"}}>Completa el formulario y un asesor te contactará en menos de 24 horas para guiarte en el proceso.</p>
+
+      {/* Aviso para quienes llegan por links antiguos de la promo Mini Pie */}
+      <div style={{"maxWidth":"620px","margin":"28px auto 0","background":"rgba(255,255,255,.06)","border":"1px solid rgba(255,255,255,.14)","borderRadius":"16px","padding":"18px 22px","textAlign":"left","display":"flex","gap":"14px","alignItems":"flex-start"}}>
+        <span style={{"fontSize":"20px","lineHeight":"1.2","flexShrink":"0"}}>📌</span>
+        <div>
+          <div style={{"font":"700 14px 'Montserrat',sans-serif","color":"#fff","marginBottom":"5px"}}>¿Llegaste buscando la promoción Mini Pie?</div>
+          <p style={{"font":"400 13px/1.65 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","margin":"0"}}>
+            Esa edición ya terminó. Los terrenos siguen disponibles con nuestro financiamiento
+            directo de siempre: sin banco, sin aval y en pesos. Regístrate igual y, si lanzamos
+            una nueva promoción, eres de los primeros en enterarte.
+          </p>
+        </div>
+      </div>
     </div>
 
     
@@ -1779,11 +1727,11 @@ export default function MiniPieClient() {
             <div className="terreno-btns">
               <button type="button" onClick={onTerreno200} style={{"background":t200SelectedBg,"border":t200SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t200SelectedColor,"marginBottom":"2px"}}>200 m²</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $1.500.000 · 72 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $5.500.000 · 45 cuotas $550K</div>
               </button>
               <button type="button" onClick={onTerreno390} style={{"background":t390SelectedBg,"border":t390SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t390SelectedColor,"marginBottom":"2px"}}>390 m² ✦</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $3.000.000 · 88 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $7.500.000 · 56 cuotas $550K</div>
               </button>
             </div>
           </div>
@@ -1833,7 +1781,7 @@ export default function MiniPieClient() {
           <div style={{"font":"900 36px/1 'Montserrat',sans-serif","color":"#76d845"}}>+50%</div>
           <div>
             <div style={{"font":"700 14px 'Montserrat',sans-serif","color":"#fff","marginBottom":"2px"}}>de terrenos ya vendidos</div>
-            <div style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Los cupos se agotan rápido · ¡Asegura el tuyo!</div>
+            <div style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.55)"}}>Quedan lotes disponibles · Consulta por el tuyo</div>
           </div>
         </div>
 
@@ -1918,11 +1866,11 @@ export default function MiniPieClient() {
       
       <div style={{"background":faq0bg,"borderRadius":"14px","border":"1.5px solid #e0eecc","overflow":"hidden","transition":"background .25s"}}>
         <button onClick={toggleFaq0} style={{"width":"100%","display":"flex","justifyContent":"space-between","alignItems":"center","padding":"18px 22px","background":"none","border":"none","cursor":"pointer","textAlign":"left","gap":"12px"}}>
-          <span style={{"font":"600 15px 'Montserrat',sans-serif","color":"#1a2b3d"}}>¿Qué es el Mini Pie y por qué es especial?</span>
+          <span style={{"font":"600 15px 'Montserrat',sans-serif","color":"#1a2b3d"}}>¿Sigue vigente la promoción Mini Pie?</span>
           <span style={{"font":"700 22px 'Montserrat',sans-serif","color":"#4ba646","flexShrink":"0","transition":"transform .3s"}}>{faq0icon}</span>
         </button>
         <div style={{"maxHeight":faq0h,"overflow":"hidden","transition":"max-height .35s cubic-bezier(.16,1,.3,1)"}}>
-          <p style={{"padding":"0 22px 18px","font":"400 14px/1.7 'Roboto',sans-serif","color":"#4B5563"}}>El Mini Pie es una promoción exclusiva de Alimin que reduce al mínimo el pie inicial de tu terreno: desde $1.500.000 para terrenos de 200 m² y $3.000.000 para 390 m². Es una edición limitada que vuelve por última vez, con cupos muy reducidos.</p>
+          <p style={{"padding":"0 22px 18px","font":"400 14px/1.7 'Roboto',sans-serif","color":"#4B5563"}}>No. El Mini Pie fue una promoción por tiempo limitado y ya finalizó. Los terrenos de Lomas del Mar siguen disponibles con nuestras condiciones habituales: pie desde $5.500.000 para 200 m² y $7.500.000 para 390 m², con financiamiento directo Alimin. Si te registras, te avisamos cuando lancemos una nueva promoción.</p>
         </div>
       </div>
       
@@ -1932,7 +1880,7 @@ export default function MiniPieClient() {
           <span style={{"font":"700 22px 'Montserrat',sans-serif","color":"#4ba646","flexShrink":"0"}}>{faq1icon}</span>
         </button>
         <div style={{"maxHeight":faq1h,"overflow":"hidden","transition":"max-height .35s cubic-bezier(.16,1,.3,1)"}}>
-          <p style={{"padding":"0 22px 18px","font":"400 14px/1.7 'Roboto',sans-serif","color":"#4B5563"}}>Pagas el pie inicial y el saldo se financia directamente con Alimin. Sin banco, sin aval. El saldo se divide en cuotas mensuales de $550.000 a 0% de interés: 72 cuotas para 200 m² y 88 cuotas para 390 m².</p>
+          <p style={{"padding":"0 22px 18px","font":"400 14px/1.7 'Roboto',sans-serif","color":"#4B5563"}}>Pagas el pie inicial y el saldo se financia directamente con Alimin. Sin banco, sin aval. El saldo se divide en cuotas mensuales de $550.000: 45 cuotas para 200 m² y 56 cuotas para 390 m².</p>
         </div>
       </div>
       
@@ -2004,7 +1952,7 @@ export default function MiniPieClient() {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#76d845" strokeWidth="2.5" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.62 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09"></path></svg>
             <span style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>+56 9 5665 4833</span>
           </div>
-          <a href="https://wa.me/56956654833?text=Hola%20Marcela%2C%20vengo%20de%20la%20web%20y%20estoy%20interesado%20en%20la%20promo%20Mini%20Pie%20%F0%9F%8C%B2%20de%20Lomas%20del%20Mar" target="_blank" rel="noopener noreferrer" style={{"display":"flex","alignItems":"center","justifyContent":"center","gap":"8px","width":"100%","background":"linear-gradient(135deg,#25D366,#1aad54)","color":"#fff","padding":"13px","borderRadius":"12px","font":"700 14px 'Montserrat',sans-serif","boxShadow":"0 4px 16px rgba(37,211,102,.3)","transition":"all .25s"}}>
+          <a href="https://wa.me/56956654833?text=Hola%20Marcela%2C%20vengo%20de%20la%20web%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20terrenos%20%F0%9F%8C%B2%20de%20Lomas%20del%20Mar" target="_blank" rel="noopener noreferrer" style={{"display":"flex","alignItems":"center","justifyContent":"center","gap":"8px","width":"100%","background":"linear-gradient(135deg,#25D366,#1aad54)","color":"#fff","padding":"13px","borderRadius":"12px","font":"700 14px 'Montserrat',sans-serif","boxShadow":"0 4px 16px rgba(37,211,102,.3)","transition":"all .25s"}}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"></path></svg>
             WhatsApp con Marcela
           </a>
@@ -2029,7 +1977,7 @@ export default function MiniPieClient() {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#76d845" strokeWidth="2.5" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.62 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09"></path></svg>
             <span style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>+56 9 7307 7128</span>
           </div>
-          <a href="https://wa.me/56973077128?text=Hola%20Orlando%2C%20vengo%20de%20la%20web%20y%20estoy%20interesado%20en%20la%20promo%20Mini%20Pie%20%F0%9F%8C%B2%20de%20Lomas%20del%20Mar" target="_blank" rel="noopener noreferrer" style={{"display":"flex","alignItems":"center","justifyContent":"center","gap":"8px","width":"100%","background":"linear-gradient(135deg,#25D366,#1aad54)","color":"#fff","padding":"13px","borderRadius":"12px","font":"700 14px 'Montserrat',sans-serif","boxShadow":"0 4px 16px rgba(37,211,102,.3)","transition":"all .25s"}}>
+          <a href="https://wa.me/56973077128?text=Hola%20Orlando%2C%20vengo%20de%20la%20web%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20terrenos%20%F0%9F%8C%B2%20de%20Lomas%20del%20Mar" target="_blank" rel="noopener noreferrer" style={{"display":"flex","alignItems":"center","justifyContent":"center","gap":"8px","width":"100%","background":"linear-gradient(135deg,#25D366,#1aad54)","color":"#fff","padding":"13px","borderRadius":"12px","font":"700 14px 'Montserrat',sans-serif","boxShadow":"0 4px 16px rgba(37,211,102,.3)","transition":"all .25s"}}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"></path></svg>
             WhatsApp con Orlando
           </a>
@@ -2077,13 +2025,13 @@ export default function MiniPieClient() {
     
     <div className="footer-bottom">
       <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.85)"}}>© 2026 Alimin SpA · aliminspa.cl/minipie · Todos los derechos reservados</span>
-      <span style={{"font":"600 11px 'Roboto',sans-serif","color":"rgba(255,255,255,.7)"}}>Promoción sujeta a disponibilidad de cupos</span>
+      <span style={{"font":"600 11px 'Roboto',sans-serif","color":"rgba(255,255,255,.7)"}}>Valores referenciales sujetos a disponibilidad de terrenos</span>
     </div>
   </div>
 </footer>
 
 
-<a href="https://wa.me/56956654833?text=Hola%2C%20vengo%20de%20la%20web%20y%20quiero%20info%20sobre%20Mini%20Pie%20%F0%9F%8C%B2" target="_blank" rel="noopener noreferrer" id="wa-float" style={{"position":"fixed","bottom":"24px","right":"24px","width":"58px","height":"58px","background":"linear-gradient(135deg,#25D366,#1aad54)","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","boxShadow":"0 4px 24px rgba(118,216,69,.45)","zIndex":"999","animation":"pulseGreen 2.8s ease-in-out infinite","transition":"transform .2s"}}>
+<a href="https://wa.me/56956654833?text=Hola%2C%20vengo%20de%20la%20web%20y%20quiero%20info%20sobre%20los%20terrenos%20de%20Lomas%20del%20Mar%20%F0%9F%8C%B2" target="_blank" rel="noopener noreferrer" id="wa-float" style={{"position":"fixed","bottom":"24px","right":"24px","width":"58px","height":"58px","background":"linear-gradient(135deg,#25D366,#1aad54)","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","boxShadow":"0 4px 24px rgba(118,216,69,.45)","zIndex":"999","animation":"pulseGreen 2.8s ease-in-out infinite","transition":"transform .2s"}}>
   <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"></path></svg>
 </a>
 

@@ -4,8 +4,8 @@ import { SITE } from '@/lib/constants'
 import MiniPieClient from './MiniPieClient'
 
 export const metadata: Metadata = {
-    title: 'Promoción Mini Pie: Terrenos con Rol Propio en El Tabo',
-    description: 'Vuelve la promoción Mini Pie de Alimin Inmobiliaria. Obtén tu terreno en Lomas del Mar, El Tabo (Litoral Central) con el pie más accesible del mercado, sin bancos ni intereses. ¡Cupos limitados!',
+    title: 'Terrenos en Lomas del Mar, El Tabo — Financiamiento Directo sin Banco',
+    description: 'Terrenos urbanizados con rol propio en Lomas del Mar, El Tabo (Litoral Central). Financiamiento directo Alimin: sin banco, sin aval y sin importar tu DICOM. Pie desde $5.500.000 y cuotas mensuales fijas.',
     alternates: {
         canonical: `${SITE.url}/minipie`,
     },

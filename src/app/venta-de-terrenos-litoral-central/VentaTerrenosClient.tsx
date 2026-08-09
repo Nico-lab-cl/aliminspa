@@ -273,7 +273,7 @@ export default function VentaTerrenosClient() {
                             <a href="#terrenos" className="al-hero-proj" style={s("position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;border:1.5px solid rgba(118,216,69,.4);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .3s")}>
                                 <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-arena-y-sol.webp'} alt="Loteo Lomas del Mar, terrenos en venta en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s ease")} /></div>
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(8,16,24,.92) 6%,rgba(8,16,24,.15) 55%,transparent)")}></div>
-                                <div style={s("position:absolute;top:10px;left:10px;background:rgba(118,216,69,.9);color:#0e1a24;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>🔥 Promo Mini Pie</div>
+                                <div style={s("position:absolute;top:10px;left:10px;background:rgba(118,216,69,.9);color:#0e1a24;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>✓ Crédito directo</div>
                                 <div style={s("position:absolute;bottom:12px;left:13px;right:13px")}>
                                     <div style={s("font:800 16px 'Montserrat',sans-serif;color:#fff;line-height:1.1;margin-bottom:2px")}>Lomas del Mar</div>
                                     <div style={s("font:500 11px 'Roboto',sans-serif;color:rgba(255,255,255,.72)")}>200 · 390 m² · a 8 min de la playa</div>
@@ -430,7 +430,6 @@ export default function VentaTerrenosClient() {
                     <div style={s("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px")}>
                         {/* LOMAS DEL MAR */}
                         <div className="al-projcard" style={s("position:relative;background:rgba(14,26,36,.75);backdrop-filter:blur(16px);border:2px solid rgba(118,216,69,.55);border-radius:22px;overflow:hidden;box-shadow:0 0 0 1px rgba(118,216,69,.18),0 14px 40px rgba(0,0,0,.45),0 0 46px rgba(118,216,69,.12);transition:transform .3s")}>
-                            <a href="https://aliminspa.cl/minipie" target="_blank" rel="noopener" style={s("position:absolute;top:16px;right:16px;z-index:5;background:linear-gradient(135deg,#76d845,#4ba646);color:#0e1a24;font:800 11px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.04em;padding:8px 13px;border-radius:100px;text-decoration:none;box-shadow:0 6px 18px rgba(118,216,69,.4)")}>🔥 Promo Mini Pie →</a>
                             <div style={s("padding:26px 26px 0")}>
                                 <div style={s("display:inline-flex;align-items:center;gap:7px;background:rgba(118,216,69,.14);border:1px solid rgba(118,216,69,.35);border-radius:100px;padding:5px 12px;margin-bottom:14px")}>
                                     <span style={s("font-size:11px")}>📍</span><span style={s("font:600 11px 'Montserrat',sans-serif;color:#b8f07a")}>A 8 minutos de la playa</span>

@@ -20,7 +20,7 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿Cuánto cuesta un terreno en el Litoral Central y cómo es el pie?',
-        a: 'En Lomas del Mar (El Tabo) el pie parte en $5.500.000 para 200 m² y en Arena y Sol en $20.000.000 para 200 m², con cuotas mensuales referenciales de $500.000 a $550.000. Con la promoción Mini Pie el pie puede ser aún más bajo. Cotiza en línea para recibir la lista de precios actualizada.',
+        a: 'En Lomas del Mar (El Tabo) el pie parte en $5.500.000 para 200 m² y en Arena y Sol en $20.000.000 para 200 m², con cuotas mensuales referenciales de $500.000 a $550.000. Cotiza en línea para recibir la lista de precios actualizada.',
     },
     {
         q: '¿Es seguro comprar un terreno en el Litoral Central?',

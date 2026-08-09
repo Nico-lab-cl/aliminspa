@@ -36,19 +36,6 @@ export const WINTER_PROMO = {
     segments: ['¡Visítanos estas vacaciones de invierno!', 'Premios para toda la familia'],
 } as const
 
-export const MINIPIE_PROMO = {
-    endDate: '2026-08-31',
-    tag: '🔥 Pie Mínimo',
-    message: 'Vuelve la promoción MiniPie — Pie desde $1.500.000',
-    cta: 'Ver promoción',
-    link: 'https://aliminspa.cl/minipie?utm_source=banner&utm_medium=web&utm_campaign=minipie',
-    badge: '⚡ Oferta',
-    segments: ['Cupos limitados en nuestros proyectos activos', 'Financiamiento directo sin banco'],
-    ctaMarquee: 'Conoce MINI PIE',
-} as const
-
-
-
 export const PROJECTS = [
     {
         id: 'lomas-del-mar',
