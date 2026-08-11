@@ -147,7 +147,11 @@
         padding: 3rem 2rem;
     }
 
+    /* Los min-width pensados para la fila de escritorio hacían que el texto y
+       el formulario se salieran del recuadro en pantallas angostas. */
+    .content,
     .form {
+        min-width: 0;
         width: 100%;
     }
 
@@ -158,5 +162,27 @@
 
     .btn {
         padding: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section {
+        padding: 4rem 0;
+    }
+
+    .wrapper {
+        padding: 2.25rem 1.25rem;
+    }
+
+    .title {
+        font-size: 1.6rem;
+    }
+
+    .desc {
+        font-size: 1rem;
+    }
+
+    .input {
+        padding: 1rem 1.1rem;
     }
 }

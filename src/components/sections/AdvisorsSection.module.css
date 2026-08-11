@@ -33,6 +33,22 @@
   color: #2F4F4F;
 }
 
+.sectionSubtitle {
+  color: rgba(47, 79, 79, 0.7);
+  margin-top: 8px;
+}
+
+/* Variante para cuando la sección va sobre el fondo verde oscuro: con los
+   colores claros el título quedaba prácticamente invisible y sólo se leía la
+   palabra dorada. */
+.dark .sectionTitle {
+  color: #ffffff;
+}
+
+.dark .sectionSubtitle {
+  color: rgba(255, 255, 255, 0.75);
+}
+
 .textGold {
   color: #d8b13e;
 }

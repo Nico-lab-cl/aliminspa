@@ -22,9 +22,10 @@ const advisors = [
   },
 ];
 
-export const AdvisorsSection = () => {
+/** `dark`: la sección se monta sobre el fondo verde oscuro (ej. Quiénes Somos). */
+export const AdvisorsSection = ({ dark = false }: { dark?: boolean }) => {
   return (
-    <section className={styles.advSection}>
+    <section className={`${styles.advSection} ${dark ? styles.dark : ''}`}>
       <div className={styles.dirContainer}>
         <div className={styles.sectionHeader}>
           <motion.span 
@@ -49,7 +50,7 @@ export const AdvisorsSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            style={{ color: 'rgba(47,79,79,0.7)', marginTop: '8px' }}
+            className={styles.sectionSubtitle}
           >
             Profesionales dedicados a acompañarte en cada paso de tu inversión
           </motion.p>

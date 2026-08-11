@@ -32,7 +32,8 @@ export function marcarTodoLeido(fecha: string) {
     }
 }
 
-export default function AliChat({ onVolver }: { onVolver: () => void }) {
+/** El control para volver a las opciones vive en el encabezado del modal. */
+export default function AliChat() {
     const [vista, setVista] = useState<'cargando' | 'puerta' | 'chat'>('cargando');
     const [mensajes, setMensajes] = useState<Mensaje[]>([]);
     const [texto, setTexto] = useState('');
@@ -235,10 +236,6 @@ export default function AliChat({ onVolver }: { onVolver: () => void }) {
     if (vista === 'puerta') {
         return (
             <form className={styles.puerta} onSubmit={abrirConversacion}>
-                <button type="button" className={styles.volver} onClick={onVolver}>
-                    ← Volver
-                </button>
-
                 <p className={styles.puertaIntro}>
                     Déjanos tus datos y conversas <strong>en vivo</strong> con un asesor de Alimin.
                 </p>
@@ -305,10 +302,6 @@ export default function AliChat({ onVolver }: { onVolver: () => void }) {
 
     return (
         <div className={styles.chat}>
-            <button type="button" className={styles.volver} onClick={onVolver}>
-                ← Otras opciones
-            </button>
-
             <div className={styles.lista} ref={listaRef} aria-live="polite">
                 {mensajes.length === 0 && (
                     <p className={styles.vacio}>

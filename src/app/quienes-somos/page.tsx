@@ -22,7 +22,7 @@ export default function TeamPage() {
                 <HeroSection />
                 <MisionVision />
                 <DirectionSection />
-                <AdvisorsSection />
+                <AdvisorsSection dark />
             </AuroraBackground>
             <Newsletter />
             <Footer />

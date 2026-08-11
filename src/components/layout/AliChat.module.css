@@ -21,21 +21,6 @@
   to { transform: rotate(360deg); }
 }
 
-.volver {
-  align-self: flex-start;
-  background: none;
-  border: none;
-  color: #1A8A7D;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 2px 0;
-}
-
-.volver:hover {
-  text-decoration: underline;
-}
-
 /* ── Puerta de entrada ─────────────────────────────────────── */
 
 .puerta {

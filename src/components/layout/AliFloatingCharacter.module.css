@@ -111,11 +111,13 @@
   border-top: 11px solid #ffffff;
 }
 
+/* Texto en flujo normal: con `display: flex` cada nodo (el "Hola, soy", el
+   <strong> y el resto) se convertía en un ítem que se partía en columnas
+   angostas al envolver en pantallas chicas. */
 .speechBubbleText {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: block;
   color: #0F3B36;
+  line-height: 1.35;
 }
 
 .speechBubbleText strong {
@@ -159,6 +161,11 @@
   flex-direction: column;
   transform-origin: bottom right;
   animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  /* El modal crece hacia arriba desde su anclaje; sin techo, el formulario
+     largo se sale por el borde superior y deja el botón "volver" fuera de
+     alcance. Con esto el cuerpo hace scroll y el encabezado siempre se ve. */
+  max-height: calc(100vh - 290px);
+  max-height: calc(100dvh - 290px);
 }
 
 @keyframes modalSlideUp {
@@ -175,12 +182,37 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
+  flex-shrink: 0;
 }
 
 .modalHeaderInfo {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+}
+
+/* Retroceder desde el chat/formulario hacia las opciones. Vive en el
+   encabezado para que siga visible aunque el cuerpo esté con scroll. */
+.backModalBtn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.backModalBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .headerAvatar {
@@ -250,6 +282,8 @@
   flex-direction: column;
   gap: 16px;
   background: #F8FAFC;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .aliGreeting {
@@ -269,10 +303,24 @@
   color: #1A8A7D;
 }
 
-/* Option Card 1: Chat con IA (Pronto) */
+/* Instrucción explícita: sin ella no queda claro si hay que tocar la tarjeta
+   o escribir directamente. */
+.aliHint {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748B;
+}
+
+/* Option Card 1: Chat en vivo con un asesor */
 .optionCard {
+  width: 100%;
+  text-align: left;
+  font: inherit;
   background: #ffffff;
-  border: 1.5px solid #CBD5E1;
+  border: 1.5px solid #1A8A7D;
   border-radius: 16px;
   padding: 14px 16px;
   display: flex;
@@ -283,10 +331,29 @@
   position: relative;
 }
 
-.optionCard:hover {
+.optionCard:hover,
+.optionCard:focus-visible {
   border-color: #1A8A7D;
-  background: rgba(26, 138, 125, 0.03);
-  box-shadow: 0 4px 12px rgba(26, 138, 125, 0.1);
+  background: rgba(26, 138, 125, 0.06);
+  box-shadow: 0 4px 12px rgba(26, 138, 125, 0.15);
+  outline: none;
+}
+
+.optionCard:active {
+  transform: scale(0.99);
+}
+
+/* Llamado a la acción visible para que se lea como botón, no como texto. */
+.optionCta {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: #1A8A7D;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 7px 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .optionHeader {
@@ -317,10 +384,14 @@
 }
 
 .optionDesc {
+  display: block;
+  font-family: 'Roboto', sans-serif;
   font-size: 12px;
+  font-weight: 400;
   color: #64748B;
   margin: 0;
   line-height: 1.4;
+  white-space: normal;
 }
 
 /* Option Card 2: WhatsApp Asesores */
@@ -448,6 +519,8 @@
 
   .chatModal {
     bottom: 210px;
+    max-height: calc(100vh - 230px);
+    max-height: calc(100dvh - 230px);
   }
 }
 
@@ -466,6 +539,8 @@
   .chatModal {
     bottom: 175px;
     right: 0.5rem;
+    max-height: calc(100vh - 195px);
+    max-height: calc(100dvh - 195px);
   }
 }
 
@@ -483,9 +558,12 @@
   .speechBubble {
     right: 8px;
     bottom: 128px;
-    font-size: 11.5px;
-    padding: 8px 12px;
-    max-width: calc(100vw - 100px);
+    font-size: 12px;
+    padding: 10px 14px;
+    /* Ancho acotado para que el texto envuelva en 2-3 líneas legibles en vez
+       de quedar en columnas de una palabra. */
+    width: max-content;
+    max-width: min(230px, calc(100vw - 32px));
     white-space: normal;
   }
 
@@ -496,6 +574,8 @@
   .chatModal {
     right: 0.25rem;
     width: calc(100vw - 1rem);
-    bottom: 140px;
+    bottom: 132px;
+    max-height: calc(100vh - 148px);
+    max-height: calc(100dvh - 148px);
   }
 }
