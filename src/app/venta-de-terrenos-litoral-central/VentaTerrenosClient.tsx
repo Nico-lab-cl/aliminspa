@@ -432,7 +432,7 @@ export default function VentaTerrenosClient() {
                         <div className="al-projcard" style={s("position:relative;background:rgba(14,26,36,.75);backdrop-filter:blur(16px);border:2px solid rgba(118,216,69,.55);border-radius:22px;overflow:hidden;box-shadow:0 0 0 1px rgba(118,216,69,.18),0 14px 40px rgba(0,0,0,.45),0 0 46px rgba(118,216,69,.12);transition:transform .3s")}>
                             <div style={s("padding:26px 26px 0")}>
                                 <div style={s("display:inline-flex;align-items:center;gap:7px;background:rgba(118,216,69,.14);border:1px solid rgba(118,216,69,.35);border-radius:100px;padding:5px 12px;margin-bottom:14px")}>
-                                    <span style={s("font-size:11px")}>📍</span><span style={s("font:600 11px 'Montserrat',sans-serif;color:#b8f07a")}>A 8 minutos de la playa</span>
+                                    <span style={s("font-size:11px")}>📍</span><span style={s("font:600 11px 'Montserrat',sans-serif;color:#b8f07a")}>A 10 minutos de la playa</span>
                                 </div>
                                 <h3 style={s("font:800 26px 'Montserrat',sans-serif;color:#fff;margin:0 0 4px")}>Lomas del Mar</h3>
                                 <p style={s("font:400 14px/1.5 'Roboto',sans-serif;color:rgba(255,255,255,.55);margin:0 0 6px")}>Terrenos urbanizados · Sin importar tu DICOM · Crédito directo</p>
@@ -440,8 +440,8 @@ export default function VentaTerrenosClient() {
                             </div>
                             <div className="al-lomas-sizes" style={s("padding:0 26px")}>
                                 {[
-                                    { m: '200 m²', pie: '$5.500.000', total: '$29.990.000', cuota: '$550.000', plazo: '45 cuotas', contado: '$26.000.000' },
-                                    { m: '390 m²', pie: '$7.500.000', total: '$37.990.000', cuota: '$550.000', plazo: '56 cuotas', contado: '$35.000.000' },
+                                    { m: '200 m²', pie: '$5.500.000', total: '$37.990.000', cuota: '$550.000', plazo: '60 cuotas', contado: '$35.000.000' },
+                                    { m: '390 m²', pie: '$7.500.000', total: '$45.990.000', cuota: '$550.000', plazo: '70 cuotas', contado: '$43.000.000' },
                                 ].map((x) => (
                                     <div key={x.m} style={s("background:rgba(0,0,0,.28);border:1px solid rgba(118,216,69,.22);border-radius:14px;padding:16px")}>
                                         <div style={s("font:900 22px 'Montserrat',sans-serif;color:#fff;margin-bottom:2px")}>{x.m}</div>

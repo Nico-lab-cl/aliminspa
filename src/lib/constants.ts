@@ -45,7 +45,7 @@ export const PROJECTS = [
         description: 'Una inversión inteligente. Terrenos urbanizados en El Tabo, diseñados para quienes buscan calidad de vida y alta plusvalía. ¡Solo el 25% disponible!',
         features: ['Rol Propio', 'Agua Certificada', 'Luz Eléctrica', 'Portón Automático'],
         location: 'El Tabo, Región de Valparaíso',
-        distance: 'A 8 MINUTOS DE LA PLAYA DEL TABO',
+        distance: 'A 10 MINUTOS DE LA PLAYA DEL TABO',
         lotSize: '200 m² - 390 m²',
         status: 'Terrenos Disponibles',
         soldPercentage: 25,
@@ -60,18 +60,18 @@ export const PROJECTS = [
                 {
                     terreno: '200 m²',
                     pie: '$5.500.000',
-                    valorTotal: '$29.990.000',
+                    valorTotal: '$37.990.000',
                     cuotaReferencial: '$550.000',
-                    plazo: '45 Cuotas',
-                    pagoContado: '$26.000.000'
+                    plazo: '60 Cuotas',
+                    pagoContado: '$35.000.000'
                 },
                 {
                     terreno: '390 m²',
                     pie: '$7.500.000',
-                    valorTotal: '$37.990.000',
+                    valorTotal: '$45.990.000',
                     cuotaReferencial: '$550.000',
-                    plazo: '56 Cuotas',
-                    pagoContado: '$35.000.000'
+                    plazo: '70 Cuotas',
+                    pagoContado: '$43.000.000'
                 }
             ]
         }

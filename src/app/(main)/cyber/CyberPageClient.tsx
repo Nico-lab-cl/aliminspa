@@ -205,7 +205,7 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
                     }}
                 >
                     <option value="">Selecciona un proyecto</option>
-                    <option value="Lomas del Mar">Lomas del Mar (Desde $29.990.000)</option>
+                    <option value="Lomas del Mar">Lomas del Mar (Desde $37.990.000)</option>
                     <option value="Arena y Sol">Arena y Sol (Desde $42.000.000)</option>
                     <option value="Ambos / Consulta general">Ambos / Consulta general</option>
                 </select>
@@ -429,7 +429,7 @@ export default function CyberPageClient() {
                             </div>
                             <div className={styles.projectContent}>
                                 <h3 className={styles.projectName}>Lomas del Mar</h3>
-                                <p className={styles.projectDistance}>A 8 minutos de la playa del Tabo</p>
+                                <p className={styles.projectDistance}>A 10 minutos de la playa del Tabo</p>
                                 <p className={styles.projectDesc}>
                                     Terrenos con alta plusvalía y excelente conectividad. Diseñados para quienes buscan un refugio cerca del mar con urbanización completa de gran nivel.
                                 </p>
@@ -454,11 +454,11 @@ export default function CyberPageClient() {
                                     <div className={styles.financeDetails}>
                                         <div className={styles.financeItem}>
                                             <span className={styles.financeLabel}>Valor contado especial:</span>
-                                            <span className={`${styles.financeValue} ${styles.highlightValue}`}>Desde $26.000.000</span>
+                                            <span className={`${styles.financeValue} ${styles.highlightValue}`}>Desde $35.000.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
                                             <span className={styles.financeLabel}>Pago con financiamiento:</span>
-                                            <span className={styles.financeValue}>Total $29.990.000</span>
+                                            <span className={styles.financeValue}>Total $37.990.000</span>
                                         </div>
                                         <div className={styles.financeItem}>
                                             <span className={styles.financeLabel}>Pie Cyber (3 cuotas sin interés):</span>

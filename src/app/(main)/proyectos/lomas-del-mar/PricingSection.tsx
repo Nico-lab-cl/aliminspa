@@ -34,10 +34,10 @@ export default function PricingSection() {
                             <p className={styles.pieText}>Pie $5.500.000</p>
                             
                             <ul className={styles.featuresList}>
-                                <li>Valor total: <span>$29.990.000</span></li>
+                                <li>Valor total: <span>$37.990.000</span></li>
                                 <li>Cuota referencial: <span>$550.000</span></li>
-                                <li>Plazo aproximado: <span>45 cuotas</span></li>
-                                <li>Precio de contado: <span className={styles.goldText}>$26.000.000</span></li>
+                                <li>Plazo aproximado: <span>60 cuotas</span></li>
+                                <li>Precio de contado: <span className={styles.goldText}>$35.000.000</span></li>
                             </ul>
 
                             <div className={styles.dicomTitle}>
@@ -72,10 +72,10 @@ export default function PricingSection() {
                             <p className={styles.pieText}>Pie $7.500.000</p>
                             
                             <ul className={styles.featuresList}>
-                                <li>Valor total: <span>$37.990.000</span></li>
+                                <li>Valor total: <span>$45.990.000</span></li>
                                 <li>Cuota referencial: <span>$550.000</span></li>
-                                <li>Plazo aproximado: <span>56 cuotas</span></li>
-                                <li>Precio de contado: <span className={styles.goldText}>$35.000.000</span></li>
+                                <li>Plazo aproximado: <span>70 cuotas</span></li>
+                                <li>Precio de contado: <span className={styles.goldText}>$43.000.000</span></li>
                             </ul>
 
                             <div className={styles.dicomTitle}>

@@ -212,7 +212,7 @@ export default function ArticleClient({ post }: ArticleClientProps) {
                                 <div className={styles.sidebarProjects}>
                                     <div className={styles.sidebarProjectCard}>
                                         <h5 className={styles.sidebarProjectName}>Lomas del Mar</h5>
-                                        <span className={styles.sidebarProjectLabel}>Desde $26.000.000 (Contado)</span>
+                                        <span className={styles.sidebarProjectLabel}>Desde $35.000.000 (Contado)</span>
                                         <Link href="/proyectos/lomas-del-mar" className={styles.sidebarProjectLink}>
                                             Ver detalles <ChevronRight size={12} />
                                         </Link>

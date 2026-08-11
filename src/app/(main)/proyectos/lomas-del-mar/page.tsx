@@ -107,7 +107,7 @@ export default function LomasDelMarPage() {
                                 </svg>
                             </div>
                             <h2 className={styles.introSubtitle}>
-                                A solo 8 minutos de la playa de <strong>El Tabo.</strong>
+                                A solo 10 minutos de la playa de <strong>El Tabo.</strong>
                             </h2>
                         </div>
                         
