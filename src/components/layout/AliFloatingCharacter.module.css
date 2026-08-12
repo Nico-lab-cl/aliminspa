@@ -257,6 +257,36 @@
   box-shadow: 0 0 8px #34D399;
 }
 
+.headerAcciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Lleva a WhatsApp y "agendar visita", que dejaron de ser la primera pantalla
+   cuando el chat pasó a abrirse directo. */
+.opcionesModalBtn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  padding-bottom: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.opcionesModalBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .closeModalBtn {
   background: rgba(255, 255, 255, 0.15);
   border: none;
@@ -286,25 +316,17 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.aliGreeting {
-  background: #ffffff;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 14px 16px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: #334155;
-  position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+/* El chat vive siempre montado dentro del cuerpo del modal; "contents" lo deja
+   participar del flex como si el envoltorio no existiera. */
+.chatMontado {
+  display: contents;
 }
 
-.aliGreeting strong {
-  color: #1A8A7D;
+.chatOculto {
+  display: none;
 }
 
-/* Instrucción explícita: sin ella no queda claro si hay que tocar la tarjeta
-   o escribir directamente. */
+/* Encabezado del menú secundario (WhatsApp y agendar visita). */
 .aliHint {
   margin: 0;
   font-size: 11.5px;
@@ -312,86 +334,6 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #64748B;
-}
-
-/* Option Card 1: Chat en vivo con un asesor */
-.optionCard {
-  width: 100%;
-  text-align: left;
-  font: inherit;
-  background: #ffffff;
-  border: 1.5px solid #1A8A7D;
-  border-radius: 16px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.optionCard:hover,
-.optionCard:focus-visible {
-  border-color: #1A8A7D;
-  background: rgba(26, 138, 125, 0.06);
-  box-shadow: 0 4px 12px rgba(26, 138, 125, 0.15);
-  outline: none;
-}
-
-.optionCard:active {
-  transform: scale(0.99);
-}
-
-/* Llamado a la acción visible para que se lea como botón, no como texto. */
-.optionCta {
-  align-self: flex-start;
-  margin-top: 4px;
-  background: #1A8A7D;
-  color: #ffffff;
-  border-radius: 10px;
-  padding: 7px 14px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.optionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.optionTitle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: #1E293B;
-}
-
-.enVivoBadge {
-  background: linear-gradient(135deg, #1A8A7D 0%, #0F766E 100%);
-  color: white;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 12px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.optionDesc {
-  display: block;
-  font-family: 'Roboto', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: #64748B;
-  margin: 0;
-  line-height: 1.4;
-  white-space: normal;
 }
 
 /* Option Card 2: WhatsApp Asesores */

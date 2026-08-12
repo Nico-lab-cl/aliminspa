@@ -1,32 +1,41 @@
 /* Chat en vivo dentro del modal de Ali.
    Paleta tomada de AliFloatingCharacter.module.css: verde #1A8A7D, fondo #F8FAFC. */
 
-.cargando {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 220px;
-}
-
-.puntos {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 3px solid rgba(26, 138, 125, 0.2);
-  border-top-color: #1A8A7D;
-  animation: girar 0.8s linear infinite;
-}
-
-@keyframes girar {
-  to { transform: rotate(360deg); }
-}
-
 /* ── Puerta de entrada ─────────────────────────────────────── */
 
 .puerta {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* La puerta ya no es una pantalla aparte: ocupa el lugar de la barra de
+   escritura, debajo de la conversación que el visitante acaba de empezar.
+   Va compacta a propósito: con las etiquetas visibles el botón de envío
+   quedaba cortado bajo el borde del modal. */
+.puertaEnChat {
+  gap: 8px;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 10px;
+  /* El relleno inferior va aquí y no en el contenedor con scroll: cuando el
+     contenido desborda, el navegador descarta el padding de abajo del
+     contenedor y el botón queda lamiendo el borde del modal. */
+  padding-bottom: 14px;
+}
+
+/* La etiqueta sigue existiendo para los lectores de pantalla; en pantalla
+   basta el placeholder. */
+.puertaEnChat .campo span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.puertaEnChat .campo input {
+  padding: 9px 12px;
 }
 
 .puertaIntro {
@@ -88,6 +97,9 @@
 }
 
 .enviarPuerta {
+  /* Deja aire bajo el botón cuando el modal se desplaza hasta él: pegado al
+     borde redondeado se le comen las esquinas. */
+  scroll-margin-bottom: 12px;
   background: #1A8A7D;
   color: #ffffff;
   border: none;
@@ -131,13 +143,13 @@
   padding-right: 4px;
 }
 
-.vacio {
-  margin: auto 0;
-  text-align: center;
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: #94A3B8;
-  padding: 0 12px;
+/* Con el formulario abajo, la conversación cede altura para que los campos
+   quepan sin obligar a hacer scroll dentro del modal. Sin flex-shrink: 0 el
+   contenedor se aplasta a cero y el mensaje pendiente deja de verse. */
+.listaCompacta {
+  flex: 0 0 auto;
+  max-height: 120px;
+  min-height: 0;
 }
 
 .burbuja {
@@ -172,6 +184,15 @@
   background: #FEE2E2;
   color: #991B1B;
   cursor: pointer;
+}
+
+/* Saludo de Ali: el mismo texto que antes abría el menú de opciones. */
+.saludo {
+  max-width: 100%;
+}
+
+.saludo strong {
+  color: #1A8A7D;
 }
 
 .autor {

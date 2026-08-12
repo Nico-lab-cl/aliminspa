@@ -36,7 +36,10 @@ const ADVISORS = [
 export default function AliFloatingCharacter() {
   const [showSpeechBubble, setShowSpeechBubble] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  // El chat es lo primero que ve el visitante: abrir a un menú de opciones
+  // agregaba un toque extra antes de poder escribir. WhatsApp y "agendar
+  // visita" siguen a un toque, en el botón "⋯" del encabezado.
+  const [vista, setVista] = useState<'chat' | 'opciones'>('chat');
   const [showAdvisors, setShowAdvisors] = useState(false);
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [shouldLoadScene, setShouldLoadScene] = useState(false);
@@ -75,7 +78,7 @@ export default function AliFloatingCharacter() {
 
     const cerrarPorHistorial = () => {
       setIsModalOpen(false);
-      setShowChat(false);
+      setVista('chat');
     };
 
     window.addEventListener('popstate', cerrarPorHistorial);
@@ -98,7 +101,7 @@ export default function AliFloatingCharacter() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setShowChat(false);
+    setVista('chat');
   };
 
   const handleCloseModalYNavegar = () => {
@@ -114,12 +117,12 @@ export default function AliFloatingCharacter() {
           {/* Header */}
           <div className={styles.modalHeader}>
             <div className={styles.modalHeaderInfo}>
-              {showChat ? (
+              {vista === 'opciones' ? (
                 <button
                   className={styles.backModalBtn}
-                  onClick={() => setShowChat(false)}
-                  aria-label="Volver a las opciones"
-                  title="Volver a las opciones"
+                  onClick={() => setVista('chat')}
+                  aria-label="Volver al chat"
+                  title="Volver al chat"
                 >
                   ←
                 </button>
@@ -127,54 +130,45 @@ export default function AliFloatingCharacter() {
                 <div className={styles.headerAvatar}>🌿</div>
               )}
               <div className={styles.headerTitle}>
-                <h4>{showChat ? 'Chat con un asesor' : 'Ali • Asistente Alimin'}</h4>
+                <h4>{vista === 'opciones' ? 'Más opciones' : 'Ali • Asistente Alimin'}</h4>
                 <span className={styles.statusOnline}>
                   <span className={styles.statusDot}></span>{' '}
-                  {showChat ? 'Toca ← para volver' : 'En línea para ayudarte'}
+                  {vista === 'opciones' ? 'Toca ← para volver al chat' : 'En línea para ayudarte'}
                 </span>
               </div>
             </div>
-            <button
-              className={styles.closeModalBtn}
-              onClick={handleCloseModal}
-              aria-label="Cerrar ventana"
-            >
-              ✕
-            </button>
+            <div className={styles.headerAcciones}>
+              {vista === 'chat' && (
+                <button
+                  className={styles.opcionesModalBtn}
+                  onClick={() => setVista('opciones')}
+                  aria-label="Más opciones"
+                  title="WhatsApp y agendar visita"
+                >
+                  ⋯
+                </button>
+              )}
+              <button
+                className={styles.closeModalBtn}
+                onClick={handleCloseModal}
+                aria-label="Cerrar ventana"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
           {/* Body */}
           <div className={styles.modalBody}>
-            {showChat ? (
+            {/* El chat se oculta, no se desmonta: al ir a "más opciones" y
+                volver, el visitante encuentra intacto lo que ya había escrito. */}
+            <div className={vista === 'chat' ? styles.chatMontado : styles.chatOculto}>
               <AliChat />
-            ) : (
-              <>
-            {/* Ali Greeting Message */}
-            <div className={styles.aliGreeting}>
-              ¡Hola! 👋 Soy <strong>Ali</strong>, el asistente virtual de <strong>Alimin Inmobiliaria</strong>. ¿Cómo puedo ayudarte hoy con la cotización de tu terreno?
             </div>
 
-            <p className={styles.aliHint}>Toca una opción para continuar</p>
-
-            {/* Option 1: Chat en vivo con un asesor */}
-            <button
-              type="button"
-              className={`${styles.optionCard} crm-track-click`}
-              onClick={() => setShowChat(true)}
-              data-crm-name="Abrir chat en vivo"
-              data-crm-category="Chat Web"
-            >
-              <span className={styles.optionHeader}>
-                <span className={styles.optionTitle}>
-                  <span>💬</span> Chatear con un asesor
-                </span>
-                <span className={styles.enVivoBadge}>En vivo</span>
-              </span>
-              <span className={styles.optionDesc}>
-                Escríbenos aquí mismo y resuelve tus dudas de terrenos, escrituración y financiamiento sin salir de la página.
-              </span>
-              <span className={styles.optionCta}>Abrir chat →</span>
-            </button>
+            {vista === 'opciones' && (
+              <>
+            <p className={styles.aliHint}>Otras formas de contactarnos</p>
 
             {/* Option 2: Hablar por WhatsApp */}
             <div className={styles.whatsappOptionBox}>
@@ -244,6 +238,7 @@ export default function AliFloatingCharacter() {
             </Link>
               </>
             )}
+
           </div>
         </div>
       )}
