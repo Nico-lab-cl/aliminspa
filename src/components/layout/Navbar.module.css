@@ -24,18 +24,9 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
     text-decoration: none;
     z-index: 101;
     flex: none;
-}
-
-.wordmark {
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 21px;
-    color: #fff;
-    letter-spacing: -0.02em;
 }
 
 .links {

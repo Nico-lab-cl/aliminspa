@@ -41,7 +41,6 @@ export default function Navbar() {
                         style={{ objectFit: 'contain' }}
                         priority
                     />
-                    <span className={styles.wordmark}>ALIMIN</span>
                 </Link>
 
                 <ul className={`${styles.links} ${isMobileOpen ? styles.open : ''}`}>
