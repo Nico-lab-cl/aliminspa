@@ -29,6 +29,13 @@
     flex: none;
 }
 
+.logoImg {
+    display: block;
+    height: 34px;
+    width: auto;
+    object-fit: contain;
+}
+
 .links {
     display: flex;
     gap: 26px;
@@ -112,6 +119,10 @@
 
 /* Mobile responsive */
 @media (max-width: 1024px) {
+    .logoImg {
+        height: 30px;
+    }
+
     .links {
         display: none !important;
     }

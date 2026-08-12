@@ -34,11 +34,11 @@ export default function Navbar() {
             <nav className={styles.nav} aria-label="Navegación principal">
                 <Link href="/" className={styles.logo} aria-label={`${SITE.shortName} - Inicio`}>
                     <Image
-                        src="/assets/homepage-v2/logo-alimin-icon.webp"
+                        src="/assets/homepage-v2/logo-alimin-menu.webp"
                         alt="Alimin"
-                        width={40}
-                        height={40}
-                        style={{ objectFit: 'contain' }}
+                        width={128}
+                        height={34}
+                        className={styles.logoImg}
                         priority
                     />
                 </Link>
