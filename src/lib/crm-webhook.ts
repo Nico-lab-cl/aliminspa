@@ -9,6 +9,7 @@ const CRM_WEBHOOK_TIMEOUT_MS = 5000
 
 interface CrmLeadPayload {
     firstName: string
+    lastName: string
     phone: string
     email: string
     city: string
@@ -65,8 +66,13 @@ export function forwardLeadToCrm(data: {
     utm_content?: string | null
     utm_term?: string | null
 }) {
+    // El CRM concatena firstName + lastName para mostrar el nombre completo, así
+    // que sin lastName la ficha del asesor termina en un "null" pegado al nombre.
+    const partesNombre = data.nombre.trim().split(/\s+/)
+
     return postToCrm({
-        firstName: data.nombre,
+        firstName: partesNombre[0] || data.nombre,
+        lastName: partesNombre.slice(1).join(' '),
         phone: data.celular,
         email: data.email,
         city: data.ciudad,

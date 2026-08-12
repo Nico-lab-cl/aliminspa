@@ -82,22 +82,24 @@ export default function MiniPieClient() {
       const fbc = getCookie('_fbc')
 
       const utm_data = getUtmParams({
-        utm_source: 'minipie_landing',
+        utm_source: 'lomasdelmar_landing',
         utm_medium: 'web',
-        utm_campaign: 'minipie_2026',
+        utm_campaign: 'lomasdelmar_2026',
       })
 
       // Shared between the browser Pixel and the CAPI call below so Meta
       // deduplicates them into a single Lead.
       const eventId = newEventId()
 
-      // Map telefono to celular, concatenate region to ciudad, send campaign data in project
+      // Map telefono to celular, concatenate region to ciudad, send campaign data in project.
+      // El proyecto es Lomas del Mar aunque la URL siga siendo /minipie: la promo
+      // terminó y el asesor necesita ver el proyecto real, no el nombre de la campaña.
       const mappedPayload = {
         nombre: form.nombre,
         email: form.email,
         celular: form.telefono,
         ciudad: form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
-        proyecto: 'MINIPIE' + (form.terreno ? ' - ' + form.terreno : ''),
+        proyecto: 'Lomas del Mar' + (form.terreno ? ' - ' + form.terreno : ''),
         ...utm_data,
         fbp,
         fbc,
