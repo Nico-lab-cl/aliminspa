@@ -46,12 +46,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'weekly',
             priority: 0.8,
         },
-        {
-            url: `${baseUrl}/minipie`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
+        // /minipie queda fuera del sitemap a propósito: renderiza la misma
+        // landing que /proyectos/lomas-del-mar y hace canonical hacia ella.
+        // Las landings de /meta/* tampoco se listan, van con noindex.
         {
             url: `${baseUrl}/venta-de-terrenos-litoral-central`,
             lastModified: new Date(),

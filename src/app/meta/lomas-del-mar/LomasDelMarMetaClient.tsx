@@ -7,10 +7,23 @@ import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
 
-// La promoción Mini Pie terminó el 9 de agosto de 2026. La landing se mantiene
-// en /minipie porque la URL sigue circulando en flyers, bio de Instagram y
-// campañas, pero ahora comunica la oferta permanente de Lomas del Mar.
-export default function MiniPieClient() {
+/* Landing de Lomas del Mar para tráfico de Meta Ads (/meta/lomas-del-mar).
+   Copia independiente de /proyectos/lomas-del-mar: se puede iterar el copy y
+   los CTA solo para los anuncios sin tocar la página pública. Lo que cambia
+   respecto del original es la etiqueta con la que se guarda el lead
+   ("Lomas del Mar - Meta"), las UTM por defecto y el noindex de la ruta. */
+/* Globales que inyecta el layout raíz: el Pixel de Meta y el tracker del CRM. */
+type TrackingWindow = {
+  fbq?: (
+    action: string,
+    event: string,
+    data: Record<string, string>,
+    opts: { eventID: string }
+  ) => void
+  AliminCRM?: { identify: (contact: Record<string, string>) => Promise<unknown> }
+}
+
+export default function LomasDelMarMetaClient() {
   const router = useRouter()
 
   // Form State
@@ -29,8 +42,10 @@ export default function MiniPieClient() {
   const [showPlan, setShowPlan] = useState(false)
 
   // Handlers
-  const handleField = (field: string) => (e: any) => {
-    setForm(prev => ({ ...prev, [field]: e.target.value }))
+  // Los inputs usan onInput y los selects onChange, así que el tipo tiene que
+  // cubrir ambos: FormEvent es el ancestro común de InputEvent y ChangeEvent.
+  const handleField = (field: string) => (e: React.FormEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm(prev => ({ ...prev, [field]: e.currentTarget.value }))
   }
 
   const playTestimonial = () => {
@@ -82,9 +97,9 @@ export default function MiniPieClient() {
       const fbc = getCookie('_fbc')
 
       const utm_data = getUtmParams({
-        utm_source: 'lomasdelmar_landing',
-        utm_medium: 'web',
-        utm_campaign: 'lomasdelmar_2026',
+        utm_source: 'meta',
+        utm_medium: 'paid_social',
+        utm_campaign: 'lomasdelmar_meta',
       })
 
       // Shared between the browser Pixel and the CAPI call below so Meta
@@ -92,14 +107,14 @@ export default function MiniPieClient() {
       const eventId = newEventId()
 
       // Map telefono to celular, concatenate region to ciudad, send campaign data in project.
-      // El proyecto es Lomas del Mar aunque la URL siga siendo /minipie: la promo
-      // terminó y el asesor necesita ver el proyecto real, no el nombre de la campaña.
+      // El asesor necesita ver el proyecto real en el CRM, no el nombre de la
+      // campaña que originó la página.
       const mappedPayload = {
         nombre: form.nombre,
         email: form.email,
         celular: form.telefono,
         ciudad: form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
-        proyecto: 'Lomas del Mar' + (form.terreno ? ' - ' + form.terreno : ''),
+        proyecto: 'Lomas del Mar - Meta' + (form.terreno ? ' - ' + form.terreno : ''),
         ...utm_data,
         fbp,
         fbc,
@@ -116,27 +131,28 @@ export default function MiniPieClient() {
 
       // Meta Pixel client-side Lead event. The server-side counterpart is sent
       // by /api/leads with the same eventId, so Meta keeps only one of the two.
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        ;(window as any).fbq('track', 'Lead', {
-          content_name: 'MINIPIE',
+      const w = window as unknown as TrackingWindow
+        if (w.fbq) {
+          w.fbq('track', 'Lead', {
+          content_name: 'Lomas del Mar - Meta',
           content_category: 'Real Estate',
           currency: 'CLP',
         }, { eventID: eventId })
       }
 
       // Identify with CRM
-      if (typeof window !== 'undefined' && (window as any).AliminCRM) {
+      if (w.AliminCRM) {
         const nameParts = form.nombre.trim().split(/\s+/)
         const firstName = nameParts[0] || ''
         const lastName = nameParts.slice(1).join(' ') || ''
-        ;(window as any).AliminCRM.identify({
+        w.AliminCRM.identify({
           email: form.email,
           firstName,
           lastName,
           phone: form.telefono,
           project: mappedPayload.proyecto,
           source: 'Sitio Web'
-        }).catch((err: any) => console.error('CRM Identify Error:', err))
+        }).catch((err: unknown) => console.error('CRM Identify Error:', err))
       }
 
       setStatus('success')
@@ -432,7 +448,7 @@ export default function MiniPieClient() {
 
   return (
     <div id="minipie-landing">
-      <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'MINIPIE - Lomas del Mar', content_category: 'Real Estate' }} />
+      <MetaTrackPageView eventName="ViewContent" customData={{ content_name: 'Lomas del Mar - Meta', content_category: 'Real Estate' }} />
       {/* Scope Styles */}
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
       <style dangerouslySetInnerHTML={{ __html: `
@@ -1506,13 +1522,13 @@ export default function MiniPieClient() {
 
       
       <div style={{"background":"linear-gradient(155deg,#325366 0%,#1a2b3d 100%)","borderRadius":"22px","padding":"36px","display":"flex","flexDirection":"column","justifyContent":"space-between","boxShadow":"0 16px 48px rgba(50,83,102,.25)","position":"relative","overflow":"hidden","border":"2px solid rgba(118,216,69,.4)"}}>
-        <div style={{"position":"absolute","top":"24px","right":"28px","font":"900 90px 'Montserrat',serif","color":"rgba(118,216,69,.14)","lineHeight":"1"}}>"</div>
+        <div style={{"position":"absolute","top":"24px","right":"28px","font":"900 90px 'Montserrat',serif","color":"rgba(118,216,69,.14)","lineHeight":"1"}}>&ldquo;</div>
         <div style={{"position":"relative","zIndex":"1"}}>
           <div style={{"display":"flex","alignItems":"center","gap":"10px","marginBottom":"18px"}}>
             <span style={{"color":"#FBBC04","fontSize":"15px","letterSpacing":"1px"}}>★★★★★</span>
             <span style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.5)"}}>Hace 50 semanas</span>
           </div>
-          <p style={{"font":"400 17px/1.7 'Roboto',sans-serif","color":"#fff","marginBottom":"24px"}}>"Excelente lugar, amo mi terreno aquí en El Tabo. Desde que invertí con ustedes mi vida mejoró radicalmente. Me costó mucho confiar pero me atreví a dar el primer paso y ahora estoy feliz. ¡Muchas gracias por esta oportunidad!"</p>
+          <p style={{"font":"400 17px/1.7 'Roboto',sans-serif","color":"#fff","marginBottom":"24px"}}>&ldquo;Excelente lugar, amo mi terreno aquí en El Tabo. Desde que invertí con ustedes mi vida mejoró radicalmente. Me costó mucho confiar pero me atreví a dar el primer paso y ahora estoy feliz. ¡Muchas gracias por esta oportunidad!&rdquo;</p>
         </div>
         <div style={{"display":"flex","alignItems":"center","gap":"12px","position":"relative","zIndex":"1"}}>
           <div style={{"width":"46px","height":"46px","borderRadius":"50%","background":"linear-gradient(135deg,#6ac28f,#4ba646)","display":"flex","alignItems":"center","justifyContent":"center","font":"700 16px 'Montserrat',sans-serif","color":"#fff","flexShrink":"0"}}>SU</div>
@@ -1691,7 +1707,7 @@ export default function MiniPieClient() {
                 <option value="Coquimbo">Coquimbo</option>
                 <option value="Valparaíso">Valparaíso</option>
                 <option value="Metropolitana">Región Metropolitana</option>
-                <option value="O'Higgins">Lib. Gral. B. O'Higgins</option>
+                <option value="O&apos;Higgins">Lib. Gral. B. O&apos;Higgins</option>
                 <option value="Maule">Maule</option>
                 <option value="Ñuble">Ñuble</option>
                 <option value="Biobío">Biobío</option>
