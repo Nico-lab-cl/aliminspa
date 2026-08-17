@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         }
 
         const {
-            nombre, email, celular, ciudad, proyecto,
+            nombre, email, celular, ciudad, proyecto, como_conocio,
             fbp, fbc, eventId,
             utm_source, utm_medium, utm_campaign, utm_content, utm_term
         } = body
@@ -26,21 +26,34 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const lead = await prisma.lead.create({
-            data: {
-                nombre,
-                email,
-                celular,
-                ciudad,
-                proyecto: proyecto || null,
-                fuente: 'web',
-                utm_source: utm_source || null,
-                utm_medium: utm_medium || null,
-                utm_campaign: utm_campaign || null,
-                utm_content: utm_content || null,
-                utm_term: utm_term || null,
-            },
-        })
+        const baseData = {
+            nombre,
+            email,
+            celular,
+            ciudad,
+            proyecto: proyecto || null,
+            fuente: 'web',
+            utm_source: utm_source || null,
+            utm_medium: utm_medium || null,
+            utm_campaign: utm_campaign || null,
+            utm_content: utm_content || null,
+            utm_term: utm_term || null,
+        }
+
+        // La columna como_conocio se agregó en agosto de 2026. Si el deploy llega
+        // antes de que corra el ALTER TABLE en la base, el insert fallaría y se
+        // perdería el lead — que es lo peor que puede pasar acá. Por eso se
+        // reintenta sin la columna en vez de devolver error. Este fallback se
+        // puede borrar una vez que la columna exista en todos los ambientes.
+        let lead
+        try {
+            lead = await prisma.lead.create({
+                data: { ...baseData, como_conocio: como_conocio || null },
+            })
+        } catch (e) {
+            console.error('Fallo el insert con como_conocio, reintentando sin esa columna:', e)
+            lead = await prisma.lead.create({ data: baseData })
+        }
 
         // Enviar lead al CRM en tiempo real (best-effort, nunca bloquea ni rompe el guardado)
         await forwardLeadToCrm({

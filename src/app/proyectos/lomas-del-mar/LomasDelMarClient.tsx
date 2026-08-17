@@ -116,6 +116,7 @@ export default function LomasDelMarClient() {
         celular: form.telefono,
         ciudad: form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
         proyecto: 'Lomas del Mar' + (form.terreno ? ' - ' + form.terreno : ''),
+        como_conocio: form.como || null,
         ...utm_data,
         fbp,
         fbc,

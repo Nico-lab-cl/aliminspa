@@ -140,6 +140,14 @@ const PLACES = [
     },
 ]
 
+const REGIONES = [
+    'Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo', 'Valparaíso',
+    'Metropolitana', 'O’Higgins', 'Maule', 'Ñuble', 'Biobío', 'Araucanía',
+    'Los Ríos', 'Los Lagos', 'Aysén', 'Magallanes',
+]
+
+const CANALES = ['Instagram', 'Facebook', 'TikTok', 'Recomendación', 'Google', 'WhatsApp', 'Otro']
+
 const PRICE_ROWS = [
     { label: 'Superficie', value: '200 m²', lima: false },
     { label: 'Pie', value: '$20.000.000', lima: false },
@@ -415,7 +423,7 @@ function CtaButton({
 // ── Página ──
 
 export default function ArenaYSolMetaClient() {
-    const [form, setForm] = useState({ nombre: '', email: '', celular: '', ciudad: '' })
+    const [form, setForm] = useState({ nombre: '', email: '', celular: '', region: '', ciudad: '', como: '' })
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [openFaq, setOpenFaq] = useState<number | null>(0)
@@ -485,7 +493,7 @@ export default function ArenaYSolMetaClient() {
         }
     }, [planoOpen])
 
-    const field = (name: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const field = (name: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const value = e.target.value
         setForm((s) => ({ ...s, [name]: value }))
         setErrors((prev) => {
@@ -500,7 +508,8 @@ export default function ArenaYSolMetaClient() {
         const e: Record<string, string> = {}
         if (!form.nombre.trim()) e.nombre = 'Escribe tu nombre para poder contactarte.'
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) e.email = 'Revisa tu email, parece incompleto.'
-        if (form.celular.replace(/\D/g, '').length < 8) e.celular = 'Necesitamos un celular válido.'
+        if (form.celular.replace(/\D/g, '').length < 8) e.celular = 'Necesitamos un teléfono válido.'
+        if (!form.region) e.region = 'Elige tu región.'
         if (!form.ciudad.trim()) e.ciudad = 'Cuéntanos desde qué ciudad nos escribes.'
         return e
     }, [form])
@@ -540,8 +549,11 @@ export default function ArenaYSolMetaClient() {
                 nombre: form.nombre,
                 email: form.email,
                 celular: form.celular,
-                ciudad: form.ciudad,
+                // La tabla leads no tiene columna de región: se adjunta a la ciudad,
+                // igual que en la landing de Lomas del Mar, para que el asesor la vea.
+                ciudad: form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
                 proyecto: 'Arena y Sol - Meta',
+                como_conocio: form.como || null,
                 ...utm_data,
                 fbp: getCookie('_fbp'),
                 fbc: getCookie('_fbc'),
@@ -579,7 +591,7 @@ export default function ArenaYSolMetaClient() {
             }
 
             setStatus('success')
-            setForm({ nombre: '', email: '', celular: '', ciudad: '' })
+            setForm({ nombre: '', email: '', celular: '', region: '', ciudad: '', como: '' })
         } catch (err) {
             console.error(err)
             setStatus('error')
@@ -1864,7 +1876,7 @@ html{scroll-behavior:smooth}
                                     </div>
 
                                     <div style={{ display: 'grid', gap: '6px' }}>
-                                        <label htmlFor="f-email" style={labelStyle}>Email *</label>
+                                        <label htmlFor="f-email" style={labelStyle}>Correo electrónico *</label>
                                         <input
                                             id="f-email"
                                             name="email"
@@ -1892,7 +1904,7 @@ html{scroll-behavior:smooth}
                                         }}
                                     >
                                         <div style={{ display: 'grid', gap: '6px' }}>
-                                            <label htmlFor="f-celular" style={labelStyle}>Celular *</label>
+                                            <label htmlFor="f-celular" style={labelStyle}>Teléfono / WhatsApp *</label>
                                             <input
                                                 id="f-celular"
                                                 name="celular"
@@ -1911,6 +1923,31 @@ html{scroll-behavior:smooth}
                                                 </span>
                                             )}
                                         </div>
+
+                                    <div style={{ display: 'grid', gap: '6px' }}>
+                                        <label htmlFor="f-region" style={labelStyle}>Región *</label>
+                                        <select
+                                            id="f-region"
+                                            name="region"
+                                            value={form.region}
+                                            onChange={field('region')}
+                                            aria-invalid={!!errors.region}
+                                            aria-describedby={errors.region ? 'err-region' : undefined}
+                                            style={{ ...inputStyle('region'), appearance: 'none', WebkitAppearance: 'none' }}
+                                        >
+                                            <option value="">Selecciona tu región</option>
+                                            {REGIONES.map((r) => (
+                                                <option key={r} value={r} style={{ color: '#1a2b3d' }}>
+                                                    {r === 'Metropolitana' ? 'Región Metropolitana' : r}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.region && (
+                                            <span id="err-region" style={{ font: "400 12.5px 'Roboto',sans-serif", color: '#FCA5A5' }}>
+                                                {errors.region}
+                                            </span>
+                                        )}
+                                    </div>
                                         <div style={{ display: 'grid', gap: '6px' }}>
                                             <label htmlFor="f-ciudad" style={labelStyle}>Ciudad *</label>
                                             <input
@@ -1933,6 +1970,27 @@ html{scroll-behavior:smooth}
                                         </div>
                                     </div>
 
+                                    <div style={{ display: 'grid', gap: '6px' }}>
+                                        <label htmlFor="f-como" style={labelStyle}>¿Cómo nos conociste?</label>
+                                        <select
+                                            id="f-como"
+                                            name="como"
+                                            value={form.como}
+                                            onChange={field('como')}
+                                            style={{ ...inputStyle('como'), appearance: 'none', WebkitAppearance: 'none' }}
+                                        >
+                                            <option value="">Selecciona una opción</option>
+                                            {CANALES.map((c) => (
+                                                <option key={c} value={c} style={{ color: '#1a2b3d' }}>
+                                                    {c === 'Recomendación'
+                                                        ? 'Recomendación de un amigo'
+                                                        : c === 'Google'
+                                                          ? 'Google / Búsqueda web'
+                                                          : c}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
                                     <button
                                         type="submit"
                                         disabled={loading}

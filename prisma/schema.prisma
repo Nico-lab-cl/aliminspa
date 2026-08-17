@@ -14,6 +14,10 @@ model Lead {
   celular   String
   ciudad    String
   proyecto  String?
+  // Respuesta de "¿Cómo nos conociste?". Nullable porque los leads anteriores
+  // a agosto de 2026 no la tienen: hasta entonces el formulario preguntaba
+  // pero la respuesta nunca se guardaba.
+  como_conocio String?
   fuente    String   @default("web")
   utm_source   String?
   utm_medium   String?
