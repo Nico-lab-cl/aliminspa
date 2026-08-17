@@ -12,7 +12,7 @@ import { FAQ_ARENA_Y_SOL } from './faq'
    ("Arena y Sol - Meta"), las UTM por defecto y el noindex de la ruta. */
 
 // ── Datos comerciales. Único lugar donde se editan. ──
-const LOTES_DISPONIBLES = 8
+const LOTES_DISPONIBLES = 17
 const LOTES_TOTALES = 42
 const PLAZO_CUOTAS = 44
 const VENDIDOS_PCT = Math.round(((LOTES_TOTALES - LOTES_DISPONIBLES) / LOTES_TOTALES) * 100)
