@@ -218,7 +218,7 @@ export default function VentaTerrenosClient() {
         ? s("padding:10px 22px;border-radius:100px;font:700 13px 'Montserrat',sans-serif;cursor:pointer;border:1px solid #4ba646;background:linear-gradient(135deg,#76d845,#4ba646);color:#fff;box-shadow:0 6px 16px rgba(118,216,69,.3);transition:all .2s;white-space:nowrap")
         : s("padding:10px 22px;border-radius:100px;font:700 13px 'Montserrat',sans-serif;cursor:pointer;border:1px solid #d7e3d0;background:#fff;color:#4b5563;transition:all .2s;white-space:nowrap")
 
-    const planoImg = lightboxProj === 'Arena y Sol' ? ASSET + '/plano-arena-y-sol.webp' : ASSET + '/plano-lomas-del-mar.webp'
+    const planoImg = lightboxProj === 'Arena y Sol' ? ASSET + '/plano-arena-y-sol-2026-08.webp' : ASSET + '/plano-lomas-del-mar.webp'
 
     return (
         <div id="venta-terrenos" style={s("font-family:'Roboto',sans-serif;background:#0e1a24;color:#fff;overflow-x:hidden")}>
@@ -534,7 +534,7 @@ export default function VentaTerrenosClient() {
                             <PlanoCard title="Lomas del Mar" badge={<span style={s("background:linear-gradient(135deg,#ff5b5b,#ff8a3d);color:#fff;font:800 10px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:5px 11px;border-radius:100px;box-shadow:0 4px 14px rgba(255,91,91,.35)")}>🔥 Hot Sale</span>} img={ASSET + '/plano-lomas-del-mar.webp'} onCotizar={cotizar('Lomas del Mar')} onOpen={() => openPlano('Lomas del Mar')} borderColor="rgba(118,216,69,.3)" />
                         )}
                         {showArena && (
-                            <PlanoCard title="Arena y Sol" badge={<span style={s("background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#e2564a;font:800 10px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:5px 11px;border-radius:100px")}>⚠ Últimos cupos</span>} img={ASSET + '/plano-arena-y-sol.webp'} onCotizar={cotizar('Arena y Sol')} onOpen={() => openPlano('Arena y Sol')} borderColor="rgba(197,160,89,.35)" />
+                            <PlanoCard title="Arena y Sol" badge={<span style={s("background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#e2564a;font:800 10px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:5px 11px;border-radius:100px")}>⚠ Últimos cupos</span>} img={ASSET + '/plano-arena-y-sol-2026-08.webp'} onCotizar={cotizar('Arena y Sol')} onOpen={() => openPlano('Arena y Sol')} borderColor="rgba(197,160,89,.35)" />
                         )}
                     </div>
                 </div>

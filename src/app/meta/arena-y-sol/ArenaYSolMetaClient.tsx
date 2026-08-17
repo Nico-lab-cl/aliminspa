@@ -1355,7 +1355,7 @@ html{scroll-behavior:smooth}
                                 }}
                             >
                                 <img
-                                    src="/assets/venta-terrenos/plano-arena-y-sol.webp"
+                                    src="/assets/venta-terrenos/plano-arena-y-sol-2026-08.webp"
                                     alt="Plano del loteo Arena y Sol con la distribución de los lotes"
                                     loading="lazy"
                                     decoding="async"
@@ -2377,7 +2377,7 @@ html{scroll-behavior:smooth}
                     }}
                 >
                     <img
-                        src="/assets/venta-terrenos/plano-arena-y-sol.webp"
+                        src="/assets/venta-terrenos/plano-arena-y-sol-2026-08.webp"
                         alt="Plano del loteo Arena y Sol ampliado"
                         onClick={(e) => {
                             e.stopPropagation()
