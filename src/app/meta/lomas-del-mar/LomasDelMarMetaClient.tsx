@@ -587,7 +587,7 @@ export default function LomasDelMarMetaClient() {
       .nav-inner{padding:0 16px;height:56px}
       .nav-badge{display:none}
       .nav-cta{padding:8px 14px!important;font-size:12px!important}
-      #main-nav #minipie-landing img{width:32px!important;height:32px!important}
+      #main-nav #minipie-landing img{width:auto!important;height:34px!important}
       #main-nav .nav-name{font-size:15px!important}
 
       /* Hero */
@@ -607,13 +607,13 @@ export default function LomasDelMarMetaClient() {
       .hero-promo-badge{display:none!important}
       /* Navbar persistente mobile */
       #persistent-nav>div{padding:0 12px!important;height:52px!important;gap:8px!important}
-      #persistent-nav img{width:30px!important;height:30px!important}
+      #persistent-nav img{width:auto!important;height:32px!important}
       #persistent-nav .nav-name-text{font-size:15px!important}
       #persistent-nav .nav-badge{display:none!important}
       #persistent-nav button{padding:7px 12px!important;font-size:11px!important}
       /* Navbar hero mobile */
       #main-nav>div{padding:0 12px!important;height:52px!important}
-      #main-nav img{width:30px!important;height:30px!important}
+      #main-nav img{width:auto!important;height:32px!important}
       #main-nav .nav-name-text{font-size:15px!important}
 
       /* Loc */
@@ -678,7 +678,7 @@ export default function LomasDelMarMetaClient() {
     /* ── 4K ≥ 2560px ── */
     @media(min-width:2560px){
       .nav-inner{height:80px}
-      #main-nav #minipie-landing img{width:56px!important;height:56px!important}
+      #main-nav #minipie-landing img{width:auto!important;height:60px!important}
       .hero-panel-inner{padding:160px 60px 120px}
     }
   ` }} />
@@ -892,8 +892,7 @@ export default function LomasDelMarMetaClient() {
     <nav id="main-nav" style={{"position":"absolute","top":"var(--mp-banner-h)","left":"0","right":"0","zIndex":"20","background":"linear-gradient(to bottom,rgba(0,0,0,.52) 0%,transparent 100%)"}}>
       <div className="nav-inner">
         <div style={{"display":"flex","alignItems":"center","gap":"12px","flexShrink":"0"}}>
-          <img src="/assets/minipie/favicon (1).png" alt="Alimin" style={{"width":"50px","height":"50px","objectFit":"contain","display":"block"}} />
-          <div className="nav-name-text" style={{"font":"900 24px/1 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.02em"}}>ALIMIN</div>
+          <img src="/images/logo-alimin-imagotipo.webp" alt="Alimin SpA" style={{"height":"52px","width":"auto","objectFit":"contain","objectPosition":"left center","display":"block"}} />
         </div>
         <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
           <div className="nav-badge" style={{"background":"rgba(118,216,69,.15)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"100px","padding":"4px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#b8f07a"}}>✓ Crédito directo</div>
@@ -938,10 +937,7 @@ export default function LomasDelMarMetaClient() {
 <nav id="persistent-nav" style={{"position":"fixed","top":"var(--mp-banner-h)","left":"0","right":"0","zIndex":"200","background":"linear-gradient(135deg,#3a9e48 0%,#4ba646 40%,#62c247 100%)","backdropFilter":"blur(12px)","WebkitBackdropFilter":"blur(12px)","borderBottom":"2px solid rgba(255,255,255,.2)","transform":"translateY(-100%)","transition":"transform .4s cubic-bezier(.16,1,.3,1)","boxShadow":"0 4px 24px rgba(75,166,70,.5)"}}>
   <div style={{"maxWidth":"1160px","margin":"0 auto","padding":"0 24px","height":"68px","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px"}}>
     <div style={{"display":"flex","alignItems":"center","gap":"12px","flexShrink":"0"}}>
-      <img src="/assets/minipie/favicon (1).png" alt="Alimin" style={{"width":"44px","height":"44px","objectFit":"contain","display":"block"}} />
-      <div>
-        <div className="nav-name-text" style={{"font":"900 22px/1 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.02em"}}>ALIMIN</div>
-      </div>
+      <img src="/images/logo-alimin-imagotipo.webp" alt="Alimin SpA" style={{"height":"48px","width":"auto","objectFit":"contain","objectPosition":"left center","display":"block"}} />
     </div>
     <div style={{"display":"flex","alignItems":"center","gap":"10px"}}>
       <div className="nav-badge" style={{"display":"flex","alignItems":"center","gap":"7px","background":"rgba(0,0,0,.18)","border":"1px solid rgba(255,255,255,.3)","borderRadius":"100px","padding":"5px 14px","font":"700 11px 'Montserrat',sans-serif","color":"#fff"}}>

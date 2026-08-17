@@ -751,7 +751,7 @@ html{scroll-behavior:smooth}
                     >
                         <Link href="/" aria-label="Alimin SpA — Inicio" style={{ display: 'block', flex: 'none' }}>
                             <img
-                                src="/images/arena_y_sol/logo-alimin.webp"
+                                src="/images/logo-alimin-imagotipo.webp"
                                 alt="Alimin SpA"
                                 style={{
                                     height: '56px',
@@ -881,7 +881,7 @@ html{scroll-behavior:smooth}
                         }}
                     >
                         <img
-                            src="/images/arena_y_sol/logo-alimin.webp"
+                            src="/images/logo-alimin-imagotipo.webp"
                             alt="Alimin SpA"
                             style={{ height: '44px', width: 'auto', display: 'block' }}
                         />
@@ -2251,7 +2251,7 @@ html{scroll-behavior:smooth}
                     >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                             <img
-                                src="/images/arena_y_sol/logo-alimin.webp"
+                                src="/images/logo-alimin-imagotipo.webp"
                                 alt="Alimin SpA"
                                 loading="lazy"
                                 style={{ height: '54px', width: 'auto', objectFit: 'contain', display: 'block' }}
