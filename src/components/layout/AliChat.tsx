@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { getUtmParams } from '@/lib/track';
 import styles from './AliChat.module.css';
 
 /**
@@ -37,8 +38,19 @@ export function marcarTodoLeido(fecha: string) {
     }
 }
 
+interface AliChatProps {
+    /**
+     * UTM con las que se abre la conversación cuando la URL no trae ninguna.
+     * Es lo único que le dice al asesor desde qué página escribe el visitante:
+     * el CRM abre la conversación con nombre, teléfono, correo y UTM, y no hay
+     * campo de proyecto. Se usan las mismas etiquetas que el formulario de cada
+     * landing, así el chat y el lead de esa página quedan bajo el mismo origen.
+     */
+    utmPorDefecto?: Record<string, string>;
+}
+
 /** Los controles de cerrar y "más opciones" viven en el encabezado del modal. */
-export default function AliChat() {
+export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
     const [mensajes, setMensajes] = useState<Mensaje[]>([]);
     const [texto, setTexto] = useState('');
     const [enviando, setEnviando] = useState(false);
@@ -147,7 +159,15 @@ export default function AliChat() {
             const res = await fetch('/api/chat/start', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre, telefono, email, consentimiento }),
+                body: JSON.stringify({
+                    nombre,
+                    telefono,
+                    email,
+                    consentimiento,
+                    // Las UTM de la URL mandan; las de la landing sólo rellenan
+                    // cuando el visitante llegó por un enlace limpio.
+                    ...getUtmParams(utmPorDefecto),
+                }),
             });
 
             const datos = await res.json().catch(() => ({}));

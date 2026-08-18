@@ -6,13 +6,26 @@ import Link from 'next/link'
 import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
+import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 
 /* Landing de Lomas del Mar — Design System v2.
    Nació como la campaña Mini Pie, que terminó el 9 de agosto de 2026; desde
    entonces comunica la oferta permanente del proyecto, así que ahora vive en
    /proyectos/lomas-del-mar y reemplaza a la página antigua de tema dorado.
    /minipie sigue renderizando este mismo componente porque esa URL circula en
-   flyers, bio de Instagram y campañas; su canonical apunta acá. */
+   flyers, bio de Instagram y campañas; su canonical apunta acá.
+   La página trae su propio nav y footer y vive fuera del grupo (main), así
+   que el chat de Ali se monta acá a mano: en el resto del sitio lo pone el
+   layout de (main), que esta página no atraviesa. */
+
+/* UTM con las que se abre el chat cuando la URL no trae ninguna. Son las mismas
+   del formulario: el chat y el lead de esta página quedan bajo el mismo origen
+   en el CRM, que es la única señal de procedencia que recibe el asesor. */
+const UTM_CHAT = {
+  utm_source: 'lomasdelmar_landing',
+  utm_medium: 'web',
+  utm_campaign: 'lomasdelmar_2026',
+}
 /* Globales que inyecta el layout raíz: el Pixel de Meta y el tracker del CRM. */
 type TrackingWindow = {
   fbq?: (
@@ -46,7 +59,12 @@ export default function LomasDelMarClient() {
   // Los inputs usan onInput y los selects onChange, así que el tipo tiene que
   // cubrir ambos: FormEvent es el ancestro común de InputEvent y ChangeEvent.
   const handleField = (field: string) => (e: React.FormEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm(prev => ({ ...prev, [field]: e.currentTarget.value }))
+    // El valor se lee ANTES de setForm: React deja currentTarget en null apenas
+    // termina el handler, y el updater puede ejecutarse despues (fase de render).
+    // Leerlo adentro reventaba con "Cannot read properties of null" y tumbaba la
+    // landing completa mientras el usuario escribia en el formulario.
+    const value = e.currentTarget.value
+    setForm(prev => ({ ...prev, [field]: value }))
   }
 
   const playTestimonial = () => {
@@ -97,11 +115,7 @@ export default function LomasDelMarClient() {
       const fbp = getCookie('_fbp')
       const fbc = getCookie('_fbc')
 
-      const utm_data = getUtmParams({
-        utm_source: 'lomasdelmar_landing',
-        utm_medium: 'web',
-        utm_campaign: 'lomasdelmar_2026',
-      })
+      const utm_data = getUtmParams(UTM_CHAT)
 
       // Shared between the browser Pixel and the CAPI call below so Meta
       // deduplicates them into a single Lead.
@@ -655,8 +669,6 @@ export default function LomasDelMarClient() {
       .footer-bottom{flex-direction:column;align-items:flex-start;gap:8px}
       .footer-inner{padding:32px 16px 24px}
 
-      /* WA float */
-      #wa-float{bottom:16px!important;right:16px!important;width:50px!important;height:50px!important}
     }
 
     /* ── SMALL MOBILE ≤ 390px ── */
@@ -2047,10 +2059,15 @@ export default function LomasDelMarClient() {
 </footer>
 
 
-<a href="https://wa.me/56956654833?text=Hola%2C%20vengo%20de%20la%20web%20y%20quiero%20info%20sobre%20los%20terrenos%20de%20Lomas%20del%20Mar%20%F0%9F%8C%B2" target="_blank" rel="noopener noreferrer" id="wa-float" style={{"position":"fixed","bottom":"24px","right":"24px","width":"58px","height":"58px","background":"linear-gradient(135deg,#25D366,#1aad54)","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","boxShadow":"0 4px 24px rgba(118,216,69,.45)","zIndex":"999","animation":"pulseGreen 2.8s ease-in-out infinite","transition":"transform .2s"}}>
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"></path></svg>
-</a>
+{/* El botón flotante de WhatsApp se retiró: lo reemplaza el chat de Ali,
+    que queda como único widget fijo. WhatsApp sigue a un toque desde el botón
+    "⋯" del chat y en los CTA de contacto repartidos por la página. */}
 
+
+      {/* ── Chat en vivo de Ali ──
+          Único widget fijo de la página, anclado abajo a la derecha igual que
+          en el resto del sitio. */}
+      <AliFloatingCharacter utmPorDefecto={UTM_CHAT} />
     </div>
   )
 }

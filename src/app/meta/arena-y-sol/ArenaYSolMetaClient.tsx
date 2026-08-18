@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { getUtmParams, newEventId } from '@/lib/track'
+import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import { FAQ_ARENA_Y_SOL } from './faq'
 
 /* Landing de Arena y Sol para tráfico de Meta Ads (/meta/arena-y-sol).
@@ -10,6 +11,15 @@ import { FAQ_ARENA_Y_SOL } from './faq'
    precios o los CTA solo para los anuncios sin tocar la página pública. Lo que
    cambia respecto del original es la etiqueta con la que se guarda el lead
    ("Arena y Sol - Meta"), las UTM por defecto y el noindex de la ruta. */
+
+/* UTM con las que se abre el chat si el anuncio no trae las suyas. Son las
+   mismas del formulario, así una conversación que nace de un anuncio llega al
+   CRM marcada como pagada y no se confunde con el tráfico de la página real. */
+const UTM_CHAT = {
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'arenaysol_meta',
+}
 
 // ── Datos comerciales. Único lugar donde se editan. ──
 const LOTES_DISPONIBLES = 17
@@ -535,11 +545,7 @@ export default function ArenaYSolMetaClient() {
                 return undefined
             }
 
-            const utm_data = getUtmParams({
-                utm_source: 'meta',
-                utm_medium: 'paid_social',
-                utm_campaign: 'arenaysol_meta',
-            })
+            const utm_data = getUtmParams(UTM_CHAT)
 
             // Compartido entre el Pixel del navegador y la CAPI del servidor para
             // que Meta deduplique ambos envíos en un solo Lead.
@@ -649,7 +655,6 @@ html{scroll-behavior:smooth}
 .ays-root input,.ays-root button{font-family:inherit}
 @keyframes aysFadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-@keyframes aysPulseGreen{0%,100%{box-shadow:0 0 0 0 rgba(118,216,69,.5)}70%{box-shadow:0 0 0 14px rgba(118,216,69,0)}}
 @keyframes aysDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.75)}}
 @keyframes aysSpin{to{transform:rotate(360deg)}}
 @keyframes aysMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -2324,33 +2329,10 @@ html{scroll-behavior:smooth}
                 </div>
             </footer>
 
-            {/* ── WhatsApp flotante ── */}
-            <a
-                href={WA_GENERAL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Escríbenos por WhatsApp"
-                style={{
-                    position: 'fixed',
-                    bottom: showSticky ? '96px' : '24px',
-                    right: '24px',
-                    width: '58px',
-                    height: '58px',
-                    background: 'linear-gradient(135deg,#25D366,#1aad54)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 24px rgba(118,216,69,.45)',
-                    zIndex: 999,
-                    animation: 'aysPulseGreen 2.8s ease-in-out infinite',
-                    transition: `bottom .3s ${EASE}`,
-                }}
-            >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                    <path d={WA_PATH} />
-                </svg>
-            </a>
+            {/* El botón flotante de WhatsApp se retiró: lo reemplaza el chat de
+                Ali, que es el único widget fijo de la página. WhatsApp sigue a
+                un toque desde el botón "⋯" del chat, y con mensaje por asesor en
+                la sección de equipo comercial. */}
 
             {/* ── Visor del plano ── */}
             {planoOpen && (
@@ -2483,6 +2465,15 @@ html{scroll-behavior:smooth}
                     </a>
                 </div>
             )}
+
+            {/* ── Chat en vivo de Ali ──
+                Cuando el CTA sticky de móvil está en pantalla hay que levantar a
+                Ali sobre él: el personaje se ancla abajo a la derecha, justo
+                donde está el botón "QUIERO MI TERRENO". */}
+            <AliFloatingCharacter
+                utmPorDefecto={UTM_CHAT}
+                offsetBottom={showSticky ? '76px' : undefined}
+            />
         </div>
     )
 }

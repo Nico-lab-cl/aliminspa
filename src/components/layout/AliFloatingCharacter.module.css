@@ -2,7 +2,11 @@
 
 .floatingWrapper {
   position: fixed;
-  bottom: 0;
+  /* Las landings de proyecto tienen su propia barra fija abajo (el CTA sticky
+     de móvil); la variable las deja levantar a Ali por encima sin duplicar el
+     componente. Vale 0px salvo que la página la defina. */
+  --ali-offset-bottom: 0px;
+  bottom: var(--ali-offset-bottom);
   right: 0;
   z-index: 9999;
   display: flex;
@@ -164,8 +168,8 @@
   /* El modal crece hacia arriba desde su anclaje; sin techo, el formulario
      largo se sale por el borde superior y deja el botón "volver" fuera de
      alcance. Con esto el cuerpo hace scroll y el encabezado siempre se ve. */
-  max-height: calc(100vh - 290px);
-  max-height: calc(100dvh - 290px);
+  max-height: calc(100vh - 290px - var(--ali-offset-bottom));
+  max-height: calc(100dvh - 290px - var(--ali-offset-bottom));
 }
 
 @keyframes modalSlideUp {
@@ -461,8 +465,8 @@
 
   .chatModal {
     bottom: 210px;
-    max-height: calc(100vh - 230px);
-    max-height: calc(100dvh - 230px);
+    max-height: calc(100vh - 230px - var(--ali-offset-bottom));
+    max-height: calc(100dvh - 230px - var(--ali-offset-bottom));
   }
 }
 
@@ -481,14 +485,14 @@
   .chatModal {
     bottom: 175px;
     right: 0.5rem;
-    max-height: calc(100vh - 195px);
-    max-height: calc(100dvh - 195px);
+    max-height: calc(100vh - 195px - var(--ali-offset-bottom));
+    max-height: calc(100dvh - 195px - var(--ali-offset-bottom));
   }
 }
 
 @media (max-width: 480px) {
   .floatingWrapper {
-    bottom: 0;
+    bottom: var(--ali-offset-bottom);
     right: 0;
   }
 
@@ -517,7 +521,7 @@
     right: 0.25rem;
     width: calc(100vw - 1rem);
     bottom: 132px;
-    max-height: calc(100vh - 148px);
-    max-height: calc(100dvh - 148px);
+    max-height: calc(100vh - 148px - var(--ali-offset-bottom));
+    max-height: calc(100dvh - 148px - var(--ali-offset-bottom));
   }
 }

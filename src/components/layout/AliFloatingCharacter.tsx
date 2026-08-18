@@ -33,7 +33,23 @@ const ADVISORS = [
   },
 ];
 
-export default function AliFloatingCharacter() {
+interface AliFloatingCharacterProps {
+  /**
+   * UTM por defecto con las que se abre la conversación. Se pasan tal cual a
+   * AliChat: son la única señal de origen que recibe el asesor en el CRM.
+   */
+  utmPorDefecto?: Record<string, string>;
+  /**
+   * Levanta el widget sobre una barra fija propia de la página (el CTA sticky
+   * de móvil de las landings). Sin esto Ali queda encima del botón principal.
+   */
+  offsetBottom?: string;
+}
+
+export default function AliFloatingCharacter({
+  utmPorDefecto,
+  offsetBottom,
+}: AliFloatingCharacterProps = {}) {
   const [showSpeechBubble, setShowSpeechBubble] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // El chat es lo primero que ve el visitante: abrir a un menú de opciones
@@ -110,7 +126,13 @@ export default function AliFloatingCharacter() {
   };
 
   return (
-    <div className={styles.floatingWrapper} id="whatsapp-float">
+    <div
+      className={styles.floatingWrapper}
+      id="whatsapp-float"
+      /* La variable la leen tanto el anclaje del wrapper como el techo del
+         modal, para que al levantarlo no se salga por el borde superior. */
+      style={offsetBottom ? ({ '--ali-offset-bottom': offsetBottom } as React.CSSProperties) : undefined}
+    >
       {/* ── INTERACTIVE CHAT MODAL ───────────────────────── */}
       {isModalOpen && (
         <div className={styles.chatModal}>
@@ -163,7 +185,7 @@ export default function AliFloatingCharacter() {
             {/* El chat se oculta, no se desmonta: al ir a "más opciones" y
                 volver, el visitante encuentra intacto lo que ya había escrito. */}
             <div className={vista === 'chat' ? styles.chatMontado : styles.chatOculto}>
-              <AliChat />
+              <AliChat utmPorDefecto={utmPorDefecto} />
             </div>
 
             {vista === 'opciones' && (
