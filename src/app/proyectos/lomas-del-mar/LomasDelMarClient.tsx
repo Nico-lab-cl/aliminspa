@@ -281,7 +281,22 @@ export default function LomasDelMarClient() {
       }
     }
     
-    setupVideo('hero-video',     '/assets/minipie/final.mp4',       true)
+    // El hero elige la pieza segun el dispositivo: horizontal en escritorio,
+    // vertical en movil, y baja una sola. El poster es el primer frame exacto
+    // del video, asi la portada pinta al instante en vez de quedar en negro
+    // mientras el video carga.
+    const heroEnMovil = window.matchMedia('(max-width:768px)').matches
+    const heroEl = document.getElementById('hero-video') as HTMLVideoElement | null
+    if (heroEl) {
+      heroEl.poster = heroEnMovil
+        ? '/videos/lomas-del-mar/hero-mobile-poster.webp'
+        : '/videos/lomas-del-mar/hero-desktop-poster.webp'
+    }
+    setupVideo(
+      'hero-video',
+      heroEnMovil ? '/videos/lomas-del-mar/hero-mobile.mp4' : '/videos/lomas-del-mar/hero-desktop.mp4',
+      true
+    )
     setupVideo('location-video', '/assets/minipie/1-ff5c0f74.mp4', true)
     setupVideo('terrain-video',  '/assets/minipie/1-ff5c0f74.mp4', true)
     setupVideo('urbano-video',   '/assets/minipie/Rural_terrain_transforming_into_..._202606290523.mp4', true)
@@ -714,8 +729,8 @@ export default function LomasDelMarClient() {
 
 
 
-<div id="sticky-wrap" style={{"height":"200vh","position":"relative","background":"#0e1a24"}}>
-  <div style={{"position":"sticky","top":"0","height":"100vh","overflow":"hidden","background":"#0e1a24"}}>
+<div id="sticky-wrap" style={{"height":"200dvh","position":"relative","background":"#0e1a24"}}>
+  <div style={{"position":"sticky","top":"0","height":"100dvh","overflow":"hidden","background":"#0e1a24"}}>
 
     
     <video id="hero-video" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","zIndex":"1","transition":"opacity 1s ease"}} preload="auto"></video>

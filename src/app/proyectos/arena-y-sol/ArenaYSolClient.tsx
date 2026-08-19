@@ -443,6 +443,54 @@ export default function ArenaYSolClient() {
     const [planoZoom, setPlanoZoom] = useState(false)
     const rootRef = useRef<HTMLDivElement>(null)
 
+    // Hero en video. La fuente se elige en el cliente para bajar solo la pieza
+    // que corresponde al dispositivo (horizontal o vertical) en vez de las dos.
+    // El poster va en el HTML servido, asi que el hero pinta igual de rapido y
+    // el video entra encima con un fundido recien cuando ya esta reproduciendo.
+    // Si el video no puede partir (autoplay bloqueado, ahorro de datos,
+    // reduced-motion) se queda la imagen y el hero se ve igual de bien.
+    const [heroVideo, setHeroVideo] = useState<string | null>(null)
+    const [heroPlaying, setHeroPlaying] = useState(false)
+    const heroVideoRef = useRef<HTMLVideoElement>(null)
+
+    // El header arranca integrado al hero (transparente, se ve el video detras)
+    // y recien se vuelve solido cuando el hero termina de pasar. Se decide
+    // midiendo el borde inferior del hero contra el alto del header: cuando el
+    // hero ya no queda debajo, el header necesita fondo propio para que el logo
+    // y el CTA sigan legibles sobre el contenido.
+    const heroRef = useRef<HTMLElement>(null)
+    const headerRef = useRef<HTMLElement>(null)
+    const [navSolido, setNavSolido] = useState(false)
+
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+        if (conn?.saveData) return
+        const mobile = window.matchMedia('(max-width:768px)').matches
+        setHeroVideo(mobile ? '/videos/arena-y-sol/hero-mobile.mp4' : '/videos/arena-y-sol/hero-desktop.mp4')
+    }, [])
+
+    // El fundido se dispara con un listener nativo sobre el <video>: los eventos
+    // de media no burbujean y React no siempre engancha onPlaying en un elemento
+    // montado despues del primer render. timeupdate queda de respaldo por si el
+    // navegador se salta playing.
+    useEffect(() => {
+        const v = heroVideoRef.current
+        if (!v) return
+        const reveal = () => {
+            setHeroPlaying(true)
+            v.removeEventListener('playing', reveal)
+            v.removeEventListener('timeupdate', reveal)
+        }
+        v.addEventListener('playing', reveal)
+        v.addEventListener('timeupdate', reveal)
+        v.play().catch(() => {})
+        return () => {
+            v.removeEventListener('playing', reveal)
+            v.removeEventListener('timeupdate', reveal)
+        }
+    }, [heroVideo])
+
     // Barra de progreso + CTA sticky de mobile (aparece pasado el hero)
     useEffect(() => {
         const onScroll = () => {
@@ -450,6 +498,12 @@ export default function ArenaYSolClient() {
             const y = window.scrollY || 0
             setScrollPct(h > 0 ? Math.min(100, (y / h) * 100) : 0)
             setShowSticky(window.innerWidth <= 820 && y > window.innerHeight * 0.85)
+            // getBoundingClientRect y no offsetHeight: en pantallas grandes el
+            // bloque va escalado con zoom y solo el rect devuelve medidas en el
+            // mismo espacio que el viewport.
+            const altoHeader = headerRef.current?.getBoundingClientRect().height ?? 110
+            const baseHero = heroRef.current?.getBoundingClientRect().bottom ?? window.innerHeight
+            setNavSolido(baseHero <= altoHeader)
         }
         onScroll()
         window.addEventListener('scroll', onScroll, { passive: true })
@@ -649,7 +703,19 @@ export default function ArenaYSolClient() {
                 dangerouslySetInnerHTML={{
                     __html: `
 html{scroll-behavior:smooth}
-.ays-root{font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.ays-root{font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased;--ays-zoom:1;--ays-w:1160px}
+/* Escalado por tamano de pantalla. El diseno completo esta en px dentro de
+   estilos inline, asi que en vez de retocar cientos de valores sueltos se
+   escala el bloque entero con zoom: mantiene las proporciones exactas del
+   diseno y solo cambia de tamano. --ays-w ademas ensancha el contenedor en
+   monitores grandes para que no quede una columna angosta al centro, y
+   --ays-zoom acompana al zoom para que el alto del hero siga siendo una
+   pantalla justa (ver minHeight del hero). Un navegador sin soporte de zoom
+   simplemente ve la pagina como hasta ahora. */
+@media (min-width:1500px){.ays-root{zoom:1.06;--ays-zoom:1.06;--ays-w:1200px}}
+@media (min-width:1750px){.ays-root{zoom:1.14;--ays-zoom:1.14;--ays-w:1260px}}
+@media (min-width:2200px){.ays-root{zoom:1.24;--ays-zoom:1.24;--ays-w:1300px}}
+@media (max-width:768px){.ays-root{zoom:1.06;--ays-zoom:1.06}}
 .ays-root a{text-decoration:none}
 .ays-h1{font:800 clamp(2rem,5vw,3.4rem)/1.06 'Montserrat',sans-serif;letter-spacing:-.03em;margin:0 0 20px;max-width:15ch;text-wrap:balance}
 .ays-root input,.ays-root button{font-family:inherit}
@@ -670,10 +736,7 @@ html{scroll-behavior:smooth}
 .ays-ghost:hover{border-color:rgba(118,216,69,.8);background:rgba(118,216,69,.14)}
 .ays-root input:focus{border-color:#76d845 !important;box-shadow:0 0 0 3px rgba(118,216,69,.25)}
 .ays-root a:focus-visible,.ays-root button:focus-visible,.ays-root input:focus-visible{outline:2px solid #76d845;outline-offset:2px}
-.ays-hero-mobile{display:none}
 @media (max-width:768px){
-  .ays-hero-desktop{display:none}
-  .ays-hero-mobile{display:block}
   .ays-nav-tag{display:none}
 }
 @media (prefers-reduced-motion:reduce){
@@ -684,13 +747,16 @@ html{scroll-behavior:smooth}
             />
 
             {/* ── Header fijo: marquesina + nav verde + progreso de scroll ── */}
-            <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 998 }}>
+            <header ref={headerRef} style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 998 }}>
                 <div
                     style={{
-                        background: '#0a1520',
-                        borderBottom: '1px solid rgba(118,216,69,.3)',
+                        background: navSolido ? '#0a1520' : 'transparent',
+                        borderBottom: navSolido
+                            ? '1px solid rgba(118,216,69,.3)'
+                            : '1px solid rgba(255,255,255,.10)',
                         padding: '9px 0',
                         overflow: 'hidden',
+                        transition: 'background .4s ease, border-color .4s ease',
                     }}
                 >
                     <div style={{ display: 'flex', width: 'max-content', animation: 'aysMarquee 26s linear infinite' }}>
@@ -738,10 +804,15 @@ html{scroll-behavior:smooth}
                 <nav
                     aria-label="Navegación de Arena y Sol"
                     style={{
-                        background: 'linear-gradient(135deg,#3a9e48 0%,#4ba646 40%,#62c247 100%)',
-                        backdropFilter: 'blur(12px)',
-                        borderBottom: '2px solid rgba(255,255,255,.2)',
-                        boxShadow: '0 4px 20px rgba(0,0,0,.25)',
+                        background: navSolido
+                            ? 'linear-gradient(135deg,#3a9e48 0%,#4ba646 40%,#62c247 100%)'
+                            : 'transparent',
+                        backdropFilter: navSolido ? 'blur(12px)' : 'none',
+                        borderBottom: navSolido
+                            ? '2px solid rgba(255,255,255,.2)'
+                            : '1px solid rgba(255,255,255,.12)',
+                        boxShadow: navSolido ? '0 4px 20px rgba(0,0,0,.25)' : 'none',
+                        transition: 'background .4s ease, border-color .4s ease, box-shadow .4s ease',
                     }}
                 >
                     <div
@@ -750,7 +821,7 @@ html{scroll-behavior:smooth}
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             gap: '16px',
-                            maxWidth: '1160px',
+                            maxWidth: 'var(--ays-w)',
                             margin: '0 auto',
                             padding: '0 24px',
                             height: '72px',
@@ -822,29 +893,55 @@ html{scroll-behavior:smooth}
 
             {/* ── 01 · Hero ── */}
             <section
+                ref={heroRef}
                 style={{
                     position: 'relative',
-                    minHeight: '94vh',
+                    minHeight: 'calc(100dvh / var(--ays-zoom))',
                     display: 'flex',
                     alignItems: 'center',
                     padding: '170px 20px 72px',
                     overflow: 'hidden',
                 }}
             >
-                <img
-                    className="ays-hero-desktop"
-                    src="/images/arena_y_sol/hero-desktop-new.webp"
-                    alt="Vista aérea del loteo Arena y Sol en El Tabo"
-                    fetchPriority="high"
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-                <img
-                    className="ays-hero-mobile"
-                    src="/images/arena_y_sol/hero-mobile-new.webp"
-                    alt=""
-                    fetchPriority="high"
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                {/* Capa 1: el poster, que es el primer frame exacto del video.
+                    Va en el HTML servido para que el hero pinte de inmediato y
+                    queda debajo como respaldo si el video no llega a partir. */}
+                <picture>
+                    <source media="(max-width:768px)" srcSet="/videos/arena-y-sol/hero-mobile-poster.webp" />
+                    <img
+                        src="/videos/arena-y-sol/hero-desktop-poster.webp"
+                        alt="Vista aérea del loteo Arena y Sol en El Tabo"
+                        fetchPriority="high"
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                </picture>
+                {/* Capa 2: el video, encima del poster. Entra con fundido recién
+                    cuando ya está reproduciendo, así nunca se ve un cuadro negro
+                    ni un salto entre la imagen y el video. */}
+                {heroVideo && (
+                    <video
+                        key={heroVideo}
+                        src={heroVideo}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                        aria-hidden="true"
+                        tabIndex={-1}
+                        ref={heroVideoRef}
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            opacity: heroPlaying ? 1 : 0,
+                            transition: 'opacity .9s ease',
+                            pointerEvents: 'none',
+                        }}
+                    />
+                )}
                 <div
                     style={{
                         position: 'absolute',
@@ -876,7 +973,7 @@ html{scroll-behavior:smooth}
                     }}
                 />
 
-                <div style={{ position: 'relative', zIndex: 1, maxWidth: '1160px', margin: '0 auto', width: '100%' }}>
+                <div style={{ position: 'relative', zIndex: 1, maxWidth: 'var(--ays-w)', margin: '0 auto', width: '100%' }}>
                     <div
                         style={{
                             display: 'flex',
@@ -1018,7 +1115,7 @@ html{scroll-behavior:smooth}
                             'linear-gradient(180deg,rgba(10,21,32,.5) 0%,rgba(18,37,58,.42) 50%,rgba(10,21,32,.58) 100%)',
                     }}
                 />
-                <div style={{ position: 'relative', maxWidth: '1160px', margin: '0 auto' }}>
+                <div style={{ position: 'relative', maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <div
                         style={{
                             textAlign: 'center',
@@ -1131,7 +1228,7 @@ html{scroll-behavior:smooth}
                         background: 'radial-gradient(circle,rgba(50,83,102,.4),transparent 70%)',
                     }}
                 />
-                <div data-animate style={{ position: 'relative', maxWidth: '1160px', margin: '0 auto' }}>
+                <div data-animate style={{ position: 'relative', maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <SectionHeader
                         kicker="Estado actual"
                         title="Así se ve Arena y Sol hoy"
@@ -1141,7 +1238,7 @@ html{scroll-behavior:smooth}
                 <div
                     style={{
                         position: 'relative',
-                        maxWidth: '1160px',
+                        maxWidth: 'var(--ays-w)',
                         margin: '0 auto',
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))',
@@ -1233,7 +1330,7 @@ html{scroll-behavior:smooth}
                         background: 'radial-gradient(circle,rgba(118,216,69,.09),transparent 70%)',
                     }}
                 />
-                <div style={{ position: 'relative', maxWidth: '1160px', margin: '0 auto' }}>
+                <div style={{ position: 'relative', maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <div data-animate>
                         <SectionHeader
                             kicker="Dónde estamos"
@@ -1315,7 +1412,7 @@ html{scroll-behavior:smooth}
                             'linear-gradient(180deg,rgba(245,249,240,.82) 0%,rgba(245,249,240,.92) 45%,rgba(234,247,216,.9) 100%)',
                     }}
                 />
-                <div style={{ position: 'relative', maxWidth: '1160px', margin: '0 auto' }}>
+                <div style={{ position: 'relative', maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <div data-animate>
                         <SectionHeader
                             dark={false}
@@ -1521,7 +1618,7 @@ html{scroll-behavior:smooth}
                         background: 'radial-gradient(circle,rgba(118,216,69,.08),transparent 70%)',
                     }}
                 />
-                <div style={{ maxWidth: '1160px', margin: '0 auto', position: 'relative' }}>
+                <div style={{ maxWidth: 'var(--ays-w)', margin: '0 auto', position: 'relative' }}>
                     <div data-animate>
                         <SectionHeader
                             kicker="Inversión"
@@ -1698,7 +1795,7 @@ html{scroll-behavior:smooth}
                         background: 'radial-gradient(circle,rgba(118,216,69,.08),transparent 70%)',
                     }}
                 />
-                <div style={{ position: 'relative', maxWidth: '1160px', margin: '0 auto' }}>
+                <div style={{ position: 'relative', maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <div data-animate>
                         <SectionHeader
                             kicker="Zona de alta plusvalía"
@@ -1781,7 +1878,7 @@ html{scroll-behavior:smooth}
                         background: 'radial-gradient(circle,rgba(118,216,69,.1),transparent 70%)',
                     }}
                 />
-                <div style={{ position: 'relative', maxWidth: '1160px', margin: '0 auto' }}>
+                <div style={{ position: 'relative', maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <div data-animate>
                         <SectionHeader
                             kicker="Reserva"
@@ -2142,7 +2239,7 @@ html{scroll-behavior:smooth}
                     overflow: 'hidden',
                 }}
             >
-                <div style={{ maxWidth: '1160px', margin: '0 auto', position: 'relative' }}>
+                <div style={{ maxWidth: 'var(--ays-w)', margin: '0 auto', position: 'relative' }}>
                     <div data-animate>
                         <SectionHeader
                             dark={false}
@@ -2244,7 +2341,7 @@ html{scroll-behavior:smooth}
 
             {/* ── Footer ── */}
             <footer style={{ background: '#4ba646', padding: '48px 20px 36px', borderTop: '2px solid rgba(255,255,255,.15)' }}>
-                <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
+                <div style={{ maxWidth: 'var(--ays-w)', margin: '0 auto' }}>
                     <div
                         style={{
                             display: 'flex',
