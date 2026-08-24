@@ -1,0 +1,1108 @@
+/* Landing SEO "terrenos baratos en la playa litoral central chile".
+   Los patrones visuales son los mismos de la homepage (Hero, Benefits,
+   HomeContactForm, FAQ): mismas variables de marca, mismos radios, mismos
+   gradientes navy → mint. Sólo cambia el contenido textual. */
+
+/* ── BREADCRUMB ─────────────────────────────────────────── */
+.breadcrumb {
+    position: relative;
+    z-index: 2;
+    background: var(--navy-deeper);
+    padding: 10px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.breadcrumbInner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font);
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.breadcrumbInner a {
+    color: rgba(255, 255, 255, 0.72);
+    text-decoration: none;
+}
+
+.breadcrumbInner a:hover {
+    color: var(--verde-lima);
+}
+
+.breadcrumbCurrent {
+    color: var(--verde-lima);
+}
+
+/* ── HERO (patrón Hero.module.css) ──────────────────────── */
+.hero {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    background: var(--navy-deep);
+    overflow: hidden;
+    padding: 56px 24px 72px;
+    color: #fff;
+}
+
+.bgWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.bgImage {
+    object-fit: cover;
+}
+
+/* Mismos valores que el overlay del hero de la homepage. Antes iba bastante más
+   oscuro (0.62 arriba) y tapaba la foto: el hero se leía como un bloque navy
+   plano, como si no tuviera fondo. */
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 21, 32, 0.38) 0%,
+        rgba(10, 21, 32, 0.28) 40%,
+        rgba(10, 21, 32, 0.66) 88%,
+        rgba(14, 26, 36, 0.97) 100%
+    );
+}
+
+
+.heroGrid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 48px;
+    align-items: center;
+    max-width: 1160px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.heroContent {
+    min-width: 0;
+    max-width: 620px;
+    /* El overlay es suave para que se vea la foto; la sombra mantiene el
+       contraste del titular sin tener que oscurecer todo el hero. */
+    text-shadow: 0 2px 18px rgba(10, 21, 32, 0.55);
+}
+
+.heroBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(118, 216, 69, 0.14);
+    border: 1px solid rgba(118, 216, 69, 0.45);
+    color: var(--verde-lima);
+    border-radius: 100px;
+    padding: 7px 16px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+
+.heroTitle {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0;
+}
+
+.highlight {
+    color: var(--verde-lima);
+}
+
+.heroSubtitle {
+    font-family: var(--font);
+    font-weight: 300;
+    font-size: 1.08rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 540px;
+    margin: 1.25rem 0 0;
+}
+
+.heroSubtitleStrong {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Fila de precios del hero: es el dato que el usuario vino a buscar. */
+.priceRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.priceChip {
+    background: rgba(14, 26, 36, 0.62);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    padding: 12px 18px;
+    min-width: 132px;
+}
+
+.priceChipLabel {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.65rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+}
+
+.priceChipValue {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.22rem;
+    color: var(--verde-lima);
+    line-height: 1.1;
+}
+
+.priceChipValueGold {
+    color: var(--gold);
+}
+
+.ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
+    color: #0e1a24;
+    border: none;
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 1.05rem 2.1rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 6px 28px rgba(118, 216, 69, 0.38);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btnPrimary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(118, 216, 69, 0.5);
+}
+
+.btnGhost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    border-radius: 100px;
+    padding: 0.85rem 1.7rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.btnGhost:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── CABECERAS DE SECCIÓN (patrón Benefits/NearbyPlaces) ── */
+.sectionHeader {
+    text-align: center;
+    margin: 0 auto 44px;
+    max-width: 780px;
+}
+
+.kickerRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.ruleLeft,
+.ruleRight {
+    width: 24px;
+    height: 2px;
+}
+
+.ruleLeft {
+    background: linear-gradient(90deg, transparent, var(--verde-lima));
+}
+
+.ruleRight {
+    background: linear-gradient(90deg, var(--verde-lima), transparent);
+}
+
+.kicker {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--verde-lima);
+}
+
+.sectionTitle {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.65rem, 3.3vw, 2.45rem);
+    line-height: 1.22;
+    margin: 0;
+}
+
+.sectionTitleLight {
+    color: #fff;
+}
+
+.sectionTitleDark {
+    color: var(--text-heading-light);
+}
+
+.sectionDesc {
+    font-family: var(--font);
+    font-size: 0.98rem;
+    line-height: 1.72;
+    margin: 16px auto 0;
+    max-width: 700px;
+}
+
+.sectionDescLight {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.sectionDescDark {
+    color: var(--text-secondary-light);
+}
+
+/* ── LISTADO DE PRECIOS ─────────────────────────────────── */
+.preciosSection {
+    position: relative;
+    padding: 78px 24px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg-mint) 55%, var(--bg-mint-2) 100%);
+    overflow: hidden;
+}
+
+.preciosBgWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.preciosBgImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Lavado claro sobre la foto: la sección tiene tarjetas blancas de precio y la
+   legibilidad del número manda por encima de la textura del fondo. */
+.preciosOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.96) 0%,
+        rgba(245, 249, 240, 0.9) 45%,
+        rgba(237, 247, 224, 0.93) 100%
+    );
+}
+
+.preciosInner {
+    position: relative;
+    z-index: 1;
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+.preciosGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.terrenoCard {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #dfe9d6;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 32px rgba(14, 26, 36, 0.09);
+    transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+}
+
+.terrenoCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 44px rgba(14, 26, 36, 0.14);
+}
+
+.terrenoCardDestacado {
+    border-color: var(--verde-solido);
+    box-shadow: 0 12px 40px rgba(75, 166, 70, 0.22);
+}
+
+.terrenoImgWrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--navy-deeper);
+}
+
+.terrenoImg {
+    object-fit: cover;
+}
+
+.terrenoBadge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #0e1a24;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+.terrenoStock {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    background: rgba(14, 26, 36, 0.78);
+    backdrop-filter: blur(6px);
+    border-radius: 100px;
+    padding: 6px 12px;
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.terrenoBody {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 22px 22px 24px;
+}
+
+.terrenoProyecto {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.18rem;
+    color: var(--text-heading-light);
+    margin: 0;
+}
+
+.terrenoSuperficie {
+    font-family: var(--font);
+    font-size: 0.85rem;
+    color: var(--text-secondary-light);
+    margin: 4px 0 16px;
+}
+
+.terrenoPrecioBloque {
+    background: var(--bg-mint);
+    border: 1px solid #e0ecd6;
+    border-radius: 14px;
+    padding: 16px 18px;
+}
+
+.terrenoPrecioLabel {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-secondary-light);
+}
+
+.terrenoPrecio {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.72rem;
+    line-height: 1.15;
+    color: var(--verde-solido);
+    margin: 2px 0 0;
+}
+
+.terrenoPrecioM2 {
+    font-family: var(--font);
+    font-size: 0.78rem;
+    color: var(--text-secondary-light);
+    margin-top: 2px;
+}
+
+.terrenoDetalle {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.terrenoDetalleFila {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid #eef3ea;
+    font-family: var(--font);
+    font-size: 0.86rem;
+    color: var(--text-secondary-light);
+}
+
+.terrenoDetalleFila:last-child {
+    border-bottom: none;
+}
+
+.terrenoDetalleValor {
+    font-weight: 700;
+    color: var(--text-heading-light);
+    text-align: right;
+}
+
+.terrenoCta {
+    margin-top: auto;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.btnCard {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
+    color: #0e1a24;
+    border: none;
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 0.85rem 1.4rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 5px 18px rgba(118, 216, 69, 0.32);
+}
+
+.btnCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(118, 216, 69, 0.45);
+}
+
+.btnCardGhost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1.5px solid #cfdec4;
+    color: var(--text-heading-light);
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 0.72rem 1.4rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.86rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btnCardGhost:hover {
+    border-color: var(--verde-solido);
+    color: var(--verde-solido);
+}
+
+/* Nota legal bajo la tabla de precios. */
+.preciosNota {
+    margin: 26px auto 0;
+    max-width: 820px;
+    text-align: center;
+    font-family: var(--font);
+    font-size: 0.79rem;
+    line-height: 1.65;
+    color: var(--text-secondary-light);
+}
+
+/* ── TABLA COMPARATIVA (scroll horizontal en móvil) ─────── */
+.tablaWrap {
+    margin-top: 40px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #dfe9d6;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 26px rgba(14, 26, 36, 0.07);
+}
+
+.tabla {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+    font-family: var(--font);
+    font-size: 0.88rem;
+}
+
+.tabla caption {
+    caption-side: top;
+    text-align: left;
+    padding: 18px 20px 0;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-heading-light);
+}
+
+.tabla th,
+.tabla td {
+    padding: 13px 18px;
+    text-align: left;
+    border-bottom: 1px solid #eef3ea;
+}
+
+.tabla thead th {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary-light);
+    background: var(--bg-mint);
+    white-space: nowrap;
+}
+
+.tabla tbody th {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--text-heading-light);
+    white-space: nowrap;
+}
+
+.tabla tbody tr:last-child th,
+.tabla tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tablaPrecio {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--verde-solido);
+    white-space: nowrap;
+}
+
+/* ── INCLUIDO EN EL PRECIO (patrón Benefits) ────────────── */
+.incluidoSection {
+    position: relative;
+    padding: 76px 24px;
+    background: var(--navy-deep);
+    overflow: hidden;
+}
+
+.incluidoOverlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 10%, rgba(118, 216, 69, 0.09), transparent 55%);
+}
+
+.incluidoInner {
+    position: relative;
+    z-index: 1;
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+.incluidoGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.incluidoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(14, 26, 36, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    padding: 26px 22px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.incluidoIcon {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: radial-gradient(circle at 30% 30%, rgba(118, 216, 69, 0.35), rgba(118, 216, 69, 0.08));
+    border: 1px solid rgba(118, 216, 69, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 24px rgba(118, 216, 69, 0.15);
+    flex: none;
+}
+
+.incluidoTitle {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: #fff;
+    margin: 0;
+}
+
+.incluidoDesc {
+    font-family: var(--font);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.58);
+    margin: 0;
+}
+
+/* ── POR QUÉ ES BARATO ──────────────────────────────────── */
+.porqueSection {
+    position: relative;
+    padding: 78px 24px;
+    background: var(--bg-mint);
+    overflow: hidden;
+}
+
+.porqueInner {
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+/* Tres columnas, una por razón: con el grid de dos quedaba un hueco en la
+   última fila. */
+.porqueGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.porqueCard {
+    display: flex;
+    gap: 18px;
+    background: #fff;
+    border: 1px solid #e2ecd9;
+    border-radius: 18px;
+    padding: 26px 24px;
+    box-shadow: 0 6px 22px rgba(14, 26, 36, 0.06);
+}
+
+.porqueNum {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--verde-lima);
+    flex: none;
+    padding-top: 2px;
+}
+
+.porqueTitle {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.02rem;
+    color: var(--text-heading-light);
+    margin: 0 0 7px;
+}
+
+.porqueDesc {
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-secondary-light);
+    margin: 0;
+}
+
+/* ── UBICACIÓN + MAPA ───────────────────────────────────── */
+.ubicacionSection {
+    position: relative;
+    padding: 78px 24px;
+    background: var(--navy-deeper);
+    overflow: hidden;
+}
+
+.ubicacionInner {
+    position: relative;
+    z-index: 1;
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+/* Enlaces a la ficha de Google Maps de cada proyecto, bajo el mapa satelital. */
+.mapaLinks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.mapaLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100px;
+    padding: 11px 20px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.mapaLink:hover {
+    background: rgba(118, 216, 69, 0.16);
+    border-color: rgba(118, 216, 69, 0.5);
+}
+
+.mapaPin {
+    width: 11px;
+    height: 11px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    flex: none;
+}
+
+/* ── FORMULARIO (patrón HomeContactForm) ────────────────── */
+.formSection {
+    position: relative;
+    padding: 80px 24px;
+    overflow: hidden;
+    background: var(--navy-deeper);
+}
+
+.formBgWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.formBgImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.formOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(14, 26, 36, 0.95) 0%,
+        rgba(14, 26, 36, 0.85) 12%,
+        rgba(14, 26, 36, 0.85) 88%,
+        rgba(14, 26, 36, 0.95) 100%
+    );
+}
+
+.formGrid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 64px;
+    align-items: center;
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+.formInfo {
+    min-width: 0;
+}
+
+.formTitleBig {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.7rem, 3.3vw, 2.45rem);
+    line-height: 1.22;
+    color: #fff;
+    margin: 0;
+}
+
+.formDesc {
+    font-family: var(--font);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 16px 0 28px;
+    max-width: 440px;
+}
+
+.trustList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.checkIcon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(118, 216, 69, 0.15);
+    border: 1px solid rgba(118, 216, 69, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+}
+
+/* ── FAQ (patrón FAQ.module.css) ────────────────────────── */
+.faqSection {
+    background: linear-gradient(160deg, #eaf7d8 0%, #f2fce8 50%, #e4f5d4 100%);
+    padding: 78px 24px;
+}
+
+.faqInner {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.faqList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faqItem {
+    background: #fff;
+    border: 1px solid #dfe9d6;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faqItemOpen {
+    border-color: var(--verde-solido);
+    box-shadow: 0 8px 26px rgba(75, 166, 70, 0.14);
+}
+
+.faqQuestion {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 19px 22px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.98rem;
+    line-height: 1.45;
+    color: var(--text-heading-light);
+}
+
+.faqIcon {
+    flex: none;
+    display: flex;
+    color: var(--verde-solido);
+    transition: transform 0.25s var(--ease-out);
+}
+
+.faqIconOpen {
+    transform: rotate(180deg);
+}
+
+/* Mismo mecanismo que el FAQ de la homepage: max-height + overflow hidden.
+   El truco de grid-template-rows 0fr→1fr no sirve acá porque el contenedor
+   tiene altura indefinida y el track fr resuelve a 0. El max-height del estado
+   abierto es holgado a propósito: sólo tiene que superar el alto del texto, y
+   la respuesta más larga en móvil ronda los 300px. */
+.faqAnswer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+/* Se abre desde el estado del padre, igual que `.open .answer` en el FAQ de la
+   homepage. Con dos clases gana por especificidad y no depende del orden en
+   que el bundler emita las reglas. */
+.faqItemOpen .faqAnswer {
+    max-height: 560px;
+}
+
+.faqAnswerInner p {
+    margin: 0;
+    padding: 0 22px 20px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    line-height: 1.72;
+    color: var(--text-secondary-light);
+}
+
+/* Nota: esta landing NO lleva barra CTA fija en móvil. El widget de Ali
+   (AliFloatingCharacter) vive abajo a la derecha y se renderiza desde el
+   layout de (main), donde no podemos pasarle `offsetBottom`. Una barra fija
+   acá le taparía el chat. La conversión en móvil la cubren el CTA del hero,
+   los botones de cada tarjeta de precio y la sección de formulario. */
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .preciosGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .incluidoGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 1024px) {
+    .heroGrid,
+    .formGrid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .heroContent {
+        max-width: 100%;
+    }
+
+    .formDesc {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 820px) {
+    .porqueGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .preciosGrid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 640px) {
+    .hero {
+        padding: 40px 18px 60px;
+    }
+
+    .heroTitle {
+        font-size: clamp(1.6rem, 6.4vw, 2.1rem);
+    }
+
+    .heroSubtitle {
+        font-size: 1rem;
+    }
+
+    /* Con tres chips, dejarlos todos a media fila deja el último estirado y
+       desbalanceado. El precio del terreno —el dato que vino a buscar— toma la
+       fila completa y el pie y la cuota se reparten la siguiente. */
+    .priceChip {
+        flex: 1 1 calc(50% - 6px);
+        min-width: 0;
+        padding: 11px 14px;
+    }
+
+    .priceRow > .priceChip:first-child {
+        flex-basis: 100%;
+    }
+
+    .ctas {
+        gap: 10px;
+    }
+
+    .btnPrimary,
+    .btnGhost {
+        width: 100%;
+    }
+
+    .preciosSection,
+    .incluidoSection,
+    .porqueSection,
+    .ubicacionSection,
+    .formSection,
+    .faqSection {
+        padding-left: 18px;
+        padding-right: 18px;
+        padding-top: 56px;
+        padding-bottom: 56px;
+    }
+
+    .incluidoGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .terrenoPrecio {
+        font-size: 1.58rem;
+    }
+
+    .faqQuestion {
+        font-size: 0.92rem;
+        padding: 17px 18px;
+    }
+
+    .faqAnswerInner p {
+        padding: 0 18px 18px;
+    }
+}
+
+@media (max-width: 460px) {
+}

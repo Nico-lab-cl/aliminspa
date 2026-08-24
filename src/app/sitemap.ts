@@ -56,6 +56,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         {
+            url: `${baseUrl}/terrenos-baratos-en-la-playa-litoral-central-chile`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
             url: `${baseUrl}/quienes-somos`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
