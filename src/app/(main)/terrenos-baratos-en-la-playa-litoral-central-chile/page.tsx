@@ -9,6 +9,7 @@ import Testimonials from '@/components/sections/Testimonials'
 import HomeNewsletter from '@/components/sections/HomeNewsletter'
 import CotizaForm from './CotizaForm'
 import FaqAccordion from './FaqAccordion'
+import HeroVideo from './HeroVideo'
 import { FAQS } from './faqs'
 import { TERRENOS, INCLUIDO, POR_QUE_BARATO, PRECIO_DESDE, PIE_DESDE, CUOTA_DESDE } from './terrenos'
 import styles from './page.module.css'
@@ -32,7 +33,7 @@ import styles from './page.module.css'
 // widget de chat de Ali sin duplicar componentes.
 
 const PAGE_URL = `${SITE.url}/terrenos-baratos-en-la-playa-litoral-central-chile`
-const OG_IMAGE = `${SITE.url}/assets/homepage-v2/hero-litoral-central.webp`
+const OG_IMAGE = `${SITE.url}/videos/terrenos-baratos/hero-desktop-poster.webp`
 
 export const metadata: Metadata = {
     // `absolute` evita el template `%s | Alimin Inmobiliaria` del layout raíz:
@@ -243,34 +244,9 @@ export default function TerrenosBaratosPage() {
                 }}
             />
 
-            {/* ===================== BREADCRUMB ===================== */}
-            <nav className={styles.breadcrumb} aria-label="Ruta de navegación">
-                <div className={styles.breadcrumbInner}>
-                    <Link href="/">Inicio</Link>
-                    <span aria-hidden="true">›</span>
-                    <Link href="/venta-de-terrenos-litoral-central">Venta de terrenos Litoral Central</Link>
-                    <span aria-hidden="true">›</span>
-                    <span className={styles.breadcrumbCurrent}>Terrenos baratos en la playa</span>
-                </div>
-            </nav>
-
             {/* ===================== HERO ===================== */}
             <section className={styles.hero} id="inicio">
-                {/* Foto aérea del loteo real con el mar al fondo. Sirve de fondo y
-                    de prueba visual del argumento de la página: cerca del mar, sin
-                    estar en primera línea. */}
-                <div className={styles.bgWrapper}>
-                    <Image
-                        src="/assets/venta-terrenos/hero-lomas-del-mar.webp"
-                        alt="Vista aérea del loteo de terrenos baratos en El Tabo, Litoral Central, con la playa al fondo"
-                        fill
-                        priority
-                        className={styles.bgImage}
-                        style={{ objectPosition: 'center 42%' }}
-                        sizes="100vw"
-                    />
-                    <div className={styles.heroOverlay} />
-                </div>
+                <HeroVideo />
 
                 <div className={styles.heroGrid}>
                     <div className={styles.heroContent}>
@@ -333,6 +309,17 @@ export default function TerrenosBaratosPage() {
                     />
                 </div>
             </section>
+
+            {/* ===================== BREADCRUMB ===================== */}
+            <nav className={styles.breadcrumb} aria-label="Ruta de navegación">
+                <div className={styles.breadcrumbInner}>
+                    <Link href="/">Inicio</Link>
+                    <span aria-hidden="true">›</span>
+                    <Link href="/venta-de-terrenos-litoral-central">Venta de terrenos Litoral Central</Link>
+                    <span aria-hidden="true">›</span>
+                    <span className={styles.breadcrumbCurrent}>Terrenos baratos en la playa</span>
+                </div>
+            </nav>
 
             {/* ===================== LISTADO DE PRECIOS ===================== */}
             <section className={styles.preciosSection} id="precios">
