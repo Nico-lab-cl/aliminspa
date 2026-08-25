@@ -78,7 +78,7 @@ export const TERRENOS: TerrenoBarato[] = [
         plazo: 'Cuotas mensuales',
         precioM2: '$195.000',
         imagen: '/assets/venta-terrenos/gallery/g01.webp',
-        plano: '/assets/venta-terrenos/plano-arena-y-sol-2026-08.webp',
+        plano: '/assets/venta-terrenos/plano-arena-y-sol-2026-08-24.webp',
         color: '#C5A059',
         disponibilidad: 'LimitedAvailability',
         disponibilidadTexto: 'Últimos terrenos',
