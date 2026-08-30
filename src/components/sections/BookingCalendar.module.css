@@ -571,6 +571,26 @@
     margin-bottom: 1rem;
 }
 
+.leadTimeNote {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background: rgba(212, 169, 70, 0.08);
+    border: 1px solid rgba(212, 169, 70, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.leadTimeNote svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #d4a946;
+}
+
 .timeSlotsDate {
     font-family: 'Playfair Display', serif;
     font-size: 1.1rem;

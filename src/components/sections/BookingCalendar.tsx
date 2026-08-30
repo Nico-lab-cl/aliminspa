@@ -3,6 +3,13 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check, Mail, Video, Shield, Zap, Droplet } from 'lucide-react'
 import AnimatedSection from '@/components/ui/AnimatedSection'
+import {
+    getBookableSlots,
+    toCalendarDate,
+    formatCalendarDate,
+    firstBookableDate,
+    minLeadLabel,
+} from '@/lib/booking-rules'
 import styles from './BookingCalendar.module.css'
 
 /* ─── CONFIG ─── */
@@ -64,17 +71,6 @@ const GENERAL_SHOWCASE = {
     googleMapsUrl: null
 }
 
-/** Availability schedule. Day: 0=Sun, 1=Mon, ..., 6=Sat */
-const AVAILABILITY: Record<number, { start: number; end: number }> = {
-    0: { start: 9, end: 19 },  // Domingo
-    1: { start: 16, end: 19 }, // Lunes
-    2: { start: 16, end: 19 }, // Martes
-    3: { start: 16, end: 19 }, // Miércoles
-    4: { start: 16, end: 19 }, // Jueves
-    5: { start: 15, end: 19 }, // Viernes
-    6: { start: 9, end: 19 },  // Sábado
-}
-
 const MONTH_NAMES = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
@@ -82,16 +78,6 @@ const MONTH_NAMES = [
 const DAY_NAMES = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do']
 
 /* ─── HELPERS ─── */
-function getSlotsForDay(dayOfWeek: number): string[] {
-    const avail = AVAILABILITY[dayOfWeek]
-    if (!avail) return []
-    const slots: string[] = []
-    for (let h = avail.start; h < avail.end; h++) {
-        slots.push(`${String(h).padStart(2, '0')}:00`)
-    }
-    return slots
-}
-
 function formatDateCL(date: Date): string {
     const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
     return `${days[date.getDay()]} ${date.getDate()} de ${MONTH_NAMES[date.getMonth()]}`
@@ -112,12 +98,19 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
             ? PROJECTS_LIST.find(p => p.name === defaultProject)?.id || ''
             : ''
     )
-    const [currentMonth, setCurrentMonth] = useState(new Date())
+    // Referencia de "ahora" fija durante la sesión: evita que el calendario
+    // cambie de estado a mitad de render.
+    const [now] = useState(() => new Date())
+    const [currentMonth, setCurrentMonth] = useState(() => {
+        const first = firstBookableDate(new Date())
+        return new Date(first.year, first.month - 1, 1)
+    })
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [selectedTime, setSelectedTime] = useState('')
     const [form, setForm] = useState({ nombre: '', email: '', celular: '' })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [meetLink, setMeetLink] = useState<string | null>(null)
+    const [errorMsg, setErrorMsg] = useState('')
 
     const project = PROJECTS_LIST.find(p => p.id === selectedProject)
     const showcaseProject = project || GENERAL_SHOWCASE
@@ -148,16 +141,12 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
         return days
     }, [currentMonth])
 
+    // Un día se bloquea si no le queda ningún horario que cumpla la brecha
+    // mínima de anticipación (MIN_LEAD_HOURS en @/lib/booking-rules).
     const isDateDisabled = useCallback((date: Date | null) => {
         if (!date) return true
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        if (date < today) return true
-        // Check if day has availability
-        const avail = AVAILABILITY[date.getDay()]
-        if (!avail) return true
-        return false
-    }, [])
+        return getBookableSlots(toCalendarDate(date), now).length === 0
+    }, [now])
 
     const isToday = useCallback((date: Date | null) => {
         if (!date) return false
@@ -169,32 +158,17 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
 
     const timeSlots = useMemo(() => {
         if (!selectedDate) return []
-        const slots = getSlotsForDay(selectedDate.getDay())
-
-        // If selected date is today, filter out past hours
-        const now = new Date()
-        if (
-            selectedDate.getDate() === now.getDate() &&
-            selectedDate.getMonth() === now.getMonth() &&
-            selectedDate.getFullYear() === now.getFullYear()
-        ) {
-            const currentHour = now.getHours()
-            return slots.filter(s => {
-                const [h] = s.split(':').map(Number)
-                return h > currentHour
-            })
-        }
-        return slots
-    }, [selectedDate])
+        return getBookableSlots(toCalendarDate(selectedDate), now)
+    }, [selectedDate, now])
 
     // Navigation
     const prevMonth = () => {
         const d = new Date(currentMonth)
         d.setMonth(d.getMonth() - 1)
-        // Don't go before current month
-        const now = new Date()
-        if (d.getFullYear() > now.getFullYear() ||
-            (d.getFullYear() === now.getFullYear() && d.getMonth() >= now.getMonth())) {
+        // No retroceder antes del primer mes con horarios agendables
+        const first = firstBookableDate(now)
+        if (d.getFullYear() > first.year ||
+            (d.getFullYear() === first.year && d.getMonth() >= first.month - 1)) {
             setCurrentMonth(d)
         }
     }
@@ -222,6 +196,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
     const handleSubmit = async () => {
         if (!selectedDate || !project) return
         setStatus('loading')
+        setErrorMsg('')
 
         try {
             const res = await fetch('/api/bookings', {
@@ -233,18 +208,21 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                     celular: form.celular,
                     proyecto: project.name,
                     fecha: selectedDate.toISOString(),
+                    // Fecha del día elegido sin zona horaria: es la que valida el servidor
+                    fechaLocal: formatCalendarDate(toCalendarDate(selectedDate)),
                     hora: selectedTime,
                 }),
             })
 
-            if (!res.ok) throw new Error('Error al agendar')
-            const data = await res.json()
+            const data = await res.json().catch(() => ({}))
+            if (!res.ok) throw new Error(data?.error || 'Error al agendar')
             setMeetLink(data.meetLink || null)
             setStatus('success')
             setStep(4)
-        } catch {
+        } catch (err) {
+            setErrorMsg(err instanceof Error ? err.message : '')
             setStatus('error')
-            setTimeout(() => setStatus('idle'), 4000)
+            setTimeout(() => setStatus('idle'), 6000)
         }
     }
 
@@ -472,6 +450,13 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                         {/* Time Slots */}
                                         <div className={styles.timeSlotsPanel}>
                                             <div className={styles.timeSlotsTitle}>Horarios disponibles</div>
+                                            <div className={styles.leadTimeNote}>
+                                                <Clock size={13} />
+                                                <span>
+                                                    Las visitas se agendan con al menos {minLeadLabel()} de
+                                                    anticipación, para que tu asesor prepare el recorrido.
+                                                </span>
+                                            </div>
                                             {selectedDate ? (
                                                 <>
                                                     <div className={styles.timeSlotsDate}>
@@ -578,7 +563,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
 
                                         {status === 'error' && (
                                             <div style={{ padding: '0.75rem', borderRadius: '8px', background: 'rgba(239,68,68,0.1)', color: '#fca5a5', textAlign: 'center', fontSize: '0.9rem' }}>
-                                                ❌ Error al agendar. Intenta nuevamente.
+                                                ❌ {errorMsg || 'Error al agendar. Intenta nuevamente.'}
                                             </div>
                                         )}
                                     </div>

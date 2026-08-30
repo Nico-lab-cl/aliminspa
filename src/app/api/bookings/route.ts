@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendMetaEvent } from '@/lib/meta-capi'
 import { createCalendarEvent } from '@/lib/google-calendar'
+import {
+    parseCalendarDate,
+    normalizeHora,
+    isSlotBookable,
+    getBookableSlots,
+    getSlotsForDay,
+    weekdayOf,
+    minLeadLabel,
+} from '@/lib/booking-rules'
 
 export async function POST(request: NextRequest) {
     try {
@@ -13,13 +22,42 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Payload JSON inválido' }, { status: 400 })
         }
 
-        const { nombre, email, celular, proyecto, fecha, hora, eventId } = body
+        const { nombre, email, celular, proyecto, fecha, fechaLocal, hora, eventId } = body
 
         if (!nombre || !email || !celular || !proyecto || !fecha || !hora) {
             return NextResponse.json(
                 { error: 'Todos los campos son obligatorios' },
                 { status: 400 }
             )
+        }
+
+        // La brecha mínima de anticipación se valida también acá: el calendario
+        // ya bloquea las horas, pero una pestaña abierta hace rato o un POST
+        // directo podrían llegar con una hora imposible para el asesor.
+        const calendarDate = parseCalendarDate(fechaLocal || fecha)
+        const horaNormalizada = normalizeHora(hora)
+
+        if (!calendarDate || !horaNormalizada) {
+            return NextResponse.json(
+                { error: 'Fecha u hora inválida' },
+                { status: 400 }
+            )
+        }
+
+        if (!isSlotBookable(calendarDate, horaNormalizada)) {
+            const enHorarioDeAtencion = getSlotsForDay(weekdayOf(calendarDate)).includes(horaNormalizada)
+            const quedanHorarios = getBookableSlots(calendarDate).length > 0
+
+            let error: string
+            if (!enHorarioDeAtencion) {
+                error = 'Ese horario está fuera del horario de atención. Elige otro bloque en el calendario.'
+            } else if (quedanHorarios) {
+                error = `Ese horario ya no está disponible. Las visitas se agendan con al menos ${minLeadLabel()} de anticipación.`
+            } else {
+                error = `Ese día ya no tiene horarios disponibles. Las visitas se agendan con al menos ${minLeadLabel()} de anticipación.`
+            }
+
+            return NextResponse.json({ error }, { status: 400 })
         }
 
         // Save booking to database
