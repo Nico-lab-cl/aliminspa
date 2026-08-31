@@ -283,3 +283,82 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* ── Adjuntos: fotos, audios y videos ─────────────────────────────── */
+
+.adjunto {
+  margin-bottom: 4px;
+  border-radius: 12px;
+  overflow: hidden;
+  /* El contenido va en su propia caja: la burbuja usa white-space: pre-wrap
+     para el texto, y eso desalinea cualquier elemento que se le meta al lado. */
+  white-space: normal;
+}
+
+.adjuntoImagen {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  cursor: zoom-in;
+}
+
+.adjuntoVideo {
+  display: block;
+  max-width: 100%;
+  border-radius: 12px;
+  background: #000;
+}
+
+.adjuntoAudio {
+  display: block;
+  width: 210px;
+  max-width: 100%;
+  height: 38px;
+}
+
+/* Botón secundario de la barra: clip y micrófono. Es más apagado que el de
+   enviar para que la acción principal siga siendo obvia. */
+.barraEnvio .botonSecundario {
+  background: #E2E8F0;
+  color: #334155;
+  font-size: 17px;
+}
+
+.barraEnvio .botonSecundario:hover:not(:disabled) {
+  background: #CBD5E1;
+}
+
+.grabando {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 10px 13px;
+  border-radius: 14px;
+  background: #FEF2F2;
+  border: 1.5px solid #FECACA;
+  font-size: 13px;
+  font-weight: 600;
+  color: #B91C1C;
+}
+
+.puntoGrabacion {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #DC2626;
+  animation: latidoGrabacion 1s ease-in-out infinite;
+}
+
+@keyframes latidoGrabacion {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* El sistema puede estar configurado para no animar. */
+@media (prefers-reduced-motion: reduce) {
+  .puntoGrabacion { animation: none; }
+}

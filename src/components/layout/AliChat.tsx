@@ -16,6 +16,13 @@ import styles from './AliChat.module.css';
  * completa el formulario.
  */
 
+interface Adjunto {
+    id: string;
+    tipo: 'image' | 'audio' | 'video';
+    mimeType: string;
+    duracionMs?: number | null;
+}
+
 interface Mensaje {
     id: string;
     text: string;
@@ -24,9 +31,45 @@ interface Mensaje {
     createdAt: string;
     /** Sólo para los mensajes propios mientras viajan al servidor. */
     estado?: 'enviando' | 'error' | 'pendiente';
+    adjunto?: Adjunto | null;
+    /**
+     * URL temporal (blob:) del archivo propio mientras se sube.
+     * Deja ver la foto o escuchar el audio de inmediato, sin esperar a que el
+     * servidor lo devuelva.
+     */
+    urlLocal?: string;
 }
 
 const INTERVALO_POLL_MS = 3000;
+
+/** Lo mismo que valida el CRM, repetido acá para avisar antes de subir nada. */
+const LIMITES_POR_TIPO: Record<string, number> = {
+    image: 8 * 1024 * 1024,
+    audio: 12 * 1024 * 1024,
+    video: 25 * 1024 * 1024,
+};
+
+/**
+ * Formatos de audio que se intentan al grabar, en orden de preferencia.
+ * Android y Chrome graban WEBM/Opus; iOS y Safari sólo aceptan MP4/AAC.
+ */
+const FORMATOS_DE_AUDIO = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg;codecs=opus',
+];
+
+function formatoDeAudioSoportado(): string | null {
+    if (typeof MediaRecorder === 'undefined') return null;
+    return FORMATOS_DE_AUDIO.find((f) => MediaRecorder.isTypeSupported(f)) || null;
+}
+
+/** "1:07" a partir de milisegundos. */
+function duracionLegible(ms: number) {
+    const total = Math.round(ms / 1000);
+    return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+}
 const MARCA_VISTOS = 'alimin_chat_visto';
 
 /** Marca de agua del último mensaje leído, para el punto de no leídos. */
@@ -68,6 +111,20 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
     const [email, setEmail] = useState('');
     const [consentimiento, setConsentimiento] = useState(false);
     const [abriendo, setAbriendo] = useState(false);
+
+    // Grabación de voz
+    const [grabando, setGrabando] = useState(false);
+    const [msGrabados, setMsGrabados] = useState(0);
+    const [puedeGrabar, setPuedeGrabar] = useState(false);
+    const grabadora = useRef<MediaRecorder | null>(null);
+    const trozos = useRef<Blob[]>([]);
+    const inicioGrabacion = useRef(0);
+    const cronometro = useRef<ReturnType<typeof setInterval> | null>(null);
+    const grabacionCancelada = useRef(false);
+
+    const inputArchivo = useRef<HTMLInputElement>(null);
+    /** Archivo que quedó esperando a que el visitante deje sus datos. */
+    const archivoPendienteRef = useRef<{ id: string; archivo: File; duracionMs?: number } | null>(null);
 
     const desdeRef = useRef<string | null>(null);
     const listaRef = useRef<HTMLDivElement>(null);
@@ -117,6 +174,24 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
             // Un fallo puntual de red no debe romper la vista; el siguiente ciclo reintenta.
         }
     }, [incorporar]);
+
+    // La grabación sólo se ofrece si el navegador puede hacerla. En un iPhone
+    // viejo o sobre HTTP no existe MediaRecorder, y un botón de micrófono que no
+    // hace nada es peor que no tenerlo.
+    useEffect(() => {
+        setPuedeGrabar(
+            Boolean(navigator.mediaDevices?.getUserMedia) && formatoDeAudioSoportado() !== null
+        );
+    }, []);
+
+    // Si el visitante cierra el chat con el micrófono abierto hay que soltarlo:
+    // el navegador deja el indicador de grabación encendido.
+    useEffect(() => {
+        return () => {
+            if (cronometro.current) clearInterval(cronometro.current);
+            grabadora.current?.stream.getTracks().forEach((t) => t.stop());
+        };
+    }, []);
 
     // El chat se pinta de inmediato con el saludo y la conversación anterior,
     // si la hay, se incorpora cuando llega: nadie espera mirando un spinner.
@@ -192,6 +267,23 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                     )
                 );
                 await despachar(pendiente.text, pendiente.id);
+            }
+
+            // El archivo que quedó esperando sale ahora, igual que el texto.
+            const archivoPendiente = archivoPendienteRef.current;
+            archivoPendienteRef.current = null;
+
+            if (archivoPendiente) {
+                setMensajes((previos) =>
+                    previos.map((m) =>
+                        m.id === archivoPendiente.id ? { ...m, estado: 'enviando' } : m
+                    )
+                );
+                await despacharArchivo(
+                    archivoPendiente.archivo,
+                    archivoPendiente.id,
+                    archivoPendiente.duracionMs
+                );
             }
 
             await consultar();
@@ -306,6 +398,217 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
         }
     };
 
+    /* ── Adjuntos ────────────────────────────────────────────── */
+
+    /**
+     * Pinta el adjunto en la lista y lo envía.
+     *
+     * Igual que con el texto: si todavía no hay conversación abierta, el archivo
+     * no se pierde. Queda a la vista marcado como pendiente y sale solo apenas
+     * el visitante completa sus datos.
+     */
+    const enviarArchivo = async (archivo: File, duracionMs?: number) => {
+        setError(null);
+
+        const tipo = archivo.type.startsWith('image/')
+            ? 'image'
+            : archivo.type.startsWith('video/')
+              ? 'video'
+              : 'audio';
+
+        const limite = LIMITES_POR_TIPO[tipo];
+        if (limite && archivo.size > limite) {
+            setError(
+                `El archivo es muy pesado. El máximo son ${Math.round(limite / (1024 * 1024))} MB.`
+            );
+            return;
+        }
+
+        const idTemporal = `local-${Date.now()}`;
+        const urlLocal = URL.createObjectURL(archivo);
+
+        setMensajes((previos) => [
+            ...previos,
+            {
+                id: idTemporal,
+                text: '',
+                deAsesor: false,
+                createdAt: new Date().toISOString(),
+                estado: haySesion ? 'enviando' : 'pendiente',
+                urlLocal,
+                adjunto: { id: idTemporal, tipo, mimeType: archivo.type, duracionMs },
+            },
+        ]);
+
+        if (!haySesion) {
+            archivoPendienteRef.current = { id: idTemporal, archivo, duracionMs };
+            setPidiendoDatos(true);
+            return;
+        }
+
+        await despacharArchivo(archivo, idTemporal, duracionMs);
+    };
+
+    /** Sube al CRM un archivo que ya está pintado en la lista. */
+    const despacharArchivo = async (archivo: File, idTemporal: string, duracionMs?: number) => {
+        setEnviando(true);
+
+        try {
+            const cuerpo = new FormData();
+            cuerpo.append('file', archivo);
+            if (duracionMs) cuerpo.append('durationMs', String(Math.round(duracionMs)));
+
+            const res = await fetch('/api/chat/media', { method: 'POST', body: cuerpo });
+            const datos = await res.json().catch(() => ({}));
+
+            if (res.status === 409) {
+                setMensajes((previos) =>
+                    previos.map((m) => (m.id === idTemporal ? { ...m, estado: 'pendiente' } : m))
+                );
+                archivoPendienteRef.current = { id: idTemporal, archivo, duracionMs };
+                setHaySesion(false);
+                setPidiendoDatos(true);
+                setError('Tu sesión de chat expiró. Confirma tus datos y lo enviamos.');
+                return;
+            }
+
+            if (!res.ok) {
+                setMensajes((previos) =>
+                    previos.map((m) => (m.id === idTemporal ? { ...m, estado: 'error' } : m))
+                );
+                setError(datos.error || 'No se pudo enviar el archivo.');
+                return;
+            }
+
+            // El mensaje local se reemplaza por el que quedó guardado. La URL
+            // local se conserva a propósito: ya está en memoria y evita volver a
+            // descargar del servidor un archivo que el visitante acaba de elegir.
+            setMensajes((previos) =>
+                previos.map((m) =>
+                    m.id === idTemporal
+                        ? {
+                              ...m,
+                              id: datos.id,
+                              createdAt: datos.createdAt,
+                              text: datos.text || m.text,
+                              estado: undefined,
+                              adjunto: datos.mediaId
+                                  ? {
+                                        id: datos.mediaId,
+                                        tipo: datos.kind,
+                                        mimeType: datos.mimeType,
+                                        duracionMs,
+                                    }
+                                  : m.adjunto,
+                          }
+                        : m
+                )
+            );
+
+            if (datos.createdAt && (!desdeRef.current || datos.createdAt > desdeRef.current)) {
+                desdeRef.current = datos.createdAt;
+            }
+
+            setMostrarAcuse(true);
+        } catch {
+            setMensajes((previos) =>
+                previos.map((m) => (m.id === idTemporal ? { ...m, estado: 'error' } : m))
+            );
+            setError('No hay conexión. Tu archivo no se envió.');
+        } finally {
+            setEnviando(false);
+        }
+    };
+
+    const alElegirArchivo = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const archivo = e.target.files?.[0];
+        // El input se limpia siempre: sin esto, elegir dos veces la misma foto
+        // no vuelve a disparar el evento.
+        e.target.value = '';
+        if (archivo) enviarArchivo(archivo);
+    };
+
+    const empezarAGrabar = async () => {
+        setError(null);
+
+        const formato = formatoDeAudioSoportado();
+        if (!formato) {
+            setError('Tu navegador no permite grabar audio.');
+            return;
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const rec = new MediaRecorder(stream, { mimeType: formato });
+
+            trozos.current = [];
+            grabacionCancelada.current = false;
+            inicioGrabacion.current = Date.now();
+
+            rec.ondataavailable = (evento) => {
+                if (evento.data.size > 0) trozos.current.push(evento.data);
+            };
+
+            rec.onstop = () => {
+                // Soltar el micrófono apaga el indicador del navegador. Va acá
+                // porque hay dos caminos hacia el stop: enviar y cancelar.
+                stream.getTracks().forEach((t) => t.stop());
+
+                const ms = Date.now() - inicioGrabacion.current;
+                const grabados = trozos.current;
+                trozos.current = [];
+
+                if (grabacionCancelada.current || grabados.length === 0) return;
+
+                if (ms < 1000) {
+                    setError('La grabación fue muy corta.');
+                    return;
+                }
+
+                // El tipo se recorta antes del ";codecs=..." porque el CRM
+                // valida contra una lista de tipos base.
+                const tipoBase = formato.split(';')[0];
+                const extension = tipoBase.includes('mp4')
+                    ? 'm4a'
+                    : tipoBase.includes('ogg')
+                      ? 'ogg'
+                      : 'webm';
+
+                const blob = new Blob(grabados, { type: tipoBase });
+                enviarArchivo(
+                    new File([blob], `audio-${Date.now()}.${extension}`, { type: tipoBase }),
+                    ms
+                );
+            };
+
+            rec.start();
+            grabadora.current = rec;
+            setGrabando(true);
+            setMsGrabados(0);
+
+            cronometro.current = setInterval(() => {
+                const transcurrido = Date.now() - inicioGrabacion.current;
+                setMsGrabados(transcurrido);
+                // Corte de seguridad antes de acercarse al límite de tamaño.
+                if (transcurrido > 5 * 60 * 1000) detenerGrabacion(false);
+            }, 200);
+        } catch {
+            setError('No pudimos usar el micrófono. Revisa el permiso en tu navegador.');
+        }
+    };
+
+    const detenerGrabacion = (cancelar: boolean) => {
+        grabacionCancelada.current = cancelar;
+        if (cronometro.current) {
+            clearInterval(cronometro.current);
+            cronometro.current = null;
+        }
+        grabadora.current?.stop();
+        grabadora.current = null;
+        setGrabando(false);
+        setMsGrabados(0);
+    };
+
     /** Devuelve el texto al campo de escritura para que el visitante lo reenvíe. */
     const reintentar = (mensaje: Mensaje) => {
         setMensajes((previos) => previos.filter((m) => m.id !== mensaje.id));
@@ -416,7 +719,44 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                         {mensaje.deAsesor && mensaje.autor && (
                             <span className={styles.autor}>{mensaje.autor}</span>
                         )}
-                        <span className={styles.texto}>{mensaje.text}</span>
+
+                        {mensaje.adjunto && (
+                            <div className={styles.adjunto}>
+                                {/* Mientras el archivo se sube se muestra la copia
+                                    local (blob:); una vez guardado, la del servidor.
+                                    Así la foto aparece al instante y no queda un
+                                    hueco esperando la subida. */}
+                                {mensaje.adjunto.tipo === 'image' && (
+                                    <img
+                                        src={mensaje.urlLocal || `/api/chat/media/${mensaje.adjunto.id}`}
+                                        alt="Imagen del chat"
+                                        className={styles.adjuntoImagen}
+                                        loading="lazy"
+                                    />
+                                )}
+
+                                {mensaje.adjunto.tipo === 'audio' && (
+                                    <audio
+                                        controls
+                                        preload="metadata"
+                                        className={styles.adjuntoAudio}
+                                        src={mensaje.urlLocal || `/api/chat/media/${mensaje.adjunto.id}`}
+                                    />
+                                )}
+
+                                {mensaje.adjunto.tipo === 'video' && (
+                                    <video
+                                        controls
+                                        playsInline
+                                        preload="metadata"
+                                        className={styles.adjuntoVideo}
+                                        src={mensaje.urlLocal || `/api/chat/media/${mensaje.adjunto.id}`}
+                                    />
+                                )}
+                            </div>
+                        )}
+
+                        {mensaje.text && <span className={styles.texto}>{mensaje.text}</span>}
                         {mensaje.estado === 'enviando' && (
                             <span className={styles.estado}>enviando...</span>
                         )}
@@ -442,17 +782,81 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                 puerta
             ) : (
                 <form className={styles.barraEnvio} onSubmit={enviar}>
-                    <input
-                        type="text"
-                        value={texto}
-                        onChange={(e) => setTexto(e.target.value)}
-                        placeholder="Escribe tu mensaje..."
-                        maxLength={2000}
-                        aria-label="Escribe tu mensaje"
-                    />
-                    <button type="submit" disabled={!texto.trim() || enviando} aria-label="Enviar">
-                        ➤
-                    </button>
+                    {grabando ? (
+                        <>
+                            <button
+                                type="button"
+                                className={styles.botonSecundario}
+                                onClick={() => detenerGrabacion(true)}
+                                aria-label="Descartar grabación"
+                            >
+                                🗑
+                            </button>
+
+                            <span className={styles.grabando}>
+                                <span className={styles.puntoGrabacion} />
+                                {duracionLegible(msGrabados)} · grabando
+                            </span>
+
+                            <button
+                                type="button"
+                                onClick={() => detenerGrabacion(false)}
+                                aria-label="Enviar grabación"
+                            >
+                                ➤
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <input
+                                ref={inputArchivo}
+                                type="file"
+                                accept="image/*,video/*"
+                                hidden
+                                onChange={alElegirArchivo}
+                            />
+                            <button
+                                type="button"
+                                className={styles.botonSecundario}
+                                onClick={() => inputArchivo.current?.click()}
+                                disabled={enviando}
+                                aria-label="Adjuntar foto o video"
+                            >
+                                📎
+                            </button>
+
+                            <input
+                                type="text"
+                                value={texto}
+                                onChange={(e) => setTexto(e.target.value)}
+                                placeholder="Escribe tu mensaje..."
+                                maxLength={2000}
+                                aria-label="Escribe tu mensaje"
+                            />
+
+                            {/* Con texto escrito, el micrófono deja su lugar al
+                                botón de enviar: en un teléfono no caben los dos y
+                                la acción esperada siempre es la del texto. */}
+                            {puedeGrabar && !texto.trim() ? (
+                                <button
+                                    type="button"
+                                    onClick={empezarAGrabar}
+                                    disabled={enviando}
+                                    aria-label="Grabar mensaje de voz"
+                                >
+                                    🎤
+                                </button>
+                            ) : (
+                                <button
+                                    type="submit"
+                                    disabled={!texto.trim() || enviando}
+                                    aria-label="Enviar"
+                                >
+                                    ➤
+                                </button>
+                            )}
+                        </>
+                    )}
                 </form>
             )}
         </div>
