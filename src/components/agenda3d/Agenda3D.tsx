@@ -69,7 +69,6 @@ export default function Agenda3D() {
 
     const viewer = useRef<ViewerHandle | null>(null)
     const [viewerReady, setViewerReady] = useState(false)
-    const [relief, setRelief] = useState<number | null>(null)
 
     const [lot, setLot] = useState<Lot | null>(null)
     /* El plano de dron arranca en el mismo instante que el acercamiento y se
@@ -88,8 +87,6 @@ export default function Agenda3D() {
     // La capa de entrada la decide el visor: vista del dron solo si el calce
     // de la panorámica ya está hecho.
     const [layer, setLayer] = useState<Capa>('foto')
-    const [mode, setMode] = useState<'natural' | 'plataformas'>('natural')
-    const [env, setEnv] = useState<'dron' | 'oscuro'>('dron')
 
     /* Modo de calce: se entra con /agendar-visita?calce=1. Sirve para hacer
        coincidir la panorámica del dron con los lotes una sola vez; el
@@ -223,7 +220,6 @@ export default function Agenda3D() {
         viewer.current = handle
         setHandle(handle)
         setViewerReady(true)
-        setRelief(detail.relief)
         setLayer(detail.layer)
         handle.setNumbers(true)
         // La órbita de presentación es para el visitante; en las herramientas
@@ -266,8 +262,6 @@ export default function Agenda3D() {
 
     const setStageChip = aplicar(setStage, (h, v: number) => h.setFilter({ stage: v }))
     const setLayerChip = aplicar(setLayer, (h, v: Capa) => h.setLayer(v))
-    const setModeChip = aplicar(setMode, (h, v: 'natural' | 'plataformas') => h.setMode(v))
-    const setEnvChip = aplicar(setEnv, (h, v: 'dron' | 'oscuro') => h.setEnv(v))
 
     /* ─── envío ─── */
 
@@ -460,9 +454,6 @@ export default function Agenda3D() {
                                 <span>Mapa 3D · El Tabo</span>
                             </div>
                         </div>
-                        {relief !== null && (
-                            <span className={styles.relief}>Desnivel real {relief} m</span>
-                        )}
                     </header>
 
                     <div className={styles.chips}>
@@ -489,30 +480,6 @@ export default function Agenda3D() {
                                     {s === 0 ? 'Todas' : `Etapa ${s}`}
                                 </button>
                             ))}
-                        </div>
-                        <div className={styles.chipRow}>
-                            {([['natural', 'Terreno natural'], ['plataformas', 'Plataformas']] as const).map(
-                                ([k, label]) => (
-                                    <button
-                                        key={k}
-                                        className={mode === k ? styles.chipOn : styles.chip}
-                                        onClick={() => setModeChip(k)}
-                                    >
-                                        {label}
-                                    </button>
-                                )
-                            )}
-                            {([['dron', 'Entorno dron'], ['oscuro', 'Fondo neutro']] as const).map(
-                                ([k, label]) => (
-                                    <button
-                                        key={k}
-                                        className={env === k ? styles.chipOn : styles.chip}
-                                        onClick={() => setEnvChip(k)}
-                                    >
-                                        {label}
-                                    </button>
-                                )
-                            )}
                         </div>
                     </div>
 
@@ -625,18 +592,19 @@ export default function Agenda3D() {
                                         <span className={styles.kickerDark}>Etapa {lot.stage}</span>
                                         <h2 className={styles.lotNumber}>Lote {lot.n}</h2>
                                     </div>
-                                    <button
-                                        className={styles.closeBtn}
-                                        onClick={limpiarLote}
-                                        aria-label="Quitar selección"
-                                    >
-                                        <X size={16} />
-                                    </button>
+                                    <div className={styles.panelHeadDer}>
+                                        <span className={lot.sold ? styles.badgeSold : styles.badgeFree}>
+                                            {lot.sold ? 'Vendido' : 'Disponible'}
+                                        </span>
+                                        <button
+                                            className={styles.closeBtn}
+                                            onClick={limpiarLote}
+                                            aria-label="Quitar selección"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <span className={lot.sold ? styles.badgeSold : styles.badgeFree}>
-                                    {lot.sold ? 'Vendido' : 'Disponible'}
-                                </span>
 
                                 <div className={styles.specs}>
                                     <div>

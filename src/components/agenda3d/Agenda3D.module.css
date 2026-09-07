@@ -1349,3 +1349,70 @@
         width: 116px;
     }
 }
+
+/* Estado y cierre juntos a la derecha del título. */
+.panelHeadDer {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-shrink: 0;
+}
+
+/* ─── Celular: la ficha ocupa lo justo para dejar ver el video de fondo ─── */
+
+@media (max-width: 860px) {
+    .panel {
+        /* Antes tomaba casi toda la pantalla y el plano de dron quedaba tapado.
+           Con este alto la ficha entra completa y el video sigue a la vista. */
+        max-height: min(62svh, calc(100svh - 96px));
+    }
+
+    .panelBody {
+        gap: 9px;
+    }
+
+    /* Superficie y cota pasan de dos tarjetas altas a dos renglones. */
+    .specs > div {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 3px 7px;
+        padding: 9px 11px;
+    }
+
+    .specs > div svg {
+        display: none;
+    }
+
+    .specs span {
+        font-size: 10.5px;
+    }
+
+    .specs strong {
+        font-size: 15px;
+    }
+
+    .specs em {
+        width: 100%;
+        font-size: 9.5px;
+    }
+
+    .price {
+        padding: 11px 13px;
+        gap: 3px;
+    }
+
+    .video {
+        padding: 8px;
+        gap: 10px;
+    }
+
+    .video video {
+        width: 72px;
+    }
+
+    .lotNumber {
+        font-size: 22px;
+        margin-top: 2px;
+    }
+}
