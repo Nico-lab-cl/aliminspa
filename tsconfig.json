@@ -30,5 +30,13 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "quienes-somos-alimin-main"]
+  "exclude": [
+    "node_modules",
+    "quienes-somos-alimin-main",
+    // Volcados del export de Claude Design: importan "@/types", que no existe
+    // en esta app, y nada del sitio los usa. Se dejan fuera del typecheck para
+    // que no rompan el build.
+    "Agendamiento-dron",
+    "src/services"
+  ]
 }

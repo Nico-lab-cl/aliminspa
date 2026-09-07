@@ -43,4 +43,8 @@ next-env.d.ts
 
 /src/generated/prisma
 *.mp4
+# Los videos del mapa 3D sí van versionados: sin ellos /agendar-visita se
+# despliega sin intro ni video de construcción. La regla de arriba sigue
+# tapando los crudos del dron de la raíz.
+!/public/lomas3d/**/*.mp4
 stitch_remix_*
