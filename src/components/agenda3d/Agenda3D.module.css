@@ -1416,3 +1416,103 @@
         margin-top: 2px;
     }
 }
+
+/* ─── Etiquetas del lote en celular ─────────────────────────────────────────
+   Tocar un lote levantaba la ficha entera y tapaba el plano de dron. Estas
+   etiquetas van al costado, ocupan poco y abren la ficha solo si se piden. */
+
+.etiquetas {
+    position: absolute;
+    /* Por encima del asistente flotante (z-index 9999), que si no tapa
+       justo las etiquetas del rincon inferior. */
+    z-index: 10000;
+    /* Al costado izquierdo y a media altura: abajo chocaban con el rincon del
+       asistente flotante, y arriba con los chips de capa y etapa. */
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    max-width: calc(100vw - 24px);
+    /* Solo opacidad: la animacion de subir usa transform y pisaria el centrado. */
+    animation: aparecer .35s ease;
+}
+
+.etiquetaLote {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 9px 8px 13px;
+    border-radius: 100px;
+    background: rgba(10, 18, 28, .9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(118, 216, 69, .38);
+}
+
+.etiquetaLote strong {
+    font: 800 13px/1 Montserrat, system-ui, sans-serif;
+    letter-spacing: -.01em;
+}
+
+.etiquetaLote span {
+    font: 400 11px/1 Roboto, system-ui, sans-serif;
+    color: rgba(255, 255, 255, .6);
+}
+
+.etiquetaLote button {
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .18);
+    color: rgba(255, 255, 255, .8);
+}
+
+.etiqueta,
+.etiquetaFuerte,
+.etiquetaWa {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 17px;
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    font: 800 12px/1 Montserrat, system-ui, sans-serif;
+    letter-spacing: .04em;
+    transition: all .2s;
+}
+
+.etiqueta {
+    background: rgba(10, 18, 28, .88);
+    border: 1px solid rgba(255, 255, 255, .22);
+    color: rgba(255, 255, 255, .88);
+}
+
+.etiquetaFuerte {
+    background: linear-gradient(135deg, var(--lima), var(--verde));
+    border: none;
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(118, 216, 69, .3);
+}
+
+.etiquetaWa {
+    background: rgba(37, 211, 102, .18);
+    border: 1px solid rgba(37, 211, 102, .5);
+    color: #7ee8a4;
+}
+
+@media (max-width: 860px) {
+    .etiquetas {
+        display: flex;
+    }
+}
+
+@keyframes aparecer {
+    from { opacity: 0; }
+}

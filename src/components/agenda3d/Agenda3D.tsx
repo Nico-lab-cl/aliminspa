@@ -82,6 +82,10 @@ export default function Agenda3D() {
        se sabe el tamaño de pantalla, y mandar el de escritorio a un celular
        eran 1,6 MB en vez de 430 KB. Hasta que se resuelve se ve el poster. */
     const [movil, setMovil] = useState<boolean | null>(null)
+    /* En celular, tocar un lote ya no levanta la ficha entera: taparia el
+       plano de dron justo cuando termina de aterrizar. Salen tres etiquetas
+       al costado y la ficha se abre recien si el visitante lo pide. */
+    const [fichaAbierta, setFichaAbierta] = useState(false)
     const [ahorroDatos, setAhorroDatos] = useState(false)
     const [stage, setStage] = useState(0)
     // La capa de entrada la decide el visor: vista del dron solo si el calce
@@ -235,6 +239,7 @@ export default function Agenda3D() {
         if (new URLSearchParams(window.location.search).get('editor') === '1') return
         setLot(picked)
         setStep('lote')
+        setFichaAbierta(false)
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
         const v = videoLlegada.current
@@ -249,6 +254,7 @@ export default function Agenda3D() {
 
     const limpiarLote = () => {
         setLlegada(false)
+        setFichaAbierta(false)
         videoLlegada.current?.pause()
         setLot(null)
         viewer.current?.clear()
@@ -584,7 +590,41 @@ export default function Agenda3D() {
                         </div>
                     )}
 
-                    {!editor && !(step === 'lote' && !lot) && <aside className={styles.panel}>
+                    {!editor && movil && lot && !fichaAbierta && (
+                        <div className={styles.etiquetas}>
+                            <div className={styles.etiquetaLote}>
+                                <strong>Lote {lot.n}</strong>
+                                <span>Etapa {lot.stage} · {lot.area} m²</span>
+                                <button onClick={limpiarLote} aria-label="Quitar selección">
+                                    <X size={13} />
+                                </button>
+                            </div>
+                            <button
+                                className={styles.etiqueta}
+                                onClick={() => { setStep('lote'); setFichaAbierta(true) }}
+                            >
+                                Ver lote
+                            </button>
+                            {!lot.sold && (
+                                <button
+                                    className={styles.etiquetaFuerte}
+                                    onClick={() => { setStep('fecha'); setFichaAbierta(true) }}
+                                >
+                                    Agendar visita
+                                </button>
+                            )}
+                            <a
+                                className={styles.etiquetaWa}
+                                href={waHref(waMessage)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                WhatsApp
+                            </a>
+                        </div>
+                    )}
+
+                    {!editor && !(step === 'lote' && !lot) && (!movil || fichaAbierta) && <aside className={styles.panel}>
                         {step === 'lote' && lot && (
                             <div className={styles.panelBody}>
                                 <div className={styles.panelHead}>
@@ -598,8 +638,8 @@ export default function Agenda3D() {
                                         </span>
                                         <button
                                             className={styles.closeBtn}
-                                            onClick={limpiarLote}
-                                            aria-label="Quitar selección"
+                                            onClick={() => movil ? setFichaAbierta(false) : limpiarLote()}
+                                            aria-label={movil ? 'Cerrar la ficha' : 'Quitar selección'}
                                         >
                                             <X size={16} />
                                         </button>
