@@ -1171,9 +1171,10 @@
     }
 
     .panel {
-        /* La ficha ahora trae video: necesita algo más de alto para no dejar
-           los botones fuera de vista. */
-        max-height: 76svh;
+        /* Un 76 % del alto alcanzaba en un teléfono de 812 px, pero en uno de
+           740 dejaba Reservar y WhatsApp cortados. Medido contra el alto real
+           menos la barra de arriba, las acciones entran en los dos. */
+        max-height: calc(100svh - 96px);
     }
 
     .video video {
@@ -1293,5 +1294,58 @@
     .llegada,
     .llegadaOn {
         display: none;
+    }
+}
+
+/* ─── Pantallas bajas: cada píxel cuenta para que las acciones se vean ─── */
+
+@media (max-width: 860px) and (max-height: 780px) {
+    .panelBody {
+        gap: 8px;
+        padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
+    }
+
+    .video video {
+        width: 74px;
+    }
+
+    .video figcaption {
+        font-size: 11px;
+    }
+
+    .lotNumber {
+        font-size: 21px;
+    }
+
+    .price strong {
+        font-size: 20px;
+    }
+
+    .specs > div {
+        padding: 8px 10px;
+    }
+
+    .primaryBtn,
+    .waBtn,
+    .reservarBtn {
+        padding: 11px 14px;
+    }
+}
+
+/* ─── Tablet: la hoja no se estira de borde a borde ─── */
+
+@media (min-width: 601px) and (max-width: 860px) {
+    /* A 768 px la ficha ocupaba los 760 y la ficha del lote quedaba con medio
+       panel vacío al lado del video. Se centra con un ancho cómodo.
+       Se usa margen automático y no transform: la animación de entrada ya
+       ocupa transform y se pisarían. */
+    .panel,
+    .hint {
+        width: min(560px, calc(100vw - 32px));
+        margin-inline: auto;
+    }
+
+    .video video {
+        width: 116px;
     }
 }

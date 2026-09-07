@@ -78,6 +78,12 @@ export default function Agenda3D() {
        despues, se nota el corte. */
     const [llegada, setLlegada] = useState(false)
     const videoLlegada = useRef<HTMLVideoElement | null>(null)
+
+    /* El video de la portada se elige recien en el cliente: en el servidor no
+       se sabe el tamaño de pantalla, y mandar el de escritorio a un celular
+       eran 1,6 MB en vez de 430 KB. Hasta que se resuelve se ve el poster. */
+    const [movil, setMovil] = useState<boolean | null>(null)
+    const [ahorroDatos, setAhorroDatos] = useState(false)
     const [stage, setStage] = useState(0)
     // La capa de entrada la decide el visor: vista del dron solo si el calce
     // de la panorámica ya está hecho.
@@ -153,6 +159,13 @@ export default function Agenda3D() {
         const q = new URLSearchParams(window.location.search)
         setCalce(q.get('calce') === '1')
         setEditor(q.get('editor') === '1')
+
+        setMovil(window.innerWidth < 900)
+
+        // Con ahorro de datos activado no se adelanta la descarga del plano de
+        // llegada: entrara igual, solo que un poco despues.
+        const con = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+        setAhorroDatos(!!con?.saveData)
     }, [])
 
     const guardarCalce = async () => {
@@ -363,12 +376,13 @@ export default function Agenda3D() {
                 <section className={styles.intro}>
                     <video
                         className={styles.introVideo}
-                        src="/lomas3d/drone-video-1.mp4"
+                        src={movil === null ? undefined
+                            : movil ? '/lomas3d/intro-dron-movil.mp4' : '/lomas3d/intro-dron.mp4'}
                         autoPlay
                         muted
                         loop
                         playsInline
-                        poster="/lomas3d/ortofoto.webp"
+                        poster="/lomas3d/intro-dron-poster.webp"
                     />
                     <div className={styles.introVeil} />
                     <div className={styles.introContent}>
@@ -407,18 +421,21 @@ export default function Agenda3D() {
                         termina de bajar al lote. Es ambiente del proyecto, no
                         una toma del lote elegido. */}
                     <div className={llegada ? styles.llegadaOn : styles.llegada} aria-hidden="true">
-                        {viewerReady && (
+                        {viewerReady && movil !== null && (
                             <video
                                 ref={videoLlegada}
-                                src="/lomas3d/construccion/llegada-lote.mp4"
+                                src={movil
+                                    ? '/lomas3d/construccion/llegada-lote-movil.mp4'
+                                    : '/lomas3d/construccion/llegada-lote.mp4'}
                                 poster="/lomas3d/construccion/llegada-lote-poster.webp"
                                 muted
                                 loop
                                 playsInline
                                 /* Se descarga apenas el mapa esta listo: si esperara al
                                    clic, el primer cuadro llegaria tarde y el encadenado
-                                   con el vuelo de camara se romperia. */
-                                preload="auto"
+                                   con el vuelo de camara se romperia. Con ahorro de datos
+                                   se deja para el momento del clic. */
+                                preload={ahorroDatos ? 'metadata' : 'auto'}
                             />
                         )}
                     </div>
@@ -649,7 +666,9 @@ export default function Agenda3D() {
 
                                 <figure className={styles.video}>
                                     <video
-                                        src="/lomas3d/construccion/casa-200m2.mp4"
+                                        src={movil
+                                            ? '/lomas3d/construccion/casa-200m2-movil.mp4'
+                                            : '/lomas3d/construccion/casa-200m2.mp4'}
                                         poster="/lomas3d/construccion/casa-200m2-poster.webp"
                                         autoPlay
                                         muted
