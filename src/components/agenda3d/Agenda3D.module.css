@@ -1260,7 +1260,9 @@
     z-index: 3;
     overflow: hidden;
     pointer-events: none;
-    transition: opacity .9s ease;
+    /* Dura lo mismo que el vuelo de camara (1,25 s): asi el fundido termina
+       justo cuando la camara aterriza y no hay salto. */
+    transition: opacity 1.15s ease-in-out;
 }
 
 .llegada {

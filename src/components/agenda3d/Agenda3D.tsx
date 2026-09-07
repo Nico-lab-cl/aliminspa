@@ -72,10 +72,12 @@ export default function Agenda3D() {
     const [relief, setRelief] = useState<number | null>(null)
 
     const [lot, setLot] = useState<Lot | null>(null)
-    /* El vuelo de cámara dura algo más de un segundo. Cuando termina, entra un
-       plano de dron de fondo: es el momento de "llegaste al terreno". */
+    /* El plano de dron arranca en el mismo instante que el acercamiento y se
+       funde mientras la cámara baja: el video tambien desciende, asi que los
+       dos movimientos se encadenan y se lee como un solo viaje. Si entra
+       despues, se nota el corte. */
     const [llegada, setLlegada] = useState(false)
-    const llegadaTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const videoLlegada = useRef<HTMLVideoElement | null>(null)
     const [stage, setStage] = useState(0)
     // La capa de entrada la decide el visor: vista del dron solo si el calce
     // de la panorámica ya está hecho.
@@ -225,25 +227,20 @@ export default function Agenda3D() {
         setLot(picked)
         setStep('lote')
 
-        // El fondo entra recién al terminar el acercamiento, no durante: la
-        // gracia es ver el vuelo y que el video reciba a quien llega.
-        if (llegadaTimer.current) clearTimeout(llegadaTimer.current)
-        setLlegada(false)
-        const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        if (!sinMovimiento) {
-            llegadaTimer.current = setTimeout(() => setLlegada(true), 1300)
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        const v = videoLlegada.current
+        if (v) {
+            v.currentTime = 0
+            // Puede fallar si el navegador aun no habilita la reproduccion
+            // automatica; el mapa sigue funcionando igual.
+            v.play().catch(() => { })
         }
-    }, [])
-
-    // Al desmontar no puede quedar un temporizador apuntando a un componente
-    // que ya no existe.
-    useEffect(() => () => {
-        if (llegadaTimer.current) clearTimeout(llegadaTimer.current)
+        setLlegada(true)
     }, [])
 
     const limpiarLote = () => {
-        if (llegadaTimer.current) clearTimeout(llegadaTimer.current)
         setLlegada(false)
+        videoLlegada.current?.pause()
         setLot(null)
         viewer.current?.clear()
         viewer.current?.cinematic(true)
@@ -410,15 +407,18 @@ export default function Agenda3D() {
                         termina de bajar al lote. Es ambiente del proyecto, no
                         una toma del lote elegido. */}
                     <div className={llegada ? styles.llegadaOn : styles.llegada} aria-hidden="true">
-                        {llegada && (
+                        {viewerReady && (
                             <video
+                                ref={videoLlegada}
                                 src="/lomas3d/construccion/llegada-lote.mp4"
                                 poster="/lomas3d/construccion/llegada-lote-poster.webp"
-                                autoPlay
                                 muted
                                 loop
                                 playsInline
-                                preload="none"
+                                /* Se descarga apenas el mapa esta listo: si esperara al
+                                   clic, el primer cuadro llegaria tarde y el encadenado
+                                   con el vuelo de camara se romperia. */
+                                preload="auto"
                             />
                         )}
                     </div>
