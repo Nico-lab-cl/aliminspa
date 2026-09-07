@@ -72,6 +72,10 @@ export default function Agenda3D() {
     const [relief, setRelief] = useState<number | null>(null)
 
     const [lot, setLot] = useState<Lot | null>(null)
+    /* El vuelo de cámara dura algo más de un segundo. Cuando termina, entra un
+       plano de dron de fondo: es el momento de "llegaste al terreno". */
+    const [llegada, setLlegada] = useState(false)
+    const llegadaTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const [stage, setStage] = useState(0)
     // La capa de entrada la decide el visor: vista del dron solo si el calce
     // de la panorámica ya está hecho.
@@ -220,9 +224,26 @@ export default function Agenda3D() {
         if (new URLSearchParams(window.location.search).get('editor') === '1') return
         setLot(picked)
         setStep('lote')
+
+        // El fondo entra recién al terminar el acercamiento, no durante: la
+        // gracia es ver el vuelo y que el video reciba a quien llega.
+        if (llegadaTimer.current) clearTimeout(llegadaTimer.current)
+        setLlegada(false)
+        const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (!sinMovimiento) {
+            llegadaTimer.current = setTimeout(() => setLlegada(true), 1300)
+        }
+    }, [])
+
+    // Al desmontar no puede quedar un temporizador apuntando a un componente
+    // que ya no existe.
+    useEffect(() => () => {
+        if (llegadaTimer.current) clearTimeout(llegadaTimer.current)
     }, [])
 
     const limpiarLote = () => {
+        if (llegadaTimer.current) clearTimeout(llegadaTimer.current)
+        setLlegada(false)
         setLot(null)
         viewer.current?.clear()
         viewer.current?.cinematic(true)
@@ -384,6 +405,23 @@ export default function Agenda3D() {
                         onError={() => setStep('fecha')}
                         onAlign={setAl}
                     />
+
+                    {/* Plano de dron que recibe al visitante cuando la cámara
+                        termina de bajar al lote. Es ambiente del proyecto, no
+                        una toma del lote elegido. */}
+                    <div className={llegada ? styles.llegadaOn : styles.llegada} aria-hidden="true">
+                        {llegada && (
+                            <video
+                                src="/lomas3d/construccion/llegada-lote.mp4"
+                                poster="/lomas3d/construccion/llegada-lote-poster.webp"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="none"
+                            />
+                        )}
+                    </div>
 
                     {!viewerReady && (
                         <div className={styles.loading}>

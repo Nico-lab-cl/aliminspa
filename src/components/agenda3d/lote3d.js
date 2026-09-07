@@ -526,8 +526,13 @@ class Lote3D extends HTMLElement {
       uv.setXY(i,
         0.5 - t / TAU + yaw / TAU,
         0.5 + Math.asin(Math.max(-1, Math.min(1, (y - dy) / Math.hypot(r, y - dy)))) / Math.PI);
-      // el disco bajo el dron y el borde lejano se difuminan
-      const a = Math.min(1, Math.max(0, (r - 7) / 10)) * Math.min(1, Math.max(0, (R1 - r) / (R1 * 0.45)));
+      /* Justo bajo el dron la equirectangular no tiene información: unos pocos
+         píxeles del polo se estiran sobre decenas de metros de suelo y se ve
+         un disco de rayas que cambia al mover la cámara. Se disuelve con una
+         transición ancha y suave —no un corte— para que el satelital de abajo
+         asome sin que se note un borde. El borde lejano se difumina igual. */
+      const suave = t => { const u = Math.min(1, Math.max(0, t)); return u * u * (3 - 2 * u); };
+      const a = suave((r - 18) / 75) * suave((R1 - r) / (R1 * 0.45));
       col.setXYZW(i, 1, 1, 1, a);
     }
     p.needsUpdate = true;

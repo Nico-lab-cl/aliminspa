@@ -1250,3 +1250,46 @@
         font-size: 10.5px;
     }
 }
+
+/* ─── Plano de llegada: entra cuando la cámara termina de bajar al lote ─── */
+
+.llegada,
+.llegadaOn {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity .9s ease;
+}
+
+.llegada {
+    opacity: 0;
+}
+
+.llegadaOn {
+    opacity: 1;
+}
+
+.llegada video,
+.llegadaOn video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Un velo tenue: el panel de la ficha tiene que seguir leyéndose encima. */
+.llegadaOn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, rgba(10, 21, 32, .28) 20%, rgba(10, 21, 32, .58));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .llegada,
+    .llegadaOn {
+        display: none;
+    }
+}
