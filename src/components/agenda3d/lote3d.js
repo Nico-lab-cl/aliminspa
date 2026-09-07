@@ -431,7 +431,10 @@ class Lote3D extends HTMLElement {
   // Malla polar: anillos con paso geométrico (denso cerca, amplio al fondo).
   // La última columna duplica la primera, así no hay costura en el equirect.
   _buildApron() {
-    const SEC = 256, RINGS = 110, R0 = 5, R1 = 2600;
+    // R0 es el radio del primer anillo: dentro de el no hay geometria y se ve
+    // el suelo de abajo. Con 5 m eso era un disco perfectamente visible desde
+    // el aire; a medio metro deja de notarse.
+    const SEC = 256, RINGS = 130, R0 = 0.5, R1 = 2600;
     const cols = SEC + 1;
     const pos = new Float32Array(cols * (RINGS + 1) * 3);
     const rad = new Float32Array(cols * (RINGS + 1));
@@ -526,17 +529,16 @@ class Lote3D extends HTMLElement {
       uv.setXY(i,
         0.5 - t / TAU + yaw / TAU,
         0.5 + Math.asin(Math.max(-1, Math.min(1, (y - dy) / Math.hypot(r, y - dy)))) / Math.PI);
-      /* El dron tapa su propio cenit y el stitcher rellena ese hueco con un
-         parche plano. Medido sobre la panorámica, ese parche ocupa 0,7° desde
-         el cenit: a 160 m de altura son unos 2 m de radio en el suelo, nada.
+      /* El manto ya no se abre en el centro. El dron tapa su propio cenit y el
+         stitcher rellena ese hueco, pero medido sobre la panoramica ese parche
+         ocupa 0,7 grados: a 160 m de altura son 2 m de suelo. Taparlo con la
+         propia panoramica se nota muchisimo menos que abrir un agujero y dejar
+         ver la satelital, que es mas borrosa y de otro color.
 
-         Antes se abria ahi un hueco enorme y por debajo asomaba la satelital,
-         que es mucho mas borrosa: eso era el disco palido que se veia en el
-         centro y cambiaba al mover la camara. Ahora el manto solo se abre en
-         esos pocos metros, asi que la panoramica cubre todo y no hay disco.
-         El borde lejano si se difumina, para que no termine en un canto. */
+         El borde lejano si se difumina, para que el manto no termine en un
+         canto recto contra el horizonte. */
       const suave = t => { const u = Math.min(1, Math.max(0, t)); return u * u * (3 - 2 * u); };
-      const a = suave((r - 1.5) / 5) * suave((R1 - r) / (R1 * 0.45));
+      const a = suave((R1 - r) / (R1 * 0.45));
       col.setXYZW(i, 1, 1, 1, a);
     }
     p.needsUpdate = true;
