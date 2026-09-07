@@ -11,6 +11,7 @@ import {
     weekdayOf,
     minLeadLabel,
 } from '@/lib/booking-rules'
+import { isSlotFree } from '@/lib/availability'
 
 export async function POST(request: NextRequest) {
     try {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Payload JSON inválido' }, { status: 400 })
         }
 
-        const { nombre, email, celular, proyecto, fecha, fechaLocal, hora, eventId } = body
+        const { nombre, email, celular, proyecto, fecha, fechaLocal, hora, eventId, lote, modalidad } = body
 
         if (!nombre || !email || !celular || !proyecto || !fecha || !hora) {
             return NextResponse.json(
@@ -60,6 +61,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error }, { status: 400 })
         }
 
+        // El calendario del front pudo quedar abierto varios minutos: se
+        // vuelve a preguntar si el bloque sigue libre antes de tomarlo.
+        if (!(await isSlotFree(calendarDate, horaNormalizada))) {
+            return NextResponse.json(
+                { error: 'Justo tomaron ese horario. Elige otro bloque en el calendario.' },
+                { status: 409 }
+            )
+        }
+
         // Save booking to database
         const booking = await prisma.booking.create({
             data: {
@@ -69,6 +79,8 @@ export async function POST(request: NextRequest) {
                 proyecto,
                 fecha: new Date(fecha),
                 hora,
+                lote: typeof lote === 'string' && lote.trim() ? lote.trim() : null,
+                modalidad: typeof modalidad === 'string' && modalidad.trim() ? modalidad.trim() : null,
                 status: 'confirmed',
             },
         })
@@ -81,6 +93,8 @@ export async function POST(request: NextRequest) {
             proyecto,
             fecha,
             hora,
+            lote: booking.lote,
+            modalidad: booking.modalidad,
         })
 
         // Send Meta event for tracking
@@ -102,6 +116,7 @@ export async function POST(request: NextRequest) {
                 {
                     content_name: proyecto,
                     content_category: 'Real Estate Visit',
+                    ...(booking.lote ? { content_ids: [booking.lote] } : {}),
                 },
                 eventSourceUrl,
                 // Mismo ID que el evento del navegador: Meta descarta la copia repetida

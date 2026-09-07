@@ -46,6 +46,12 @@ model Booking {
   proyecto  String
   fecha     DateTime
   hora      String
+  // Lote elegido en el mapa 3D, con el formato "Etapa 2 · Lote 14". Nullable
+  // porque el calendario clásico (/reunion) agenda sin elegir un lote.
+  lote      String?
+  // Modalidad de la visita. Hoy siempre "Visita en terreno, El Tabo"; queda
+  // como campo por si más adelante se ofrece videollamada u oficina.
+  modalidad String?
   status    String   @default("confirmed")
   createdAt DateTime @default(now()) @map("created_at")
 

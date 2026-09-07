@@ -50,6 +50,8 @@ export async function createCalendarEvent(params: {
     proyecto: string
     fecha: string // ISO date string
     hora: string  // "16:00" format
+    lote?: string | null
+    modalidad?: string | null
 }): Promise<{ meetLink: string | null; eventId: string | null }> {
     const calendar = getCalendarClient()
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
@@ -58,7 +60,7 @@ export async function createCalendarEvent(params: {
         return { meetLink: null, eventId: null }
     }
 
-    const { nombre, email, celular, proyecto, fecha, hora } = params
+    const { nombre, email, celular, proyecto, fecha, hora, lote, modalidad } = params
 
     // Build start/end times in Chile timezone
     const [h] = hora.split(':').map(Number)
@@ -75,9 +77,11 @@ export async function createCalendarEvent(params: {
             conferenceDataVersion: 1, // Required to create Google Meet
             sendUpdates: 'all', // Send email invitations to attendees
             requestBody: {
-                summary: `Visita ${proyecto} — ${nombre}`,
+                summary: `Visita ${proyecto}${lote ? ` · ${lote}` : ''} — ${nombre}`,
                 description: [
                     `🏡 Visita agendada al proyecto ${proyecto}`,
+                    ...(lote ? [`📐 Lote elegido en el mapa 3D: ${lote}`] : []),
+                    ...(modalidad ? [`🚗 Modalidad: ${modalidad}`] : []),
                     ``,
                     `📋 Datos del visitante:`,
                     `• Nombre: ${nombre}`,
@@ -135,5 +139,52 @@ export async function createCalendarEvent(params: {
             errors: error.errors,
         })
         return { meetLink: null, eventId: null }
+    }
+}
+
+/**
+ * Bloques ocupados del calendario del equipo entre dos instantes.
+ *
+ * Se usa para que el calendario de la web no ofrezca horas en las que el
+ * asesor ya tiene algo agendado — venga de la web o lo haya puesto a mano.
+ *
+ * Devuelve null cuando el calendario no está configurado o la consulta falla.
+ * Ese null significa "no sé", y quien llama debe decidir: preferimos mostrar
+ * la hora y que el asesor reagende, antes que dejar la agenda en blanco por
+ * una caída de Google.
+ */
+export async function getBusyIntervals(
+    timeMin: Date,
+    timeMax: Date
+): Promise<Array<{ start: number; end: number }> | null> {
+    const calendar = getCalendarClient()
+    const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
+    if (!calendar) return null
+
+    try {
+        const res = await calendar.freebusy.query({
+            requestBody: {
+                timeMin: timeMin.toISOString(),
+                timeMax: timeMax.toISOString(),
+                timeZone: 'America/Santiago',
+                items: [{ id: calendarId }],
+            },
+        })
+
+        const busy = res.data.calendars?.[calendarId]?.busy
+        if (!busy) return null
+
+        return busy
+            .map(b => ({
+                start: b.start ? new Date(b.start).getTime() : NaN,
+                end: b.end ? new Date(b.end).getTime() : NaN,
+            }))
+            .filter(b => Number.isFinite(b.start) && Number.isFinite(b.end))
+    } catch (error: any) {
+        console.error('Error consultando freebusy de Google Calendar:', {
+            message: error.message,
+            status: error.code,
+        })
+        return null
     }
 }
