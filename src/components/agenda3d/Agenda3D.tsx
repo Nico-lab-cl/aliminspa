@@ -27,7 +27,7 @@ import {
     Video,
     X,
 } from 'lucide-react'
-import Lote3DViewer, { Capa, Conteo, Listo, Lot, ViewerHandle, Vuelo } from './Lote3DViewer'
+import Lote3DViewer, { Conteo, Listo, Lot, ViewerHandle, Vuelo } from './Lote3DViewer'
 import EditorLotes from './EditorLotes'
 import { getUtmParams, newEventId } from '@/lib/track'
 import { SITE } from '@/lib/constants'
@@ -89,9 +89,6 @@ export default function Agenda3D() {
     const [fichaAbierta, setFichaAbierta] = useState(false)
     const [ahorroDatos, setAhorroDatos] = useState(false)
     const [stage, setStage] = useState(0)
-    // La capa de entrada la decide el visor: vista del dron solo si el calce
-    // de la panorámica ya está hecho.
-    const [layer, setLayer] = useState<Capa>('foto')
 
     /* Modo de calce: se entra con /agendar-visita?calce=1. Sirve para hacer
        coincidir la panorámica del dron con los lotes una sola vez; el
@@ -226,7 +223,6 @@ export default function Agenda3D() {
         setHandle(handle)
         setViewerReady(true)
         setConteo(detail.conteo)
-        setLayer(detail.layer)
         handle.setNumbers(true)
         // La órbita de presentación es para el visitante; en las herramientas
         // internas estorba.
@@ -269,7 +265,6 @@ export default function Agenda3D() {
     }
 
     const setStageChip = aplicar(setStage, (h, v: number) => h.setFilter({ stage: v }))
-    const setLayerChip = aplicar(setLayer, (h, v: Capa) => h.setLayer(v))
 
     /* ─── envío ─── */
 
@@ -474,19 +469,6 @@ export default function Agenda3D() {
                     </header>
 
                     <div className={styles.chips}>
-                        <div className={styles.chipRow}>
-                            {([['dron', 'Vista del dron'], ['foto', 'Ortofoto'], ['satelite', 'Satelital']] as const).map(
-                                ([k, label]) => (
-                                    <button
-                                        key={k}
-                                        className={layer === k ? styles.chipOn : styles.chip}
-                                        onClick={() => setLayerChip(k)}
-                                    >
-                                        {label}
-                                    </button>
-                                )
-                            )}
-                        </div>
                         <div className={styles.chipRow}>
                             {[0, 1, 2, 3].map(s => (
                                 <button

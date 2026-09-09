@@ -114,8 +114,22 @@ class Lote3D extends HTMLElement {
 
     const dem = await this._dem().catch(() => null);
     this.dem = dem;
-    const sat = await this._sat().catch(e => { console.warn('ortofoto', e); return null; });
-    this._terrain(dem, sat);
+    /* El mapa es solo la vista del dron: no se piden los mosaicos de Esri ni
+       se arma la ortofoto. Son varias decenas de peticiones y medio mega que
+       ya no hacen falta. */
+    this._terrain(dem, null);
+    /* La ortofoto y el relleno satelital se dan de baja: el unico suelo es la
+       panoramica del dron. _terrain deja las mallas armadas por compatibilidad,
+       asi que se sacan de la escena y se liberan. */
+    for (const clave of ['ground', 'ortho']) {
+      const malla = this[clave];
+      if (!malla) continue;
+      this.scene.remove(malla);
+      malla.geometry.dispose();
+      malla.material.dispose();
+      this[clave] = null;
+    }
+
     this._mountDrape();
     this._lots();
     this.setLayer(this._calibrado || this.getAttribute('editor') === '1' ? 'dron' : 'foto');
@@ -163,8 +177,7 @@ class Lote3D extends HTMLElement {
           };
         })(),
         relief: dem ? +(dem.max - dem.min).toFixed(1) : 0,
-        source: dem ? dem.source : 'plano',
-        sat: sat ? sat.source : null
+        source: dem ? dem.source : 'plano'
       }
     }));
   }
@@ -546,17 +559,15 @@ class Lote3D extends HTMLElement {
       uv.setXY(i,
         0.5 - t / TAU + yaw / TAU,
         0.5 + Math.asin(Math.max(-1, Math.min(1, (y - dy) / Math.hypot(r, y - dy)))) / Math.PI);
-      /* Bajo el dron la panoramica no tiene informacion: el vuelo no alcanza
-         el nadir y ahi la foto se abre en abanico. Da igual con que se rellene
-         —color liso, espejo, estirado—: siempre queda un disco en medio del
-         mapa. Asi que el manto se abre en esa zona y por debajo asoma la
-         ortofoto, que es la unica imagen real que existe de ese suelo.
+      /* El manto no se abre en ningun lado. Abrirlo en el nadir dejaba ver la
+         ortofoto, con los colores del plano viejo deformandose en el centro
+         del mapa. La zona bajo el dron se cubre con la propia panoramica, que
+         ahi va desenfocada a proposito.
 
-         La transicion es ancha para que no se note el canto del disco.
-         El borde lejano se difumina igual, para que el manto no termine en un
+         El borde lejano si se difumina, para que el manto no termine en un
          corte recto contra el horizonte. */
       const suave = t => { const u = Math.min(1, Math.max(0, t)); return u * u * (3 - 2 * u); };
-      const a = suave((r - 22) / 55) * suave((R1 - r) / (R1 * 0.45));
+      const a = suave((R1 - r) / (R1 * 0.45));
       col.setXYZW(i, 1, 1, 1, a);
     }
     p.needsUpdate = true;

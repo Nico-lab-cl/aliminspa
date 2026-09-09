@@ -103,29 +103,80 @@ async function main() {
     const cielo = { r: tono[0], g: tono[1], b: tono[2] }
     console.log(`Relleno de cielo: rgb(${cielo.r},${cielo.g},${cielo.b})`)
 
-    /* Abajo NO puede ir color liso. Esas filas son el nadir y al proyectarlas
-       sobre el terreno se abren en un disco de decenas de metros justo bajo el
-       dron: un tono plano se ve como una mancha en medio del mapa, y espejar
-       las ultimas filas deja una roseta, que se nota igual.
-
-       Se estiran las ultimas filas reales hacia abajo. En el mapa eso se
-       proyecta como estrias radiales que convergen en el centro, que es
-       justo lo que hace una panoramica de verdad cerca del nadir: continua
-       en vez de dibujar una figura. */
-    const espejo = await sharp(cuerpo)
-        .extract({ left: 0, top: mc.height - 2, width: mc.width, height: 2 })
-        .resize({ width: mc.width, height: abajo, fit: 'fill' })
-        .toBuffer()
-
     /* Dos pasadas y no dos extend encadenados: sharp no los acumula, el
        segundo reemplaza al primero y la imagen sale con un solo relleno. */
     const conCielo = await sharp(cuerpo)
         .extend({ top: arriba, background: cielo })
         .toBuffer()
-    const completa = await sharp(conCielo)
+    const plana = await sharp(conCielo)
         .extend({ bottom: abajo, background: cielo })
-        .composite([{ input: espejo, top: arriba + mc.height, left: 0 }])
         .toBuffer()
+
+    /* El nadir es la zona que el vuelo no alcanza, y ademas las ultimas filas
+       que si trae la foto vienen degradadas del stitch.
+
+       En una equirectangular todas las direcciones convergen en la fila de
+       abajo, asi que al proyectarla cualquier dibujo con estructura se abre en
+       rayos desde el punto bajo el dron. Probado: color liso deja una mancha,
+       espejar deja una roseta, estirar deja estrias y repetir un trozo de
+       vegetacion deja una estrella de 256 rayos. El problema no es el dibujo,
+       es la convergencia.
+
+       Lo unico que no se deforma al converger es lo que ya es constante a lo
+       largo de la fila. Asi que la franja de abajo se reemplaza por el promedio
+       de cada fila, entrando de a poco: arriba de la franja manda la foto real
+       y hacia el nadir manda el promedio. Queda un degradado del color del
+       suelo, sin figura. Los deslindes de los lotes siguen viendose porque son
+       geometria 3D, no parte de la foto. */
+    const franja = Math.max(abajo + 24, Math.round(ALTO * 0.09))
+    const cruda = await sharp(plana).raw().toBuffer({ resolveWithObject: true })
+    const px = cruda.data, W = cruda.info.width, C = cruda.info.channels
+    const arranque = ALTO - franja
+    const ultimaReal = arriba + mc.height - 1
+
+    /* Promedio de cada fila de la franja. Las filas del relleno no tienen foto,
+       asi que repiten la ultima que si la tiene. */
+    const medias = []
+    for (let y = arranque; y < ALTO; y++) {
+        const f = Math.min(y, ultimaReal)
+        let r = 0, g = 0, b = 0
+        for (let x = 0; x < W; x++) {
+            const i = (f * W + x) * C
+            r += px[i]; g += px[i + 1]; b += px[i + 2]
+        }
+        medias.push([r / W, g / W, b / W])
+    }
+
+    /* Los promedios crudos saltan de fila en fila, y como cada fila es un
+       anillo alrededor del dron, esos saltos salen dibujados como una diana.
+       Se suavizan con una media movil ancha: el disco queda como un degradado
+       continuo del color del suelo, sin bordes que mirar. */
+    const RADIO = Math.round(franja * 0.35)
+    const suavizadas = medias.map((_, k) => {
+        let r = 0, g = 0, b = 0, n = 0
+        for (let j = k - RADIO; j <= k + RADIO; j++) {
+            const m = medias[Math.min(medias.length - 1, Math.max(0, j))]
+            r += m[0]; g += m[1]; b += m[2]; n++
+        }
+        return [r / n, g / n, b / n]
+    })
+
+    const suave = t => { const u = Math.min(1, Math.max(0, t)); return u * u * (3 - 2 * u) }
+    for (let y = arranque; y < ALTO; y++) {
+        const [pr, pg, pb] = suavizadas[y - arranque]
+        // Peso del promedio: 0 al entrar en la franja, 1 bastante antes del
+        // borde, para que las filas del relleno ya no tengan nada que aportar.
+        const w = suave((y - arranque) / (franja * 0.8))
+        for (let x = 0; x < W; x++) {
+            const i = (y * W + x) * C
+            px[i] = px[i] * (1 - w) + pr * w
+            px[i + 1] = px[i + 1] * (1 - w) + pg * w
+            px[i + 2] = px[i + 2] * (1 - w) + pb * w
+        }
+    }
+    console.log(`Nadir: ${franja} px de franja promediada por fila (${(franja / ALTO * 180).toFixed(1)} grados sobre el nadir)`)
+
+    const completa = await sharp(px, { raw: cruda.info }).png().toBuffer()
 
     const mf = await sharp(completa).metadata()
     if (mf.width !== ANCHO || mf.height !== ALTO) {
