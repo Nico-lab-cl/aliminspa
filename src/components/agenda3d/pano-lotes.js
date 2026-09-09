@@ -25,9 +25,35 @@ const TAU = Math.PI * 2
 /** Campo visual: mínimo es el acercamiento a un lote, máximo la vista general. */
 const FOV_MIN = 16, FOV_MAX = 82
 
-/* Hasta dónde deja mirar. Arriba sobra cielo y abajo está el cono ciego del
-   nadir, así que ni uno ni otro entran en cuadro. */
-const PITCH_MIN = -78 * RAD, PITCH_MAX = 8 * RAD
+/**
+ * Tope del campo con que se entra.
+ *
+ * Visto desde el dron el loteo es una banda ancha y baja: abarca unos 100° de
+ * rumbo y apenas 40° de altura, porque el vuelo quedó casi encima. Abrir el
+ * campo hasta que entre todo a lo ancho deja el loteo aplastado abajo y medio
+ * cuadro de cerro arriba, y encima estira las esquinas. Se entra más cerrado,
+ * bien encuadrado, y lo que queda a los lados se alcanza girando.
+ */
+const FOV_ENTRADA = 64
+
+const PITCH_MAX = 8 * RAD
+
+/**
+ * Depresión a partir de la cual la foto ya no sirve.
+ *
+ * El vuelo no alcanzó el nadir: el stitch llega a 4° de mirar hacia abajo y el
+ * detalle se derrumba pasados los 83° de depresión. Ese cono no se puede
+ * rellenar con nada. En una equirectangular todas las direcciones convergen en
+ * el polo, así que lo que se ponga ahí es constante a lo largo de la fila —y
+ * sale un disco— o varía —y sale una estrella de rayos—. Se probaron ocho
+ * rellenos y los ocho se ven.
+ *
+ * Como la cámara está en el punto del vuelo, hay una salida que antes no
+ * existía: no mirarlo nunca. El cabeceo se limita para que el borde de abajo
+ * del cuadro no baje de acá, y el cono ciego queda siempre fuera de pantalla.
+ * El loteo llega a 80° de depresión, así que entra entero igual.
+ */
+const LIMITE = 83 * RAD
 
 /** Para el picking basta media resolución: un lote son decenas de píxeles. */
 const PICK_DIV = 2
@@ -207,6 +233,9 @@ class PanoLotes extends HTMLElement {
             previo = now
             encajar()
             this._animar(dt)
+            /* Después de animar y antes de dibujar: al alejarse, el tope sube
+               y hay que arrastrar el cabeceo con él. */
+            this._pitch = Math.min(PITCH_MAX, Math.max(this._topePitch(), this._pitch))
             cam.fov = this._fov
             cam.updateProjectionMatrix()
             cam.quaternion.setFromRotationMatrix(
@@ -253,6 +282,17 @@ class PanoLotes extends HTMLElement {
         return new THREE.Vector3(Math.sin(th) * ce, Math.sin(el), Math.cos(th) * ce)
     }
 
+    /**
+     * Cabeceo mínimo para el campo visual actual.
+     *
+     * Es dinámico porque lo que importa no es hacia dónde apunta la cámara
+     * sino dónde termina el cuadro: con campo ancho hay que apuntar más arriba
+     * para dejar el cono ciego afuera, y acercándose se puede bajar más.
+     */
+    _topePitch() {
+        return -(LIMITE - this._fov * RAD / 2)
+    }
+
     _mirada() {
         const cp = Math.cos(this._pitch)
         return new THREE.Vector3(
@@ -272,7 +312,7 @@ class PanoLotes extends HTMLElement {
         for (const c of this.celdas) s.add(this._dir(c))
         s.normalize()
         const yaw = Math.atan2(s.x, s.z)
-        const pitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, Math.asin(s.y)))
+        let pitch = Math.min(PITCH_MAX, Math.asin(s.y))
 
         // Base de la cámara mirando ahí, para medir cuánto se sale cada lote.
         const f = new THREE.Vector3(
@@ -291,7 +331,8 @@ class PanoLotes extends HTMLElement {
                 Math.abs(d.dot(arr)) / z,
                 Math.abs(d.dot(der)) / z / aspecto)
         }
-        const fov = Math.max(FOV_MIN, Math.min(FOV_MAX, Math.atan(tan * 1.12) * 2 / RAD))
+        const fov = Math.max(FOV_MIN, Math.min(FOV_ENTRADA, Math.atan(tan * 1.12) * 2 / RAD))
+        pitch = Math.max(-(LIMITE - fov * RAD / 2), pitch)
         return { yaw, pitch, fov }
     }
 
@@ -321,7 +362,7 @@ class PanoLotes extends HTMLElement {
             // El paso se escala con el zoom: acercado, el mismo gesto mueve menos.
             const k = this._fov * RAD / Math.max(1, this.clientHeight)
             this._yaw -= dx * k
-            this._pitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, this._pitch + dy * k))
+            this._pitch = Math.max(this._topePitch(), Math.min(PITCH_MAX, this._pitch + dy * k))
             this._destino = null
             this._sucio = true
         })
@@ -517,7 +558,9 @@ class PanoLotes extends HTMLElement {
         this._destino = {
             t: 0, dur: 1.25,
             y0: this._yaw, y1: Math.atan2(d.x, d.z),
-            p0: this._pitch, p1: Math.max(PITCH_MIN, Math.min(PITCH_MAX, Math.asin(d.y))),
+            // El tope se calcula con el campo al que se va a llegar, no con el actual.
+            p0: this._pitch,
+            p1: Math.max(-(LIMITE - 30 * RAD / 2), Math.min(PITCH_MAX, Math.asin(d.y))),
             f0: this._fov, f1: 30
         }
     }
