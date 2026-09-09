@@ -164,6 +164,8 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
                 el.setAttribute('pano', panoSrc ?? '/lomas3d/pano-360-lite.webp')
                 el.setAttribute('mapa', '/lomas3d/lotes-mapa.png')
                 el.setAttribute('celdas', '/lomas3d/lotes-pano.json')
+                el.setAttribute('suelo', '/lomas3d/nadir.webp')
+                el.setAttribute('suelo-datos', '/lomas3d/nadir.json')
                 el.setAttribute('quality', quality)
                 if (q.get('editor') === '1') el.setAttribute('editor', '1')
                 el.style.width = '100%'

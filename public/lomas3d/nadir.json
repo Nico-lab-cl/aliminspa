@@ -1,0 +1,8 @@
+{
+ "_comentario": "Trozo de suelo que tapa el cono ciego del vuelo. Lo escribe scripts/chip-nadir.js. Depende de vuelo.json.",
+ "lado": 190,
+ "alt": 260,
+ "yaw": 325.25,
+ "desde": 77,
+ "hasta": 85
+}
