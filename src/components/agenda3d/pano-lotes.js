@@ -25,17 +25,6 @@ const TAU = Math.PI * 2
 /** Campo visual: mínimo es el acercamiento a un lote, máximo la vista general. */
 const FOV_MIN = 16, FOV_MAX = 82
 
-/**
- * Tope del campo con que se entra.
- *
- * Visto desde el dron el loteo es una banda ancha y baja: abarca unos 100° de
- * rumbo y apenas 40° de altura, porque el vuelo quedó casi encima. Abrir el
- * campo hasta que entre todo a lo ancho deja el loteo aplastado abajo y medio
- * cuadro de cerro arriba, y encima estira las esquinas. Se entra más cerrado,
- * bien encuadrado, y lo que queda a los lados se alcanza girando.
- */
-const FOV_ENTRADA = 58
-
 const PITCH_MAX = 8 * RAD
 
 /**
@@ -205,7 +194,10 @@ class PanoLotes extends HTMLElement {
         this._yaw = enc.yaw
         this._pitch = enc.pitch
         this._fov = enc.fov
-        this._cine = false
+        /* Arranca girando despacio. Con los lotes repartidos en toda la vuelta,
+           girar no es un adorno: es la única forma de verlos todos, y el giro
+           lo dice sin tener que explicarlo. Se detiene al primer toque. */
+        this._cine = true
 
         this._controles()
         this._etiquetas()
@@ -310,45 +302,66 @@ class PanoLotes extends HTMLElement {
     /**
      * Encuadre que deja a la vista un grupo de lotes.
      *
-     * Apunta a su centro de masa y abre el campo lo justo. No usa el lote más
-     * salido sino el percentil 88: un par de celdas en la punta obligaban a
-     * abrir 20° de más, y con eso el loteo quedaba chico en el medio del cuadro
-     * rodeado de cerro.
+     * Los lotes rodean al dron: el vuelo quedó sobre el medio del loteo, así
+     * que hay terreno en los 360°, con un solo hueco de 24° de rumbo. Eso tiene
+     * dos consecuencias que mandan sobre todo lo demás.
      *
-     * El cabeceo lo termina de decidir el tope: el borde de abajo manda.
+     * La primera es que ninguna vista los muestra todos: un tercio siempre
+     * queda a la espalda. La segunda es que abrir el campo no ayuda. Medido:
+     * de 46° a 82° de campo entran los mismos 88 lotes, porque los que faltan
+     * no están lejos sino detrás. Abrir de más solo achica lo que sí se ve.
+     *
+     * Por eso el campo no se elige para que entre todo, sino que se cierra
+     * hasta el último grado que no cuesta lotes. Y el rumbo tampoco sale del
+     * centro de masa —con lotes en toda la vuelta ese centro no significa
+     * nada— sino de probar la vuelta entera y quedarse con la dirección desde
+     * la que se ven más.
      */
     _encuadre(celdas = this.celdas) {
-        const lista = celdas.length ? celdas : this.celdas
-        const s = new THREE.Vector3()
-        for (const c of lista) s.add(this._dir(c))
-        s.normalize()
-        const yaw = Math.atan2(s.x, s.z)
-        let pitch = Math.min(PITCH_MAX, Math.asin(s.y))
-
-        // Base de la cámara mirando ahí, para medir cuánto se sale cada lote.
-        const f = new THREE.Vector3(
-            Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch))
-        const der = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), f).normalize()
-        const arr = new THREE.Vector3().crossVectors(f, der)
-
+        const lista = celdas && celdas.length ? celdas : this.celdas
+        const dirs = lista.map(c => this._dir(c))
         const aspecto = Math.max(0.5, (this.clientWidth || 1280) / (this.clientHeight || 720))
-        const pedidos = []
-        for (const c of lista) {
-            const d = this._dir(c)
-            const z = d.dot(f)
-            if (z <= 0.05) continue
-            // Media tangente vertical que haría falta para que este lote entre.
-            pedidos.push(Math.max(
-                Math.abs(d.dot(arr)) / z,
-                Math.abs(d.dot(der)) / z / aspecto))
+        const ARRIBA = new THREE.Vector3(0, 1, 0)
+
+        // Altura media del grupo: el cabeceo sale de ahí, y el tope lo corrige.
+        let elev = 0
+        for (const d of dirs) elev += Math.asin(Math.max(-1, Math.min(1, d.y)))
+        elev /= Math.max(1, dirs.length)
+
+        const cabeceo = fov => Math.max(-(LIMITE - fov * RAD / 2), Math.min(PITCH_MAX, elev))
+
+        /** Cuántos lotes del grupo caen dentro del cuadro. */
+        const dentro = (yaw, fov) => {
+            const pitch = cabeceo(fov)
+            const cp = Math.cos(pitch)
+            const f = new THREE.Vector3(Math.sin(yaw) * cp, Math.sin(pitch), Math.cos(yaw) * cp)
+            const der = new THREE.Vector3().crossVectors(ARRIBA, f).normalize()
+            const arr = new THREE.Vector3().crossVectors(f, der)
+            const t = Math.tan(fov * RAD / 2)
+            let n = 0
+            for (const d of dirs) {
+                const z = d.dot(f)
+                if (z <= 0.05) continue
+                if (Math.abs(d.dot(arr)) / z <= t && Math.abs(d.dot(der)) / z <= t * aspecto) n++
+            }
+            return n
         }
-        pedidos.sort((a, b) => a - b)
-        const tan = pedidos.length
-            ? pedidos[Math.min(pedidos.length - 1, Math.floor(pedidos.length * 0.88))]
-            : 0.4
-        const fov = Math.max(FOV_MIN, Math.min(FOV_ENTRADA, Math.atan(tan * 1.14) * 2 / RAD))
-        pitch = Math.max(-(LIMITE - fov * RAD / 2), pitch)
-        return { yaw, pitch, fov }
+
+        // Rumbo: se prueba la vuelta entera con el campo abierto.
+        let yaw = 0, mejor = -1
+        for (let g = 0; g < 360; g += 5) {
+            const n = dentro(g * RAD, FOV_MAX)
+            if (n > mejor) { mejor = n; yaw = g * RAD }
+        }
+
+        // Campo: el más cerrado que conserva prácticamente los mismos lotes.
+        let fov = FOV_MAX
+        for (let f = FOV_MIN; f <= FOV_MAX; f += 2) {
+            if (dentro(yaw, f) >= mejor * 0.95) { fov = f; break }
+        }
+        fov = Math.max(FOV_MIN, Math.min(FOV_MAX, fov * 1.06))   // un respiro en los bordes
+
+        return { yaw, pitch: cabeceo(fov), fov }
     }
 
     // ---------- mirar y acercarse ----------
@@ -442,7 +455,7 @@ class PanoLotes extends HTMLElement {
             this._sucio = true
             if (d.t >= 1) this._destino = null
         } else if (this._cine) {
-            this._yaw += dt * 0.012
+            this._yaw += dt * 0.035     // unos 2° por segundo
             this._sucio = true
         }
     }
