@@ -504,9 +504,11 @@ export default function Agenda3D() {
                         <div className={styles.calce}>
                             <span className={styles.kickerDark}>Calzar la panorámica con los lotes</span>
                             <p className={styles.panelText}>
-                                Abajo está la ortofoto, que ya calza con los lotes. Encima, la vista del
-                                dron. Mueve la de arriba —arrastrando, o con <strong>Shift</strong> para
-                                girarla— hasta que los caminos y las casas de las dos coincidan.
+                                Las líneas blancas de la foto son los deslindes dibujados. Mueve la
+                                panorámica —arrastrando, o con <strong>Shift</strong> para girarla— hasta
+                                que esas líneas caigan sobre los rectángulos verdes y rojos. El
+                                deslizador de abajo mezcla con la ortofoto, por si quieres una segunda
+                                referencia.
                             </p>
                             <div className={styles.calceBotones}>
                                 <span className={styles.editorNota}>Solo ortofoto</span>

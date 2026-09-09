@@ -1,8 +1,8 @@
 {
-  "_comentario": "Calce calculado con scripts/calzar-con-plano.js sobre los deslindes dibujados en la panoramica.",
+  "_comentario": "Calce calculado con scripts/calzar-con-plano.js sobre los deslindes dibujados. 65,5% de aciertos contra 4,2% por azar.",
   "calibrado": true,
-  "x": -12,
-  "z": 126,
-  "alt": 300,
-  "yaw": 173.75
+  "x": 56,
+  "z": 44,
+  "alt": 455,
+  "yaw": 183.5
 }
