@@ -132,6 +132,9 @@ class Lote3D extends HTMLElement {
 
     this._mountDrape();
     this._lots();
+    // _lots deja el relleno con la opacidad de arranque; _paint es quien sabe
+    // si esto es la pagina (invisible) o el editor (a la vista).
+    this._paint();
     this.setLayer(this._calibrado || this.getAttribute('editor') === '1' ? 'dron' : 'foto');
     this._pick();
 
@@ -695,7 +698,10 @@ class Lote3D extends HTMLElement {
     const cands = [];
     for (const L of this.labels) {
       const l = L.lot;
-      if (!this._inFilter(l) || l.stage === NOT_FOR_SALE) {
+      /* Los numeros son parte del mismo calco: fuera del editor solo se ve el
+         del lote apuntado y el del elegido. */
+      const vivo = this.editing || this._sel === l.id || this._hover === l.id
+      if (!vivo || !this._inFilter(l) || l.stage === NOT_FOR_SALE) {
         if (L.on) { L.el.style.visibility = 'hidden'; L.on = false; }
         continue;
       }
@@ -823,7 +829,7 @@ class Lote3D extends HTMLElement {
       this._ht = now;
       const h = hit(e);
       const id = h ? h.object.userData.lot.id : null;
-      if (id !== this._hover) { this._hover = id; this._paint(); }
+      if (id !== this._hover) { this._hover = id; this._paint(); this._dirty = true; }
       this.renderer.domElement.style.cursor = h ? 'pointer' : 'grab';
     });
     this.addEventListener('pointerup', e => {
@@ -859,15 +865,20 @@ class Lote3D extends HTMLElement {
         sel ? (l.sold ? SEL_SOLD : SEL)
           : hov && on ? HOV
             : l.sold ? SOLD : AV);
-      // Al dibujar hay que ver bien dónde quedó cada lote: en la página el
-      // relleno es apenas un velo para no tapar el terreno, pero en el editor
-      // eso vuelve imposible trabajar.
-      m.material.opacity = !on ? 0.02
-        : sel ? 0.75
-          : hov ? 0.5
-            : l.sold ? 0.42
-              : this.editing ? 0.42 : 0.28;
+      /* En la pagina el plano se mira limpio: los deslindes ya vienen
+         dibujados en la foto del dron y los rectangulos de colores encima lo
+         ensuciaban. Las mallas se quedan puestas —son lo que se toca— pero
+         transparentes, y solo se pinta el lote que se apunta y el que se
+         elige.
+
+         Al dibujar es al reves: sin relleno no hay nada que arrastrar, asi que
+         en el editor se ven todos. */
+      m.material.opacity = this.editing
+        ? (!on ? 0.02 : sel ? 0.75 : hov ? 0.5 : 0.42)
+        : (!on ? 0 : sel ? 0.6 : hov ? 0.32 : 0);
     }
+    // Los deslindes propios sobran fuera del editor: la foto ya los trae.
+    if (this.lines) this.lines.visible = !!this.editing;
   }
 
   _inFilter(l) {
@@ -904,7 +915,7 @@ class Lote3D extends HTMLElement {
     if (this._drape) this._drape.visible = k === 'dron';
     if (this.ortho) this.ortho.visible = k !== 'satelite';
     if (this.ground) this.ground.visible = true;
-    if (this.lines) this.lines.visible = true;
+    if (this.lines) this.lines.visible = !!this.editing;
     if (this._labelLayer) this._labelLayer.style.display = this._numbers === false ? 'none' : 'block';
   }
 

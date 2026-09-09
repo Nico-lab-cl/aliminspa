@@ -373,30 +373,6 @@
     color: rgba(255, 255, 255, .68);
 }
 
-.legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.dotFree,
-.dotSold {
-    width: 12px;
-    height: 12px;
-    border-radius: 4px;
-}
-
-/* Mismos colores que usa el mapa: verde disponible, rojo vendido. */
-.dotFree {
-    background: rgba(118, 216, 69, .55);
-    border: 1.5px solid #76d845;
-}
-
-.dotSold {
-    background: rgba(229, 72, 77, .55);
-    border: 1.5px solid #e5484d;
-}
-
 .specs {
     display: grid;
     grid-template-columns: 1fr 1fr;

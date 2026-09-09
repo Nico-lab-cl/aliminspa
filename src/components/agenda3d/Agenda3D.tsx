@@ -574,10 +574,9 @@ export default function Agenda3D() {
                         <div className={styles.hint}>
                             <div className={styles.hintTexto}>
                                 <strong>Toca un lote en el mapa</strong>
-                                <span className={styles.legend}>
-                                    <span><i className={styles.dotFree} /> Disponible</span>
-                                    <span><i className={styles.dotSold} /> Vendido</span>
-                                </span>
+                                {/* Sin lotes pintados encima del plano, una leyenda de
+                                    colores explicaria colores que no se ven. */}
+                                <span className={styles.legend}>Se marca al pasar por encima</span>
                             </div>
                             <button className={styles.hintBtn} onClick={() => setStep('fecha')}>
                                 Agendar sin elegir lote
