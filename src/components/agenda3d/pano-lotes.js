@@ -421,11 +421,31 @@ class PanoLotes extends HTMLElement {
             return n
         }
 
-        // Rumbo: se prueba la vuelta entera con el campo abierto.
-        let yaw = 0, mejor = -1
+        /* Rumbo: se prueba la vuelta entera, pero no se toma sin más el que
+           deja más lotes. Mirando hacia abajo, girar la cámara da vuelta el
+           mapa igual que se da vuelta un plano de papel, y desde la mitad de
+           las direcciones la población queda al otro lado del que la tiene el
+           plano. Eso confunde: parece que la imagen viniera espejada, y no lo
+           está —una panorámica no se puede espejar—.
+
+           Así que entre los rumbos que dejan prácticamente los mismos lotes se
+           elige el que más se parece a cómo está dibujado el plano. */
+        const referencia = this._suelo ? (this._suelo.yaw - 90) * RAD : null
+        const probados = []
+        let mejor = -1
         for (let g = 0; g < 360; g += 5) {
             const n = dentro(g * RAD, FOV_MAX)
-            if (n > mejor) { mejor = n; yaw = g * RAD }
+            probados.push([g * RAD, n])
+            if (n > mejor) mejor = n
+        }
+        let yaw = probados.find(c => c[1] === mejor)[0]
+        if (referencia != null) {
+            let cerca = Infinity
+            for (const [y, n] of probados) {
+                if (n < mejor * 0.85) continue
+                const d = Math.abs(angulo(y - referencia))
+                if (d < cerca) { cerca = d; yaw = y }
+            }
         }
 
         // Campo: el más cerrado que conserva prácticamente los mismos lotes.
