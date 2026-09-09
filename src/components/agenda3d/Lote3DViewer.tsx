@@ -69,11 +69,19 @@ export interface ViewerHandle {
 
 export type Capa = 'dron' | 'foto' | 'satelite'
 
+/** Cuántos lotes hay y cuántos siguen disponibles. */
+export interface Conteo {
+    total: number
+    disponibles: number
+    porEtapa: Record<number, { total: number; disponibles: number }>
+}
+
 /** Lo que informa el visor cuando terminó de armar la escena. */
 export interface Listo {
     relief: number
     layer: Capa
     calibrado: boolean
+    conteo: Conteo
 }
 
 export type Quality = 'alta' | 'baja'

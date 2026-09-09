@@ -145,6 +145,23 @@ class Lote3D extends HTMLElement {
       detail: {
         layer: this.layer,
         calibrado: this._calibrado,
+        /* La cuenta de disponibles sale de los propios lotes, no de un numero
+           escrito a mano: al marcar uno como vendido en el editor, el contador
+           de la pagina se corrige solo. */
+        conteo: (() => {
+          const enVenta = this.data.lots.filter(l => l.stage !== NOT_FOR_SALE);
+          const porEtapa = {};
+          for (const l of enVenta) {
+            const e = (porEtapa[l.stage] ||= { total: 0, disponibles: 0 });
+            e.total++;
+            if (!l.sold) e.disponibles++;
+          }
+          return {
+            total: enVenta.length,
+            disponibles: enVenta.filter(l => !l.sold).length,
+            porEtapa
+          };
+        })(),
         relief: dem ? +(dem.max - dem.min).toFixed(1) : 0,
         source: dem ? dem.source : 'plano',
         sat: sat ? sat.source : null

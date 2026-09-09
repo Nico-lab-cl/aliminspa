@@ -27,7 +27,7 @@ import {
     Video,
     X,
 } from 'lucide-react'
-import Lote3DViewer, { Capa, Listo, Lot, ViewerHandle, Vuelo } from './Lote3DViewer'
+import Lote3DViewer, { Capa, Conteo, Listo, Lot, ViewerHandle, Vuelo } from './Lote3DViewer'
 import EditorLotes from './EditorLotes'
 import { getUtmParams, newEventId } from '@/lib/track'
 import { SITE } from '@/lib/constants'
@@ -69,6 +69,7 @@ export default function Agenda3D() {
 
     const viewer = useRef<ViewerHandle | null>(null)
     const [viewerReady, setViewerReady] = useState(false)
+    const [conteo, setConteo] = useState<Conteo | null>(null)
 
     const [lot, setLot] = useState<Lot | null>(null)
     /* El plano de dron arranca en el mismo instante que el acercamiento y se
@@ -224,6 +225,7 @@ export default function Agenda3D() {
         viewer.current = handle
         setHandle(handle)
         setViewerReady(true)
+        setConteo(detail.conteo)
         setLayer(detail.layer)
         handle.setNumbers(true)
         // La órbita de presentación es para el visitante; en las herramientas
@@ -460,6 +462,15 @@ export default function Agenda3D() {
                                 <span>Mapa 3D · El Tabo</span>
                             </div>
                         </div>
+
+                        {conteo && (
+                            <span className={styles.disponibles}>
+                                <i />
+                                {stage === 0
+                                    ? `${conteo.disponibles} lotes disponibles`
+                                    : `${conteo.porEtapa[stage]?.disponibles ?? 0} disponibles · Etapa ${stage}`}
+                            </span>
+                        )}
                     </header>
 
                     <div className={styles.chips}>
