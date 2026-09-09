@@ -136,8 +136,17 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
         let cancelled = false
 
         const boot = async () => {
+            /* Visor nuevo: la panorámica mirada de frente, sin proyectarla
+               sobre el terreno. Va detrás de ?pano=1 mientras la numeración de
+               los lotes siga sin verificar. */
+            const q = new URLSearchParams(window.location.search)
+            const pano = q.get('pano') === '1'
             try {
-                await import('./lote3d.js')
+                // Dos ramas literales y no una expresion: el empaquetador
+                // resuelve los import() leyendo la ruta, y con una variable
+                // adentro no encuentra ningun modulo.
+                if (pano) await import('./pano-lotes.js')
+                else await import('./lote3d.js')
             } catch (err) {
                 console.error('No se pudo cargar el visor 3D', err)
                 if (!cancelled) {
@@ -148,7 +157,28 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
             }
             if (cancelled) return
 
-            const { quality, pano } = detectQuality()
+            const { quality, pano: panoSrc } = detectQuality()
+
+            if (pano) {
+                el = document.createElement('pano-lotes')
+                el.setAttribute('pano', panoSrc ?? '/lomas3d/pano-360-lite.webp')
+                el.setAttribute('mapa', '/lomas3d/lotes-mapa.png')
+                el.setAttribute('celdas', '/lomas3d/lotes-pano.json')
+                el.setAttribute('quality', quality)
+                if (q.get('editor') === '1') el.setAttribute('editor', '1')
+                el.style.width = '100%'
+                el.style.height = '100%'
+                el.addEventListener('lotpick', e => {
+                    cbs.current.onPick((e as CustomEvent<Lot>).detail)
+                })
+                el.addEventListener('ready', e => {
+                    const detail = (e as CustomEvent<Listo>).detail
+                    cbs.current.onReady(el as unknown as ViewerHandle, detail)
+                })
+                host.appendChild(el)
+                return
+            }
+
             el = document.createElement('lote-3d')
             el.setAttribute('src', '/lomas3d/mapa-data.json')
             el.setAttribute('georef', '/lomas3d/georef.json')
@@ -161,7 +191,7 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
             }
             el.setAttribute('drone-alt', '110')
             el.setAttribute('drone-reach', '400')
-            el.setAttribute('pano', pano ?? '/lomas3d/pano-360-lite.webp')
+            el.setAttribute('pano', panoSrc ?? '/lomas3d/pano-360-lite.webp')
             el.style.width = '100%'
             el.style.height = '100%'
 
@@ -189,9 +219,17 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
             // El visor guarda un WebGLRenderer con su propio animation loop:
             // sacarlo del DOM sin más deja la GPU trabajando en una pestaña que
             // ya cambió de página.
-            const viewer = el as unknown as { renderer?: { setAnimationLoop(cb: null): void; dispose(): void } } | null
-            viewer?.renderer?.setAnimationLoop(null)
-            viewer?.renderer?.dispose()
+            const viewer = el as unknown as {
+                destruir?(): void
+                renderer?: { setAnimationLoop(cb: null): void; dispose(): void }
+            } | null
+            if (viewer?.destruir) {
+                // El visor de panorámica lleva su propio bucle y sabe soltarlo.
+                viewer.destruir()
+            } else {
+                viewer?.renderer?.setAnimationLoop(null)
+                viewer?.renderer?.dispose()
+            }
             el?.remove()
         }
     }, [])

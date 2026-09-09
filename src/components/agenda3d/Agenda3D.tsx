@@ -647,15 +647,18 @@ export default function Agenda3D() {
                                         <strong>{lot.area ? `${lot.area.toLocaleString('es-CL')} m²` : 'Consultar'}</strong>
                                         <em>de escritura</em>
                                     </div>
-                                    <div>
-                                        <MapPin size={15} />
-                                        <span>Cota</span>
-                                        <strong>
-                                            {viewer.current?.dem
-                                                ? `${(viewer.current.dem.min + viewer.current.height(lot.cx, lot.cy)).toFixed(1)} m`
-                                                : '—'}
-                                        </strong>
-                                    </div>
+                                    {/* La cota sale del modelo de elevación. El visor de
+                                        panorámica no levanta terreno, así que sin dato no
+                                        se muestra una fila con una raya. */}
+                                    {viewer.current?.dem && (
+                                        <div>
+                                            <MapPin size={15} />
+                                            <span>Cota</span>
+                                            <strong>
+                                                {`${(viewer.current.dem.min + viewer.current.height(lot.cx, lot.cy)).toFixed(1)} m`}
+                                            </strong>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {lot.price && (
