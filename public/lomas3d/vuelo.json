@@ -1,8 +1,8 @@
 {
-  "_comentario": "Calce de la panoramica del dron con el terreno. Lo escribe el modo de calce en /agendar-visita?calce=1. x y z en metros desde el origen del loteo, alt en metros sobre el suelo, yaw en grados.",
+  "_comentario": "Calce calculado con scripts/calzar-con-plano.js sobre los deslindes dibujados en la panoramica.",
   "calibrado": true,
-  "x": -87.8,
-  "z": 283.6,
-  "alt": 160,
-  "yaw": -13
+  "x": -12,
+  "z": 126,
+  "alt": 300,
+  "yaw": 173.75
 }
