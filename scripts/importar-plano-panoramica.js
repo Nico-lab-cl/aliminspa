@@ -17,6 +17,10 @@
  *
  * Escribe public/lomas3d/pano-360.webp y pano-360-lite.webp.
  *
+ * Tapa ademas el agujero del nadir con satelital de Esri, reproyectada aqui
+ * mismo. Eso hace que la salida dependa de public/lomas3d/vuelo.json: si el
+ * calce cambia, hay que volver a correr este script o el parche queda corrido.
+ *
  * Despues hay que recalcular el calce, porque la foto nueva no tiene por que
  * mirar hacia donde miraba la anterior:
  *
@@ -30,6 +34,13 @@ const sharp = require('sharp')
 const RAIZ = path.join(__dirname, '..')
 const SALIDA = path.join(RAIZ, 'public/lomas3d/pano-360.webp')
 const SALIDA_LITE = path.join(RAIZ, 'public/lomas3d/pano-360-lite.webp')
+const VUELO = path.join(RAIZ, 'public/lomas3d/vuelo.json')
+const MAPA = path.join(RAIZ, 'public/lomas3d/mapa-data.json')
+
+/* Esri no pasa de z18 en El Tabo: z19 responde "map data not yet available".
+   A esta latitud z18 son unos 50 cm por pixel. */
+const SAT = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile'
+const SAT_Z = 18
 
 /** Ancho de la equirectangular que se publica. El alto sale de la relacion 2:1. */
 const ANCHO = 6144
@@ -65,6 +76,69 @@ async function buscarHorizonte(archivo) {
         if (cieloPorFila[y - 1] >= 0.5 && cieloPorFila[y] < 0.5) return y / H
     }
     throw new Error('No se encontro el horizonte: el cielo no llega a cortarse.')
+}
+
+/*
+ * Mosaico satelital de un trozo de mundo, en memoria.
+ *
+ * Devuelve un muestreador bilineal por lat/lng. Se baja una sola vez, al
+ * compilar: el visitante no pide nada.
+ */
+async function mosaicoSatelital(la, lo, R, kx, cx, cz, radio) {
+    const N = 2 ** SAT_Z
+    const merc = (lat, lng) => {
+        const s = Math.sin(lat * Math.PI / 180)
+        return [(lng + 180) / 360 * N * 256,
+                (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * N * 256]
+    }
+    const aLL = (x, z) => [la - z / R, lo + x / kx]
+    const m = radio * 1.15   // un poco de margen para el bilineal del borde
+    const [pxW, pyN] = merc(...aLL(cx - m, cz - m))
+    const [pxE, pyS] = merc(...aLL(cx + m, cz + m))
+    const tx0 = Math.floor(Math.min(pxW, pxE) / 256), tx1 = Math.floor(Math.max(pxW, pxE) / 256)
+    const ty0 = Math.floor(Math.min(pyN, pyS) / 256), ty1 = Math.floor(Math.max(pyN, pyS) / 256)
+    const cols = tx1 - tx0 + 1, filas = ty1 - ty0 + 1
+
+    const piezas = []
+    let bajadas = 0
+    for (let ty = ty0; ty <= ty1; ty++) {
+        for (let tx = tx0; tx <= tx1; tx++) {
+            const r = await fetch(`${SAT}/${SAT_Z}/${ty}/${tx}`, {
+                headers: { 'User-Agent': 'aliminspa-build' }
+            })
+            if (!r.ok) { console.warn(`  mosaico ${tx}/${ty}: HTTP ${r.status}`); continue }
+            piezas.push({
+                input: Buffer.from(await r.arrayBuffer()),
+                left: (tx - tx0) * 256, top: (ty - ty0) * 256
+            })
+            bajadas++
+        }
+    }
+    if (!bajadas) throw new Error('No se pudo bajar ningun mosaico satelital.')
+    console.log(`Satelital: ${bajadas} de ${cols * filas} mosaicos z${SAT_Z}`)
+
+    const lienzo = await sharp({
+        create: { width: cols * 256, height: filas * 256, channels: 3, background: { r: 107, g: 91, b: 69 } }
+    }).composite(piezas).png().toBuffer()
+    const cr = await sharp(lienzo).raw().toBuffer({ resolveWithObject: true })
+    const SW = cr.info.width, SH = cr.info.height, SC = cr.info.channels, sd = cr.data
+    const ox = tx0 * 256, oy = ty0 * 256
+
+    /** Color del suelo en un punto del mundo, o null si cae fuera del mosaico. */
+    return (x, z) => {
+        const [plat, plng] = aLL(x, z)
+        const [mx, my] = merc(plat, plng)
+        const fx = mx - ox, fy = my - oy
+        if (fx < 0 || fy < 0 || fx >= SW - 1 || fy >= SH - 1) return null
+        const x0 = Math.floor(fx), y0 = Math.floor(fy), ax = fx - x0, ay = fy - y0
+        const en = (a, b) => (b * SW + a) * SC
+        const out = [0, 0, 0]
+        for (let c = 0; c < 3; c++) {
+            out[c] = (sd[en(x0, y0) + c] * (1 - ax) + sd[en(x0 + 1, y0) + c] * ax) * (1 - ay)
+                   + (sd[en(x0, y0 + 1) + c] * (1 - ax) + sd[en(x0 + 1, y0 + 1) + c] * ax) * ay
+        }
+        return out
+    }
 }
 
 async function main() {
@@ -179,22 +253,118 @@ async function main() {
     mr /= W; mg /= W; mb /= W
 
     const suave = t => { const u = Math.min(1, Math.max(0, t)); return u * u * (3 - 2 * u) }
+
+    /* Suelo de verdad para el agujero: satelital de ese mismo punto, traido a
+       coordenadas de la panoramica.
+
+       Cada pixel de la franja es una direccion desde el dron. Se invierte la
+       misma cuenta que usa el manto en el visor —angulo bajo el horizonte y
+       rumbo— se cruza con el suelo, y ahi se mira que color tiene el satelite.
+       Como es la inversa exacta de lo que hace el manto, al proyectarlo vuelve
+       a caer donde corresponde, sin capa nueva ni geometria nueva.
+
+       Supone suelo plano a la cota del dron. Sobre 70 m de radio el desnivel
+       corre el muestreo unos metros, que para un relleno blando no importa. */
+    const vuelo = JSON.parse(fs.readFileSync(VUELO, 'utf8'))
+    const mapa = JSON.parse(fs.readFileSync(MAPA, 'utf8'))
+    const RT = 111320, kx = RT * Math.cos(mapa.origin.lat * Math.PI / 180)
+    const TAU = Math.PI * 2
+    const yawRad = (vuelo.yaw || 0) * Math.PI / 180
+    const alt = vuelo.alt
+    // Radio de suelo que abarca la franja: el angulo de arriba de la franja.
+    const phiArranque = Math.PI * ((arranque + 0.5) / ALTO - 0.5)
+    const radioSuelo = alt / Math.tan(phiArranque)
+    console.log(`Agujero: ${franja} px de franja = ${(90 - phiArranque * 180 / Math.PI).toFixed(1)} grados sobre el nadir = ${radioSuelo.toFixed(0)} m de radio en el suelo a ${alt} m de vuelo`)
+
+    let muestra = null
+    try {
+        muestra = await mosaicoSatelital(mapa.origin.lat, mapa.origin.lng, RT, kx, vuelo.x, vuelo.z, radioSuelo)
+    } catch (e) {
+        console.warn(`Sin satelital (${e.message}): la franja queda con el color liso de respaldo.`)
+    }
+
+    /* Igualar el satelite a la foto: viene de otro dia, otra camara y otra
+       hora. Igualar solo la media dejaba el parche lavado —el satelite tiene
+       menos contraste y al subirle el brillo se aplana—, asi que se igualan
+       media y desviacion por canal sobre el anillo donde las dos imagenes
+       conviven. Es la correccion clasica de transferencia de color. */
+    let ajuste = null
+    if (muestra) {
+        const nf = [0, 0, 0], nf2 = [0, 0, 0], ns = [0, 0, 0], ns2 = [0, 0, 0]
+        let n = 0
+        for (let y = arranque; y < ALTO; y += 2) {
+            const w = suave((y - arranque) / (franja * 0.32))
+            if (w < 0.12 || w > 0.5) continue
+            const phi = Math.PI * ((y + 0.5) / ALTO - 0.5)
+            const r = alt / Math.tan(phi)
+            for (let x = 0; x < W; x += 8) {
+                const t = Math.PI + yawRad - TAU * (x + 0.5) / W
+                const c = muestra(vuelo.x + Math.cos(t) * r, vuelo.z + Math.sin(t) * r)
+                if (!c) continue
+                const i = (y * W + x) * C
+                /* Los deslindes dibujados son blancos y puros, y no son suelo:
+                   contados, inflaban la desviacion de la foto y el satelite
+                   salia con el contraste reventado. */
+                const mn = Math.min(px[i], px[i + 1], px[i + 2])
+                const mx = Math.max(px[i], px[i + 1], px[i + 2])
+                if (mn > 195 && mx - mn < 35) continue
+                for (let k = 0; k < 3; k++) {
+                    nf[k] += px[i + k]; nf2[k] += px[i + k] ** 2
+                    ns[k] += c[k]; ns2[k] += c[k] ** 2
+                }
+                n++
+            }
+        }
+        if (n > 500) {
+            ajuste = [0, 1, 2].map(k => {
+                const mf = nf[k] / n, ms = ns[k] / n
+                const df = Math.sqrt(Math.max(1, nf2[k] / n - mf * mf))
+                const ds = Math.sqrt(Math.max(1, ns2[k] / n - ms * ms))
+                // El factor se acota: sin tope, un anillo con poco contraste
+                // dispara el ruido del satelite.
+                return { ms, mf, k: Math.min(1.8, Math.max(0.5, df / ds)) }
+            })
+            console.log('Igualado de color sobre ' + n + ' muestras:')
+            for (const [i, a] of ajuste.entries()) {
+                console.log(`  canal ${'RGB'[i]}: media ${a.ms.toFixed(0)} → ${a.mf.toFixed(0)}, contraste ×${a.k.toFixed(2)}`)
+            }
+        } else {
+            console.warn(`Pocas muestras (${n}) para igualar color: se deja sin corregir.`)
+        }
+    }
+    const corregir = (c, k) => ajuste
+        ? Math.min(255, Math.max(0, (c - ajuste[k].ms) * ajuste[k].k + ajuste[k].mf))
+        : c
+
+    let conSat = 0, sinSat = 0
     for (let y = arranque; y < ALTO; y++) {
         // w: cuanto manda el relleno sobre la foto. w2: cuanto se cierra al
-        // promedio, para que el punto exacto del nadir sea de un solo color.
-        const w = suave((y - arranque) / (franja * 0.47))
+        // promedio, para el respaldo liso cuando no hay satelital.
+        const w = suave((y - arranque) / (franja * 0.32))
         const w2 = suave((y - arranque) / franja)
+        const phi = Math.PI * ((y + 0.5) / ALTO - 0.5)
+        const r = alt / Math.tan(phi)
         for (let x = 0; x < W; x++) {
             const i = (y * W + x) * C
-            const fr = color[x * 3] * (1 - w2) + mr * w2
-            const fg = color[x * 3 + 1] * (1 - w2) + mg * w2
-            const fb = color[x * 3 + 2] * (1 - w2) + mb * w2
+            let fr, fg, fb
+            const c = muestra && muestra(vuelo.x + Math.cos(Math.PI + yawRad - TAU * (x + 0.5) / W) * r,
+                                        vuelo.z + Math.sin(Math.PI + yawRad - TAU * (x + 0.5) / W) * r)
+            if (c) {
+                fr = corregir(c[0], 0); fg = corregir(c[1], 1); fb = corregir(c[2], 2)
+                conSat++
+            } else {
+                // Respaldo: el color del suelo en ese rumbo, cerrando al promedio.
+                fr = color[x * 3] * (1 - w2) + mr * w2
+                fg = color[x * 3 + 1] * (1 - w2) + mg * w2
+                fb = color[x * 3 + 2] * (1 - w2) + mb * w2
+                sinSat++
+            }
             px[i] = px[i] * (1 - w) + fr * w
             px[i + 1] = px[i + 1] * (1 - w) + fg * w
             px[i + 2] = px[i + 2] * (1 - w) + fb * w
         }
     }
-    console.log(`Nadir: ${franja} px de franja (${(franja / ALTO * 180).toFixed(1)} grados sobre el nadir), color tomado de las filas ${refA}-${refB}`)
+    console.log(`Franja: ${(conSat / (conSat + sinSat) * 100).toFixed(1)} % con satelital, el resto con color de respaldo`)
 
     const completa = await sharp(px, { raw: cruda.info }).png().toBuffer()
 
