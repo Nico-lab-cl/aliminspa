@@ -96,18 +96,26 @@ async function main() {
         process.exit(1)
     }
 
-    /* El relleno se hace con el color del borde: arriba queda cielo y abajo
-       tierra, que es lo que habria si la foto llegara hasta el cenit. Es una
-       aproximacion, pero esas zonas casi no se ven —el manto se difumina
-       antes— y cualquier otra cosa cantaria mas. */
-    const tono = async (top, height) => {
-        const { data } = await sharp(cuerpo).extract({ left: 0, top, width: mc.width, height })
-            .resize(1, 1).raw().toBuffer({ resolveWithObject: true })
-        return { r: data[0], g: data[1], b: data[2] }
-    }
-    const cielo = await tono(0, 8)
-    const suelo = await tono(mc.height - 8, 8)
-    console.log(`Tono del relleno — cielo rgb(${cielo.r},${cielo.g},${cielo.b}) · suelo rgb(${suelo.r},${suelo.g},${suelo.b})`)
+    /* Arriba va cielo liso: son las filas del cenit, que en el mapa quedan a
+       espaldas de la camara y practicamente no se miran. */
+    const { data: tono } = await sharp(cuerpo).extract({ left: 0, top: 0, width: mc.width, height: 8 })
+        .resize(1, 1).raw().toBuffer({ resolveWithObject: true })
+    const cielo = { r: tono[0], g: tono[1], b: tono[2] }
+    console.log(`Relleno de cielo: rgb(${cielo.r},${cielo.g},${cielo.b})`)
+
+    /* Abajo NO puede ir color liso. Esas filas son el nadir y al proyectarlas
+       sobre el terreno se abren en un disco de decenas de metros justo bajo el
+       dron: un tono plano se ve como una mancha en medio del mapa, y espejar
+       las ultimas filas deja una roseta, que se nota igual.
+
+       Se estiran las ultimas filas reales hacia abajo. En el mapa eso se
+       proyecta como estrias radiales que convergen en el centro, que es
+       justo lo que hace una panoramica de verdad cerca del nadir: continua
+       en vez de dibujar una figura. */
+    const espejo = await sharp(cuerpo)
+        .extract({ left: 0, top: mc.height - 2, width: mc.width, height: 2 })
+        .resize({ width: mc.width, height: abajo, fit: 'fill' })
+        .toBuffer()
 
     /* Dos pasadas y no dos extend encadenados: sharp no los acumula, el
        segundo reemplaza al primero y la imagen sale con un solo relleno. */
@@ -115,7 +123,8 @@ async function main() {
         .extend({ top: arriba, background: cielo })
         .toBuffer()
     const completa = await sharp(conCielo)
-        .extend({ bottom: abajo, background: suelo })
+        .extend({ bottom: abajo, background: cielo })
+        .composite([{ input: espejo, top: arriba + mc.height, left: 0 }])
         .toBuffer()
 
     const mf = await sharp(completa).metadata()

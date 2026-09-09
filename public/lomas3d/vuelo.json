@@ -1,8 +1,8 @@
 {
-  "_comentario": "Calce calculado con scripts/calzar-con-plano.js sobre los deslindes dibujados del plano nuevo.",
+  "_comentario": "Calce sobre los deslindes dibujados, en la rama de giro que deja la poblacion a la izquierda. La otra rama puntua parecido pero espeja el mapa.",
   "calibrado": true,
-  "x": -65,
-  "z": 135,
-  "alt": 280,
-  "yaw": 135
+  "x": -120,
+  "z": 284,
+  "alt": 260,
+  "yaw": 325.25
 }

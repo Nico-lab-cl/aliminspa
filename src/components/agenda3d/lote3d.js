@@ -546,16 +546,17 @@ class Lote3D extends HTMLElement {
       uv.setXY(i,
         0.5 - t / TAU + yaw / TAU,
         0.5 + Math.asin(Math.max(-1, Math.min(1, (y - dy) / Math.hypot(r, y - dy)))) / Math.PI);
-      /* El manto ya no se abre en el centro. El dron tapa su propio cenit y el
-         stitcher rellena ese hueco, pero medido sobre la panoramica ese parche
-         ocupa 0,7 grados: a 160 m de altura son 2 m de suelo. Taparlo con la
-         propia panoramica se nota muchisimo menos que abrir un agujero y dejar
-         ver la satelital, que es mas borrosa y de otro color.
+      /* Bajo el dron la panoramica no tiene informacion: el vuelo no alcanza
+         el nadir y ahi la foto se abre en abanico. Da igual con que se rellene
+         —color liso, espejo, estirado—: siempre queda un disco en medio del
+         mapa. Asi que el manto se abre en esa zona y por debajo asoma la
+         ortofoto, que es la unica imagen real que existe de ese suelo.
 
-         El borde lejano si se difumina, para que el manto no termine en un
-         canto recto contra el horizonte. */
+         La transicion es ancha para que no se note el canto del disco.
+         El borde lejano se difumina igual, para que el manto no termine en un
+         corte recto contra el horizonte. */
       const suave = t => { const u = Math.min(1, Math.max(0, t)); return u * u * (3 - 2 * u); };
-      const a = suave((R1 - r) / (R1 * 0.45));
+      const a = suave((r - 22) / 55) * suave((R1 - r) / (R1 * 0.45));
       col.setXYZW(i, 1, 1, 1, a);
     }
     p.needsUpdate = true;
@@ -883,11 +884,14 @@ class Lote3D extends HTMLElement {
 
   setLayer(k) {
     this.layer = k;
-    // 'dron'     = la panorámica proyectada sobre el terreno (la de más resolución)
-    // 'foto'     = ortofoto del vuelo sobre la satelital
-    // 'satelite' = solo el relleno satelital
+    /* 'dron'     = la panoramica proyectada sobre el terreno
+       'foto'     = ortofoto del vuelo sobre la satelital
+       'satelite' = solo el relleno satelital
+
+       En 'dron' la ortofoto queda encendida por debajo: el manto se abre en el
+       nadir y ahi tiene que asomar suelo de verdad, no un disco liso. */
     if (this._drape) this._drape.visible = k === 'dron';
-    if (this.ortho) this.ortho.visible = k === 'foto';
+    if (this.ortho) this.ortho.visible = k !== 'satelite';
     if (this.ground) this.ground.visible = true;
     if (this.lines) this.lines.visible = true;
     if (this._labelLayer) this._labelLayer.style.display = this._numbers === false ? 'none' : 'block';
