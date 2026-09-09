@@ -34,7 +34,7 @@ const FOV_MIN = 16, FOV_MAX = 82
  * cuadro de cerro arriba, y encima estira las esquinas. Se entra más cerrado,
  * bien encuadrado, y lo que queda a los lados se alcanza girando.
  */
-const FOV_ENTRADA = 64
+const FOV_ENTRADA = 58
 
 const PITCH_MAX = 8 * RAD
 
@@ -307,9 +307,20 @@ class PanoLotes extends HTMLElement {
      * proyección rectilínea las esquinas de un campo ancho se estiran mucho, y
      * el loteo queda chico en el medio rodeado de cerro.
      */
-    _encuadre() {
+    /**
+     * Encuadre que deja a la vista un grupo de lotes.
+     *
+     * Apunta a su centro de masa y abre el campo lo justo. No usa el lote más
+     * salido sino el percentil 88: un par de celdas en la punta obligaban a
+     * abrir 20° de más, y con eso el loteo quedaba chico en el medio del cuadro
+     * rodeado de cerro.
+     *
+     * El cabeceo lo termina de decidir el tope: el borde de abajo manda.
+     */
+    _encuadre(celdas = this.celdas) {
+        const lista = celdas.length ? celdas : this.celdas
         const s = new THREE.Vector3()
-        for (const c of this.celdas) s.add(this._dir(c))
+        for (const c of lista) s.add(this._dir(c))
         s.normalize()
         const yaw = Math.atan2(s.x, s.z)
         let pitch = Math.min(PITCH_MAX, Math.asin(s.y))
@@ -321,17 +332,21 @@ class PanoLotes extends HTMLElement {
         const arr = new THREE.Vector3().crossVectors(f, der)
 
         const aspecto = Math.max(0.5, (this.clientWidth || 1280) / (this.clientHeight || 720))
-        let tan = 0
-        for (const c of this.celdas) {
+        const pedidos = []
+        for (const c of lista) {
             const d = this._dir(c)
             const z = d.dot(f)
             if (z <= 0.05) continue
             // Media tangente vertical que haría falta para que este lote entre.
-            tan = Math.max(tan,
+            pedidos.push(Math.max(
                 Math.abs(d.dot(arr)) / z,
-                Math.abs(d.dot(der)) / z / aspecto)
+                Math.abs(d.dot(der)) / z / aspecto))
         }
-        const fov = Math.max(FOV_MIN, Math.min(FOV_ENTRADA, Math.atan(tan * 1.12) * 2 / RAD))
+        pedidos.sort((a, b) => a - b)
+        const tan = pedidos.length
+            ? pedidos[Math.min(pedidos.length - 1, Math.floor(pedidos.length * 0.88))]
+            : 0.4
+        const fov = Math.max(FOV_MIN, Math.min(FOV_ENTRADA, Math.atan(tan * 1.14) * 2 / RAD))
         pitch = Math.max(-(LIMITE - fov * RAD / 2), pitch)
         return { yaw, pitch, fov }
     }
@@ -580,7 +595,7 @@ class PanoLotes extends HTMLElement {
     }
 
     resetView() {
-        const enc = this._encuadre()
+        const enc = this._encuadre(this.celdas.filter(c => this._enFiltro(c)))
         this._destino = {
             t: 0, dur: 1,
             y0: this._yaw, y1: enc.yaw,
@@ -593,6 +608,21 @@ class PanoLotes extends HTMLElement {
         this._filtro = f || {}
         this._pintar()
         this._sucio = true
+        /* Elegir una etapa además acerca la cámara a esa etapa. Sin esto el
+           chip solo apagaba un poco el resto y el visitante seguía viendo el
+           loteo entero desde lejos, que es justo lo que cuesta mirar. */
+        if (!this._sel) this._volarA(this._encuadre(this.celdas.filter(c => this._enFiltro(c))))
+    }
+
+    /** Vuelo suave hacia un encuadre. */
+    _volarA(enc, dur = 1) {
+        this._cine = false
+        this._destino = {
+            t: 0, dur,
+            y0: this._yaw, y1: enc.yaw,
+            p0: this._pitch, p1: enc.pitch,
+            f0: this._fov, f1: enc.fov
+        }
     }
 
     setNumbers(todos) {
