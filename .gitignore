@@ -48,3 +48,5 @@ next-env.d.ts
 # tapando los crudos del dron de la raíz.
 !/public/lomas3d/**/*.mp4
 stitch_remix_*
+# El plano cenital original: 85 MB. Lo publicado sale de scripts/importar-plano-cenital.js
+/Panoramica de Lomasturbas.png

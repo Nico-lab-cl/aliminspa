@@ -141,11 +141,14 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
                los lotes siga sin verificar. */
             const q = new URLSearchParams(window.location.search)
             const pano = q.get('pano') === '1'
+            // Plano cenital: el mapa plano, sobre la foto mirando hacia abajo.
+            const plano = q.get('plano') === '1'
             try {
                 // Dos ramas literales y no una expresion: el empaquetador
                 // resuelve los import() leyendo la ruta, y con una variable
                 // adentro no encuentra ningun modulo.
-                if (pano) await import('./pano-lotes.js')
+                if (plano) await import('./plano-lotes.js')
+                else if (pano) await import('./pano-lotes.js')
                 else await import('./lote3d.js')
             } catch (err) {
                 console.error('No se pudo cargar el visor 3D', err)
@@ -158,6 +161,27 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
             if (cancelled) return
 
             const { quality, pano: panoSrc } = detectQuality()
+
+            if (plano) {
+                el = document.createElement('plano-lotes')
+                el.setAttribute('plano', quality === 'baja'
+                    ? '/lomas3d/plano-lite.webp' : '/lomas3d/plano.webp')
+                el.setAttribute('mapa', '/lomas3d/plano-mapa.png')
+                el.setAttribute('lotes', '/lomas3d/plano-lotes.json')
+                el.setAttribute('quality', quality)
+                if (q.get('editor') === '1') el.setAttribute('editor', '1')
+                el.style.width = '100%'
+                el.style.height = '100%'
+                el.addEventListener('lotpick', e => {
+                    cbs.current.onPick((e as CustomEvent<Lot>).detail)
+                })
+                el.addEventListener('ready', e => {
+                    const detail = (e as CustomEvent<Listo>).detail
+                    cbs.current.onReady(el as unknown as ViewerHandle, detail)
+                })
+                host.appendChild(el)
+                return
+            }
 
             if (pano) {
                 el = document.createElement('pano-lotes')
