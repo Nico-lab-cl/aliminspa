@@ -28,21 +28,33 @@ const FOV_MIN = 16, FOV_MAX = 82
 const PITCH_MAX = 8 * RAD
 
 /**
+ * Tope del campo con que se entra.
+ *
+ * Los lotes rodean al dron, así que abrir el campo siempre mete alguno más y
+ * la búsqueda, si la dejan sola, abre hasta el máximo. Pero pasado cierto
+ * punto eso deja el loteo aplastado abajo con medio cuadro de cerro encima, y
+ * estira las esquinas. Se entra más cerrado y bien encuadrado; lo que queda
+ * alrededor se alcanza girando, que es para lo que el mapa entra girando.
+ */
+const FOV_ENTRADA = 62
+
+/**
  * Depresión a partir de la cual la foto ya no sirve.
  *
  * El vuelo no alcanzó el nadir: el stitch llega a 4° de mirar hacia abajo y el
- * detalle se derrumba pasados los 83° de depresión. Ese cono no se puede
- * rellenar con nada. En una equirectangular todas las direcciones convergen en
- * el polo, así que lo que se ponga ahí es constante a lo largo de la fila —y
- * sale un disco— o varía —y sale una estrella de rayos—. Se probaron ocho
- * rellenos y los ocho se ven.
+ * detalle se derrumba pasados los 81°. Ese cono no se puede rellenar. Dentro
+ * de la panorámica todas las direcciones convergen ahí, así que cualquier
+ * relleno sale como un disco o como una estrella. Y traerlo de afuera tampoco:
+ * se probó con satelital de ese mismo punto y la correlación contra la foto en
+ * el anillo donde conviven da 0,01 —ruido—, o sea que no hay forma de
+ * comprobar que el trozo pegado sea el trozo que corresponde. Suelo real pero
+ * quizá de otra parte, en el medio del loteo, es peor que no poner nada.
  *
- * Como la cámara está en el punto del vuelo, hay una salida que antes no
- * existía: no mirarlo nunca. El cabeceo se limita para que el borde de abajo
- * del cuadro no baje de acá, y el cono ciego queda siempre fuera de pantalla.
- * El loteo llega a 80° de depresión, así que entra entero igual.
+ * Así que no se rellena: no se mira. El cabeceo se limita para que el borde de
+ * abajo del cuadro nunca baje de acá. Los lotes llegan a 80° de depresión, así
+ * que entran todos igual.
  */
-const PITCH_MIN = -88 * RAD
+const LIMITE = 81 * RAD
 
 /** Para el picking basta media resolución: un lote son decenas de píxeles. */
 const PICK_DIV = 2
@@ -78,16 +90,14 @@ class PanoLotes extends HTMLElement {
     }
 
     async _boot() {
-        const [celdas, panoTex, mapa, sueloTex, suelo] = await Promise.all([
+        const [celdas, panoTex, mapa, vuelo] = await Promise.all([
             fetch(this.getAttribute('celdas')).then(r => r.json()),
             cargarTextura(this.getAttribute('pano')),
             cargarMapa(this.getAttribute('mapa')),
-            cargarTextura(this.getAttribute('suelo')).catch(() => null),
-            fetch(this.getAttribute('suelo-datos')).then(r => r.json()).catch(() => null)
+            fetch(this.getAttribute('vuelo')).then(r => r.json()).catch(() => null)
         ])
-        /* Sin el trozo de suelo el visor sigue andando: se limita el cabeceo
-           como antes y el cono ciego se queda fuera de cuadro. */
-        this._suelo = sueloTex && suelo ? suelo : null
+        // Del vuelo solo se usa el giro, para entrar orientado como el plano.
+        this._vuelo = vuelo
 
         this.celdas = celdas.celdas
         this.porId = new Map(this.celdas.map(c => [c.id, c]))
@@ -133,14 +143,7 @@ class PanoLotes extends HTMLElement {
                 colSel: { value: new THREE.Vector3(SEL.r, SEL.g, SEL.b) },
                 colHov: { value: new THREE.Vector3(HOV.r, HOV.g, HOV.b) },
                 invProj: { value: new THREE.Matrix4() },
-                camRot: { value: new THREE.Matrix3() },
-                suelo: { value: sueloTex || panoTex },
-                haySuelo: { value: this._suelo ? 1 : 0 },
-                alt: { value: this._suelo ? this._suelo.alt : 100 },
-                lado: { value: this._suelo ? this._suelo.lado : 100 },
-                giro: { value: this._suelo ? this._suelo.yaw * RAD : 0 },
-                depDesde: { value: (this._suelo ? this._suelo.desde : 77) * RAD },
-                depHasta: { value: (this._suelo ? this._suelo.hasta : 85) * RAD }
+                camRot: { value: new THREE.Matrix3() }
             },
             depthTest: false,
             depthWrite: false,
@@ -159,28 +162,9 @@ class PanoLotes extends HTMLElement {
                 uniform vec3 colSel, colHov;
                 uniform mat4 invProj;
                 uniform mat3 camRot;
-                uniform sampler2D suelo;
-                uniform float haySuelo, alt, lado, giro, depDesde, depHasta;
                 varying vec2 vNdc;
 
                 const float PI = 3.14159265359;
-                const float TAU = 6.2831853072;
-
-                /** Identificador de celda en unas coordenadas de la panorámica. */
-                float idEn(vec2 uv) {
-                    vec2 e = texture2D(ids, uv).rg;
-                    return floor(e.r * 255.0 + 0.5) + floor(e.g * 255.0 + 0.5) * 256.0;
-                }
-
-                /** De un punto del suelo, en metros desde el dron, a la panorámica. */
-                vec2 aPano(vec2 m) {
-                    float r = max(0.5, length(m));
-                    float t = atan(m.y, m.x);
-                    float u = 0.5 - t / TAU + giro / TAU;
-                    float dep = atan(alt / r);
-                    return vec2(fract(u), 0.5 - dep / PI);
-                }
-
                 void main() {
                     /* Rayo exacto por píxel a partir de las matrices de la
                        cámara. Con una esfera teselada la dirección sale
@@ -193,48 +177,6 @@ class PanoLotes extends HTMLElement {
                         0.5 + asin(clamp(d.y, -1.0, 1.0)) / PI);
 
                     vec3 col = texture2D(pano, uv).rgb;
-
-                    /* Punto ciego del vuelo. La panorámica no llega al nadir,
-                       y ahí dentro no se puede rellenar: en el polo todas las
-                       direcciones convergen en un punto, así que cualquier
-                       relleno sale como un disco o como una estrella.
-
-                       Fuera de la panorámica sí. El rayo se cruza con el suelo
-                       y se lee un trozo de foto cenital en metros, que no
-                       converge en ninguna parte. Es lo mismo que hacía el mapa
-                       anterior abriendo el manto bajo el dron, pero resuelto
-                       por píxel en vez de con una capa por debajo. */
-                    if (haySuelo > 0.5 && d.y < 0.0) {
-                        float dep = asin(clamp(-d.y, 0.0, 1.0));
-                        float mezcla = smoothstep(depDesde, depHasta, dep);
-                        if (mezcla > 0.001) {
-                            float r = alt * length(d.xz) / max(1e-4, -d.y);
-                            float t = giro - atan(d.x, d.z);
-                            vec2 mundo = vec2(cos(t), sin(t)) * r;
-                            vec2 uvSuelo = mundo / lado + 0.5;
-                            if (all(greaterThan(uvSuelo, vec2(0.0))) &&
-                                all(lessThan(uvSuelo, vec2(1.0)))) {
-                                // La fila 0 del trozo es el borde -lado/2 en Z.
-                                vec3 c = texture2D(suelo, vec2(uvSuelo.x, 1.0 - uvSuelo.y)).rgb;
-
-                                /* Dentro del relleno la foto ya no trae los
-                                   deslindes dibujados, y los lotes quedarían
-                                   sin borde justo en el medio. Se vuelven a
-                                   trazar desde el mapa de identificadores,
-                                   comparando el lote de este punto con el de
-                                   sus vecinos a 0,8 m. Al medirlo en metros y
-                                   no en píxeles de la panorámica, el trazo
-                                   sale del mismo grosor en todas partes. */
-                                float aqui = idEn(aPano(mundo));
-                                float dx = idEn(aPano(mundo + vec2(0.8, 0.0)));
-                                float dz = idEn(aPano(mundo + vec2(0.0, 0.8)));
-                                float borde = (abs(aqui - dx) > 0.5 || abs(aqui - dz) > 0.5) ? 1.0 : 0.0;
-                                c = mix(c, vec3(0.93), borde * 0.85);
-
-                                col = mix(col, c, mezcla);
-                            }
-                        }
-                    }
 
                     vec2 e = texture2D(ids, uv).rg;
                     float id = floor(e.r * 255.0 + 0.5) + floor(e.g * 255.0 + 0.5) * 256.0;
@@ -347,16 +289,14 @@ class PanoLotes extends HTMLElement {
     }
 
     /**
-     * Cabeceo mínimo. Fijo, casi el nadir.
+     * Cabeceo mínimo para el campo visual actual.
      *
-     * Antes era dinámico y dependía del campo, porque el cono ciego se evitaba
-     * no mirándolo: había que apuntar más arriba cuanto más ancho el cuadro.
-     * Ahora el cono se rellena con el trozo de suelo, así que se puede mirar
-     * hacia abajo sin más. Los dos grados que faltan para el nadir son para no
-     * dejar la cámara mirando paralela a su propio eje vertical.
+     * Es dinámico porque lo que importa no es hacia dónde apunta la cámara
+     * sino dónde termina el cuadro: con campo ancho hay que apuntar más arriba
+     * para dejar el cono ciego afuera, y acercándose se puede bajar más.
      */
     _topePitch() {
-        return PITCH_MIN
+        return -(LIMITE - this._fov * RAD / 2)
     }
 
     _mirada() {
@@ -402,11 +342,11 @@ class PanoLotes extends HTMLElement {
         for (const d of dirs) elev += Math.asin(Math.max(-1, Math.min(1, d.y)))
         elev /= Math.max(1, dirs.length)
 
-        const cabeceo = () => Math.max(PITCH_MIN, Math.min(PITCH_MAX, elev))
+        const cabeceo = fov => Math.max(-(LIMITE - fov * RAD / 2), Math.min(PITCH_MAX, elev))
 
         /** Cuántos lotes del grupo caen dentro del cuadro. */
         const dentro = (yaw, fov) => {
-            const pitch = cabeceo()
+            const pitch = cabeceo(fov)
             const cp = Math.cos(pitch)
             const f = new THREE.Vector3(Math.sin(yaw) * cp, Math.sin(pitch), Math.cos(yaw) * cp)
             const der = new THREE.Vector3().crossVectors(ARRIBA, f).normalize()
@@ -430,11 +370,11 @@ class PanoLotes extends HTMLElement {
 
            Así que entre los rumbos que dejan prácticamente los mismos lotes se
            elige el que más se parece a cómo está dibujado el plano. */
-        const referencia = this._suelo ? (this._suelo.yaw - 90) * RAD : null
+        const referencia = this._vuelo ? (this._vuelo.yaw - 90) * RAD : null
         const probados = []
         let mejor = -1
         for (let g = 0; g < 360; g += 5) {
-            const n = dentro(g * RAD, FOV_MAX)
+            const n = dentro(g * RAD, FOV_ENTRADA)
             probados.push([g * RAD, n])
             if (n > mejor) mejor = n
         }
@@ -449,13 +389,13 @@ class PanoLotes extends HTMLElement {
         }
 
         // Campo: el más cerrado que conserva prácticamente los mismos lotes.
-        let fov = FOV_MAX
-        for (let f = FOV_MIN; f <= FOV_MAX; f += 2) {
+        let fov = FOV_ENTRADA
+        for (let f = FOV_MIN; f <= FOV_ENTRADA; f += 2) {
             if (dentro(yaw, f) >= mejor * 0.95) { fov = f; break }
         }
-        fov = Math.max(FOV_MIN, Math.min(FOV_MAX, fov * 1.06))   // un respiro en los bordes
+        fov = Math.max(FOV_MIN, Math.min(FOV_ENTRADA, fov * 1.06))   // un respiro en los bordes
 
-        return { yaw, pitch: cabeceo(), fov }
+        return { yaw, pitch: cabeceo(fov), fov }
     }
 
     // ---------- mirar y acercarse ----------
@@ -681,7 +621,7 @@ class PanoLotes extends HTMLElement {
             t: 0, dur: 1.25,
             y0: this._yaw, y1: Math.atan2(d.x, d.z),
             p0: this._pitch,
-            p1: Math.max(PITCH_MIN, Math.min(PITCH_MAX, Math.asin(d.y))),
+            p1: Math.max(-(LIMITE - 30 * RAD / 2), Math.min(PITCH_MAX, Math.asin(d.y))),
             f0: this._fov, f1: 30
         }
     }
