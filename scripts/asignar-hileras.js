@@ -42,9 +42,12 @@ const REGLAS = [
            el triangulo de la esquina hacia adentro.
 
            Las 24 celdas cierran exacto asi: el triangulo es el lote 28, del 29
-           al 44 van 16, despues tres areas verdes, despues el 45, 46 y 47, y al
-           final el estacionamiento de visitas. Esa ultima celda mide 2043 px
-           contra los 3120 de un lote, que es la senal de que no lo es.
+           al 44 van 16, despues tres areas verdes, despues el 45 y el 46, luego
+           el estacionamiento de visitas, y el 47 al final, pegado al camino.
+
+           El estacionamiento va entre el 46 y el 47, no despues del 47: por
+           tamano parecia al reves —el 47 mide 2043 px y el estacionamiento
+           3127— pero el 47 es un lote de esquina y por eso sale mas chico.
 
            El triangulo se deja simbolico —rojo, sin numero ni ficha— porque es
            el remate de la esquina y no un lote que alguien vaya a elegir. */
@@ -60,8 +63,8 @@ const REGLAS = [
                 { tipo: 'areaverde' },
                 { n: 45, sold: true },
                 { n: 46, sold: true },
-                { n: 47, sold: true },
-                { tipo: 'estacionamiento' }
+                { tipo: 'estacionamiento' },
+                { n: 47, sold: true }
             ]
         }
     }

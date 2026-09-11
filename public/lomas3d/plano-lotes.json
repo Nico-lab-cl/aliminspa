@@ -2396,11 +2396,11 @@
     0.7649
    ],
    "px": 2043,
-   "n": null,
-   "stage": null,
-   "sold": false,
+   "n": 47,
+   "stage": 1,
+   "sold": true,
    "area": null,
-   "tipo": "estacionamiento"
+   "tipo": "lote"
   },
   {
    "id": 142,
@@ -2601,11 +2601,11 @@
     0.76436
    ],
    "px": 3127,
-   "n": 47,
-   "stage": 1,
-   "sold": true,
+   "n": null,
+   "stage": null,
+   "sold": false,
    "area": null,
-   "tipo": "lote"
+   "tipo": "estacionamiento"
   },
   {
    "id": 154,
