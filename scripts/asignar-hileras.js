@@ -5,7 +5,7 @@
  * El cruce con el catastro (scripts/numerar-lotes.js) reparte numero y etapa,
  * pero de ahi no sale el estado: en lots.json los 202 registros figuran como
  * disponibles. Quien vende es el que sabe cuales estan vendidos, y las zonas
- * que no son lote —areas verdes, estacionamiento, equipamiento— tampoco estan
+ * que no son lote âareas verdes, estacionamiento, equipamientoâ tampoco estan
  * en ningun archivo.
  *
  *   node scripts/asignar-hileras.js
@@ -41,6 +41,10 @@ const zona = (tipo, veces = 1) => Array.from({ length: veces }, () => ({ tipo })
    pocos que quedan disponibles y el resto se marca vendido. */
 const DISPONIBLES_E1 = new Set([26, 25, 24, 23, 22, 21, 19])
 
+/* En la etapa 2 es al reves: recien empieza a venderse, asi que se dicen los
+   vendidos y el resto de los 47 queda disponible. */
+const VENDIDOS_E2 = [1, 4, 8, 18]
+
 /**
  * Lo dictado.
  *
@@ -60,8 +64,8 @@ const REGLAS = [
            el estacionamiento de visitas, y el 47 al final, pegado al camino.
 
            El estacionamiento va entre el 46 y el 47, no despues del 47: por
-           tamano parecia al reves —el 47 mide 2043 px y el estacionamiento
-           3127— pero el 47 es un lote de esquina y por eso sale mas chico. */
+           tamano parecia al reves âel 47 mide 2043 px y el estacionamiento
+           3127â pero el 47 es un lote de esquina y por eso sale mas chico. */
         de: 'la hilera de abajo de la etapa 1',
         hilera: {
             etapa: 1,
@@ -104,7 +108,7 @@ const REGLAS = [
            la de arriba de la etapa 1 y ya esta puesta.
 
            Lo dictado va de izquierda a derecha, o sea desde el camino hacia la
-           esquina, y acá se recorre al reves, asi que la lista va invertida.
+           esquina, y acÃ¡ se recorre al reves, asi que la lista va invertida.
 
            No se dijo que lotes estan vendidos, asi que quedan todos
            disponibles hasta que alguien lo diga. */
@@ -124,13 +128,35 @@ const REGLAS = [
         }
     },
     {
-        /* Estado de la etapa 2: esta vendida entera menos el lote 30. Va
-           despues de la hilera, porque la hilera deja los suyos disponibles y
-           esto los corrige. Alcanza a los 47 de la etapa, no solo a los 28 de
-           esa hilera. */
+        /* Segunda hilera de la etapa 2, la que cierra la numeracion. El calce
+           automatico habia dejado cuatro celdas sin nada y con eso corrio los
+           numeros del 40 en adelante.
+
+           Va del 29 al 41 desde la esquina, despues cuatro areas verdes, y del
+           42 al 47 hasta el camino. La ultima celda, la mas grande de todo el
+           plano, no se dicto todavia y se deja como esta. */
+        de: 'la segunda hilera de la etapa 2',
+        hilera: {
+            etapa: 2,
+            guia: { etapa: 1, numero: 40 },
+            franja: 2,
+            celdas: [
+                ...tramo(29, 41).map(n => ({ n })),
+                ...zona('areaverde', 4),
+                ...tramo(42, 47).map(n => ({ n })),
+                { dejar: true }
+            ]
+        }
+    },
+    {
+        /* Estado de la etapa 2: de las dos hileras solo hay cuatro vendidos,
+           el 1, el 4, el 8 y el 18. Todo el resto de la etapa esta disponible.
+
+           Va despues de las hileras, porque ellas reparten numero y zona pero
+           no el estado, y esto lo pone sobre los 47 lotes de la etapa. */
         de: 'estado de la etapa 2',
-        vendidos: { etapa: 2, numeros: tramo(1, 47).filter(n => n !== 30) },
-        disponibles: { etapa: 2, numeros: [30] }
+        vendidos: { etapa: 2, numeros: VENDIDOS_E2 },
+        disponibles: { etapa: 2, numeros: tramo(1, 47).filter(n => !VENDIDOS_E2.includes(n)) }
     }
 ]
 
@@ -214,7 +240,9 @@ function main() {
             }
             for (const [i, dicho] of celdas.entries()) {
                 const l = fila[i]
-                if (dicho.reservado) {
+                if (dicho.dejar) {
+                    // Celda que todavia no se dicto: se cuenta pero no se toca.
+                } else if (dicho.reservado) {
                     // Se ve rojo como un vendido, pero no se puede elegir.
                     l.tipo = 'reservado'; l.n = null; l.stage = etapa; l.sold = true
                 } else if (dicho.simbolico) {
@@ -227,11 +255,12 @@ function main() {
             }
             const corto = { areaverde: 'AV', estacionamiento: 'EST', sanitario: 'SAN', descartado: '--' }
             const resumen = celdas.map(c =>
-                c.reservado ? 'RES' : c.simbolico ? '□' : c.tipo ? (corto[c.tipo] ?? c.tipo) : c.n).join(' ')
+                c.dejar ? '??' : c.reservado ? 'RES' : c.simbolico ? '□' : c.tipo ? (corto[c.tipo] ?? c.tipo) : c.n).join(' ')
             console.log(`  ${fila.length} celdas desde la punta: ${resumen}`)
             const cuenta = {}
             for (const c of celdas) {
-                const k = c.reservado ? 'reservado'
+                const k = c.dejar ? 'sin dictar'
+                    : c.reservado ? 'reservado'
                     : c.simbolico ? 'simbolica'
                         : c.tipo ?? (c.sold ? 'lote vendido' : 'lote disponible')
                 cuenta[k] = (cuenta[k] ?? 0) + 1
@@ -270,7 +299,7 @@ function main() {
                 ? [porNum(s.etapa, s.numero)].filter(Boolean)
                 : sueltasEntre(s.entre, s.cuantas)
             if (!cuales.length) {
-                console.warn(`  OJO: ${s.porque} — no encuentro esa celda`)
+                console.warn(`  OJO: ${s.porque} â no encuentro esa celda`)
                 problemas++
                 continue
             }
@@ -286,7 +315,7 @@ function main() {
         for (const z of r.zonas ?? []) {
             const sueltas = sueltasEntre(z.entre, z.cuantas)
             if (sueltas.length < z.cuantas) {
-                console.warn(`  OJO: ${z.porque} — solo encontre ${sueltas.length} celdas sueltas`)
+                console.warn(`  OJO: ${z.porque} â solo encontre ${sueltas.length} celdas sueltas`)
                 problemas++
             }
             for (const l of sueltas) {
