@@ -43,6 +43,7 @@ const HOV = new THREE.Color(0xb9e79a)
 const ZONAS = {
     disponible:      { color: 0x76d845, fuerza: 0.34, nombre: 'Disponible' },
     vendido:         { color: 0xe5484d, fuerza: 0.40, nombre: 'Vendido' },
+    reservado:       { color: 0xe5484d, fuerza: 0.40, nombre: 'Reservado' },
     estacionamiento: { color: 0xf2c033, fuerza: 0.40, nombre: 'Estacionamiento visitas' },
     sanitario:       { color: 0x3b82f6, fuerza: 0.40, nombre: 'Equip. sanitario' },
     areaverde:       { color: 0x1f7a34, fuerza: 0.45, nombre: 'Área verde' },

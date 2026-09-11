@@ -23,6 +23,7 @@ const ZONAS = [
     { id: 'estacionamiento', nombre: 'Estacionamiento', color: '#f2c033' },
     { id: 'sanitario', nombre: 'Equip. sanitario', color: '#3b82f6' },
     { id: 'areaverde', nombre: 'Área verde', color: '#1f7a34' },
+    { id: 'reservado', nombre: 'Reservado', color: '#e5484d' },
     { id: 'descartado', nombre: 'No es zona', color: '#6b7280' }
 ] as const
 

@@ -14,7 +14,7 @@ import path from 'path'
  * escribe archivos del servidor no tiene nada que hacer en el sitio público.
  */
 
-const ZONAS = ['lote', 'estacionamiento', 'sanitario', 'areaverde', 'descartado']
+const ZONAS = ['lote', 'estacionamiento', 'sanitario', 'areaverde', 'vendido', 'reservado', 'descartado']
 
 interface Edicion {
     id: number

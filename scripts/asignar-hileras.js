@@ -27,6 +27,20 @@ const tramo = (a, b) => {
     return l
 }
 
+/** Los numeros de un tramo en orden descendente, como se recorren en el plano. */
+const bajando = (desde, hasta) => {
+    const l = []
+    for (let n = desde; n >= hasta; n--) l.push(n)
+    return l
+}
+
+/** Repite una zona tantas veces seguidas. */
+const zona = (tipo, veces = 1) => Array.from({ length: veces }, () => ({ tipo }))
+
+/* En la hilera de arriba de la etapa 1 casi todo esta vendido: se dicen los
+   pocos que quedan disponibles y el resto se marca vendido. */
+const DISPONIBLES_E1 = new Set([26, 25, 24, 23, 22, 21, 19])
+
 /**
  * Lo dictado.
  *
@@ -63,6 +77,24 @@ const REGLAS = [
                 { n: 46, sold: true },
                 { tipo: 'estacionamiento' },
                 { n: 47, sold: true }
+            ]
+        }
+    },
+    {
+        /* La hilera de arriba, la siguiente hacia adentro. Se recorre igual:
+           desde el lado de la esquina hacia el camino. Son 34 celdas y la
+           cuenta cierra exacta. */
+        de: 'la hilera de arriba de la etapa 1',
+        hilera: {
+            etapa: 1,
+            guia: { etapa: 1, numero: 40 },
+            franja: 1,
+            celdas: [
+                { reservado: true },
+                ...bajando(27, 7).map(n => ({ n, sold: !DISPONIBLES_E1.has(n) })),
+                { tipo: 'sanitario' },
+                ...zona('areaverde', 5),
+                ...bajando(6, 1).map(n => ({ n, sold: true }))
             ]
         }
     }
@@ -109,7 +141,7 @@ function main() {
      * Se hace asi y no siguiendo la numeracion porque justamente la numeracion
      * es lo que puede estar corrido.
      */
-    const recorrerHilera = guia => {
+    const recorrerHilera = (guia, franja = 0) => {
         const punta = [...L].sort((a, b) => (b.u - b.v) - (a.u - a.v))[0]
         const otra = porNum(guia.etapa, guia.numero)
         if (!punta || !otra) return []
@@ -117,18 +149,30 @@ function main() {
         const m = Math.hypot(dx, dy)
         const ex = [dx / m, dy / m]
         const alLargo = l => (l.u - punta.u) * rel * ex[0] + (l.v - punta.v) * ex[1]
-        const aparte = l => Math.abs(-(l.u - punta.u) * rel * ex[1] + (l.v - punta.v) * ex[0])
-        return L
-            .filter(l => aparte(l) < 0.018 && alLargo(l) > -0.02)
-            .sort((x, y) => alLargo(x) - alLargo(y))
+        // Con signo: crece al alejarse de la hilera de la esquina.
+        const aparte = l => -(l.u - punta.u) * rel * ex[1] + (l.v - punta.v) * ex[0]
+
+        /* Las franjas se separan solas: entre una y otra hay un camino, y en el
+           perpendicular eso es un salto mucho mayor que el ancho de un lote. Se
+           numeran desde la de la esquina hacia adentro. */
+        const orden = [...L].sort((a, b) => aparte(a) - aparte(b))
+        let g = 0
+        orden[0].franja = 0
+        for (let i = 1; i < orden.length; i++) {
+            if (aparte(orden[i]) - aparte(orden[i - 1]) > 0.012) g++
+            orden[i].franja = g
+        }
+        const fila = orden.filter(l => l.franja === franja)
+        for (const l of orden) delete l.franja
+        return fila.sort((x, y) => alLargo(x) - alLargo(y))
     }
 
     for (const r of REGLAS) {
         console.log(`\n${r.de}`)
 
         if (r.hilera) {
-            const { etapa, guia, celdas } = r.hilera
-            const fila = recorrerHilera(guia)
+            const { etapa, guia, franja = 0, celdas } = r.hilera
+            const fila = recorrerHilera(guia, franja)
             if (fila.length !== celdas.length) {
                 console.error(`  La hilera tiene ${fila.length} celdas y la lista trae ${celdas.length}.`)
                 console.error('  No se escribe nada: con la lista corrida, toda la hilera queda con el numero del vecino.')
@@ -136,7 +180,10 @@ function main() {
             }
             for (const [i, dicho] of celdas.entries()) {
                 const l = fila[i]
-                if (dicho.simbolico) {
+                if (dicho.reservado) {
+                    // Se ve rojo como un vendido, pero no se puede elegir.
+                    l.tipo = 'reservado'; l.n = null; l.stage = etapa; l.sold = true
+                } else if (dicho.simbolico) {
                     l.tipo = 'vendido'; l.n = null; l.stage = etapa; l.sold = true
                 } else if (dicho.tipo) {
                     l.tipo = dicho.tipo; l.n = null; l.stage = null; l.sold = false
@@ -145,11 +192,14 @@ function main() {
                 }
             }
             const corto = { areaverde: 'AV', estacionamiento: 'EST', sanitario: 'SAN', descartado: '--' }
-            const resumen = celdas.map(c => c.simbolico ? '□' : c.tipo ? (corto[c.tipo] ?? c.tipo) : c.n).join(' ')
+            const resumen = celdas.map(c =>
+                c.reservado ? 'RES' : c.simbolico ? '□' : c.tipo ? (corto[c.tipo] ?? c.tipo) : c.n).join(' ')
             console.log(`  ${fila.length} celdas desde la punta: ${resumen}`)
             const cuenta = {}
             for (const c of celdas) {
-                const k = c.simbolico ? 'simbolica' : c.tipo ?? (c.sold ? 'lote vendido' : 'lote disponible')
+                const k = c.reservado ? 'reservado'
+                    : c.simbolico ? 'simbolica'
+                        : c.tipo ?? (c.sold ? 'lote vendido' : 'lote disponible')
                 cuenta[k] = (cuenta[k] ?? 0) + 1
             }
             console.log('  ' + Object.entries(cuenta).map(([k, v]) => `${v} ${k}`).join(', '))
