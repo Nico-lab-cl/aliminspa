@@ -97,6 +97,31 @@ const REGLAS = [
                 ...bajando(6, 1).map(n => ({ n, sold: true }))
             ]
         }
+    },
+    {
+        /* Primera hilera de la etapa 2: la numeracion vuelve a empezar en 1.
+           Es la unica hilera de 34 celdas que quedaba, porque la otra de 34 es
+           la de arriba de la etapa 1 y ya esta puesta.
+
+           Lo dictado va de izquierda a derecha, o sea desde el camino hacia la
+           esquina, y acá se recorre al reves, asi que la lista va invertida.
+
+           No se dijo que lotes estan vendidos, asi que quedan todos
+           disponibles hasta que alguien lo diga. */
+        de: 'la primera hilera de la etapa 2',
+        hilera: {
+            etapa: 2,
+            guia: { etapa: 1, numero: 40 },
+            franja: 3,
+            celdas: [
+                ...bajando(28, 9).map(n => ({ n, sold: false })),
+                { tipo: 'sanitario' },
+                ...zona('areaverde', 4),
+                ...bajando(8, 2).map(n => ({ n, sold: false })),
+                { tipo: 'estacionamiento' },
+                { n: 1, sold: false }
+            ]
+        }
     }
 ]
 
