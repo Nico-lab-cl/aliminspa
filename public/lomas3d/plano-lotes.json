@@ -3770,11 +3770,11 @@
     0.52654
    ],
    "px": 3117,
-   "n": null,
+   "n": 36,
    "stage": 1,
    "sold": true,
    "area": null,
-   "tipo": "vendido"
+   "tipo": "lote"
   },
   {
    "id": 222,
@@ -3822,7 +3822,7 @@
     0.50813
    ],
    "px": 3115,
-   "n": 36,
+   "n": 35,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3874,7 +3874,7 @@
     0.48971
    ],
    "px": 3109,
-   "n": 35,
+   "n": 34,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3909,7 +3909,7 @@
     0.47183
    ],
    "px": 3119,
-   "n": 34,
+   "n": 33,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3944,7 +3944,7 @@
     0.45341
    ],
    "px": 3115,
-   "n": 33,
+   "n": 32,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3979,7 +3979,7 @@
     0.43499
    ],
    "px": 3120,
-   "n": 32,
+   "n": 31,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3997,7 +3997,7 @@
     0.41712
    ],
    "px": 3117,
-   "n": 31,
+   "n": 30,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -4015,7 +4015,7 @@
     0.3987
    ],
    "px": 3131,
-   "n": 30,
+   "n": 29,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -4033,7 +4033,7 @@
     0.38082
    ],
    "px": 3105,
-   "n": 29,
+   "n": 28,
    "stage": 1,
    "sold": true,
    "area": null,

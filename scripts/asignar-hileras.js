@@ -36,21 +36,27 @@ const tramo = (a, b) => {
  */
 const REGLAS = [
     {
+        /* Esta hilera no se puede tomar del catastro: ahi tiene un lote menos
+           que el plano dibujado, y por eso dejaba una celda sin numero en medio
+           de la corrida. Entre las areas verdes y el triangulo de la esquina
+           hay 17 celdas iguales, y del 44 al 28 son 17 numeros: calza exacto.
+           Asi que se reparte por posicion, recorriendo la hilera. */
         de: 'la hilera de abajo de la etapa 1',
-        vendidos: { etapa: 1, numeros: tramo(28, 47) },
-        zonas: [{
-            tipo: 'areaverde',
-            cuantas: 3,
-            entre: { etapa: 1, a: 44, b: 45 },
-            porque: 'tres celdas de area verde entre el lote 44 y el 45'
-        }],
-        simbolicos: [{
-            etapa: 1, numero: 28,
-            porque: 'el triangulo de la esquina queda rojo, sin numero ni ficha'
-        }, {
-            entre: { etapa: 1, a: 36, b: 37 }, cuantas: 1,
-            porque: 'la celda suelta entre el 36 y el 37 tambien va roja, para que la hilera no quede cortada'
-        }]
+        hilera: {
+            etapa: 1,
+            // Se arranca en el triangulo de la punta y se camina hacia adentro.
+            guia: { etapa: 1, numero: 40 },
+            celdas: [
+                { simbolico: true },
+                ...tramo(28, 44).map(n => ({ n, sold: true })),
+                { tipo: 'areaverde' },
+                { tipo: 'areaverde' },
+                { tipo: 'areaverde' },
+                { n: 45, sold: true },
+                { n: 46, sold: true },
+                { n: 47, sold: true }
+            ]
+        }
     }
 ]
 
@@ -84,8 +90,57 @@ function main() {
             .map(x => x.l)
     }
 
+    /**
+     * Las celdas de una hilera, en orden desde la punta hacia adentro.
+     *
+     * La punta es el triangulo de la esquina: la celda que mas se va hacia
+     * arriba y a la derecha. La direccion de la hilera la fija una segunda
+     * celda conocida, y con esas dos se arma la recta: son de la hilera las
+     * celdas que caen cerca de ella, y el orden sale de proyectarlas.
+     *
+     * Se hace asi y no siguiendo la numeracion porque justamente la numeracion
+     * es lo que puede estar corrido.
+     */
+    const recorrerHilera = guia => {
+        const punta = [...L].sort((a, b) => (b.u - b.v) - (a.u - a.v))[0]
+        const otra = porNum(guia.etapa, guia.numero)
+        if (!punta || !otra) return []
+        const dx = (otra.u - punta.u) * rel, dy = otra.v - punta.v
+        const m = Math.hypot(dx, dy)
+        const ex = [dx / m, dy / m]
+        const alLargo = l => (l.u - punta.u) * rel * ex[0] + (l.v - punta.v) * ex[1]
+        const aparte = l => Math.abs(-(l.u - punta.u) * rel * ex[1] + (l.v - punta.v) * ex[0])
+        return L
+            .filter(l => aparte(l) < 0.018 && alLargo(l) > -0.02)
+            .sort((x, y) => alLargo(x) - alLargo(y))
+    }
+
     for (const r of REGLAS) {
         console.log(`\n${r.de}`)
+
+        if (r.hilera) {
+            const { etapa, guia, celdas } = r.hilera
+            const fila = recorrerHilera(guia)
+            if (fila.length !== celdas.length) {
+                console.error(`  La hilera tiene ${fila.length} celdas y la lista trae ${celdas.length}.`)
+                console.error('  No se escribe nada: con la lista corrida, toda la hilera queda con el numero del vecino.')
+                process.exit(1)
+            }
+            for (const [i, dicho] of celdas.entries()) {
+                const l = fila[i]
+                if (dicho.simbolico) {
+                    l.tipo = 'vendido'; l.n = null; l.stage = etapa; l.sold = true
+                } else if (dicho.tipo) {
+                    l.tipo = dicho.tipo; l.n = null; l.stage = null; l.sold = false
+                } else {
+                    l.tipo = 'lote'; l.n = dicho.n; l.stage = etapa; l.sold = !!dicho.sold
+                }
+            }
+            const resumen = celdas.map(c => c.simbolico ? '□' : c.tipo ? 'AV' : c.n).join(' ')
+            console.log(`  ${fila.length} celdas desde la punta: ${resumen}`)
+            const vend = celdas.filter(c => c.sold).length
+            console.log(`  ${vend} lotes vendidos, ${celdas.filter(c => c.tipo).length} de area verde, ${celdas.filter(c => c.simbolico).length} simbolica`)
+        }
 
         if (r.vendidos) {
             const { etapa, numeros } = r.vendidos
