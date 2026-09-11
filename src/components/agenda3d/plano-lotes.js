@@ -415,10 +415,12 @@ class PlanoLotes extends HTMLElement {
         const id = datos[i] + datos[i + 1] * 256
         const l = this.porId.get(id)
         if (!l) return 0
-        /* En la página solo se toca lo que se vende. Un área verde, o un lote
-           todavía sin numerar, abrirían una ficha vacía, y eso desconcierta más
-           que no responder. En el editor se toca todo, que para eso está. */
-        if (!this._editor && (l.n == null || (l.tipo ?? 'lote') !== 'lote')) return 0
+        /* En la página solo se toca lo que se vende. Un área verde o un lote
+           todavía sin numerar abrirían una ficha vacía, y un lote vendido lleva
+           a agendar una visita por algo que ya no está: se ve rojo y ahí queda.
+           En el editor se toca todo, que para eso está. */
+        if (!this._editor
+            && (l.n == null || (l.tipo ?? 'lote') !== 'lote' || l.sold)) return 0
         return id
     }
 

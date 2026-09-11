@@ -254,11 +254,13 @@ const REGLAS = [
     {
         /* Tercera hilera de la etapa 4, del 25 al 41 de izquierda a derecha.
 
-           Son 17 lotes, pero la deteccion encontraba 16: el plano deja uno
-           abierto hacia el camino y por eso se derramaba. Se nota en que entre
-           sus dos vecinos hay el doble de separacion que en el resto de la
-           fila. Ese lote se recupera con scripts/recuperar-lote-abierto.js,
-           que hay que correr antes que esto.
+           Son 17 lotes y la deteccion encontraba 16: el ultimo es la cuna que
+           cierra la manzana contra el camino, y el filtro la descarto por
+           centesimas —llena 0,358 contra un umbral de 0,36—. Se rescata con
+           scripts/recuperar-celda.js, que hay que correr antes que esto.
+
+           La separacion del doble que hay en medio de la fila no es un lote
+           que falte: ahi termina una manzana y empieza la otra.
 
            No se dijo cuales estan vendidos: quedan disponibles. */
         de: 'la hilera del 25 al 41 de la etapa 4',
