@@ -2396,11 +2396,11 @@
     0.7649
    ],
    "px": 2043,
-   "n": 47,
-   "stage": 1,
-   "sold": true,
+   "n": null,
+   "stage": null,
+   "sold": false,
    "area": null,
-   "tipo": "lote"
+   "tipo": "estacionamiento"
   },
   {
    "id": 142,
@@ -2601,7 +2601,7 @@
     0.76436
    ],
    "px": 3127,
-   "n": 46,
+   "n": 47,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -2755,7 +2755,7 @@
     0.7454
    ],
    "px": 3121,
-   "n": 45,
+   "n": 46,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -2875,11 +2875,11 @@
     0.72752
    ],
    "px": 3120,
-   "n": null,
-   "stage": null,
-   "sold": false,
+   "n": 45,
+   "stage": 1,
+   "sold": true,
    "area": null,
-   "tipo": "areaverde"
+   "tipo": "lote"
   },
   {
    "id": 170,
@@ -3201,11 +3201,11 @@
     0.67226
    ],
    "px": 3130,
-   "n": 44,
-   "stage": 1,
-   "sold": true,
+   "n": null,
+   "stage": null,
+   "sold": false,
    "area": null,
-   "tipo": "lote"
+   "tipo": "areaverde"
   },
   {
    "id": 189,
@@ -3287,7 +3287,7 @@
     0.65439
    ],
    "px": 3121,
-   "n": 43,
+   "n": 44,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3390,7 +3390,7 @@
     0.63597
    ],
    "px": 3127,
-   "n": 42,
+   "n": 43,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3459,7 +3459,7 @@
     0.61755
    ],
    "px": 3119,
-   "n": 41,
+   "n": 42,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3545,7 +3545,7 @@
     0.59967
    ],
    "px": 3126,
-   "n": 40,
+   "n": 41,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3597,7 +3597,7 @@
     0.58126
    ],
    "px": 3112,
-   "n": 39,
+   "n": 40,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3666,7 +3666,7 @@
     0.56338
    ],
    "px": 3123,
-   "n": 38,
+   "n": 39,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3718,7 +3718,7 @@
     0.54496
    ],
    "px": 3126,
-   "n": 37,
+   "n": 38,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3770,7 +3770,7 @@
     0.52654
    ],
    "px": 3117,
-   "n": 36,
+   "n": 37,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3822,7 +3822,7 @@
     0.50813
    ],
    "px": 3115,
-   "n": 35,
+   "n": 36,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3874,7 +3874,7 @@
     0.48971
    ],
    "px": 3109,
-   "n": 34,
+   "n": 35,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3909,7 +3909,7 @@
     0.47183
    ],
    "px": 3119,
-   "n": 33,
+   "n": 34,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3944,7 +3944,7 @@
     0.45341
    ],
    "px": 3115,
-   "n": 32,
+   "n": 33,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3979,7 +3979,7 @@
     0.43499
    ],
    "px": 3120,
-   "n": 31,
+   "n": 32,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -3997,7 +3997,7 @@
     0.41712
    ],
    "px": 3117,
-   "n": 30,
+   "n": 31,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -4015,7 +4015,7 @@
     0.3987
    ],
    "px": 3131,
-   "n": 29,
+   "n": 30,
    "stage": 1,
    "sold": true,
    "area": null,
@@ -4033,7 +4033,7 @@
     0.38082
    ],
    "px": 3105,
-   "n": 28,
+   "n": 29,
    "stage": 1,
    "sold": true,
    "area": null,

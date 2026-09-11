@@ -38,23 +38,30 @@ const REGLAS = [
     {
         /* Esta hilera no se puede tomar del catastro: ahi tiene un lote menos
            que el plano dibujado, y por eso dejaba una celda sin numero en medio
-           de la corrida. Entre las areas verdes y el triangulo de la esquina
-           hay 17 celdas iguales, y del 44 al 28 son 17 numeros: calza exacto.
-           Asi que se reparte por posicion, recorriendo la hilera. */
+           de la corrida. Se reparte por posicion, recorriendo la hilera desde
+           el triangulo de la esquina hacia adentro.
+
+           Las 24 celdas cierran exacto asi: el triangulo es el lote 28, del 29
+           al 44 van 16, despues tres areas verdes, despues el 45, 46 y 47, y al
+           final el estacionamiento de visitas. Esa ultima celda mide 2043 px
+           contra los 3120 de un lote, que es la senal de que no lo es.
+
+           El triangulo se deja simbolico —rojo, sin numero ni ficha— porque es
+           el remate de la esquina y no un lote que alguien vaya a elegir. */
         de: 'la hilera de abajo de la etapa 1',
         hilera: {
             etapa: 1,
-            // Se arranca en el triangulo de la punta y se camina hacia adentro.
             guia: { etapa: 1, numero: 40 },
             celdas: [
                 { simbolico: true },
-                ...tramo(28, 44).map(n => ({ n, sold: true })),
+                ...tramo(29, 44).map(n => ({ n, sold: true })),
                 { tipo: 'areaverde' },
                 { tipo: 'areaverde' },
                 { tipo: 'areaverde' },
                 { n: 45, sold: true },
                 { n: 46, sold: true },
-                { n: 47, sold: true }
+                { n: 47, sold: true },
+                { tipo: 'estacionamiento' }
             ]
         }
     }
@@ -136,10 +143,15 @@ function main() {
                     l.tipo = 'lote'; l.n = dicho.n; l.stage = etapa; l.sold = !!dicho.sold
                 }
             }
-            const resumen = celdas.map(c => c.simbolico ? '□' : c.tipo ? 'AV' : c.n).join(' ')
+            const corto = { areaverde: 'AV', estacionamiento: 'EST', sanitario: 'SAN', descartado: '--' }
+            const resumen = celdas.map(c => c.simbolico ? '□' : c.tipo ? (corto[c.tipo] ?? c.tipo) : c.n).join(' ')
             console.log(`  ${fila.length} celdas desde la punta: ${resumen}`)
-            const vend = celdas.filter(c => c.sold).length
-            console.log(`  ${vend} lotes vendidos, ${celdas.filter(c => c.tipo).length} de area verde, ${celdas.filter(c => c.simbolico).length} simbolica`)
+            const cuenta = {}
+            for (const c of celdas) {
+                const k = c.simbolico ? 'simbolica' : c.tipo ?? (c.sold ? 'lote vendido' : 'lote disponible')
+                cuenta[k] = (cuenta[k] ?? 0) + 1
+            }
+            console.log('  ' + Object.entries(cuenta).map(([k, v]) => `${v} ${k}`).join(', '))
         }
 
         if (r.vendidos) {
