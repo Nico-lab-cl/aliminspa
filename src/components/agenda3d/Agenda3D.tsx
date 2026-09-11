@@ -21,6 +21,7 @@ import {
     Check,
     ChevronLeft,
     ChevronRight,
+    ChevronUp,
     Loader2,
     MapPin,
     Ruler,
@@ -103,8 +104,8 @@ export default function Agenda3D() {
        eran 1,6 MB en vez de 430 KB. Hasta que se resuelve se ve el poster. */
     const [movil, setMovil] = useState<boolean | null>(null)
     /* En celular, tocar un lote ya no levanta la ficha entera: taparia el
-       plano de dron justo cuando termina de aterrizar. Salen tres etiquetas
-       al costado y la ficha se abre recien si el visitante lo pide. */
+       plano de dron justo cuando termina de aterrizar. Sale una barra abajo
+       con el lote y sus acciones, y la ficha se abre recien si se pide. */
     const [fichaAbierta, setFichaAbierta] = useState(false)
     const [ahorroDatos, setAhorroDatos] = useState(false)
     const [stage, setStage] = useState(0)
@@ -182,7 +183,12 @@ export default function Agenda3D() {
         setEditor(q.get('editor') === '1')
         setPlano(q.get('plano') === '1')
 
-        setMovil(window.innerWidth < 900)
+        /* 860 y no 900: es el mismo corte que usan las consultas de media de la
+           hoja de estilos. Con dos números distintos quedaba una franja entre
+           861 y 899 px donde el componente se creía celular —y escondía el
+           panel lateral— pero el CSS seguía en escritorio y no mostraba la
+           barra de abajo: ahí no aparecía nada al elegir un lote. */
+        setMovil(window.innerWidth <= 860)
 
         // Con ahorro de datos activado no se adelanta la descarga del plano de
         // llegada: entrara igual, solo que un poco despues.
@@ -463,7 +469,10 @@ export default function Agenda3D() {
                         )}
                     </header>
 
-                    <div className={styles.chips}>
+                    {/* Con un lote elegido en celular los filtros se van: ya se
+                        eligió, y ocupaban un tercio de la pantalla por encima de
+                        justo lo que el visitante fue a mirar. */}
+                    <div className={movil && lot ? `${styles.chips} ${styles.chipsOcultos}` : styles.chips}>
                         <div className={styles.chipRow}>
                             {etapas.map(s => (
                                 <button
@@ -594,56 +603,69 @@ export default function Agenda3D() {
                         </div>
                     )}
 
+                    {/* Barra del lote elegido, en celular.
+                        Antes esto era una columna de botones al costado, y tapaba
+                        media pantalla justo cuando el plano de dron termina de
+                        aterrizar. Abajo deja el video entero a la vista y agrupa
+                        lo que el visitante puede hacer. La flecha —o cualquiera de
+                        los botones— despliega la ficha completa. */}
                     {!editor && movil && lot && !fichaAbierta && (
-                        <div className={styles.etiquetas}>
-                            <div className={styles.etiquetaLote}>
-                                <strong>Lote {lot.n}</strong>
-                                {/* Sin superficie cargada quedaba un "· m²" suelto. */}
-                                <span>Etapa {lot.stage}{lot.area ? ` · ${lot.area} m²` : ''}</span>
-                                <button onClick={limpiarLote} aria-label="Quitar selección">
-                                    <X size={13} />
+                        <div className={styles.barraLote}>
+                            <div className={styles.barraFila}>
+                                <button
+                                    className={styles.barraTitulo}
+                                    onClick={() => { setStep('lote'); setFichaAbierta(true) }}
+                                    aria-label={`Ver la ficha del lote ${lot.n}`}
+                                >
+                                    <strong>Lote {lot.n}</strong>
+                                    {/* Sin superficie cargada quedaba un "· m²" suelto. */}
+                                    <span>Etapa {lot.stage}{lot.area ? ` · ${lot.area} m²` : ''}</span>
+                                </button>
+                                <button
+                                    className={styles.barraIcono}
+                                    onClick={limpiarLote}
+                                    aria-label="Quitar selección"
+                                >
+                                    <X size={16} />
+                                </button>
+                                <button
+                                    className={styles.barraSubir}
+                                    onClick={() => { setStep('lote'); setFichaAbierta(true) }}
+                                    aria-label="Desplegar la ficha del lote"
+                                >
+                                    <ChevronUp size={18} />
                                 </button>
                             </div>
-                            {/* El mismo video que va junto a las especificaciones, acá
-                                mismo: es lo que responde "¿y qué me cabe en este lote?"
-                                sin pedir un toque más. Abre la ficha si lo tocan. */}
-                            <figure
-                                className={styles.etiquetaVideo}
-                                onClick={() => { setStep('lote'); setFichaAbierta(true) }}
-                            >
-                                <video
-                                    src="/lomas3d/construccion/casa-200m2-movil.mp4"
-                                    poster="/lomas3d/construccion/casa-200m2-poster.webp"
-                                    autoPlay
-                                    muted
-                                    loop
-                                    playsInline
-                                    preload="metadata"
-                                />
-                                <figcaption>Ejemplo de lo que se puede construir en 200 m²</figcaption>
-                            </figure>
-                            <button
-                                className={styles.etiqueta}
-                                onClick={() => { setStep('lote'); setFichaAbierta(true) }}
-                            >
-                                Ver lote
-                            </button>
-                            {!lot.sold && (
-                                <button
-                                    className={styles.etiquetaFuerte}
-                                    onClick={() => { setStep('fecha'); setFichaAbierta(true) }}
+                            <div className={styles.barraBotones}>
+                                {!lot.sold && (
+                                    <a
+                                        className={styles.barraReservar}
+                                        href={waHref(reservaMessage)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => { marcarReserva(); setFichaAbierta(true) }}
+                                    >
+                                        Reservar
+                                    </a>
+                                )}
+                                {!lot.sold && (
+                                    <button
+                                        className={styles.barraAgendar}
+                                        onClick={() => { setStep('fecha'); setFichaAbierta(true) }}
+                                    >
+                                        Agendar visita
+                                    </button>
+                                )}
+                                <a
+                                    className={styles.barraWa}
+                                    href={waHref(waMessage)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => setFichaAbierta(true)}
                                 >
-                                    Agendar visita
-                                </button>
-                            )}
-                            <a
-                                className={styles.etiquetaWa}
-                                href={waHref(waMessage)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                WhatsApp
-                            </a>
+                                    WhatsApp
+                                </a>
+                            </div>
                         </div>
                     )}
 
