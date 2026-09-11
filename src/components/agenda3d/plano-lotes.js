@@ -27,7 +27,6 @@ const ZOOM_MIN = 0.035, ZOOM_MAX = 1
 const PICK_DIV = 2
 
 const SEL = new THREE.Color(0xd8f56a)
-const HOV = new THREE.Color(0xb9e79a)
 
 /**
  * Cómo se pinta cada zona del plano.
@@ -37,16 +36,18 @@ const HOV = new THREE.Color(0xb9e79a)
  * color va en la tabla que consulta el shader, así que cambiar esto no toca
  * geometría ni obliga a recompilar nada.
  *
- * La fuerza es cuánto tiñe sobre la foto: lo justo para leer la zona sin tapar
- * el terreno, que es lo que el visitante vino a mirar.
+ * La fuerza es cuánto tiñe sobre la foto. Va baja a propósito: el visitante
+ * vino a mirar el terreno, no una grilla de colores, y con el tinte fuerte la
+ * foto desaparecía debajo. Alcanza con que el color se lea, porque lo que
+ * distingue un estado de otro es el tono, no cuánto tapa.
  */
 const ZONAS = {
-    disponible:      { color: 0x76d845, fuerza: 0.34, nombre: 'Disponible' },
-    vendido:         { color: 0xe5484d, fuerza: 0.40, nombre: 'Vendido' },
-    reservado:       { color: 0xe5484d, fuerza: 0.40, nombre: 'Reservado' },
-    estacionamiento: { color: 0xf2c033, fuerza: 0.40, nombre: 'Estacionamiento visitas' },
-    sanitario:       { color: 0x3b82f6, fuerza: 0.40, nombre: 'Equip. sanitario' },
-    areaverde:       { color: 0x1f7a34, fuerza: 0.45, nombre: 'Área verde' },
+    disponible:      { color: 0x76d845, fuerza: 0.20, nombre: 'Disponible' },
+    vendido:         { color: 0xe5484d, fuerza: 0.24, nombre: 'Vendido' },
+    reservado:       { color: 0xe5484d, fuerza: 0.24, nombre: 'Reservado' },
+    estacionamiento: { color: 0xf2c033, fuerza: 0.24, nombre: 'Estacionamiento visitas' },
+    sanitario:       { color: 0x3b82f6, fuerza: 0.24, nombre: 'Equip. sanitario' },
+    areaverde:       { color: 0x1f7a34, fuerza: 0.26, nombre: 'Área verde' },
     ninguna:         { color: 0x000000, fuerza: 0.00, nombre: 'Sin asignar' }
 }
 const RGB = Object.fromEntries(Object.entries(ZONAS)
@@ -135,7 +136,6 @@ class PlanoLotes extends HTMLElement {
                 sel: { value: 0 },
                 hov: { value: 0 },
                 colSel: { value: new THREE.Vector3(SEL.r, SEL.g, SEL.b) },
-                colHov: { value: new THREE.Vector3(HOV.r, HOV.g, HOV.b) },
                 centro: { value: new THREE.Vector2(0.5, 0.5) },
                 zona: { value: new THREE.Vector2(1, 1) },
                 fondo: { value: new THREE.Vector3(0.04, 0.07, 0.1) }
@@ -154,7 +154,7 @@ class PlanoLotes extends HTMLElement {
                 uniform sampler2D ids;
                 uniform sampler2D tabla;
                 uniform float nTabla, sel, hov;
-                uniform vec3 colSel, colHov, fondo;
+                uniform vec3 colSel, fondo;
                 uniform vec2 centro, zona;
                 varying vec2 vNdc;
 
@@ -175,9 +175,18 @@ class PlanoLotes extends HTMLElement {
                         vec4 st = texture2D(tabla, vec2((id + 0.5) / nTabla, 0.5));
                         vec3 tinte = st.rgb;
                         float fuerza = st.a;
-                        if (abs(id - sel) < 0.5) { tinte = colSel; fuerza = 0.5; }
-                        else if (abs(id - hov) < 0.5) { tinte = colHov; fuerza = 0.3; }
+                        float claro = 0.0;
+                        if (abs(id - sel) < 0.5) { tinte = colSel; fuerza = 0.46; }
+                        else if (abs(id - hov) < 0.5) {
+                            /* Señalar no cambia de color: un vendido que al pasar
+                               el cursor se pone verde se lee como disponible. Se
+                               sube su propio tinte y se aclara, que se nota igual
+                               y no miente. */
+                            fuerza = min(1.0, fuerza + 0.14);
+                            claro = 0.13;
+                        }
                         col = mix(col, tinte, fuerza);
+                        col = mix(col, vec3(1.0), claro);
                     }
                     gl_FragColor = vec4(col, 1.0);
                     /* La textura viene marcada como sRGB, así que al muestrearla

@@ -47,6 +47,21 @@ const MESES = [
 ]
 const DIAS_CORTOS = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do']
 
+/**
+ * Qué significa cada color del mapa.
+ *
+ * Los colores son los mismos que usa el visor en plano-lotes.js. Si allá
+ * cambian, acá también: un glosario que no coincide con el mapa es peor que
+ * no tenerlo.
+ */
+const GLOSARIO = [
+    { color: '#76d845', nombre: 'Disponible' },
+    { color: '#e5484d', nombre: 'Vendido' },
+    { color: '#1f7a34', nombre: 'Área verde' },
+    { color: '#f2c033', nombre: 'Estacionamiento' },
+    { color: '#3b82f6', nombre: 'Equip. sanitario' },
+]
+
 type Step = 'lote' | 'fecha' | 'datos' | 'listo'
 
 interface Availability {
@@ -65,7 +80,10 @@ function fechaLarga(iso: string): string {
 }
 
 export default function Agenda3D() {
-    const [started, setStarted] = useState(false)
+    /* El mapa se muestra de entrada. Antes había una portada con el vuelo de
+       dron y un botón para entrar, pero quien abre este enlace viene a elegir
+       un lote: la portada era una pantalla de más entre el clic y el mapa. */
+    const [started] = useState(true)
     const [step, setStep] = useState<Step>('lote')
 
     const viewer = useRef<ViewerHandle | null>(null)
@@ -271,6 +289,13 @@ export default function Agenda3D() {
 
     const setStageChip = aplicar(setStage, (h, v: number) => h.setFilter({ stage: v }))
 
+    /* Las etapas salen del conteo y no de una lista escrita acá: el plano ya
+       va en cuatro, y una etapa que existe en el mapa pero no en los chips
+       queda sin forma de mirarse sola. */
+    const etapas = useMemo(
+        () => [0, ...Object.keys(conteo?.porEtapa ?? {}).map(Number).sort((a, b) => a - b)],
+        [conteo])
+
     /* ─── envío ─── */
 
     // Etiqueta que se guarda en la base y viaja al evento de calendario.
@@ -373,41 +398,6 @@ export default function Agenda3D() {
 
     return (
         <div className={styles.stage}>
-            {/* Intro: el vuelo de dron ocupa la pantalla hasta que el visitante entra al mapa */}
-            {!started && (
-                <section className={styles.intro}>
-                    <video
-                        className={styles.introVideo}
-                        src={movil === null ? undefined
-                            : movil ? '/lomas3d/intro-dron-movil.mp4' : '/lomas3d/intro-dron.mp4'}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        poster="/lomas3d/intro-dron-poster.webp"
-                    />
-                    <div className={styles.introVeil} />
-                    <div className={styles.introContent}>
-                        <span className={styles.kicker}>Lomas del Mar · El Tabo</span>
-                        <h1 className={styles.introTitle}>
-                            Elige tu lote desde el aire<br />y agenda la visita
-                        </h1>
-                        <p className={styles.introText}>
-                            El terreno completo, levantado con dron y elevación real. Toca el lote que
-                            te gusta y reserva el día en que te lo mostramos.
-                        </p>
-                        <button className={styles.introCta} onClick={() => setStarted(true)}>
-                            Entrar al mapa 3D <ArrowRight size={18} />
-                        </button>
-                        <div className={styles.introStats}>
-                            <span><strong>200–390</strong> m² por lote</span>
-                            <span><strong>3</strong> etapas</span>
-                            <span><strong>10 min</strong> de la playa</span>
-                        </div>
-                    </div>
-                </section>
-            )}
-
             {/* Mapa + panel: el recorrido completo ocurre acá */}
             {started && (
                 <section className={styles.map} aria-label="Mapa 3D del loteo">
@@ -475,7 +465,7 @@ export default function Agenda3D() {
 
                     <div className={styles.chips}>
                         <div className={styles.chipRow}>
-                            {[0, 1, 2, 3].map(s => (
+                            {etapas.map(s => (
                                 <button
                                     key={s}
                                     className={stage === s ? styles.chipOn : styles.chip}
@@ -483,6 +473,17 @@ export default function Agenda3D() {
                                 >
                                     {s === 0 ? 'Todas' : `Etapa ${s}`}
                                 </button>
+                            ))}
+                        </div>
+                        <div className={styles.glosario}>
+                            {GLOSARIO.map(g => (
+                                <span key={g.nombre} className={styles.glosarioItem}>
+                                    <i
+                                        className={styles.glosarioColor}
+                                        style={{ '--c': g.color } as React.CSSProperties}
+                                    />
+                                    {g.nombre}
+                                </span>
                             ))}
                         </div>
                     </div>
