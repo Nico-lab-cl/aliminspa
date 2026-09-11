@@ -227,6 +227,29 @@ const REGLAS = [
                 ...tramo(61, 65).map(n => ({ n, sold: true }))
             ]
         }
+    },
+    {
+        /* Segunda hilera de la etapa 4. La celda del camino, que el calce
+           llamaba lote 2, es el estacionamiento, y con eso la numeracion se
+           corre entera: lo que decia 3 es el 1, y asi hasta arriba. Por eso
+           esta hilera se saltaba el 19.
+
+           Dictada de izquierda a derecha: el estacionamiento, del 1 al 5, un
+           area verde, el equipamiento sanitario, y del 6 al 24. Aca se recorre
+           desde la esquina, asi que la lista baja. Vendida entera. */
+        de: 'la hilera del 1 al 24 de la etapa 4',
+        hilera: {
+            etapa: 4,
+            guia: { etapa: 1, numero: 40 },
+            franja: 7,
+            celdas: [
+                ...bajando(24, 6).map(n => ({ n, sold: true })),
+                { tipo: 'sanitario' },
+                { tipo: 'areaverde' },
+                ...bajando(5, 1).map(n => ({ n, sold: true })),
+                { tipo: 'estacionamiento' }
+            ]
+        }
     }
 ]
 
