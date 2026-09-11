@@ -136,13 +136,22 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
         let cancelled = false
 
         const boot = async () => {
-            /* Visor nuevo: la panorámica mirada de frente, sin proyectarla
-               sobre el terreno. Va detrás de ?pano=1 mientras la numeración de
-               los lotes siga sin verificar. */
+            /*
+             * Qué visor se muestra.
+             *
+             * El plano cenital es el que va: la foto mirando recto hacia abajo,
+             * con los 202 lotes numerados, su etapa y su estado. Los otros dos
+             * quedan detrás de un parámetro por si hay que compararlos.
+             *
+             * `?plano=0` vuelve al visor viejo, el que proyectaba la panorámica
+             * sobre el terreno levantado. Tenía el agujero en el centro, la
+             * numeración sin verificar y solo tres etapas.
+             *
+             * `?pano=1` es el intermedio, la panorámica mirada de frente.
+             */
             const q = new URLSearchParams(window.location.search)
             const pano = q.get('pano') === '1'
-            // Plano cenital: el mapa plano, sobre la foto mirando hacia abajo.
-            const plano = q.get('plano') === '1'
+            const plano = !pano && q.get('plano') !== '0'
             try {
                 // Dos ramas literales y no una expresion: el empaquetador
                 // resuelve los import() leyendo la ruta, y con una variable

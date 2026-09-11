@@ -215,7 +215,9 @@ export default function Agenda3D() {
         const q = new URLSearchParams(window.location.search)
         setCalce(q.get('calce') === '1')
         setEditor(q.get('editor') === '1')
-        setPlano(q.get('plano') === '1')
+        // Mismo criterio que Lote3DViewer: el plano cenital es el que va salvo
+        // que se pida otra cosa. Acá decide qué editor abrir con ?editor=1.
+        setPlano(q.get('pano') !== '1' && q.get('plano') !== '0')
 
         // Con ahorro de datos activado no se adelanta la descarga del plano de
         // llegada: entrara igual, solo que un poco despues.
