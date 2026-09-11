@@ -26,9 +26,37 @@ const ZOOM_MIN = 0.035, ZOOM_MAX = 1
 /** Para el picking basta media resolución: un lote son decenas de píxeles. */
 const PICK_DIV = 2
 
-const SEL = new THREE.Color(0x76d845)
+const SEL = new THREE.Color(0xd8f56a)
 const HOV = new THREE.Color(0xb9e79a)
-const SOLD = new THREE.Color(0xe5484d)
+
+/**
+ * Cómo se pinta cada zona del plano.
+ *
+ * El plano no es solo lotes: hay estacionamiento de visitas, equipamiento
+ * sanitario y áreas verdes, y conviene que se distingan de un vistazo. El
+ * color va en la tabla que consulta el shader, así que cambiar esto no toca
+ * geometría ni obliga a recompilar nada.
+ *
+ * La fuerza es cuánto tiñe sobre la foto: lo justo para leer la zona sin tapar
+ * el terreno, que es lo que el visitante vino a mirar.
+ */
+const ZONAS = {
+    disponible:      { color: 0x76d845, fuerza: 0.34, nombre: 'Disponible' },
+    vendido:         { color: 0xe5484d, fuerza: 0.40, nombre: 'Vendido' },
+    estacionamiento: { color: 0xf2c033, fuerza: 0.40, nombre: 'Estacionamiento visitas' },
+    sanitario:       { color: 0x3b82f6, fuerza: 0.40, nombre: 'Equip. sanitario' },
+    areaverde:       { color: 0x1f7a34, fuerza: 0.45, nombre: 'Área verde' },
+    ninguna:         { color: 0x000000, fuerza: 0.00, nombre: 'Sin asignar' }
+}
+const RGB = Object.fromEntries(Object.entries(ZONAS)
+    .map(([k, z]) => [k, new THREE.Color(z.color)]))
+
+/** Qué zona le toca a un lote, según su tipo y si está vendido. */
+function zonaDe(l) {
+    if (l.tipo && l.tipo !== 'lote') return ZONAS[l.tipo] ? l.tipo : 'ninguna'
+    if (l.n == null) return 'ninguna'
+    return l.sold ? 'vendido' : 'disponible'
+}
 
 class PlanoLotes extends HTMLElement {
     connectedCallback() {
@@ -409,14 +437,15 @@ class PlanoLotes extends HTMLElement {
         t.fill(0)
         for (const l of this.lotes) {
             const i = l.id * 4
-            /* Fuera de la etapa elegida el lote se apaga un poco. Es lo único
-               que se pinta en reposo: el plano ya está dibujado en la foto y
-               taparlo con rectángulos de color lo ensucia. */
+            // Fuera de la etapa elegida la zona se apaga, en vez de pintarse.
             if (!this._enFiltro(l)) {
                 t[i] = 6; t[i + 1] = 12; t[i + 2] = 20; t[i + 3] = 95
-            } else if (l.sold && this._marcarVendidos) {
-                t[i] = SOLD.r * 255; t[i + 1] = SOLD.g * 255; t[i + 2] = SOLD.b * 255; t[i + 3] = 70
+                continue
             }
+            const k = zonaDe(l)
+            const c = RGB[k]
+            t[i] = c.r * 255; t[i + 1] = c.g * 255; t[i + 2] = c.b * 255
+            t[i + 3] = ZONAS[k].fuerza * 255
         }
         if (this._mat) {
             this._mat.uniforms.tabla.value.needsUpdate = true

@@ -1,6 +1,6 @@
 {
- "_comentario": "Lotes sacados del plano dibujado sobre la foto cenital, por scripts/importar-plano-cenital.js. u y v van en fraccion de la imagen, con el origen arriba a la izquierda. La numeracion es una propuesta sin verificar.",
- "provisional": true,
+ "_comentario": "Lotes sacados del plano cenital y numerados cruzandolos con el catastro de Lomas-del-mar-update4 (scripts/importar-plano-cenital.js y scripts/numerar-lotes.js). u y v en fraccion de imagen, origen arriba a la izquierda.",
+ "provisional": false,
  "ancho": 4096,
  "alto": 1846,
  "lotes": [
@@ -16,10 +16,11 @@
     0.22644
    ],
    "px": 3717,
-   "n": null,
-   "stage": null,
+   "n": 25,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.1
   },
   {
    "id": 2,
@@ -33,10 +34,11 @@
     0.29957
    ],
    "px": 3433,
-   "n": null,
-   "stage": null,
+   "n": 45,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.8
   },
   {
    "id": 3,
@@ -67,10 +69,11 @@
     0.26327
    ],
    "px": 2589,
-   "n": null,
-   "stage": null,
+   "n": 44,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.3
   },
   {
    "id": 5,
@@ -84,10 +87,11 @@
     0.28765
    ],
    "px": 1740,
-   "n": null,
-   "stage": null,
+   "n": 31,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.2
   },
   {
    "id": 6,
@@ -101,10 +105,11 @@
     0.26327
    ],
    "px": 1692,
-   "n": null,
-   "stage": null,
+   "n": 29,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.6
   },
   {
    "id": 7,
@@ -118,10 +123,11 @@
     0.25081
    ],
    "px": 1586,
-   "n": null,
-   "stage": null,
+   "n": 28,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.3
   },
   {
    "id": 8,
@@ -135,10 +141,11 @@
     0.29252
    ],
    "px": 1699,
-   "n": null,
-   "stage": null,
+   "n": 22,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.7
   },
   {
    "id": 9,
@@ -152,10 +159,11 @@
     0.23835
    ],
    "px": 1576,
-   "n": null,
-   "stage": null,
+   "n": 27,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.9
   },
   {
    "id": 10,
@@ -169,10 +177,11 @@
     0.26869
    ],
    "px": 1470,
-   "n": null,
-   "stage": null,
+   "n": 23,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.9
   },
   {
    "id": 11,
@@ -186,10 +195,11 @@
     0.2519
    ],
    "px": 2422,
-   "n": null,
-   "stage": null,
+   "n": 24,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.7
   },
   {
    "id": 12,
@@ -203,10 +213,11 @@
     0.31798
    ],
    "px": 2577,
-   "n": null,
-   "stage": null,
+   "n": 46,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.8
   },
   {
    "id": 13,
@@ -220,10 +231,11 @@
     0.31744
    ],
    "px": 1688,
-   "n": null,
-   "stage": null,
+   "n": 20,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.6
   },
   {
    "id": 14,
@@ -237,10 +249,11 @@
     0.30498
    ],
    "px": 1573,
-   "n": null,
-   "stage": null,
+   "n": 21,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.6
   },
   {
    "id": 15,
@@ -271,10 +284,11 @@
     0.68852
    ],
    "px": 4736,
-   "n": null,
-   "stage": null,
+   "n": 64,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.8
   },
   {
    "id": 17,
@@ -288,10 +302,11 @@
     0.57313
    ],
    "px": 1787,
-   "n": null,
-   "stage": null,
+   "n": 5,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 19.5
   },
   {
    "id": 18,
@@ -305,10 +320,11 @@
     0.72156
    ],
    "px": 1972,
-   "n": null,
-   "stage": null,
+   "n": 2,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5
   },
   {
    "id": 19,
@@ -322,10 +338,11 @@
     0.65222
    ],
    "px": 3104,
-   "n": null,
-   "stage": null,
+   "n": 63,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.9
   },
   {
    "id": 20,
@@ -356,10 +373,11 @@
     0.68743
    ],
    "px": 1571,
-   "n": null,
-   "stage": null,
+   "n": 3,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.6
   },
   {
    "id": 22,
@@ -373,10 +391,11 @@
     0.63434
    ],
    "px": 3088,
-   "n": null,
-   "stage": null,
+   "n": 62,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.6
   },
   {
    "id": 23,
@@ -390,10 +409,11 @@
     0.67551
    ],
    "px": 1660,
-   "n": null,
-   "stage": null,
+   "n": 4,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.5
   },
   {
    "id": 24,
@@ -407,10 +427,11 @@
     0.76273
    ],
    "px": 3169,
-   "n": null,
-   "stage": null,
+   "n": 42,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.3
   },
   {
    "id": 25,
@@ -424,10 +445,11 @@
     0.61538
    ],
    "px": 3084,
-   "n": null,
-   "stage": null,
+   "n": 61,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6
   },
   {
    "id": 26,
@@ -441,10 +463,11 @@
     0.74431
    ],
    "px": 3064,
-   "n": null,
-   "stage": null,
+   "n": 41,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.7
   },
   {
    "id": 27,
@@ -458,10 +481,11 @@
     0.65168
    ],
    "px": 1734,
-   "n": null,
-   "stage": null,
+   "n": 5,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.7
   },
   {
    "id": 28,
@@ -492,10 +516,11 @@
     0.5
    ],
    "px": 1697,
-   "n": null,
-   "stage": null,
+   "n": 7,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.7
   },
   {
    "id": 30,
@@ -509,10 +534,11 @@
     0.77898
    ],
    "px": 3091,
-   "n": null,
-   "stage": null,
+   "n": 2,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.2
   },
   {
    "id": 31,
@@ -543,10 +569,11 @@
     0.72589
    ],
    "px": 3079,
-   "n": null,
-   "stage": null,
+   "n": 40,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.4
   },
   {
    "id": 33,
@@ -577,10 +604,11 @@
     0.6273
    ],
    "px": 1732,
-   "n": null,
-   "stage": null,
+   "n": 7,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.1
   },
   {
    "id": 35,
@@ -594,10 +622,11 @@
     0.47508
    ],
    "px": 1618,
-   "n": null,
-   "stage": null,
+   "n": 8,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.6
   },
   {
    "id": 36,
@@ -611,10 +640,11 @@
     0.42145
    ],
    "px": 1687,
-   "n": null,
-   "stage": null,
+   "n": 40,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.9
   },
   {
    "id": 37,
@@ -628,10 +658,11 @@
     0.76219
    ],
    "px": 1577,
-   "n": null,
-   "stage": null,
+   "n": 3,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.1
   },
   {
    "id": 38,
@@ -645,10 +676,11 @@
     0.70802
    ],
    "px": 3069,
-   "n": null,
-   "stage": null,
+   "n": 39,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 0.9
   },
   {
    "id": 39,
@@ -679,10 +711,11 @@
     0.46316
    ],
    "px": 1616,
-   "n": null,
-   "stage": null,
+   "n": 9,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3
   },
   {
    "id": 41,
@@ -696,10 +729,11 @@
     0.40899
    ],
    "px": 1583,
-   "n": null,
-   "stage": null,
+   "n": 39,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 0.7
   },
   {
    "id": 42,
@@ -713,10 +747,11 @@
     0.3364
    ],
    "px": 1969,
-   "n": null,
-   "stage": null,
+   "n": 47,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 0.5
   },
   {
    "id": 43,
@@ -730,10 +765,11 @@
     0.75027
    ],
    "px": 1567,
-   "n": null,
-   "stage": null,
+   "n": 4,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.4
   },
   {
    "id": 44,
@@ -747,10 +783,11 @@
     0.60293
    ],
    "px": 1729,
-   "n": null,
-   "stage": null,
+   "n": 8,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.4
   },
   {
    "id": 45,
@@ -764,10 +801,11 @@
     0.45125
    ],
    "px": 1709,
-   "n": null,
-   "stage": null,
+   "n": 10,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5
   },
   {
    "id": 46,
@@ -781,10 +819,11 @@
     0.6896
    ],
    "px": 3072,
-   "n": null,
-   "stage": null,
+   "n": 38,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.7
   },
   {
    "id": 47,
@@ -798,10 +837,11 @@
     0.5428
    ],
    "px": 3083,
-   "n": null,
-   "stage": null,
+   "n": 60,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.2
   },
   {
    "id": 48,
@@ -815,10 +855,11 @@
     0.39653
    ],
    "px": 1673,
-   "n": null,
-   "stage": null,
+   "n": 38,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.6
   },
   {
    "id": 49,
@@ -832,10 +873,11 @@
     0.73835
    ],
    "px": 1579,
-   "n": null,
-   "stage": null,
+   "n": 5,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.1
   },
   {
    "id": 50,
@@ -849,10 +891,11 @@
     0.72589
    ],
    "px": 1577,
-   "n": null,
-   "stage": null,
+   "n": 6,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.1
   },
   {
    "id": 51,
@@ -883,10 +926,11 @@
     0.57855
    ],
    "px": 1650,
-   "n": null,
-   "stage": null,
+   "n": 9,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 13.1
   },
   {
    "id": 53,
@@ -900,10 +944,11 @@
     0.52438
    ],
    "px": 3069,
-   "n": null,
-   "stage": null,
+   "n": 59,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.7
   },
   {
    "id": 54,
@@ -917,10 +962,11 @@
     0.42687
    ],
    "px": 1639,
-   "n": null,
-   "stage": null,
+   "n": 11,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.2
   },
   {
    "id": 55,
@@ -934,10 +980,11 @@
     0.3727
    ],
    "px": 1683,
-   "n": null,
-   "stage": null,
+   "n": 37,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.5
   },
   {
    "id": 56,
@@ -951,10 +998,11 @@
     0.71343
    ],
    "px": 1574,
-   "n": null,
-   "stage": null,
+   "n": 7,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.5
   },
   {
    "id": 57,
@@ -985,10 +1033,11 @@
     0.41441
    ],
    "px": 1578,
-   "n": null,
-   "stage": null,
+   "n": 12,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.8
   },
   {
    "id": 59,
@@ -1036,10 +1085,11 @@
     0.36024
    ],
    "px": 1612,
-   "n": null,
-   "stage": null,
+   "n": 36,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.9
   },
   {
    "id": 62,
@@ -1053,10 +1103,11 @@
     0.70152
    ],
    "px": 1574,
-   "n": null,
-   "stage": null,
+   "n": 8,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.4
   },
   {
    "id": 63,
@@ -1070,10 +1121,11 @@
     0.77302
    ],
    "px": 2420,
-   "n": null,
-   "stage": null,
+   "n": 46,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.8
   },
   {
    "id": 64,
@@ -1087,10 +1139,11 @@
     0.55363
    ],
    "px": 1568,
-   "n": null,
-   "stage": null,
+   "n": 10,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 14.6
   },
   {
    "id": 65,
@@ -1104,10 +1157,11 @@
     0.40195
    ],
    "px": 1701,
-   "n": null,
-   "stage": null,
+   "n": 13,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1
   },
   {
    "id": 66,
@@ -1121,10 +1175,11 @@
     0.34832
    ],
    "px": 1710,
-   "n": null,
-   "stage": null,
+   "n": 35,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.1
   },
   {
    "id": 67,
@@ -1172,10 +1227,11 @@
     0.54171
    ],
    "px": 1567,
-   "n": null,
-   "stage": null,
+   "n": 11,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 15.6
   },
   {
    "id": 70,
@@ -1189,10 +1245,11 @@
     0.48754
    ],
    "px": 3065,
-   "n": null,
-   "stage": null,
+   "n": 58,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.8
   },
   {
    "id": 71,
@@ -1223,10 +1280,11 @@
     0.52979
    ],
    "px": 1575,
-   "n": null,
-   "stage": null,
+   "n": 12,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 16.6
   },
   {
    "id": 73,
@@ -1240,10 +1298,11 @@
     0.76761
    ],
    "px": 3074,
-   "n": null,
-   "stage": null,
+   "n": 45,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.8
   },
   {
    "id": 74,
@@ -1257,10 +1316,11 @@
     0.61647
    ],
    "px": 3086,
-   "n": null,
-   "stage": null,
+   "n": 37,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.2
   },
   {
    "id": 75,
@@ -1274,10 +1334,11 @@
     0.46966
    ],
    "px": 3079,
-   "n": null,
-   "stage": null,
+   "n": 57,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.7
   },
   {
    "id": 76,
@@ -1308,10 +1369,11 @@
     0.51733
    ],
    "px": 1568,
-   "n": null,
-   "stage": null,
+   "n": 13,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 17.1
   },
   {
    "id": 78,
@@ -1325,10 +1387,11 @@
     0.74973
    ],
    "px": 3069,
-   "n": null,
-   "stage": null,
+   "n": 44,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.8
   },
   {
    "id": 79,
@@ -1393,10 +1456,11 @@
     0.45125
    ],
    "px": 3088,
-   "n": null,
-   "stage": null,
+   "n": 56,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.9
   },
   {
    "id": 83,
@@ -1410,10 +1474,11 @@
     0.35374
    ],
    "px": 1772,
-   "n": null,
-   "stage": null,
+   "n": 17,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.3
   },
   {
    "id": 84,
@@ -1461,10 +1526,11 @@
     0.58017
    ],
    "px": 3092,
-   "n": null,
-   "stage": null,
+   "n": 36,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.2
   },
   {
    "id": 87,
@@ -1478,10 +1544,11 @@
     0.43283
    ],
    "px": 3080,
-   "n": null,
-   "stage": null,
+   "n": 55,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.6
   },
   {
    "id": 88,
@@ -1495,10 +1562,11 @@
     0.76869
    ],
    "px": 2635,
-   "n": null,
-   "stage": null,
+   "n": 3,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.2
   },
   {
    "id": 89,
@@ -1512,10 +1580,11 @@
     0.62893
    ],
    "px": 1650,
-   "n": null,
-   "stage": null,
+   "n": 9,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.9
   },
   {
    "id": 90,
@@ -1546,10 +1615,11 @@
     0.71289
    ],
    "px": 3061,
-   "n": null,
-   "stage": null,
+   "n": 43,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.3
   },
   {
    "id": 92,
@@ -1563,10 +1633,11 @@
     0.61647
    ],
    "px": 1580,
-   "n": null,
-   "stage": null,
+   "n": 10,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 13.6
   },
   {
    "id": 93,
@@ -1580,10 +1651,11 @@
     0.56176
    ],
    "px": 3079,
-   "n": null,
-   "stage": null,
+   "n": 35,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.7
   },
   {
    "id": 94,
@@ -1631,10 +1703,11 @@
     0.75515
    ],
    "px": 1982,
-   "n": null,
-   "stage": null,
+   "n": 4,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.4
   },
   {
    "id": 97,
@@ -1648,10 +1721,11 @@
     0.60401
    ],
    "px": 1665,
-   "n": null,
-   "stage": null,
+   "n": 11,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 16.8
   },
   {
    "id": 98,
@@ -1665,10 +1739,11 @@
     0.69502
    ],
    "px": 3100,
-   "n": null,
-   "stage": null,
+   "n": 42,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.2
   },
   {
    "id": 99,
@@ -1682,10 +1757,11 @@
     0.54334
    ],
    "px": 3061,
-   "n": null,
-   "stage": null,
+   "n": 14,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 14.3
   },
   {
    "id": 100,
@@ -1699,10 +1775,11 @@
     0.39653
    ],
    "px": 3093,
-   "n": null,
-   "stage": null,
+   "n": 54,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9
   },
   {
    "id": 101,
@@ -1716,10 +1793,11 @@
     0.73998
    ],
    "px": 1571,
-   "n": null,
-   "stage": null,
+   "n": 5,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.6
   },
   {
    "id": 102,
@@ -1801,10 +1879,11 @@
     0.52492
    ],
    "px": 3103,
-   "n": null,
-   "stage": null,
+   "n": 15,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.1
   },
   {
    "id": 107,
@@ -1835,10 +1914,11 @@
     0.37811
    ],
    "px": 3077,
-   "n": null,
-   "stage": null,
+   "n": 53,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9
   },
   {
    "id": 109,
@@ -1852,10 +1932,11 @@
     0.7156
    ],
    "px": 1655,
-   "n": null,
-   "stage": null,
+   "n": 6,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 8.5
   },
   {
    "id": 110,
@@ -1869,10 +1950,11 @@
     0.56771
    ],
    "px": 1583,
-   "n": null,
-   "stage": null,
+   "n": 12,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 17.6
   },
   {
    "id": 111,
@@ -1920,10 +2002,11 @@
     0.50704
    ],
    "px": 3063,
-   "n": null,
-   "stage": null,
+   "n": 16,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.7
   },
   {
    "id": 114,
@@ -1937,10 +2020,11 @@
     0.3597
    ],
    "px": 3064,
-   "n": null,
-   "stage": null,
+   "n": 52,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.8
   },
   {
    "id": 115,
@@ -1954,10 +2038,11 @@
     0.55525
    ],
    "px": 1652,
-   "n": null,
-   "stage": null,
+   "n": 34,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.8
   },
   {
    "id": 116,
@@ -1971,10 +2056,11 @@
     0.7649
    ],
    "px": 2043,
-   "n": null,
-   "stage": null,
+   "n": 46,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.1
   },
   {
    "id": 117,
@@ -2022,10 +2108,11 @@
     0.48862
    ],
    "px": 3089,
-   "n": null,
-   "stage": null,
+   "n": 17,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.2
   },
   {
    "id": 120,
@@ -2056,10 +2143,11 @@
     0.34182
    ],
    "px": 3103,
-   "n": null,
-   "stage": null,
+   "n": 51,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 11.3
   },
   {
    "id": 122,
@@ -2090,10 +2178,11 @@
     0.53142
    ],
    "px": 1640,
-   "n": null,
-   "stage": null,
+   "n": 33,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.1
   },
   {
    "id": 124,
@@ -2124,10 +2213,11 @@
     0.62189
    ],
    "px": 3079,
-   "n": null,
-   "stage": null,
+   "n": 41,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 8.5
   },
   {
    "id": 126,
@@ -2141,10 +2231,11 @@
     0.76436
    ],
    "px": 3127,
-   "n": null,
-   "stage": null,
+   "n": 45,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.7
   },
   {
    "id": 127,
@@ -2158,10 +2249,11 @@
     0.47075
    ],
    "px": 3084,
-   "n": null,
-   "stage": null,
+   "n": 18,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 8.1
   },
   {
    "id": 128,
@@ -2192,10 +2284,11 @@
     0.51896
    ],
    "px": 1568,
-   "n": null,
-   "stage": null,
+   "n": 32,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.4
   },
   {
    "id": 130,
@@ -2226,10 +2319,11 @@
     0.60347
    ],
    "px": 3083,
-   "n": null,
-   "stage": null,
+   "n": 40,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.8
   },
   {
    "id": 132,
@@ -2243,10 +2337,11 @@
     0.65493
    ],
    "px": 1578,
-   "n": null,
-   "stage": null,
+   "n": 7,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.5
   },
   {
    "id": 133,
@@ -2277,10 +2372,11 @@
     0.50704
    ],
    "px": 1662,
-   "n": null,
-   "stage": null,
+   "n": 31,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 10.5
   },
   {
    "id": 135,
@@ -2294,10 +2390,11 @@
     0.45233
    ],
    "px": 3070,
-   "n": null,
-   "stage": null,
+   "n": 20,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.9
   },
   {
    "id": 136,
@@ -2311,10 +2408,11 @@
     0.64247
    ],
    "px": 1660,
-   "n": null,
-   "stage": null,
+   "n": 8,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 14.9
   },
   {
    "id": 137,
@@ -2328,10 +2426,11 @@
     0.58505
    ],
    "px": 3064,
-   "n": null,
-   "stage": null,
+   "n": 14,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.4
   },
   {
    "id": 138,
@@ -2362,10 +2461,11 @@
     0.43391
    ],
    "px": 3070,
-   "n": null,
-   "stage": null,
+   "n": 21,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.6
   },
   {
    "id": 140,
@@ -2379,10 +2479,11 @@
     0.34724
    ],
    "px": 3828,
-   "n": null,
-   "stage": null,
+   "n": 50,
+   "stage": 4,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.7
   },
   {
    "id": 141,
@@ -2413,10 +2514,11 @@
     0.56717
    ],
    "px": 3065,
-   "n": null,
-   "stage": null,
+   "n": 15,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 11.1
   },
   {
    "id": 143,
@@ -2430,10 +2532,11 @@
     0.61863
    ],
    "px": 1632,
-   "n": null,
-   "stage": null,
+   "n": 9,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 15.7
   },
   {
    "id": 144,
@@ -2464,10 +2567,11 @@
     0.47021
    ],
    "px": 1566,
-   "n": null,
-   "stage": null,
+   "n": 30,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.1
   },
   {
    "id": 146,
@@ -2481,10 +2585,11 @@
     0.41549
    ],
    "px": 3059,
-   "n": null,
-   "stage": null,
+   "n": 22,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.8
   },
   {
    "id": 147,
@@ -2532,10 +2637,11 @@
     0.54875
    ],
    "px": 3071,
-   "n": null,
-   "stage": null,
+   "n": 17,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.5
   },
   {
    "id": 150,
@@ -2549,10 +2655,11 @@
     0.69068
    ],
    "px": 3115,
-   "n": null,
-   "stage": null,
+   "n": 44,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.8
   },
   {
    "id": 151,
@@ -2566,10 +2673,11 @@
     0.59372
    ],
    "px": 1571,
-   "n": null,
-   "stage": null,
+   "n": 39,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 11
   },
   {
    "id": 152,
@@ -2583,10 +2691,11 @@
     0.44583
    ],
    "px": 1577,
-   "n": null,
-   "stage": null,
+   "n": 29,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.5
   },
   {
    "id": 153,
@@ -2600,10 +2709,11 @@
     0.39762
    ],
    "px": 5037,
-   "n": null,
-   "stage": null,
+   "n": 24,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.3
   },
   {
    "id": 154,
@@ -2617,10 +2727,11 @@
     0.53034
    ],
    "px": 3077,
-   "n": null,
-   "stage": null,
+   "n": 18,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.6
   },
   {
    "id": 155,
@@ -2634,10 +2745,11 @@
     0.5818
    ],
    "px": 1563,
-   "n": null,
-   "stage": null,
+   "n": 11,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 20.2
   },
   {
    "id": 156,
@@ -2651,10 +2763,11 @@
     0.67226
    ],
    "px": 3130,
-   "n": null,
-   "stage": null,
+   "n": 43,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.4
   },
   {
    "id": 157,
@@ -2685,10 +2798,11 @@
     0.56988
    ],
    "px": 1573,
-   "n": null,
-   "stage": null,
+   "n": 38,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.3
   },
   {
    "id": 159,
@@ -2702,10 +2816,11 @@
     0.42145
    ],
    "px": 1575,
-   "n": null,
-   "stage": null,
+   "n": 28,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.6
   },
   {
    "id": 160,
@@ -2719,10 +2834,11 @@
     0.51192
    ],
    "px": 3068,
-   "n": null,
-   "stage": null,
+   "n": 19,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6
   },
   {
    "id": 161,
@@ -2736,10 +2852,11 @@
     0.65439
    ],
    "px": 3121,
-   "n": null,
-   "stage": null,
+   "n": 42,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 11
   },
   {
    "id": 162,
@@ -2753,10 +2870,11 @@
     0.55742
    ],
    "px": 1577,
-   "n": null,
-   "stage": null,
+   "n": 37,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.2
   },
   {
    "id": 163,
@@ -2787,10 +2905,11 @@
     0.49404
    ],
    "px": 3082,
-   "n": null,
-   "stage": null,
+   "n": 21,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.9
   },
   {
    "id": 165,
@@ -2821,10 +2940,11 @@
     0.39707
    ],
    "px": 1656,
-   "n": null,
-   "stage": null,
+   "n": 27,
+   "stage": 3,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.8
   },
   {
    "id": 167,
@@ -2838,10 +2958,11 @@
     0.63597
    ],
    "px": 3127,
-   "n": null,
-   "stage": null,
+   "n": 10,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 15.3
   },
   {
    "id": 168,
@@ -2855,10 +2976,11 @@
     0.53304
    ],
    "px": 1572,
-   "n": null,
-   "stage": null,
+   "n": 36,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.5
   },
   {
    "id": 169,
@@ -2872,10 +2994,11 @@
     0.47562
    ],
    "px": 3090,
-   "n": null,
-   "stage": null,
+   "n": 22,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3
   },
   {
    "id": 170,
@@ -2889,10 +3012,11 @@
     0.61755
    ],
    "px": 3119,
-   "n": null,
-   "stage": null,
+   "n": 41,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 13.3
   },
   {
    "id": 171,
@@ -2940,10 +3064,11 @@
     0.4572
    ],
    "px": 3063,
-   "n": null,
-   "stage": null,
+   "n": 24,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.2
   },
   {
    "id": 174,
@@ -2957,10 +3082,11 @@
     0.50867
    ],
    "px": 1652,
-   "n": null,
-   "stage": null,
+   "n": 35,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.1
   },
   {
    "id": 175,
@@ -2974,10 +3100,11 @@
     0.59967
    ],
    "px": 3126,
-   "n": null,
-   "stage": null,
+   "n": 12,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 11.1
   },
   {
    "id": 176,
@@ -2991,10 +3118,11 @@
     0.43933
    ],
    "px": 3067,
-   "n": null,
-   "stage": null,
+   "n": 25,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.5
   },
   {
    "id": 177,
@@ -3008,10 +3136,11 @@
     0.58126
    ],
    "px": 3112,
-   "n": null,
-   "stage": null,
+   "n": 13,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 9.5
   },
   {
    "id": 178,
@@ -3025,10 +3154,11 @@
     0.48483
    ],
    "px": 1643,
-   "n": null,
-   "stage": null,
+   "n": 34,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2.9
   },
   {
    "id": 179,
@@ -3042,10 +3172,11 @@
     0.42091
    ],
    "px": 3067,
-   "n": null,
-   "stage": null,
+   "n": 27,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 6.3
   },
   {
    "id": 180,
@@ -3059,10 +3190,11 @@
     0.47237
    ],
    "px": 1574,
-   "n": null,
-   "stage": null,
+   "n": 33,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.3
   },
   {
    "id": 181,
@@ -3076,10 +3208,11 @@
     0.56338
    ],
    "px": 3123,
-   "n": null,
-   "stage": null,
+   "n": 14,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 8.9
   },
   {
    "id": 182,
@@ -3110,10 +3243,11 @@
     0.40249
    ],
    "px": 2875,
-   "n": null,
-   "stage": null,
+   "n": 28,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.1
   },
   {
    "id": 184,
@@ -3127,10 +3261,11 @@
     0.54496
    ],
    "px": 3126,
-   "n": null,
-   "stage": null,
+   "n": 15,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 8.4
   },
   {
    "id": 185,
@@ -3144,10 +3279,11 @@
     0.448
    ],
    "px": 1576,
-   "n": null,
-   "stage": null,
+   "n": 32,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3.5
   },
   {
    "id": 186,
@@ -3161,10 +3297,11 @@
     0.43554
    ],
    "px": 1571,
-   "n": null,
-   "stage": null,
+   "n": 26,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 18.5
   },
   {
    "id": 187,
@@ -3178,10 +3315,11 @@
     0.52654
    ],
    "px": 3117,
-   "n": null,
-   "stage": null,
+   "n": 17,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.4
   },
   {
    "id": 188,
@@ -3212,10 +3350,11 @@
     0.42362
    ],
    "px": 1568,
-   "n": null,
-   "stage": null,
+   "n": 31,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5
   },
   {
    "id": 190,
@@ -3229,10 +3368,11 @@
     0.50813
    ],
    "px": 3115,
-   "n": null,
-   "stage": null,
+   "n": 18,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.1
   },
   {
    "id": 191,
@@ -3246,10 +3386,11 @@
     0.41116
    ],
    "px": 1574,
-   "n": null,
-   "stage": null,
+   "n": 30,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 7.8
   },
   {
    "id": 192,
@@ -3280,10 +3421,11 @@
     0.48971
    ],
    "px": 3109,
-   "n": null,
-   "stage": null,
+   "n": 20,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.9
   },
   {
    "id": 194,
@@ -3314,10 +3456,11 @@
     0.47183
    ],
    "px": 3119,
-   "n": null,
-   "stage": null,
+   "n": 21,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 3
   },
   {
    "id": 196,
@@ -3331,10 +3474,11 @@
     0.37486
    ],
    "px": 1570,
-   "n": null,
-   "stage": null,
+   "n": 29,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 8.8
   },
   {
    "id": 197,
@@ -3348,10 +3492,11 @@
     0.45341
    ],
    "px": 3115,
-   "n": null,
-   "stage": null,
+   "n": 22,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 1.7
   },
   {
    "id": 198,
@@ -3382,10 +3527,11 @@
     0.43499
    ],
    "px": 3120,
-   "n": null,
-   "stage": null,
+   "n": 24,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 4.2
   },
   {
    "id": 200,
@@ -3399,10 +3545,11 @@
     0.41712
    ],
    "px": 3117,
-   "n": null,
-   "stage": null,
+   "n": 25,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 2
   },
   {
    "id": 201,
@@ -3416,10 +3563,11 @@
     0.3987
    ],
    "px": 3131,
-   "n": null,
-   "stage": null,
+   "n": 26,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5
   },
   {
    "id": 202,
@@ -3433,10 +3581,11 @@
     0.38082
    ],
    "px": 3237,
-   "n": null,
-   "stage": null,
+   "n": 27,
+   "stage": 1,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 5.9
   },
   {
    "id": 203,
@@ -3450,10 +3599,11 @@
     0.7974
    ],
    "px": 6489,
-   "n": null,
-   "stage": null,
+   "n": 47,
+   "stage": 2,
    "sold": false,
-   "area": null
+   "area": null,
+   "error": 12.8
   },
   {
    "id": 204,

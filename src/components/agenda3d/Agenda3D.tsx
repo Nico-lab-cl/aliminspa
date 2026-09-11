@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 import Lote3DViewer, { Conteo, Listo, Lot, ViewerHandle, Vuelo } from './Lote3DViewer'
 import EditorLotes from './EditorLotes'
+import EditorPlano, { type VisorPlano } from './EditorPlano'
 import { getUtmParams, newEventId } from '@/lib/track'
 import { SITE } from '@/lib/constants'
 import styles from './Agenda3D.module.css'
@@ -97,6 +98,9 @@ export default function Agenda3D() {
     /* Editor de lotes: /agendar-visita?editor=1. Los coloca el equipo mirando
        la foto; el visitante normal nunca lo ve. */
     const [editor, setEditor] = useState(false)
+    /* El plano cenital tiene su propio editor: acá no se mueven polígonos, se
+       les pone número, etapa y zona a los lotes que ya salieron del dibujo. */
+    const [plano, setPlano] = useState(false)
     // El hijo necesita el visor como estado, no como ref: con un ref no se
     // entera de que ya está montado.
     const [handle, setHandle] = useState<ViewerHandle | null>(null)
@@ -158,6 +162,7 @@ export default function Agenda3D() {
         const q = new URLSearchParams(window.location.search)
         setCalce(q.get('calce') === '1')
         setEditor(q.get('editor') === '1')
+        setPlano(q.get('plano') === '1')
 
         setMovil(window.innerWidth < 900)
 
@@ -565,7 +570,9 @@ export default function Agenda3D() {
                         </div>
                     )}
 
-                    {editor && <EditorLotes viewer={handle} />}
+                    {editor && (plano
+                        ? <EditorPlano viewer={handle as unknown as VisorPlano} />
+                        : <EditorLotes viewer={handle} />)}
 
                     {/* Sin lote elegido el aviso es una barra compacta: la tarjeta
                         grande bajaba hasta el rincón del asistente flotante y se

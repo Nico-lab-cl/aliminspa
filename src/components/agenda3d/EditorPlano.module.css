@@ -1,0 +1,173 @@
+/* Editor de numeración del plano cenital. Solo se ve con ?editor=1, así que
+   manda que se trabaje rápido, no que combine con el resto de la página. */
+
+.panel {
+    position: absolute;
+    top: calc(var(--nav-h, 64px) + 76px);
+    right: 16px;
+    z-index: 6;
+    width: 268px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(8, 15, 24, .93);
+    border: 1px solid rgba(255, 255, 255, .1);
+    backdrop-filter: blur(8px);
+    color: rgba(255, 255, 255, .92);
+    font: 400 13px/1.4 Roboto, system-ui, sans-serif;
+}
+
+.cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.cabecera strong {
+    font: 700 14px Montserrat, sans-serif;
+}
+
+.cabecera span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, .55);
+}
+
+.vacio {
+    margin: 0;
+    color: rgba(255, 255, 255, .6);
+}
+
+.zonas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.zona,
+.zonaActiva {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .05);
+    color: inherit;
+    font: 500 12px Roboto, system-ui, sans-serif;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* El cuadrito de color es el mismo con que se pinta la zona en el mapa. */
+.zona::before,
+.zonaActiva::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--c);
+    flex: none;
+}
+
+.zonaActiva {
+    border-color: var(--c);
+    background: color-mix(in srgb, var(--c) 22%, transparent);
+}
+
+.campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.campos label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, .6);
+}
+
+.campos input {
+    width: 100%;
+    padding: 7px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+    font: 600 14px Roboto, system-ui, sans-serif;
+}
+
+.campos input:focus {
+    outline: none;
+    border-color: #76d845;
+}
+
+.disponible,
+.vendido {
+    grid-column: 1 / -1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font: 600 12px Roboto, system-ui, sans-serif;
+    cursor: pointer;
+}
+
+.disponible {
+    background: rgba(118, 216, 69, .18);
+    border-color: rgba(118, 216, 69, .5);
+    color: #b9e79a;
+}
+
+.vendido {
+    background: rgba(229, 72, 77, .18);
+    border-color: rgba(229, 72, 77, .5);
+    color: #ff9d9d;
+}
+
+.navegar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.navegar button {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .05);
+    color: inherit;
+    font: 500 12px Roboto, system-ui, sans-serif;
+    cursor: pointer;
+}
+
+.guardar {
+    padding: 10px;
+    border-radius: 9px;
+    border: none;
+    background: #76d845;
+    color: #08121c;
+    font: 700 13px Montserrat, sans-serif;
+    cursor: pointer;
+}
+
+.guardar:disabled {
+    opacity: .6;
+    cursor: default;
+}
+
+.aviso {
+    margin: 0;
+    font-size: 12px;
+    color: #d8f56a;
+}
+
+.ayuda {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .45);
+}
