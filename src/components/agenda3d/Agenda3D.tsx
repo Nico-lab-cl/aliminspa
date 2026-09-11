@@ -582,9 +582,11 @@ export default function Agenda3D() {
                         <div className={styles.hint}>
                             <div className={styles.hintTexto}>
                                 <strong>Toca un lote en el mapa</strong>
-                                {/* Sin lotes pintados encima del plano, una leyenda de
-                                    colores explicaria colores que no se ven. */}
-                                <span className={styles.legend}>Se marca al pasar por encima</span>
+                                {/* En un teléfono no hay cursor que pasar por encima:
+                                    decirlo ahí mandaba a hacer algo imposible. */}
+                                <span className={styles.legend}>
+                                    {movil ? 'Los rojos ya están vendidos' : 'Se marca al pasar por encima'}
+                                </span>
                             </div>
                             <button className={styles.hintBtn} onClick={() => setStep('fecha')}>
                                 Agendar sin elegir lote
@@ -596,11 +598,30 @@ export default function Agenda3D() {
                         <div className={styles.etiquetas}>
                             <div className={styles.etiquetaLote}>
                                 <strong>Lote {lot.n}</strong>
-                                <span>Etapa {lot.stage} · {lot.area} m²</span>
+                                {/* Sin superficie cargada quedaba un "· m²" suelto. */}
+                                <span>Etapa {lot.stage}{lot.area ? ` · ${lot.area} m²` : ''}</span>
                                 <button onClick={limpiarLote} aria-label="Quitar selección">
                                     <X size={13} />
                                 </button>
                             </div>
+                            {/* El mismo video que va junto a las especificaciones, acá
+                                mismo: es lo que responde "¿y qué me cabe en este lote?"
+                                sin pedir un toque más. Abre la ficha si lo tocan. */}
+                            <figure
+                                className={styles.etiquetaVideo}
+                                onClick={() => { setStep('lote'); setFichaAbierta(true) }}
+                            >
+                                <video
+                                    src="/lomas3d/construccion/casa-200m2-movil.mp4"
+                                    poster="/lomas3d/construccion/casa-200m2-poster.webp"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    preload="metadata"
+                                />
+                                <figcaption>Ejemplo de lo que se puede construir en 200 m²</figcaption>
+                            </figure>
                             <button
                                 className={styles.etiqueta}
                                 onClick={() => { setStep('lote'); setFichaAbierta(true) }}

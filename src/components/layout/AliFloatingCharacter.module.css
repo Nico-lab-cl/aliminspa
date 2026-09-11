@@ -525,3 +525,33 @@
     max-height: calc(100dvh - 148px - var(--ali-offset-bottom));
   }
 }
+
+/* ─── Ali achicado: el mapa de lotes ───────────────────────────────────────
+
+   Ahí la página entera es la herramienta y el personaje a tamaño normal se
+   come el rincón del plano. En celular, que es donde la pantalla no sobra,
+   queda del porte de un botón y levantado por encima de la barra de abajo.
+   Sigue abriendo el chat de un toque. */
+
+.compacto .characterBox {
+    width: 150px;
+    height: 160px;
+}
+
+@media (max-width: 860px) {
+    .compacto {
+        /* Por encima de la barra inferior del mapa, que ocupa el ancho. */
+        --ali-offset-bottom: 76px;
+    }
+
+    .compacto .characterBox {
+        width: 92px;
+        height: 98px;
+        filter: drop-shadow(0 6px 16px rgba(26, 138, 125, .35));
+    }
+
+    .compacto .chatModal {
+        bottom: 96px;
+        max-height: calc(100dvh - 190px);
+    }
+}

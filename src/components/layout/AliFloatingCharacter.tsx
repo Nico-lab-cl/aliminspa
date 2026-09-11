@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { SITE } from '@/lib/constants';
 import AliChat from './AliChat';
 import styles from './AliFloatingCharacter.module.css';
@@ -60,13 +61,22 @@ export default function AliFloatingCharacter({
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [shouldLoadScene, setShouldLoadScene] = useState(false);
 
+  /* En el mapa de lotes Ali se achica y no saluda.
+     La página entera es la herramienta: el globo tapaba el plano justo en el
+     rincón donde caen las etapas 1 y 2, y en un teléfono eso es una porción
+     grande del loteo. Achicado sigue estando a un toque, que es para lo que
+     el visitante lo busca. */
+  const pathname = usePathname();
+  const enMapa = pathname === '/agendar-visita';
+
   // Auto show speech bubble with smooth delay if closed
   useEffect(() => {
+    if (enMapa) return;
     const timer = setTimeout(() => {
       setShowSpeechBubble(true);
     }, 800);
     return () => clearTimeout(timer);
-  }, []);
+  }, [enMapa]);
 
   // Defer the heavy 3D scene until the page has settled, so it never
   // competes with initial/critical page rendering on any route.
@@ -127,7 +137,7 @@ export default function AliFloatingCharacter({
 
   return (
     <div
-      className={styles.floatingWrapper}
+      className={enMapa ? `${styles.floatingWrapper} ${styles.compacto}` : styles.floatingWrapper}
       id="whatsapp-float"
       /* La variable la leen tanto el anclaje del wrapper como el techo del
          modal, para que al levantarlo no se salga por el borde superior. */
@@ -266,7 +276,7 @@ export default function AliFloatingCharacter({
       )}
 
       {/* ── SPEECH BUBBLE TOOLTIP ────────────────────────── */}
-      {showSpeechBubble && !isModalOpen && (
+      {showSpeechBubble && !isModalOpen && !enMapa && (
         <div
           className={styles.speechBubble}
           onClick={handleCharacterClick}
