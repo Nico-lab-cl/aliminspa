@@ -47,6 +47,9 @@ const REGLAS = [
         simbolicos: [{
             etapa: 1, numero: 28,
             porque: 'el triangulo de la esquina queda rojo, sin numero ni ficha'
+        }, {
+            entre: { etapa: 1, a: 36, b: 37 }, cuantas: 1,
+            porque: 'la celda suelta entre el 36 y el 37 tambien va roja, para que la hilera no quede cortada'
         }]
     }
 ]
@@ -60,6 +63,26 @@ function main() {
     const rel = datos.ancho / datos.alto
     const porNum = (etapa, n) => L.find(l => l.stage === etapa && l.n === n)
     let problemas = 0
+
+    /**
+     * Celdas sin numero que quedan entre dos lotes conocidos.
+     *
+     * Es la unica forma de nombrar una celda que el calce dejo sin numero: por
+     * los dos vecinos numerados que la rodean, que es como se ve en el plano.
+     */
+    const sueltasEntre = (entre, cuantas) => {
+        const a = porNum(entre.etapa, entre.a), b = porNum(entre.etapa, entre.b)
+        if (!a || !b) return []
+        const medio = { u: (a.u + b.u) / 2, v: (a.v + b.v) / 2 }
+        const largo = dist(a, b, rel)
+        return L
+            .filter(l => l.n == null && !l.tipo)
+            .map(l => ({ l, d: dist(l, medio, rel) }))
+            .filter(x => x.d < largo)
+            .sort((x, y) => x.d - y.d)
+            .slice(0, cuantas)
+            .map(x => x.l)
+    }
 
     for (const r of REGLAS) {
         console.log(`\n${r.de}`)
@@ -85,42 +108,33 @@ function main() {
            despues de los vendidos, porque le quita el numero y a partir de ahi
            ya no se le puede llegar por numero. */
         for (const s of r.simbolicos ?? []) {
-            const l = porNum(s.etapa, s.numero)
-            if (!l) {
-                console.warn(`  OJO: no encuentro el lote ${s.numero} de la etapa ${s.etapa}`)
+            /* Se puede senalar de dos formas: por numero, cuando el calce se
+               lo puso, o por los dos lotes entre los que queda, cuando la
+               celda salio sin numero y no hay otra forma de nombrarla. */
+            const cuales = s.numero != null
+                ? [porNum(s.etapa, s.numero)].filter(Boolean)
+                : sueltasEntre(s.entre, s.cuantas)
+            if (!cuales.length) {
+                console.warn(`  OJO: ${s.porque} — no encuentro esa celda`)
                 problemas++
                 continue
             }
-            l.tipo = 'vendido'
-            l.n = null
-            l.sold = true
+            for (const l of cuales) {
+                l.tipo = 'vendido'
+                l.n = null
+                l.stage = s.entre?.etapa ?? s.etapa
+                l.sold = true
+            }
             console.log(`  ${s.porque}`)
         }
 
         for (const z of r.zonas ?? []) {
-            const a = porNum(z.entre.etapa, z.entre.a)
-            const b = porNum(z.entre.etapa, z.entre.b)
-            if (!a || !b) {
-                console.warn(`  OJO: no encuentro los lotes ${z.entre.a} y ${z.entre.b} de la etapa ${z.entre.etapa}`)
-                problemas++
-                continue
-            }
-            /* Las celdas sin numero que caen entre esos dos lotes, medidas por
-               cercania a la recta que los une. Se toman las mas cercanas al
-               punto medio, tantas como se dijo. */
-            const medio = { u: (a.u + b.u) / 2, v: (a.v + b.v) / 2 }
-            const largo = dist(a, b, rel)
-            const sueltas = L
-                .filter(l => l.n == null && !l.tipo)
-                .map(l => ({ l, d: dist(l, medio, rel) }))
-                .filter(x => x.d < largo)
-                .sort((x, y) => x.d - y.d)
-                .slice(0, z.cuantas)
+            const sueltas = sueltasEntre(z.entre, z.cuantas)
             if (sueltas.length < z.cuantas) {
                 console.warn(`  OJO: ${z.porque} — solo encontre ${sueltas.length} celdas sueltas`)
                 problemas++
             }
-            for (const { l } of sueltas) {
+            for (const l of sueltas) {
                 l.tipo = z.tipo
                 l.n = null
                 l.stage = null

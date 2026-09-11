@@ -3771,9 +3771,10 @@
    ],
    "px": 3117,
    "n": null,
-   "stage": null,
-   "sold": false,
-   "area": null
+   "stage": 1,
+   "sold": true,
+   "area": null,
+   "tipo": "vendido"
   },
   {
    "id": 222,
