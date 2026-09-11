@@ -250,6 +250,24 @@ const REGLAS = [
                 { tipo: 'estacionamiento' }
             ]
         }
+    },
+    {
+        /* Tercera hilera de la etapa 4, del 25 al 41 de izquierda a derecha.
+
+           Son 17 lotes, pero la deteccion encontraba 16: el plano deja uno
+           abierto hacia el camino y por eso se derramaba. Se nota en que entre
+           sus dos vecinos hay el doble de separacion que en el resto de la
+           fila. Ese lote se recupera con scripts/recuperar-lote-abierto.js,
+           que hay que correr antes que esto.
+
+           No se dijo cuales estan vendidos: quedan disponibles. */
+        de: 'la hilera del 25 al 41 de la etapa 4',
+        hilera: {
+            etapa: 4,
+            guia: { etapa: 1, numero: 40 },
+            franja: 8,
+            celdas: tramo(25, 41).map(n => ({ n }))
+        }
     }
 ]
 
