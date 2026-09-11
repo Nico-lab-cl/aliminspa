@@ -1326,7 +1326,7 @@
    "px": 1575,
    "n": 11,
    "stage": 3,
-   "sold": false,
+   "sold": true,
    "area": null,
    "tipo": "lote"
   },
@@ -1872,7 +1872,7 @@
    "px": 1569,
    "n": 16,
    "stage": 3,
-   "sold": false,
+   "sold": true,
    "area": null,
    "tipo": "lote"
   },

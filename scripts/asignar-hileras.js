@@ -50,6 +50,9 @@ const VENDIDOS_E2 = [1, 4, 8, 18]
    todavia no se dicta. */
 const VENDIDOS_E3 = new Set([43, 42, 41, 40, 39, 38, 37, 36, 35, 33, 27])
 
+/* De la hilera de arriba de la etapa 3, la del 1 al 26, los vendidos. */
+const VENDIDOS_E3_ARRIBA = new Set([11, 16])
+
 /**
  * Lo dictado.
  *
@@ -190,20 +193,17 @@ const REGLAS = [
 
            Dictada de izquierda a derecha: el estacionamiento pegado al camino,
            del 1 al 8, el equipamiento sanitario, tres areas verdes, y del 9 al
-           26. Aca se recorre al reves, desde la esquina, asi que la lista baja.
-
-           No se dijo el estado de estos lotes: quedan disponibles, que es como
-           estan hoy, hasta que alguien diga cuales se vendieron. */
+           26. Aca se recorre al reves, desde la esquina, asi que la lista baja. */
         de: 'la hilera del 1 al 26 de la etapa 3',
         hilera: {
             etapa: 3,
             guia: { etapa: 1, numero: 40 },
             franja: 5,
             celdas: [
-                ...bajando(26, 9).map(n => ({ n })),
+                ...bajando(26, 9).map(n => ({ n, sold: VENDIDOS_E3_ARRIBA.has(n) })),
                 ...zona('areaverde', 3),
                 { tipo: 'sanitario' },
-                ...bajando(8, 1).map(n => ({ n })),
+                ...bajando(8, 1).map(n => ({ n, sold: VENDIDOS_E3_ARRIBA.has(n) })),
                 { tipo: 'estacionamiento' }
             ]
         }
