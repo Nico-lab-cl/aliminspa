@@ -207,6 +207,26 @@ const REGLAS = [
                 { tipo: 'estacionamiento' }
             ]
         }
+    },
+    {
+        /* Primera hilera de la etapa 4, la que sigue subiendo. El calce
+           automatico dejaba cinco celdas sin nada y contaba hasta el 64, un
+           numero corto, justamente porque se comia una.
+
+           Dictada de izquierda a derecha va del 65 al 61, cuatro areas verdes,
+           y del 60 al 49. Aca se recorre desde la esquina, asi que la lista
+           sube. Esta vendida entera. */
+        de: 'la hilera del 49 al 65 de la etapa 4',
+        hilera: {
+            etapa: 4,
+            guia: { etapa: 1, numero: 40 },
+            franja: 6,
+            celdas: [
+                ...tramo(49, 60).map(n => ({ n, sold: true })),
+                ...zona('areaverde', 4),
+                ...tramo(61, 65).map(n => ({ n, sold: true }))
+            ]
+        }
     }
 ]
 

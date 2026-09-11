@@ -118,10 +118,11 @@
     0.68852
    ],
    "px": 4736,
-   "n": 64,
+   "n": 65,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 8,
@@ -170,10 +171,11 @@
     0.65222
    ],
    "px": 3074,
-   "n": 63,
+   "n": 64,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 11,
@@ -223,10 +225,11 @@
     0.6338
    ],
    "px": 3071,
-   "n": 62,
+   "n": 63,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 14,
@@ -293,10 +296,11 @@
     0.61538
    ],
    "px": 3069,
-   "n": 61,
+   "n": 62,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 18,
@@ -364,10 +368,11 @@
     0.59751
    ],
    "px": 3073,
-   "n": null,
-   "stage": null,
-   "sold": false,
-   "area": null
+   "n": 61,
+   "stage": 4,
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 22,
@@ -472,7 +477,8 @@
    "n": null,
    "stage": null,
    "sold": false,
-   "area": null
+   "area": null,
+   "tipo": "areaverde"
   },
   {
    "id": 28,
@@ -595,7 +601,8 @@
    "n": null,
    "stage": null,
    "sold": false,
-   "area": null
+   "area": null,
+   "tipo": "areaverde"
   },
   {
    "id": 35,
@@ -731,10 +738,11 @@
     0.5428
    ],
    "px": 3083,
-   "n": 60,
-   "stage": 4,
+   "n": null,
+   "stage": null,
    "sold": false,
-   "area": null
+   "area": null,
+   "tipo": "areaverde"
   },
   {
    "id": 43,
@@ -923,10 +931,11 @@
     0.52438
    ],
    "px": 3069,
-   "n": 59,
-   "stage": 4,
+   "n": null,
+   "stage": null,
    "sold": false,
-   "area": null
+   "area": null,
+   "tipo": "areaverde"
   },
   {
    "id": 54,
@@ -1062,10 +1071,11 @@
     0.50596
    ],
    "px": 3071,
-   "n": 58,
+   "n": 60,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 62,
@@ -1238,10 +1248,11 @@
     0.48754
    ],
    "px": 3065,
-   "n": null,
-   "stage": null,
-   "sold": false,
-   "area": null
+   "n": 59,
+   "stage": 4,
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 72,
@@ -1395,10 +1406,11 @@
     0.46966
    ],
    "px": 3079,
-   "n": 57,
+   "n": 58,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 81,
@@ -1571,10 +1583,11 @@
     0.45125
    ],
    "px": 3072,
-   "n": 56,
+   "n": 57,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 91,
@@ -1694,10 +1707,11 @@
     0.43283
    ],
    "px": 3067,
-   "n": 55,
+   "n": 56,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 98,
@@ -1888,10 +1902,11 @@
     0.41495
    ],
    "px": 3073,
-   "n": 54,
+   "n": 55,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 109,
@@ -2046,10 +2061,11 @@
     0.39653
    ],
    "px": 3065,
-   "n": 53,
+   "n": 54,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 118,
@@ -2258,10 +2274,11 @@
     0.37811
    ],
    "px": 3077,
-   "n": 52,
+   "n": 53,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 130,
@@ -2399,10 +2416,11 @@
     0.3597
    ],
    "px": 3064,
-   "n": 51,
+   "n": 52,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 138,
@@ -2595,10 +2613,11 @@
     0.34182
    ],
    "px": 3073,
-   "n": 50,
+   "n": 51,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 149,
@@ -2720,10 +2739,11 @@
     0.3234
    ],
    "px": 2918,
-   "n": 49,
+   "n": 50,
    "stage": 4,
-   "sold": false,
-   "area": null
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 156,
@@ -2809,10 +2829,11 @@
     0.30607
    ],
    "px": 2890,
-   "n": null,
-   "stage": null,
-   "sold": false,
-   "area": null
+   "n": 49,
+   "stage": 4,
+   "sold": true,
+   "area": null,
+   "tipo": "lote"
   },
   {
    "id": 161,
