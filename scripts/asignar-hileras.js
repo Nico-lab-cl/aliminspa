@@ -45,6 +45,11 @@ const DISPONIBLES_E1 = new Set([26, 25, 24, 23, 22, 21, 19])
    vendidos y el resto de los 47 queda disponible. */
 const VENDIDOS_E2 = [1, 4, 8, 18]
 
+/* De la hilera del 27 al 43 de la etapa 3, los vendidos. El estado se dice en
+   la misma hilera y no en una regla aparte, porque la otra hilera de la etapa
+   todavia no se dicta. */
+const VENDIDOS_E3 = new Set([43, 42, 41, 40, 39, 38, 37, 36, 35, 33, 27])
+
 /**
  * Lo dictado.
  *
@@ -157,6 +162,26 @@ const REGLAS = [
         de: 'estado de la etapa 2',
         vendidos: { etapa: 2, numeros: VENDIDOS_E2 },
         disponibles: { etapa: 2, numeros: tramo(1, 47).filter(n => !VENDIDOS_E2.includes(n)) }
+    },
+    {
+        /* Primera hilera de la etapa 3. El calce automatico la dejaba corrida
+           en uno: metia una celda suelta despues del 29 y ponia solo tres
+           areas verdes donde hay cuatro.
+
+           Dictada de izquierda a derecha va del 43 al 38, cuatro areas verdes,
+           y del 37 al 27. Aca se recorre al reves —desde la esquina hacia el
+           camino— asi que la lista sube del 27 al 43. */
+        de: 'la hilera del 27 al 43 de la etapa 3',
+        hilera: {
+            etapa: 3,
+            guia: { etapa: 1, numero: 40 },
+            franja: 4,
+            celdas: [
+                ...tramo(27, 37).map(n => ({ n, sold: VENDIDOS_E3.has(n) })),
+                ...zona('areaverde', 4),
+                ...tramo(38, 43).map(n => ({ n, sold: VENDIDOS_E3.has(n) }))
+            ]
+        }
     }
 ]
 
