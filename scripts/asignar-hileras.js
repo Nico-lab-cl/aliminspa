@@ -182,6 +182,31 @@ const REGLAS = [
                 ...tramo(38, 43).map(n => ({ n, sold: VENDIDOS_E3.has(n) }))
             ]
         }
+    },
+    {
+        /* Segunda hilera de la etapa 3, la de arriba, donde la numeracion
+           empieza. El calce automatico dejaba cinco celdas sin nada, entre
+           ellas el estacionamiento y el equipamiento.
+
+           Dictada de izquierda a derecha: el estacionamiento pegado al camino,
+           del 1 al 8, el equipamiento sanitario, tres areas verdes, y del 9 al
+           26. Aca se recorre al reves, desde la esquina, asi que la lista baja.
+
+           No se dijo el estado de estos lotes: quedan disponibles, que es como
+           estan hoy, hasta que alguien diga cuales se vendieron. */
+        de: 'la hilera del 1 al 26 de la etapa 3',
+        hilera: {
+            etapa: 3,
+            guia: { etapa: 1, numero: 40 },
+            franja: 5,
+            celdas: [
+                ...bajando(26, 9).map(n => ({ n })),
+                ...zona('areaverde', 3),
+                { tipo: 'sanitario' },
+                ...bajando(8, 1).map(n => ({ n })),
+                { tipo: 'estacionamiento' }
+            ]
+        }
     }
 ]
 
