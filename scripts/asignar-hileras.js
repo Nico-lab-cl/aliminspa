@@ -122,6 +122,15 @@ const REGLAS = [
                 { n: 1, sold: false }
             ]
         }
+    },
+    {
+        /* Estado de la etapa 2: esta vendida entera menos el lote 30. Va
+           despues de la hilera, porque la hilera deja los suyos disponibles y
+           esto los corrige. Alcanza a los 47 de la etapa, no solo a los 28 de
+           esa hilera. */
+        de: 'estado de la etapa 2',
+        vendidos: { etapa: 2, numeros: tramo(1, 47).filter(n => n !== 30) },
+        disponibles: { etapa: 2, numeros: [30] }
     }
 ]
 
@@ -230,17 +239,20 @@ function main() {
             console.log('  ' + Object.entries(cuenta).map(([k, v]) => `${v} ${k}`).join(', '))
         }
 
-        if (r.vendidos) {
-            const { etapa, numeros } = r.vendidos
+        /* Estado por numero. Se dice de las dos formas segun convenga: a veces
+           se enumeran los vendidos y a veces los pocos que siguen libres. */
+        for (const [clave, vendido] of [['vendidos', true], ['disponibles', false]]) {
+            if (!r[clave]) continue
+            const { etapa, numeros } = r[clave]
             const hechos = [], faltan = []
             for (const n of numeros) {
                 const l = porNum(etapa, n)
                 if (!l) { faltan.push(n); continue }
-                l.sold = true
+                l.sold = vendido
                 l.tipo = 'lote'
                 hechos.push(n)
             }
-            console.log(`  vendidos: ${hechos.length} de ${numeros.length} (etapa ${etapa}, del ${numeros[0]} al ${numeros[numeros.length - 1]})`)
+            console.log(`  ${clave}: ${hechos.length} de ${numeros.length} en la etapa ${etapa}`)
             if (faltan.length) {
                 console.warn(`  OJO: no estan los numeros ${faltan.join(', ')}`)
                 problemas++
