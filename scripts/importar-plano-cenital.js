@@ -118,13 +118,17 @@ async function main() {
     console.log(`Recintos: ${celdas.length}`)
 
     /* Se descartan el fondo, el ruido y las tiras largas, que son los caminos.
-       Un lote llena su caja; un camino curvo no. */
+       El que separa un lote de un camino es lo alargado, no lo lleno: el loteo
+       esta girado respecto de la imagen, asi que hasta un lote rectangular
+       llena solo la mitad de su caja recta, y los de esquina son triangulos,
+       que llenan todavia menos. Con el umbral en 0,45 se caian justamente las
+       esquinas. */
     const lotes = celdas.filter(c => {
         if (c.n < MIN || c.n > MAX) return false
         const an = c.caja[2] - c.caja[0] + 1, al = c.caja[3] - c.caja[1] + 1
         if (an > W * 0.12 || al > H * 0.25) return false
-        if (c.n / (an * al) < 0.45) return false
-        return Math.max(an, al) / Math.max(1, Math.min(an, al)) < 6
+        if (c.n / (an * al) < 0.36) return false
+        return Math.max(an, al) / Math.max(1, Math.min(an, al)) < 5
     })
     console.log(`Lotes: ${lotes.length}`)
     const ts = lotes.map(c => c.n).sort((a, b) => a - b)

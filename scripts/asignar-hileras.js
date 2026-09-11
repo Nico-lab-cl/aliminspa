@@ -1,23 +1,18 @@
 /*
- * Reparte numero, etapa y zona sobre una hilera completa del plano.
+ * Aplica lo que dicta quien conoce el loteo, sobre lo que el calce automatico
+ * no puede saber.
  *
- * El cruce automatico con el catastro (scripts/numerar-lotes.js) deja 7,5 m de
- * error sobre lotes de 14 m de lado, asi que puede emparejar un lote con su
- * vecino. Cuando alguien que conoce el loteo dicta una hilera entera —"de
- * izquierda a derecha: 47, 46, 45, tres areas verdes, y del 44 al 28"— eso vale
- * mas que cualquier ajuste, y se escribe de una.
+ * El cruce con el catastro (scripts/numerar-lotes.js) reparte numero y etapa,
+ * pero de ahi no sale el estado: en lots.json los 202 registros figuran como
+ * disponibles. Quien vende es el que sabe cuales estan vendidos, y las zonas
+ * que no son lote —areas verdes, estacionamiento, equipamiento— tampoco estan
+ * en ningun archivo.
  *
  *   node scripts/asignar-hileras.js
  *
- * Las hileras se detectan igual que las ve el ojo: el loteo son franjas
- * paralelas separadas por caminos, asi que se proyectan los centros sobre el
- * eje perpendicular a las franjas y se corta donde hay hueco. Las franjas
- * quedan numeradas F0, F1... de un lado al otro, y dentro de cada una las
- * celdas van en orden a lo largo.
- *
- * Antes de escribir se comprueba que la hilera tenga exactamente tantas celdas
- * como dice la lista. Si no calzan, no se toca nada: una lista corrida por una
- * celda deja toda la hilera con el numero del vecino.
+ * Cada regla dice a que lotes toca por etapa y numero, que es como habla quien
+ * dicta. Si una regla no encuentra a quien aplicarse, se avisa y no se escribe:
+ * una regla que no calza suele significar que la numeracion cambio debajo.
  */
 
 const fs = require('fs')
@@ -25,118 +20,104 @@ const path = require('path')
 
 const DATOS = path.join(__dirname, '..', 'public/lomas3d/plano-lotes.json')
 
-/** Del 44 al 28 hacia abajo, todos vendidos. */
-const bajando = (desde, hasta) => {
+/** Todos los numeros de un tramo, en cualquier sentido. */
+const tramo = (a, b) => {
     const l = []
-    for (let n = desde; n >= hasta; n--) l.push({ n, sold: true })
+    for (let n = Math.min(a, b); n <= Math.max(a, b); n++) l.push(n)
     return l
 }
 
 /**
- * Lo que dicta quien conoce el loteo, hilera por hilera.
+ * Lo dictado.
  *
- * `franja` es cual de las detectadas, y `celdas` va en el mismo orden en que
- * se recorre la hilera: desde el extremo que da al camino hacia la punta.
+ * `vendidos` marca lotes por etapa y numero. `zonas` marca celdas que no son
+ * lote, y como esas no tienen numero hay que ubicarlas de otra forma: se dicen
+ * por los dos lotes entre los que quedan, que es como se ven en el plano.
  */
-const HILERAS = [
+const REGLAS = [
     {
-        franja: 5,
-        etapa: 1,
-        desde: 'el extremo que da al camino',
-        celdas: [
-            { n: 47, sold: true },
-            { n: 46, sold: true },
-            { n: 45, sold: true },
-            { tipo: 'areaverde' },
-            { tipo: 'areaverde' },
-            { tipo: 'areaverde' },
-            ...bajando(44, 28)
-        ]
+        de: 'la hilera de abajo de la etapa 1',
+        vendidos: { etapa: 1, numeros: tramo(28, 47) },
+        zonas: [{
+            tipo: 'areaverde',
+            cuantas: 3,
+            entre: { etapa: 1, a: 44, b: 45 },
+            porque: 'tres celdas de area verde entre el lote 44 y el 45'
+        }]
     }
 ]
 
-/** Agrupa los lotes en franjas, como se ven en el plano. */
-function franjas(lotes, rel) {
-    const P = lotes.map(l => [l.u * rel, l.v])
-    const n = P.length
-    let mx = 0, my = 0
-    for (const p of P) { mx += p[0]; my += p[1] }
-    mx /= n; my /= n
-    let sxx = 0, sxy = 0, syy = 0
-    for (const p of P) {
-        const a = p[0] - mx, b = p[1] - my
-        sxx += a * a; sxy += a * b; syy += b * b
-    }
-    /* Eje mayor de la nube: es la direccion en que corren las franjas, porque
-       el loteo es mucho mas largo a lo largo de ellas que a lo ancho. */
-    const t = 0.5 * Math.atan2(2 * sxy / n, (sxx - syy) / n)
-    const eA = [Math.cos(t), Math.sin(t)], eB = [-Math.sin(t), Math.cos(t)]
-    const proy = lotes.map((l, i) => {
-        const a = P[i][0] - mx, b = P[i][1] - my
-        return { l, a: a * eA[0] + b * eA[1], b: a * eB[0] + b * eB[1] }
-    })
-    const orden = [...proy].sort((x, y) => x.b - y.b)
-    const corte = (orden[orden.length - 1].b - orden[0].b) * 0.022
-    let g = 0
-    orden[0].g = 0
-    for (let i = 1; i < orden.length; i++) {
-        if (orden[i].b - orden[i - 1].b > corte) g++
-        orden[i].g = g
-    }
-    const grupos = new Map()
-    for (const o of orden) {
-        if (!grupos.has(o.g)) grupos.set(o.g, [])
-        grupos.get(o.g).push(o)
-    }
-    for (const G of grupos.values()) G.sort((x, y) => x.a - y.a)
-    return grupos
-}
+/** Distancia entre dos celdas, corrigiendo que la imagen no es cuadrada. */
+const dist = (a, b, rel) => Math.hypot((a.u - b.u) * rel, a.v - b.v)
 
 function main() {
     const datos = JSON.parse(fs.readFileSync(DATOS, 'utf8'))
-    const grupos = franjas(datos.lotes, datos.ancho / datos.alto)
-    console.log(`Franjas detectadas: ${grupos.size}`)
-    for (const [k, G] of [...grupos].sort((a, b) => a[0] - b[0])) {
-        console.log(`  F${k}: ${G.length} celdas`)
-    }
+    const L = datos.lotes
+    const rel = datos.ancho / datos.alto
+    const porNum = (etapa, n) => L.find(l => l.stage === etapa && l.n === n)
+    let problemas = 0
 
-    for (const h of HILERAS) {
-        const G = grupos.get(h.franja)
-        if (!G) { console.error(`\nNo existe la franja F${h.franja}.`); process.exit(1) }
-        if (G.length !== h.celdas.length) {
-            console.error(`\nF${h.franja} tiene ${G.length} celdas y la lista trae ${h.celdas.length}.`)
-            console.error('No se escribe nada: con la lista corrida, toda la hilera queda con el numero del vecino.')
-            process.exit(1)
+    for (const r of REGLAS) {
+        console.log(`\n${r.de}`)
+
+        if (r.vendidos) {
+            const { etapa, numeros } = r.vendidos
+            const hechos = [], faltan = []
+            for (const n of numeros) {
+                const l = porNum(etapa, n)
+                if (!l) { faltan.push(n); continue }
+                l.sold = true
+                l.tipo = 'lote'
+                hechos.push(n)
+            }
+            console.log(`  vendidos: ${hechos.length} de ${numeros.length} (etapa ${etapa}, del ${numeros[0]} al ${numeros[numeros.length - 1]})`)
+            if (faltan.length) {
+                console.warn(`  OJO: no estan los numeros ${faltan.join(', ')}`)
+                problemas++
+            }
         }
-        console.log(`\nF${h.franja} — etapa ${h.etapa}, desde ${h.desde}`)
-        for (const [i, dicho] of h.celdas.entries()) {
-            const l = G[i].l
-            if (dicho.tipo) {
-                l.tipo = dicho.tipo
+
+        for (const z of r.zonas ?? []) {
+            const a = porNum(z.entre.etapa, z.entre.a)
+            const b = porNum(z.entre.etapa, z.entre.b)
+            if (!a || !b) {
+                console.warn(`  OJO: no encuentro los lotes ${z.entre.a} y ${z.entre.b} de la etapa ${z.entre.etapa}`)
+                problemas++
+                continue
+            }
+            /* Las celdas sin numero que caen entre esos dos lotes, medidas por
+               cercania a la recta que los une. Se toman las mas cercanas al
+               punto medio, tantas como se dijo. */
+            const medio = { u: (a.u + b.u) / 2, v: (a.v + b.v) / 2 }
+            const largo = dist(a, b, rel)
+            const sueltas = L
+                .filter(l => l.n == null && !l.tipo)
+                .map(l => ({ l, d: dist(l, medio, rel) }))
+                .filter(x => x.d < largo)
+                .sort((x, y) => x.d - y.d)
+                .slice(0, z.cuantas)
+            if (sueltas.length < z.cuantas) {
+                console.warn(`  OJO: ${z.porque} — solo encontre ${sueltas.length} celdas sueltas`)
+                problemas++
+            }
+            for (const { l } of sueltas) {
+                l.tipo = z.tipo
                 l.n = null
                 l.stage = null
                 l.sold = false
-            } else {
-                l.tipo = 'lote'
-                l.n = dicho.n
-                l.stage = h.etapa
-                l.sold = !!dicho.sold
             }
-            delete l.error
+            console.log(`  ${z.porque}: ${sueltas.length} marcadas`)
         }
-        const resumen = h.celdas.map(c => c.tipo ? 'AV' : c.n).join(' ')
-        console.log(`  ${resumen}`)
-        const vendidos = h.celdas.filter(c => c.sold).length
-        const verdes = h.celdas.filter(c => c.tipo === 'areaverde').length
-        console.log(`  ${h.celdas.length - verdes} lotes (${vendidos} vendidos) y ${verdes} de area verde`)
     }
 
-    datos.provisional = datos.lotes.some(l =>
-        (l.tipo ?? 'lote') === 'lote' && (l.n == null || l.stage == null))
+    for (const l of L) delete l.error
+
+    datos.provisional = L.some(l => (l.tipo ?? 'lote') === 'lote' && (l.n == null || l.stage == null))
     fs.writeFileSync(DATOS, JSON.stringify(datos, null, 1))
 
-    const listos = datos.lotes.filter(l => (l.tipo ?? 'lote') !== 'lote' || l.n != null).length
-    console.log(`\nEscrito. ${listos} de ${datos.lotes.length} celdas resueltas.`)
+    const sinResolver = L.filter(l => (l.tipo ?? 'lote') === 'lote' && l.n == null)
+    console.log(`\nEscrito. Quedan ${sinResolver.length} celdas sin numero ni zona, de ${L.length}.`)
+    if (problemas) console.log(`Hubo ${problemas} avisos: revisalos antes de publicar.`)
 }
 
 main()
