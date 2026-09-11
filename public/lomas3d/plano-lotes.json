@@ -4050,11 +4050,11 @@
     0.36186
    ],
    "px": 5985,
-   "n": 28,
+   "n": null,
    "stage": 1,
    "sold": true,
    "area": null,
-   "tipo": "lote"
+   "tipo": "vendido"
   },
   {
    "id": 238,

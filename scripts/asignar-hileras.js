@@ -43,6 +43,10 @@ const REGLAS = [
             cuantas: 3,
             entre: { etapa: 1, a: 44, b: 45 },
             porque: 'tres celdas de area verde entre el lote 44 y el 45'
+        }],
+        simbolicos: [{
+            etapa: 1, numero: 28,
+            porque: 'el triangulo de la esquina queda rojo, sin numero ni ficha'
         }]
     }
 ]
@@ -75,6 +79,22 @@ function main() {
                 console.warn(`  OJO: no estan los numeros ${faltan.join(', ')}`)
                 problemas++
             }
+        }
+
+        /* Simbolico: se ve vendido pero no es un lote que se pueda elegir. Va
+           despues de los vendidos, porque le quita el numero y a partir de ahi
+           ya no se le puede llegar por numero. */
+        for (const s of r.simbolicos ?? []) {
+            const l = porNum(s.etapa, s.numero)
+            if (!l) {
+                console.warn(`  OJO: no encuentro el lote ${s.numero} de la etapa ${s.etapa}`)
+                problemas++
+                continue
+            }
+            l.tipo = 'vendido'
+            l.n = null
+            l.sold = true
+            console.log(`  ${s.porque}`)
         }
 
         for (const z of r.zonas ?? []) {

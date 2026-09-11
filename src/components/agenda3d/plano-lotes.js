@@ -97,6 +97,7 @@ class PlanoLotes extends HTMLElement {
         this._hov = 0
         this._filtro = {}
         this._relacion = datos.ancho / datos.alto
+        this._editor = this.getAttribute('editor') === '1'
 
         const renderer = new THREE.WebGLRenderer({ antialias: true })
         renderer.setPixelRatio(Math.min(devicePixelRatio, this.getAttribute('quality') === 'baja' ? 1.5 : 2))
@@ -411,7 +412,13 @@ class PlanoLotes extends HTMLElement {
         const y = Math.min(H - 1, Math.max(0, Math.floor(v * H)))
         const i = (y * W + x) * 4
         const id = datos[i] + datos[i + 1] * 256
-        return this.porId.has(id) ? id : 0
+        const l = this.porId.get(id)
+        if (!l) return 0
+        /* En la página solo se toca lo que se vende. Un área verde, o un lote
+           todavía sin numerar, abrirían una ficha vacía, y eso desconcierta más
+           que no responder. En el editor se toca todo, que para eso está. */
+        if (!this._editor && (l.n == null || (l.tipo ?? 'lote') !== 'lote')) return 0
+        return id
     }
 
     _tocar(clientX, clientY) {
@@ -494,7 +501,11 @@ class PlanoLotes extends HTMLElement {
             const l = E.l
             /* En la página solo se ve el número del lote apuntado y el del
                elegido. En el editor, todos. */
-            const vivo = this._todosLosNumeros || this._sel === l.id || this._hov === l.id
+            /* Sin número no hay etiqueta que mostrar: un lote simbólico se ve
+               rojo y nada más. En el editor sí aparecen todas, con un punto
+               donde todavía falta numerar. */
+            const vivo = (this._todosLosNumeros || this._sel === l.id || this._hov === l.id)
+                && (l.n != null || this._todosLosNumeros)
             if (!vivo || !this._enFiltro(l)) {
                 if (E.on) { E.el.style.visibility = 'hidden'; E.on = false }
                 continue
