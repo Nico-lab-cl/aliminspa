@@ -183,17 +183,32 @@ export default function Agenda3D() {
         setEditor(q.get('editor') === '1')
         setPlano(q.get('plano') === '1')
 
-        /* 860 y no 900: es el mismo corte que usan las consultas de media de la
-           hoja de estilos. Con dos números distintos quedaba una franja entre
-           861 y 899 px donde el componente se creía celular —y escondía el
-           panel lateral— pero el CSS seguía en escritorio y no mostraba la
-           barra de abajo: ahí no aparecía nada al elegir un lote. */
-        setMovil(window.innerWidth <= 860)
-
         // Con ahorro de datos activado no se adelanta la descarga del plano de
         // llegada: entrara igual, solo que un poco despues.
         const con = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
         setAhorroDatos(!!con?.saveData)
+    }, [])
+
+    /*
+     * Ancho de pantalla, medido cada vez que cambia.
+     *
+     * 860 y no 900: es el mismo corte que usan las consultas de media de la
+     * hoja de estilos. Con dos números distintos quedaba una franja entre 861
+     * y 899 px donde el componente se creía celular —y escondía el panel
+     * lateral— mientras el CSS seguía en escritorio y no mostraba la barra de
+     * abajo: elegir un lote ahí no mostraba nada.
+     *
+     * Y se vuelve a medir, en vez de una sola vez al montar: girando el
+     * teléfono, o cambiando el tamaño de la ventana, la página se quedaba con
+     * el diseño del tamaño anterior. En un celular que quedó marcado como
+     * escritorio no se esconden los filtros ni sale la barra del lote, y la
+     * ficha se abre entera de golpe.
+     */
+    useEffect(() => {
+        const medir = () => setMovil(window.innerWidth <= 860)
+        medir()
+        window.addEventListener('resize', medir)
+        return () => window.removeEventListener('resize', medir)
     }, [])
 
     const guardarCalce = async () => {
