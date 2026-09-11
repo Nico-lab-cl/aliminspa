@@ -4051,11 +4051,11 @@
     0.36186
    ],
    "px": 5985,
-   "n": null,
+   "n": 28,
    "stage": 1,
    "sold": true,
    "area": null,
-   "tipo": "vendido"
+   "tipo": "lote"
   },
   {
    "id": 238,

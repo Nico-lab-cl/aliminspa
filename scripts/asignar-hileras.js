@@ -47,16 +47,14 @@ const REGLAS = [
 
            El estacionamiento va entre el 46 y el 47, no despues del 47: por
            tamano parecia al reves —el 47 mide 2043 px y el estacionamiento
-           3127— pero el 47 es un lote de esquina y por eso sale mas chico.
-
-           El triangulo se deja simbolico —rojo, sin numero ni ficha— porque es
-           el remate de la esquina y no un lote que alguien vaya a elegir. */
+           3127— pero el 47 es un lote de esquina y por eso sale mas chico. */
         de: 'la hilera de abajo de la etapa 1',
         hilera: {
             etapa: 1,
             guia: { etapa: 1, numero: 40 },
             celdas: [
-                { simbolico: true },
+                // El triangulo de la esquina es el lote 28, con su numero.
+                { n: 28, sold: true },
                 ...tramo(29, 44).map(n => ({ n, sold: true })),
                 { tipo: 'areaverde' },
                 { tipo: 'areaverde' },
