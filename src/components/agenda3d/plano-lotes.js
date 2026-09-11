@@ -325,7 +325,8 @@ class PlanoLotes extends HTMLElement {
             if (!arrastrando) {
                 const id = this.idEn(e.clientX, e.clientY)
                 if (id !== this._hov) { this._hov = id; this._pintar(); this._sucio = true }
-                lienzo.style.cursor = id ? 'pointer' : 'grab'
+                // La mano solo sobre lo que se puede elegir; lo vendido se lee.
+                lienzo.style.cursor = this.idElegibleEn(e.clientX, e.clientY) ? 'pointer' : 'grab'
                 return
             }
             const dx = e.clientX - px, dy = e.clientY - py
@@ -415,17 +416,25 @@ class PlanoLotes extends HTMLElement {
         const id = datos[i] + datos[i + 1] * 256
         const l = this.porId.get(id)
         if (!l) return 0
-        /* En la página solo se toca lo que se vende. Un área verde o un lote
-           todavía sin numerar abrirían una ficha vacía, y un lote vendido lleva
-           a agendar una visita por algo que ya no está: se ve rojo y ahí queda.
-           En el editor se toca todo, que para eso está. */
-        if (!this._editor
-            && (l.n == null || (l.tipo ?? 'lote') !== 'lote' || l.sold)) return 0
+        /* Se señala todo lote numerado, vendido o no: que el visitante pueda
+           leer el número de uno vendido es justamente lo que le dice cuáles se
+           fueron. Un área verde o un lote sin numerar no señalan nada, porque
+           no hay número que mostrar. En el editor se señala todo. */
+        if (!this._editor && (l.n == null || (l.tipo ?? 'lote') !== 'lote')) return 0
         return id
     }
 
-    _tocar(clientX, clientY) {
+    /** Identificador de lote que se puede elegir bajo un punto, o 0. */
+    idElegibleEn(clientX, clientY) {
         const id = this.idEn(clientX, clientY)
+        /* Un lote vendido se mira pero no se elige: llevaría a agendar una
+           visita por algo que ya no está. En el editor se elige todo. */
+        if (!id || this._editor) return id
+        return this.porId.get(id).sold ? 0 : id
+    }
+
+    _tocar(clientX, clientY) {
+        const id = this.idElegibleEn(clientX, clientY)
         if (!id) return
         const l = this.porId.get(id)
         this._sel = id

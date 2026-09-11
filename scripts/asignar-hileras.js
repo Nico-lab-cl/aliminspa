@@ -262,13 +262,29 @@ const REGLAS = [
            La separacion del doble que hay en medio de la fila no es un lote
            que falte: ahi termina una manzana y empieza la otra.
 
-           No se dijo cuales estan vendidos: quedan disponibles. */
+           Vendida entera. */
         de: 'la hilera del 25 al 41 de la etapa 4',
         hilera: {
             etapa: 4,
             guia: { etapa: 1, numero: 40 },
             franja: 8,
-            celdas: tramo(25, 41).map(n => ({ n }))
+            celdas: tramo(25, 41).map(n => ({ n, sold: true }))
+        }
+    },
+    {
+        /* La ultima hilera, la tira angosta que corre por el borde de arriba
+           del loteo. Son siete lotes, del 48 al 42 de izquierda a derecha, y
+           con ella termina la etapa 4.
+
+           El septimo tambien es una cuna y tambien se habia caido del filtro,
+           por lo mismo que el 41: llena 0,334 de su caja recta. Se rescata con
+           scripts/recuperar-celda.js antes de correr esto. Vendida entera. */
+        de: 'la hilera del 42 al 48 de la etapa 4',
+        hilera: {
+            etapa: 4,
+            guia: { etapa: 1, numero: 40 },
+            franja: 9,
+            celdas: tramo(42, 48).map(n => ({ n, sold: true }))
         }
     }
 ]
