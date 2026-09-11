@@ -1542,3 +1542,80 @@
         font-size: 9.5px;
     }
 }
+
+/* ─── Dónde queda el loteo ─────────────────────────────────────────────────
+
+   El mapa de lotes no dice dónde está eso en el mundo, y es de lo primero que
+   pregunta quien mira desde Santiago. En escritorio va bajo el glosario, que
+   es la esquina donde ya están las claves de lectura del plano; en celular no
+   cabe ahí sin tapar el plano y se muestra dentro de la ficha del lote. */
+
+.ubicacion {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 16px;
+    background: rgba(10, 18, 28, .82);
+    border: 1px solid rgba(255, 255, 255, .14);
+    backdrop-filter: blur(8px);
+}
+
+.ubicacionCabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 2px;
+}
+
+.ubicacionCabecera span {
+    font: 700 10.5px/1 Montserrat, system-ui, sans-serif;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .55);
+}
+
+.ubicacionCabecera a {
+    font: 700 11px/1 Montserrat, system-ui, sans-serif;
+    color: var(--lima-text);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.ubicacionCabecera a:hover {
+    text-decoration: underline;
+}
+
+.ubicacion iframe {
+    width: 100%;
+    height: 150px;
+    display: block;
+    border: 0;
+    border-radius: 11px;
+    /* El embed viene con fondo claro mientras carga: sobre el panel oscuro
+       eso es un flash blanco en cada apertura. */
+    background: #0a1520;
+}
+
+.ubicacion p {
+    margin: 0;
+    padding: 0 2px;
+    font: 300 11px/1.45 Roboto, system-ui, sans-serif;
+    color: rgba(255, 255, 255, .62);
+}
+
+@media (max-width: 860px) {
+    /* Dentro de la ficha el panel ya pone su propio fondo y borde: acá sobra
+       la caja, y el mapa gana el alto que esa caja ocupaba. */
+    .panelBody .ubicacion {
+        padding: 0;
+        background: none;
+        border: 0;
+        backdrop-filter: none;
+    }
+
+    .panelBody .ubicacion iframe {
+        height: 138px;
+    }
+}

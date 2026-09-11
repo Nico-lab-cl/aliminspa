@@ -63,6 +63,40 @@ const GLOSARIO = [
     { color: '#3b82f6', nombre: 'Equip. sanitario' },
 ]
 
+/**
+ * Dónde queda el loteo, sobre la foto satelital de Google.
+ *
+ * El mapa del loteo muestra los lotes pero no dice dónde está eso en el mundo,
+ * y es de lo primero que pregunta quien mira desde Santiago. Es el mismo
+ * embed que usa la página del proyecto, así que los dos apuntan al mismo
+ * lugar sin dos direcciones que mantener.
+ *
+ * `loading="lazy"` a propósito: es un iframe de un tercero y no tiene por qué
+ * competir con el mapa de lotes, que es lo que el visitante vino a usar.
+ */
+const MAPA_EMBED = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.7!2d-71.6181184!3d-33.4617574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x966215007f8800b9%3A0x952d8553bda618e5!2sLomas%20Del%20Mar%20-%20Alimin!5e1!3m2!1ses!2scl!4v1719000000000'
+const MAPA_LUGAR = 'https://www.google.com/maps/place/Lomas+Del+Mar+-+Alimin/@-33.4617529,-71.6184652,907m/data=!3m2!1e3!4b1'
+
+function Ubicacion() {
+    return (
+        <section className={styles.ubicacion}>
+            <div className={styles.ubicacionCabecera}>
+                <span>Dónde queda</span>
+                <a href={MAPA_LUGAR} target="_blank" rel="noopener noreferrer">
+                    Abrir en Google Maps
+                </a>
+            </div>
+            <iframe
+                src={MAPA_EMBED}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Lomas del Mar · El Tabo, Litoral Central"
+            />
+            <p>El Tabo, Litoral Central · a 10 min de la playa y 1 hora de Santiago</p>
+        </section>
+    )
+}
+
 type Step = 'lote' | 'fecha' | 'datos' | 'listo'
 
 interface Availability {
@@ -510,6 +544,11 @@ export default function Agenda3D() {
                                 </span>
                             ))}
                         </div>
+                        {/* Dónde queda el loteo. En celular no cabe acá encima del
+                            plano, así que va dentro de la ficha del lote; por eso
+                            se monta en un lado o en el otro, nunca en los dos: son
+                            dos cargas del mapa de Google en vez de una. */}
+                        {movil === false && <Ubicacion />}
                     </div>
 
                     {calce && (
@@ -749,6 +788,11 @@ export default function Agenda3D() {
                                     />
                                     <figcaption>Ejemplo de lo que se puede construir en 200 m²</figcaption>
                                 </figure>
+
+                                {/* En celular la ubicación vive acá: sobre el plano
+                                    no cabe sin taparlo, y la ficha es donde el
+                                    visitante ya está mirando los datos del lote. */}
+                                {movil && <Ubicacion />}
 
                                 {lot.sold ? (
                                     <>
