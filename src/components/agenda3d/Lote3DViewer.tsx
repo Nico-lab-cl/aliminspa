@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { LOMAS_DEL_MAR, type Proyecto } from './proyectos'
 
 /** Posición y orientación del dron cuando tomó la panorámica. */
 export interface Vuelo {
@@ -108,6 +109,14 @@ export function detectQuality(): { quality: Quality; pano: string | null } {
 
 interface Props {
     className?: string
+    /**
+     * Qué proyecto se muestra. Decide qué archivos carga el visor del plano.
+     *
+     * Los otros dos visores —la panorámica y el terreno levantado— siguen
+     * atados a Lomas del Mar: viven detrás de un parámetro en la URL y solo se
+     * usan para comparar contra el plano, que es el que va.
+     */
+    proyecto?: Proyecto
     /** Se dispara cuando el visitante toca un lote en el mapa. */
     onPick(lot: Lot): void
     /** Se dispara una vez que la escena terminó de armarse. */
@@ -119,9 +128,41 @@ interface Props {
     onGroundPick?(punto: { x: number; z: number }): void
 }
 
-export default function Lote3DViewer({ className, onPick, onReady, onError, onAlign, onGroundPick }: Props) {
+export default function Lote3DViewer({
+    className,
+    proyecto = LOMAS_DEL_MAR,
+    onPick,
+    onReady,
+    onError,
+    onAlign,
+    onGroundPick,
+}: Props) {
     const hostRef = useRef<HTMLDivElement>(null)
     const [failed, setFailed] = useState(false)
+
+    /*
+     * Si la pantalla es más alta que ancha y el proyecto tiene el plano girado,
+     * se usa ese. Vale para el teléfono en vertical y también para la tablet.
+     *
+     * Al girar el aparato el visor se vuelve a montar: el plano que estaba
+     * cargado ya no es el que corresponde, y no hay forma de cambiarle la
+     * textura sin rehacer la escena igual. Empieza en null para no elegir en el
+     * servidor, donde no se sabe el tamaño de la pantalla.
+     */
+    const [vertical, setVertical] = useState<boolean | null>(null)
+
+    useEffect(() => {
+        const mq = window.matchMedia('(orientation: portrait)')
+        const leer = () => setVertical(mq.matches)
+        leer()
+        mq.addEventListener('change', leer)
+        return () => mq.removeEventListener('change', leer)
+    }, [])
+
+    // Igual que los callbacks: el efecto corre una sola vez y necesita el
+    // proyecto vigente sin volver a montar el visor.
+    const proy = useRef(proyecto)
+    proy.current = proyecto
 
     // Los callbacks viven en un ref: el efecto debe correr una sola vez, y si
     // dependiera de ellos el visor se destruiría en cada render del padre.
@@ -130,7 +171,10 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
 
     useEffect(() => {
         const host = hostRef.current
-        if (!host) return
+        // Hasta saber la orientación no se monta: montar con el plano que no
+        // corresponde y cambiarlo después es descargar dos veces la imagen más
+        // pesada de la página.
+        if (!host || vertical === null) return
 
         let el: HTMLElement | null = null
         let cancelled = false
@@ -172,11 +216,17 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
             const { quality, pano: panoSrc } = detectQuality()
 
             if (plano) {
+                const p = (vertical && proy.current.planoVertical) || proy.current.plano
                 el = document.createElement('plano-lotes')
-                el.setAttribute('plano', quality === 'baja'
-                    ? '/lomas3d/plano-lite.webp' : '/lomas3d/plano.webp')
-                el.setAttribute('mapa', '/lomas3d/plano-mapa.png')
-                el.setAttribute('lotes', '/lomas3d/plano-lotes.json')
+                el.setAttribute('plano', quality === 'baja' ? p.baja : p.alta)
+                el.setAttribute('mapa', p.mapa)
+                el.setAttribute('lotes', p.lotes)
+                if (proy.current.aire) el.setAttribute('aire', String(proy.current.aire))
+                // Sin números de escritura, la etiqueta del mapa lleva la sigla:
+                // así dice lo mismo que el panel y no simula un número de lote.
+                if (!proy.current.numeraLotes && proy.current.refPrefijo) {
+                    el.setAttribute('prefijo', proy.current.refPrefijo + '-')
+                }
                 el.setAttribute('quality', quality)
                 if (q.get('editor') === '1') el.setAttribute('editor', '1')
                 el.style.width = '100%'
@@ -266,7 +316,9 @@ export default function Lote3DViewer({ className, onPick, onReady, onError, onAl
             }
             el?.remove()
         }
-    }, [])
+        // Solo la orientación rehace el visor, y cambia cuando el visitante
+        // gira el aparato. El resto de lo que usa el efecto vive en refs.
+    }, [vertical])
 
     if (failed) {
         return (

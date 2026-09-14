@@ -50,3 +50,13 @@ next-env.d.ts
 stitch_remix_*
 # El plano cenital original: 85 MB. Lo publicado sale de scripts/importar-plano-cenital.js
 /Panoramica de Lomasturbas.png
+
+# El material crudo del tour de Arena y Sol: 150 MB de panorámicas reconstruidas
+# desde los tiles del visor. Lo que se publica sale de
+# scripts/importar-plano-arenaysol.js. Los dos JSON sí van versionados: uno es
+# la entrada del script y el otro es la correspondencia con el plano oficial,
+# que se armó a mano y no se puede regenerar.
+/tour-arenaysol/*
+!/tour-arenaysol/LEEME.md
+!/tour-arenaysol/lotes-poligonos.json
+!/tour-arenaysol/numeracion-oficial.json

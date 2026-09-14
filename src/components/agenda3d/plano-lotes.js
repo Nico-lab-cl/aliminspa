@@ -293,8 +293,13 @@ class PlanoLotes extends HTMLElement {
         }
         const u = (x0 + x1) / 2, v = (y0 + y1) / 2
         const c = (this.clientWidth || 1280) / (this.clientHeight || 720)
+        /* Cuánto aire queda alrededor de los lotes. Sale por atributo porque
+           depende de qué haya afuera: en Lomas del Mar el loteo llega hasta el
+           borde de la foto y no hay nada que mostrar, y en Arena y Sol el
+           entorno es parte de lo que el visitante quiere ver. */
+        const aire = Number(this.getAttribute('aire')) || 1.14
         // El zoom lo manda el lado que peor entra.
-        const z = Math.max((x1 - x0), (y1 - y0) * c / this._relacion) * 1.14
+        const z = Math.max((x1 - x0), (y1 - y0) * c / this._relacion) * aire
         return { u, v, z: Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z)) }
     }
 
@@ -496,9 +501,14 @@ class PlanoLotes extends HTMLElement {
             position: 'absolute', inset: '0', pointerEvents: 'none', overflow: 'hidden'
         })
         this.appendChild(capa)
+        /* Delante del número. Donde los lotes no tienen número de escritura
+           —Arena y Sol— el que se dibuja es un orden del mapa, y va con su
+           sigla para que se lea como referencia y no como número de lote, y
+           para que coincida con lo que dice el panel. */
+        const prefijo = this.getAttribute('prefijo') || ''
         this.etiquetas = this.lotes.map(l => {
             const el = document.createElement('div')
-            el.textContent = l.n ?? '·'
+            el.textContent = l.n == null ? '·' : prefijo + l.n
             Object.assign(el.style, {
                 position: 'absolute', left: '0', top: '0',
                 transform: 'translate3d(-9999px,-9999px,0)',

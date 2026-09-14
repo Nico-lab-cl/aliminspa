@@ -1,0 +1,31 @@
+{
+ "_que": "Que lote del plano oficial es cada poligono del tour. La geometria sale del tour (scripts/importar-plano-arenaysol.js) y la identidad sale de esta tabla, que se llena a mano cruzando el plano.",
+ "_clave": "id del poligono en plano-lotes.json -> numero de lote oficial (L01..L66)",
+ "_ojo": "PARCIAL. Lo que no este aca todavia no tiene numero oficial confirmado.",
+ "_grupos_confirmados": [
+  "Esquina inferior izquierda, fila de abajo de izquierda a derecha: L61, L10, L09, L08, L07, L06, L05, L04, L03, L02",
+  "Esquina inferior izquierda, fila de arriba de izquierda a derecha: L11 a L19"
+ ],
+ "_nota_L61": "El plano dibuja L61 arriba de L10, en la fila superior. En el tour quedo dibujado en la fila de abajo, en la misma esquina. Se respeta la posicion del tour porque la geometria es la del tour.",
+ "lotes": {
+  "2": 2,
+  "25": 3,
+  "28": 19,
+  "29": 18,
+  "30": 14,
+  "31": 16,
+  "32": 17,
+  "33": 15,
+  "34": 13,
+  "35": 12,
+  "36": 11,
+  "37": 4,
+  "38": 5,
+  "39": 6,
+  "40": 7,
+  "41": 8,
+  "42": 9,
+  "43": 10,
+  "44": 61
+ }
+}

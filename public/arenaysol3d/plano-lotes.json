@@ -1,0 +1,1324 @@
+{
+ "_comentario": "Lotes sacados de los poligonos del tour de Panoee, proyectados al plano del suelo y fusionadas las dos escenas (scripts/importar-plano-arenaysol.js). u y v en fraccion de imagen, origen arriba a la izquierda.",
+ "_numeracion": "PROVISIONAL: el tour no trae numeros de lote. n es un orden por posicion, no el numero de la escritura.",
+ "_superficies": "area va en null a proposito: la escala en metros no es confiable. Ver el encabezado del script.",
+ "provisional": true,
+ "fuente": "https://tour.panoee.net/arenaysol/68a920e6671c3e138277f1ef",
+ "escenas": [
+  "02-Vista_2_Arena_y_Sol",
+  "03-Vista_1_Arena_y_Sol"
+ ],
+ "registro": {
+  "giro": 165.789,
+  "escala": 0.59159,
+  "tx": 3.4658,
+  "ty": -0.7511
+ },
+ "ancho": 4096,
+ "alto": 2128,
+ "lotes": [
+  {
+   "id": 1,
+   "n": 16,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "conflicto": true,
+   "u": 0.52492,
+   "v": 0.58267,
+   "caja": [
+    0.5073,
+    0.54081,
+    0.54288,
+    0.62719
+   ],
+   "px": 19153,
+   "cx": 2.7335,
+   "cy": -1.3101
+  },
+  {
+   "id": 2,
+   "n": 14,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.41225,
+   "v": 0.58498,
+   "caja": [
+    0.39411,
+    0.53987,
+    0.43196,
+    0.62914
+   ],
+   "px": 26062,
+   "cx": 1.6301,
+   "cy": -1.3219
+  },
+  {
+   "id": 3,
+   "n": 42,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.17589,
+   "v": 0.39357,
+   "caja": [
+    0.16196,
+    0.34822,
+    0.1898,
+    0.43865
+   ],
+   "px": 20001,
+   "cx": -0.6845,
+   "cy": -0.3482
+  },
+  {
+   "id": 4,
+   "n": 23,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.83564,
+   "v": 0.60928,
+   "caja": [
+    0.80171,
+    0.55202,
+    0.87235,
+    0.66741
+   ],
+   "px": 42631,
+   "cx": 5.7762,
+   "cy": -1.4455
+  },
+  {
+   "id": 5,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "ninguna",
+   "visto": "ambas",
+   "u": 0.47019,
+   "v": 0.52793,
+   "caja": [
+    0.45102,
+    0.4564,
+    0.49428,
+    0.61698
+   ],
+   "px": 0,
+   "cx": 2.1975,
+   "cy": -1.0317
+  },
+  {
+   "id": 6,
+   "n": 29,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.5341,
+   "v": 0.50253,
+   "caja": [
+    0.51509,
+    0.46034,
+    0.55369,
+    0.5463
+   ],
+   "px": 20517,
+   "cx": 2.8234,
+   "cy": -0.9025
+  },
+  {
+   "id": 7,
+   "n": 30,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.5631,
+   "v": 0.50846,
+   "caja": [
+    0.54296,
+    0.46446,
+    0.58332,
+    0.55299
+   ],
+   "px": 21731,
+   "cx": 3.1074,
+   "cy": -0.9327
+  },
+  {
+   "id": 8,
+   "n": 32,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.62175,
+   "v": 0.52413,
+   "caja": [
+    0.60133,
+    0.4781,
+    0.64186,
+    0.57097
+   ],
+   "px": 22356,
+   "cx": 3.6817,
+   "cy": -1.0124
+  },
+  {
+   "id": 9,
+   "n": 33,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.65197,
+   "v": 0.53437,
+   "caja": [
+    0.63121,
+    0.48673,
+    0.6728,
+    0.58271
+   ],
+   "px": 23816,
+   "cx": 3.9776,
+   "cy": -1.0645
+  },
+  {
+   "id": 10,
+   "n": 34,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "conflicto": true,
+   "u": 0.68419,
+   "v": 0.54746,
+   "caja": [
+    0.66218,
+    0.49729,
+    0.70689,
+    0.59912
+   ],
+   "px": 26510,
+   "cx": 4.2931,
+   "cy": -1.131
+  },
+  {
+   "id": 11,
+   "n": 35,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.72082,
+   "v": 0.56611,
+   "caja": [
+    0.69534,
+    0.51127,
+    0.74641,
+    0.62293
+   ],
+   "px": 32747,
+   "cx": 4.6519,
+   "cy": -1.2259
+  },
+  {
+   "id": 12,
+   "n": 22,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "conflicto": true,
+   "u": 0.76366,
+   "v": 0.59018,
+   "caja": [
+    0.73496,
+    0.53149,
+    0.79344,
+    0.65426
+   ],
+   "px": 40564,
+   "cx": 5.0714,
+   "cy": -1.3484
+  },
+  {
+   "id": 13,
+   "n": 4,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.81557,
+   "v": 0.69978,
+   "caja": [
+    0.78611,
+    0.64237,
+    0.85372,
+    0.75427
+   ],
+   "px": 43876,
+   "cx": 5.5797,
+   "cy": -1.9059
+  },
+  {
+   "id": 14,
+   "n": 3,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.76456,
+   "v": 0.67512,
+   "caja": [
+    0.7427,
+    0.6176,
+    0.78989,
+    0.73002
+   ],
+   "px": 35405,
+   "cx": 5.0802,
+   "cy": -1.7804
+  },
+  {
+   "id": 15,
+   "n": 1,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.70799,
+   "v": 0.65554,
+   "caja": [
+    0.68405,
+    0.6004,
+    0.73397,
+    0.70717
+   ],
+   "px": 30999,
+   "cx": 4.5262,
+   "cy": -1.6808
+  },
+  {
+   "id": 16,
+   "n": 21,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.67304,
+   "v": 0.63776,
+   "caja": [
+    0.65116,
+    0.58437,
+    0.69526,
+    0.6924
+   ],
+   "px": 27726,
+   "cx": 4.184,
+   "cy": -1.5903
+  },
+  {
+   "id": 17,
+   "n": 20,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.6413,
+   "v": 0.62296,
+   "caja": [
+    0.6208,
+    0.57169,
+    0.66191,
+    0.67549
+   ],
+   "px": 25271,
+   "cx": 3.8731,
+   "cy": -1.5151
+  },
+  {
+   "id": 18,
+   "n": 19,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.611,
+   "v": 0.61046,
+   "caja": [
+    0.59068,
+    0.56066,
+    0.63092,
+    0.6625
+   ],
+   "px": 23949,
+   "cx": 3.5764,
+   "cy": -1.4515
+  },
+  {
+   "id": 19,
+   "n": 17,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.55308,
+   "v": 0.59005,
+   "caja": [
+    0.53453,
+    0.54726,
+    0.5721,
+    0.63423
+   ],
+   "px": 20360,
+   "cx": 3.0092,
+   "cy": -1.3477
+  },
+  {
+   "id": 20,
+   "n": 54,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.7341,
+   "v": 0.42926,
+   "caja": [
+    0.66566,
+    0.37705,
+    0.80594,
+    0.47883
+   ],
+   "px": 63772,
+   "cx": 4.7819,
+   "cy": -0.5298
+  },
+  {
+   "id": 21,
+   "n": 52,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.62563,
+   "v": 0.39181,
+   "caja": [
+    0.58141,
+    0.34295,
+    0.67518,
+    0.43206
+   ],
+   "px": 47645,
+   "cx": 3.7197,
+   "cy": -0.3393
+  },
+  {
+   "id": 22,
+   "n": 50,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.54332,
+   "v": 0.36971,
+   "caja": [
+    0.50834,
+    0.31604,
+    0.57964,
+    0.41516
+   ],
+   "px": 44012,
+   "cx": 2.9137,
+   "cy": -0.2269
+  },
+  {
+   "id": 23,
+   "n": 49,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.48023,
+   "v": 0.3741,
+   "caja": [
+    0.45101,
+    0.33632,
+    0.51397,
+    0.40466
+   ],
+   "px": 29597,
+   "cx": 2.2958,
+   "cy": -0.2492
+  },
+  {
+   "id": 24,
+   "n": 63,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.48482,
+   "v": 0.31882,
+   "caja": [
+    0.45202,
+    0.27798,
+    0.5217,
+    0.35433
+   ],
+   "px": 30577,
+   "cx": 2.3407,
+   "cy": 0.032
+  },
+  {
+   "id": 25,
+   "n": 13,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.38035,
+   "v": 0.58257,
+   "caja": [
+    0.36425,
+    0.53548,
+    0.39674,
+    0.62911
+   ],
+   "px": 24219,
+   "cx": 1.3177,
+   "cy": -1.3096
+  },
+  {
+   "id": 26,
+   "n": 15,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.49624,
+   "v": 0.57842,
+   "caja": [
+    0.47801,
+    0.53928,
+    0.51469,
+    0.61773
+   ],
+   "px": 19135,
+   "cx": 2.4526,
+   "cy": -1.2885
+  },
+  {
+   "id": 27,
+   "n": 40,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.50514,
+   "v": 0.49869,
+   "caja": [
+    0.48669,
+    0.45693,
+    0.52438,
+    0.54076
+   ],
+   "px": 20595,
+   "cx": 2.5397,
+   "cy": -0.8829
+  },
+  {
+   "id": 28,
+   "n": 39,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.41075,
+   "v": 0.49623,
+   "caja": [
+    0.39455,
+    0.45477,
+    0.42749,
+    0.53859
+   ],
+   "px": 23119,
+   "cx": 1.6154,
+   "cy": -0.8704
+  },
+  {
+   "id": 29,
+   "n": 38,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.37932,
+   "v": 0.4951,
+   "caja": [
+    0.36328,
+    0.45508,
+    0.39508,
+    0.53694
+   ],
+   "px": 21240,
+   "cx": 1.3077,
+   "cy": -0.8647
+  },
+  {
+   "id": 30,
+   "n": 27,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.26262,
+   "v": 0.5111,
+   "caja": [
+    0.2473,
+    0.46477,
+    0.2784,
+    0.55844
+   ],
+   "px": 22253,
+   "cx": 0.1648,
+   "cy": -0.9461
+  },
+  {
+   "id": 31,
+   "n": 36,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.32016,
+   "v": 0.50025,
+   "caja": [
+    0.30476,
+    0.45747,
+    0.33502,
+    0.54426
+   ],
+   "px": 20981,
+   "cx": 0.7283,
+   "cy": -0.8909
+  },
+  {
+   "id": 32,
+   "n": 37,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.34896,
+   "v": 0.49627,
+   "caja": [
+    0.33363,
+    0.45462,
+    0.36404,
+    0.53973
+   ],
+   "px": 20590,
+   "cx": 1.0104,
+   "cy": -0.8707
+  },
+  {
+   "id": 33,
+   "n": 28,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.29162,
+   "v": 0.50542,
+   "caja": [
+    0.27631,
+    0.46041,
+    0.30684,
+    0.55035
+   ],
+   "px": 21271,
+   "cx": 0.4489,
+   "cy": -0.9172
+  },
+  {
+   "id": 34,
+   "n": 26,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.23378,
+   "v": 0.51795,
+   "caja": [
+    0.2188,
+    0.47029,
+    0.24899,
+    0.56556
+   ],
+   "px": 22611,
+   "cx": -0.1176,
+   "cy": -0.981
+  },
+  {
+   "id": 35,
+   "n": 25,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "conflicto": true,
+   "u": 0.20462,
+   "v": 0.52656,
+   "caja": [
+    0.18984,
+    0.47684,
+    0.21956,
+    0.57651
+   ],
+   "px": 22994,
+   "cx": -0.4032,
+   "cy": -1.0247
+  },
+  {
+   "id": 36,
+   "n": 24,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.17583,
+   "v": 0.53298,
+   "caja": [
+    0.1612,
+    0.48408,
+    0.19022,
+    0.58135
+   ],
+   "px": 22451,
+   "cx": -0.6851,
+   "cy": -1.0574
+  },
+  {
+   "id": 37,
+   "n": 12,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.35107,
+   "v": 0.58543,
+   "caja": [
+    0.33615,
+    0.53548,
+    0.36602,
+    0.63351
+   ],
+   "px": 23169,
+   "cx": 1.0309,
+   "cy": -1.3242
+  },
+  {
+   "id": 38,
+   "n": 11,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.32236,
+   "v": 0.5891,
+   "caja": [
+    0.30758,
+    0.54167,
+    0.33685,
+    0.63781
+   ],
+   "px": 22512,
+   "cx": 0.7498,
+   "cy": -1.3429
+  },
+  {
+   "id": 39,
+   "n": 10,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.29406,
+   "v": 0.59403,
+   "caja": [
+    0.27873,
+    0.54577,
+    0.30891,
+    0.64109
+   ],
+   "px": 22487,
+   "cx": 0.4727,
+   "cy": -1.3679
+  },
+  {
+   "id": 40,
+   "n": 9,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.26473,
+   "v": 0.60165,
+   "caja": [
+    0.24933,
+    0.55058,
+    0.28067,
+    0.6528
+   ],
+   "px": 23973,
+   "cx": 0.1855,
+   "cy": -1.4067
+  },
+  {
+   "id": 41,
+   "n": 8,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.23465,
+   "v": 0.61043,
+   "caja": [
+    0.21963,
+    0.55838,
+    0.25038,
+    0.66202
+   ],
+   "px": 24623,
+   "cx": -0.1091,
+   "cy": -1.4514
+  },
+  {
+   "id": 42,
+   "n": 7,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.20468,
+   "v": 0.6189,
+   "caja": [
+    0.18934,
+    0.56604,
+    0.21975,
+    0.67109
+   ],
+   "px": 24466,
+   "cx": -0.4025,
+   "cy": -1.4944
+  },
+  {
+   "id": 43,
+   "n": 6,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.17368,
+   "v": 0.62786,
+   "caja": [
+    0.15473,
+    0.57559,
+    0.18973,
+    0.67653
+   ],
+   "px": 26027,
+   "cx": -0.7062,
+   "cy": -1.54
+  },
+  {
+   "id": 44,
+   "n": 5,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.14295,
+   "v": 0.63375,
+   "caja": [
+    0.12765,
+    0.58237,
+    0.16034,
+    0.68892
+   ],
+   "px": 23926,
+   "cx": -1.007,
+   "cy": -1.57
+  },
+  {
+   "id": 45,
+   "n": 45,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.26063,
+   "v": 0.37348,
+   "caja": [
+    0.24568,
+    0.33017,
+    0.27556,
+    0.4163
+   ],
+   "px": 20416,
+   "cx": 0.1453,
+   "cy": -0.246
+  },
+  {
+   "id": 46,
+   "n": 55,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.14834,
+   "v": 0.31726,
+   "caja": [
+    0.13356,
+    0.2718,
+    0.16252,
+    0.36437
+   ],
+   "px": 20647,
+   "cx": -0.9543,
+   "cy": 0.0399
+  },
+  {
+   "id": 47,
+   "n": 41,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.14716,
+   "v": 0.40268,
+   "caja": [
+    0.13157,
+    0.35614,
+    0.16195,
+    0.44877
+   ],
+   "px": 21158,
+   "cx": -0.9658,
+   "cy": -0.3946
+  },
+  {
+   "id": 48,
+   "n": 43,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.20388,
+   "v": 0.38609,
+   "caja": [
+    0.18981,
+    0.33986,
+    0.21825,
+    0.43177
+   ],
+   "px": 20463,
+   "cx": -0.4104,
+   "cy": -0.3102
+  },
+  {
+   "id": 49,
+   "n": 44,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.23231,
+   "v": 0.37856,
+   "caja": [
+    0.21777,
+    0.33375,
+    0.24732,
+    0.42339
+   ],
+   "px": 20658,
+   "cx": -0.132,
+   "cy": -0.2719
+  },
+  {
+   "id": 50,
+   "n": 46,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.28924,
+   "v": 0.37017,
+   "caja": [
+    0.27438,
+    0.32711,
+    0.3041,
+    0.41323
+   ],
+   "px": 20481,
+   "cx": 0.4255,
+   "cy": -0.2292
+  },
+  {
+   "id": 51,
+   "n": 47,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.31812,
+   "v": 0.36649,
+   "caja": [
+    0.30287,
+    0.32296,
+    0.33318,
+    0.41004
+   ],
+   "px": 21234,
+   "cx": 0.7084,
+   "cy": -0.2105
+  },
+  {
+   "id": 52,
+   "n": 48,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.34774,
+   "v": 0.36268,
+   "caja": [
+    0.3323,
+    0.31754,
+    0.36289,
+    0.40585
+   ],
+   "px": 21662,
+   "cx": 0.9983,
+   "cy": -0.1911
+  },
+  {
+   "id": 53,
+   "n": 62,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.40905,
+   "v": 0.35623,
+   "caja": [
+    0.39371,
+    0.30361,
+    0.42485,
+    0.40337
+   ],
+   "px": 24154,
+   "cx": 1.5988,
+   "cy": -0.1583
+  },
+  {
+   "id": 54,
+   "n": 61,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.37793,
+   "v": 0.35032,
+   "caja": [
+    0.36203,
+    0.29039,
+    0.39455,
+    0.4051
+   ],
+   "px": 29212,
+   "cx": 1.294,
+   "cy": -0.1282
+  },
+  {
+   "id": 55,
+   "n": 60,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.33022,
+   "v": 0.29811,
+   "caja": [
+    0.30552,
+    0.26177,
+    0.36222,
+    0.32659
+   ],
+   "px": 22304,
+   "cx": 0.8268,
+   "cy": 0.1374
+  },
+  {
+   "id": 56,
+   "n": 64,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.28894,
+   "v": 0.28975,
+   "caja": [
+    0.27268,
+    0.24573,
+    0.3064,
+    0.32981
+   ],
+   "px": 21394,
+   "cx": 0.4226,
+   "cy": 0.1799
+  },
+  {
+   "id": 57,
+   "n": 59,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.25931,
+   "v": 0.29095,
+   "caja": [
+    0.24487,
+    0.2471,
+    0.27391,
+    0.3341
+   ],
+   "px": 20011,
+   "cx": 0.1324,
+   "cy": 0.1738
+  },
+  {
+   "id": 58,
+   "n": 58,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "ambas",
+   "u": 0.23127,
+   "v": 0.29658,
+   "caja": [
+    0.21685,
+    0.25247,
+    0.24585,
+    0.34001
+   ],
+   "px": 19931,
+   "cx": -0.1421,
+   "cy": 0.1451
+  },
+  {
+   "id": 59,
+   "n": 57,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.20331,
+   "v": 0.30357,
+   "caja": [
+    0.18953,
+    0.25982,
+    0.21747,
+    0.34795
+   ],
+   "px": 19501,
+   "cx": -0.416,
+   "cy": 0.1096
+  },
+  {
+   "id": 60,
+   "n": 56,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 2",
+   "u": 0.17595,
+   "v": 0.31079,
+   "caja": [
+    0.16202,
+    0.26605,
+    0.18976,
+    0.35606
+   ],
+   "px": 19742,
+   "cx": -0.6839,
+   "cy": 0.0729
+  },
+  {
+   "id": 61,
+   "n": 31,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 1",
+   "u": 0.59237,
+   "v": 0.51521,
+   "caja": [
+    0.57247,
+    0.46979,
+    0.61248,
+    0.56035
+   ],
+   "px": 21630,
+   "cx": 3.394,
+   "cy": -0.967
+  },
+  {
+   "id": 62,
+   "n": 18,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 1",
+   "u": 0.58157,
+   "v": 0.5987,
+   "caja": [
+    0.56219,
+    0.55322,
+    0.60117,
+    0.64549
+   ],
+   "px": 21619,
+   "cx": 3.2882,
+   "cy": -1.3917
+  },
+  {
+   "id": 63,
+   "n": 2,
+   "stage": null,
+   "sold": false,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 1",
+   "u": 0.74664,
+   "v": 0.67942,
+   "caja": [
+    0.7203,
+    0.62508,
+    0.77631,
+    0.73455
+   ],
+   "px": 31357,
+   "cx": 4.9047,
+   "cy": -1.8023
+  },
+  {
+   "id": 64,
+   "n": 51,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 1",
+   "u": 0.60847,
+   "v": 0.39241,
+   "caja": [
+    0.57076,
+    0.34523,
+    0.6478,
+    0.43276
+   ],
+   "px": 39012,
+   "cx": 3.5516,
+   "cy": -0.3423
+  },
+  {
+   "id": 65,
+   "n": 53,
+   "stage": null,
+   "sold": true,
+   "area": null,
+   "tipo": "lote",
+   "visto": "Vista 1",
+   "u": 0.69496,
+   "v": 0.42527,
+   "caja": [
+    0.64117,
+    0.37869,
+    0.75143,
+    0.46755
+   ],
+   "px": 47901,
+   "cx": 4.3986,
+   "cy": -0.5095
+  }
+ ]
+}

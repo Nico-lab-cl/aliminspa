@@ -33,12 +33,9 @@ import EditorLotes from './EditorLotes'
 import EditorPlano, { type VisorPlano } from './EditorPlano'
 import { getUtmParams, newEventId } from '@/lib/track'
 import { SITE } from '@/lib/constants'
+import { LOMAS_DEL_MAR, type Proyecto } from './proyectos'
 import styles from './Agenda3D.module.css'
 
-/** Nombre con que se guarda la visita. Sin sufijo: esta ruta no vive bajo /meta. */
-const PROYECTO = 'Lomas del Mar'
-/** Única modalidad que ofrece el equipo hoy. */
-const MODALIDAD = 'Visita en terreno, El Tabo'
 /** Ventana que se le pide a la agenda, en días. */
 const VENTANA_DIAS = 60
 
@@ -74,25 +71,22 @@ const GLOSARIO = [
  * `loading="lazy"` a propósito: es un iframe de un tercero y no tiene por qué
  * competir con el mapa de lotes, que es lo que el visitante vino a usar.
  */
-const MAPA_EMBED = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.7!2d-71.6181184!3d-33.4617574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x966215007f8800b9%3A0x952d8553bda618e5!2sLomas%20Del%20Mar%20-%20Alimin!5e1!3m2!1ses!2scl!4v1719000000000'
-const MAPA_LUGAR = 'https://www.google.com/maps/place/Lomas+Del+Mar+-+Alimin/@-33.4617529,-71.6184652,907m/data=!3m2!1e3!4b1'
-
-function Ubicacion() {
+function Ubicacion({ proyecto }: { proyecto: Proyecto }) {
     return (
         <section className={styles.ubicacion}>
             <div className={styles.ubicacionCabecera}>
                 <span>Dónde queda</span>
-                <a href={MAPA_LUGAR} target="_blank" rel="noopener noreferrer">
+                <a href={proyecto.mapaLugar} target="_blank" rel="noopener noreferrer">
                     Abrir en Google Maps
                 </a>
             </div>
             <iframe
-                src={MAPA_EMBED}
+                src={proyecto.mapaEmbed}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Lomas del Mar · El Tabo, Litoral Central"
+                title={`${proyecto.nombre} · ${proyecto.comuna}, Litoral Central`}
             />
-            <p>El Tabo, Litoral Central · a 10 min de la playa y 1 hora de Santiago</p>
+            <p>{proyecto.ubicacionPie}</p>
         </section>
     )
 }
@@ -114,7 +108,7 @@ function fechaLarga(iso: string): string {
     return `${dias[wd]} ${d} de ${MESES[m - 1].toLowerCase()}`
 }
 
-export default function Agenda3D() {
+export default function Agenda3D({ proyecto = LOMAS_DEL_MAR }: { proyecto?: Proyecto }) {
     /* El mapa se muestra de entrada. Antes había una portada con el vuelo de
        dron y un botón para entrar, pero quien abre este enlace viene a elegir
        un lote: la portada era una pantalla de más entre el clic y el mapa. */
@@ -356,24 +350,43 @@ export default function Agenda3D() {
     /* ─── envío ─── */
 
     // Etiqueta que se guarda en la base y viaja al evento de calendario.
-    const loteLabel = lot ? `Etapa ${lot.stage} · Lote ${lot.n}` : null
+    /*
+     * Cómo se nombra el lote elegido.
+     *
+     * Con números de escritura se dice "Lote 12", y "Etapa 3 · Lote 12" donde
+     * hay etapas. Sin ellos —Arena y Sol hoy— no se inventa uno: se manda una
+     * referencia del mapa, que le alcanza al asesor para saber cuál marcó el
+     * visitante y no le promete un número que después no calza con la
+     * escritura.
+     */
+    const loteLabel = lot
+        ? proyecto.numeraLotes
+            ? proyecto.tieneEtapas ? `Etapa ${lot.stage} · Lote ${lot.n}` : `Lote ${lot.n}`
+            : `${proyecto.refPrefijo ?? 'Ref'}-${lot.n}`
+        : null
     // La misma información en prosa, para los títulos y los mensajes.
-    const loteTexto = lot ? `Lote ${lot.n} de la Etapa ${lot.stage}` : null
+    const loteTexto = lot
+        ? proyecto.numeraLotes
+            ? proyecto.tieneEtapas ? `Lote ${lot.n} de la Etapa ${lot.stage}` : `Lote ${lot.n}`
+            : `lote marcado en el mapa (${loteLabel})`
+        : null
+
+    const superficie = lot?.area ? ` (${lot.area} m²)` : ''
 
     const waMessage = lot
-        ? `Hola, vengo del mapa 3D de Lomas del Mar. Me interesa el Lote ${lot.n} de la Etapa ${lot.stage}${lot.area ? ` (${lot.area} m²)` : ''}. ¿Sigue disponible?`
-        : 'Hola, vengo del mapa 3D de Lomas del Mar y quiero agendar una visita.'
+        ? `Hola, vengo del mapa 3D de ${proyecto.nombre}. Me interesa el ${loteTexto}${superficie}. ¿Sigue disponible?`
+        : `Hola, vengo del mapa 3D de ${proyecto.nombre} y quiero agendar una visita.`
 
     const reservaMessage = lot
-        ? `Hola, quiero reservar el Lote ${lot.n} de la Etapa ${lot.stage} de Lomas del Mar${lot.area ? ` (${lot.area} m²)` : ''}. ¿Cómo sigo?`
-        : 'Hola, quiero reservar un lote en Lomas del Mar. ¿Cómo sigo?'
+        ? `Hola, quiero reservar el ${loteTexto} de ${proyecto.nombre}${superficie}. ¿Cómo sigo?`
+        : `Hola, quiero reservar un lote en ${proyecto.nombre}. ¿Cómo sigo?`
 
     /* La reserva se cierra por WhatsApp con un asesor: acá solo se registra la
        intención para poder medirla como conversión. */
     const marcarReserva = () => {
         const w = window as unknown as { fbq?: (...args: unknown[]) => void }
         w.fbq?.('track', 'Lead', {
-            content_name: PROYECTO,
+            content_name: proyecto.nombre,
             content_category: 'Reserva de lote',
             ...(loteLabel ? { content_ids: [loteLabel] } : {}),
             currency: 'CLP',
@@ -407,14 +420,14 @@ export default function Agenda3D() {
                     nombre: form.nombre,
                     email: form.email,
                     celular: form.celular,
-                    proyecto: PROYECTO,
+                    proyecto: proyecto.nombre,
                     // El servidor valida con fechaLocal; fecha va como ISO para
                     // el registro y el evento de calendario.
                     fecha: new Date(`${date}T${time}:00`).toISOString(),
                     fechaLocal: date,
                     hora: time,
                     lote: loteLabel,
-                    modalidad: MODALIDAD,
+                    modalidad: proyecto.modalidad,
                     eventId,
                     ...utm,
                 }),
@@ -428,7 +441,7 @@ export default function Agenda3D() {
             const w = window as unknown as { fbq?: (...args: unknown[]) => void }
             if (w.fbq) {
                 w.fbq('track', 'Schedule', {
-                    content_name: PROYECTO,
+                    content_name: proyecto.nombre,
                     content_category: 'Real Estate Visit',
                     ...(loteLabel ? { content_ids: [loteLabel] } : {}),
                     currency: 'CLP',
@@ -460,6 +473,7 @@ export default function Agenda3D() {
                 <section className={styles.map} aria-label="Mapa 3D del loteo">
                     <Lote3DViewer
                         className={styles.viewer}
+                        proyecto={proyecto}
                         onPick={onPick}
                         onReady={onReady}
                         onError={() => setStep('fecha')}
@@ -470,13 +484,11 @@ export default function Agenda3D() {
                         termina de bajar al lote. Es ambiente del proyecto, no
                         una toma del lote elegido. */}
                     <div className={llegada ? styles.llegadaOn : styles.llegada} aria-hidden="true">
-                        {viewerReady && movil !== null && (
+                        {viewerReady && movil !== null && proyecto.llegada && (
                             <video
                                 ref={videoLlegada}
-                                src={movil
-                                    ? '/lomas3d/construccion/llegada-lote-movil.mp4'
-                                    : '/lomas3d/construccion/llegada-lote.mp4'}
-                                poster="/lomas3d/construccion/llegada-lote-poster.webp"
+                                src={movil ? proyecto.llegada.movil : proyecto.llegada.escritorio}
+                                poster={proyecto.llegada.poster}
                                 muted
                                 loop
                                 playsInline
@@ -505,15 +517,15 @@ export default function Agenda3D() {
                                 height={40}
                             />
                             <div>
-                                <strong>LOMAS DEL MAR</strong>
-                                <span>Mapa 3D · El Tabo</span>
+                                <strong>{proyecto.rotulo}</strong>
+                                <span>Mapa 3D · {proyecto.comuna}</span>
                             </div>
                         </div>
 
                         {conteo && (
                             <span className={styles.disponibles}>
                                 <i />
-                                {stage === 0
+                                {stage === 0 || !proyecto.tieneEtapas
                                     ? `${conteo.disponibles} lotes disponibles`
                                     : `${conteo.porEtapa[stage]?.disponibles ?? 0} disponibles · Etapa ${stage}`}
                             </span>
@@ -524,19 +536,23 @@ export default function Agenda3D() {
                         eligió, y ocupaban un tercio de la pantalla por encima de
                         justo lo que el visitante fue a mirar. */}
                     <div className={movil && lot ? `${styles.chips} ${styles.chipsOcultos}` : styles.chips}>
-                        <div className={styles.chipRow}>
-                            {etapas.map(s => (
-                                <button
-                                    key={s}
-                                    className={stage === s ? styles.chipOn : styles.chip}
-                                    onClick={() => setStageChip(s)}
-                                >
-                                    {s === 0 ? 'Todas' : `Etapa ${s}`}
-                                </button>
-                            ))}
-                        </div>
+                        {/* Sin etapas no hay nada que filtrar: la fila quedaba
+                            con un solo botón "Todas" que no hacía nada. */}
+                        {proyecto.tieneEtapas && (
+                            <div className={styles.chipRow}>
+                                {etapas.map(s => (
+                                    <button
+                                        key={s}
+                                        className={stage === s ? styles.chipOn : styles.chip}
+                                        onClick={() => setStageChip(s)}
+                                    >
+                                        {s === 0 ? 'Todas' : `Etapa ${s}`}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                         <div className={styles.glosario}>
-                            {GLOSARIO.map(g => (
+                            {GLOSARIO.filter(g => proyecto.glosario.includes(g.nombre)).map(g => (
                                 <span key={g.nombre} className={styles.glosarioItem}>
                                     <i
                                         className={styles.glosarioColor}
@@ -550,7 +566,7 @@ export default function Agenda3D() {
                             plano, así que va dentro de la ficha del lote; por eso
                             se monta en un lado o en el otro, nunca en los dos: son
                             dos cargas del mapa de Google en vez de una. */}
-                        {movil === false && <Ubicacion />}
+                        {movil === false && <Ubicacion proyecto={proyecto} />}
                     </div>
 
                     {calce && (
@@ -671,11 +687,14 @@ export default function Agenda3D() {
                                 <button
                                     className={styles.barraTitulo}
                                     onClick={() => { setStep('lote'); setFichaAbierta(true) }}
-                                    aria-label={`Ver la ficha del lote ${lot.n}`}
+                                    aria-label={`Ver la ficha del ${loteTexto}`}
                                 >
-                                    <strong>Lote {lot.n}</strong>
+                                    <strong>{proyecto.numeraLotes ? `Lote ${lot.n}` : 'Lote elegido'}</strong>
                                     {/* Sin superficie cargada quedaba un "· m²" suelto. */}
-                                    <span>Etapa {lot.stage}{lot.area ? ` · ${lot.area} m²` : ''}</span>
+                                    <span>
+                                        {proyecto.tieneEtapas ? `Etapa ${lot.stage}` : loteLabel}
+                                        {lot.area ? ` · ${lot.area} m²` : ''}
+                                    </span>
                                 </button>
                                 <button
                                     className={styles.barraIcono}
@@ -730,8 +749,12 @@ export default function Agenda3D() {
                             <div className={styles.panelBody}>
                                 <div className={styles.panelHead}>
                                     <div>
-                                        <span className={styles.kickerDark}>Etapa {lot.stage}</span>
-                                        <h2 className={styles.lotNumber}>Lote {lot.n}</h2>
+                                        <span className={styles.kickerDark}>
+                                            {proyecto.tieneEtapas ? `Etapa ${lot.stage}` : loteLabel}
+                                        </span>
+                                        <h2 className={styles.lotNumber}>
+                                            {proyecto.numeraLotes ? `Lote ${lot.n}` : 'Lote elegido'}
+                                        </h2>
                                     </div>
                                     <div className={styles.panelHeadDer}>
                                         <span className={lot.sold ? styles.badgeSold : styles.badgeFree}>
@@ -776,37 +799,39 @@ export default function Agenda3D() {
                                     </div>
                                 )}
 
-                                <figure className={styles.video}>
-                                    <video
-                                        src={movil
-                                            ? '/lomas3d/construccion/casa-200m2-movil.mp4'
-                                            : '/lomas3d/construccion/casa-200m2.mp4'}
-                                        poster="/lomas3d/construccion/casa-200m2-poster.webp"
-                                        autoPlay
-                                        muted
-                                        loop
-                                        playsInline
-                                        preload="metadata"
-                                    />
-                                    <figcaption>Ejemplo de lo que se puede construir en 200 m²</figcaption>
-                                </figure>
+                                {proyecto.casa && (
+                                    <figure className={styles.video}>
+                                        <video
+                                            src={movil ? proyecto.casa.movil : proyecto.casa.escritorio}
+                                            poster={proyecto.casa.poster}
+                                            autoPlay
+                                            muted
+                                            loop
+                                            playsInline
+                                            preload="metadata"
+                                        />
+                                        <figcaption>Ejemplo de lo que se puede construir en 200 m²</figcaption>
+                                    </figure>
+                                )}
 
                                 {/* En celular la ubicación vive acá: sobre el plano
                                     no cabe sin taparlo, y la ficha es donde el
                                     visitante ya está mirando los datos del lote. */}
-                                {movil && <Ubicacion />}
+                                {movil && <Ubicacion proyecto={proyecto} />}
 
                                 {lot.sold ? (
                                     <>
                                         <p className={styles.panelText}>
                                             Este lote ya se vendió. Agenda igual y te mostramos los que
-                                            quedan en la misma etapa.
+                                            {proyecto.tieneEtapas ? ' quedan en la misma etapa.' : ' siguen disponibles.'}
                                         </p>
                                         <button
                                             className={styles.primaryBtn}
-                                            onClick={() => { setStageChip(lot.stage); limpiarLote() }}
+                                            onClick={() => { if (proyecto.tieneEtapas) setStageChip(lot.stage); limpiarLote() }}
                                         >
-                                            Ver los disponibles de la Etapa {lot.stage}
+                                            {proyecto.tieneEtapas
+                                                ? `Ver los disponibles de la Etapa ${lot.stage}`
+                                                : 'Ver los lotes disponibles'}
                                         </button>
                                     </>
                                 ) : (
@@ -1012,7 +1037,7 @@ export default function Agenda3D() {
                                 <div className={styles.tick}><Check size={26} /></div>
                                 <h2 className={styles.panelTitle}>Visita agendada</h2>
                                 <p className={styles.panelText}>
-                                    Te esperamos el {fechaLarga(date)} a las {time} h en El Tabo
+                                    Te esperamos el {fechaLarga(date)} a las {time} h en {proyecto.comuna}
                                     {loteTexto && <>, para mostrarte el <strong>{loteTexto}</strong></>}.
                                     La invitación va camino a {form.email}.
                                 </p>
