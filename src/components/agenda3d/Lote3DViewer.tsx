@@ -227,6 +227,10 @@ export default function Lote3DViewer({
                 if (!proy.current.numeraLotes && proy.current.refPrefijo) {
                     el.setAttribute('prefijo', proy.current.refPrefijo + '-')
                 }
+                // Donde el número es el de la escritura, el plano los muestra
+                // todos: el visitante reconoce el lote que le nombró el asesor
+                // sin tener que ir pasando el cursor uno por uno.
+                if (proy.current.numeraLotes) el.setAttribute('numeros', 'todos')
                 el.setAttribute('quality', quality)
                 if (q.get('editor') === '1') el.setAttribute('editor', '1')
                 el.style.width = '100%'

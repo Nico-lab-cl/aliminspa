@@ -26,6 +26,22 @@ const ZOOM_MIN = 0.035, ZOOM_MAX = 1
 /** Para el picking basta media resolución: un lote son decenas de píxeles. */
 const PICK_DIV = 2
 
+/**
+ * El tablero donde se reparten los números del plano.
+ *
+ * `CELDA` es el grano con que se mide si dos números se pisan: más fino deja
+ * pasar roces, más grueso esconde números que sí cabían. `BORDE` solo corre el
+ * origen para que las celdas de la izquierda y de arriba de la pantalla —que
+ * dan índices negativos— no compartan clave con las de la derecha y abajo.
+ */
+const CELDA = 13, BORDE = 4096
+
+/** A quién le toca el espacio cuando dos números caen en el mismo lugar. */
+function prioridad(E) {
+    if (E.destacada) return 0
+    return E.l.sold ? 2 : 1
+}
+
 const SEL = new THREE.Color(0xd8f56a)
 
 /**
@@ -508,19 +524,46 @@ class PlanoLotes extends HTMLElement {
         const prefijo = this.getAttribute('prefijo') || ''
         this.etiquetas = this.lotes.map(l => {
             const el = document.createElement('div')
-            el.textContent = l.n == null ? '·' : prefijo + l.n
+            const texto = l.n == null ? '·' : prefijo + l.n
+            el.textContent = texto
             Object.assign(el.style, {
                 position: 'absolute', left: '0', top: '0',
                 transform: 'translate3d(-9999px,-9999px,0)',
-                whiteSpace: 'nowrap', willChange: 'transform', visibility: 'hidden',
+                whiteSpace: 'nowrap', willChange: 'transform', visibility: 'hidden'
+            })
+            capa.appendChild(el)
+            /* Cuánto mide el número escrito, sin preguntárselo al navegador:
+               202 lecturas de ancho obligan a rehacer el diseño de la página y
+               además darían mal si la tipografía todavía no terminó de cargar.
+               Con dígitos de 10px en negrita, seis píxeles por carácter. */
+            return { el, l, ancho: texto.length * 6.2 + 4 }
+        })
+    }
+
+    /**
+     * Cómo se ve un número en el plano.
+     *
+     * De fondo van todos los lotes a la vez, así que la etiqueta es solo el
+     * número con una sombra que lo despega de la foto: una píldora por lote
+     * taparía el terreno, que es lo que el visitante vino a mirar. El lote
+     * apuntado y el elegido sí llevan píldora, para que se distingan del resto.
+     */
+    _vestir(E, destacada) {
+        if (E.modo === (destacada ? 'ficha' : 'fondo')) return
+        E.modo = destacada ? 'ficha' : 'fondo'
+        Object.assign(E.el.style, destacada
+            ? {
                 font: '700 11px Montserrat, sans-serif', letterSpacing: '.02em',
                 padding: '2px 6px', borderRadius: '6px',
                 background: 'rgba(10,18,28,.78)', color: 'rgba(255,255,255,.95)',
-                border: '1px solid rgba(118,216,69,.45)'
+                border: '1px solid rgba(118,216,69,.45)', textShadow: 'none'
+            }
+            : {
+                font: '700 10px Montserrat, sans-serif', letterSpacing: '.02em',
+                padding: '0', borderRadius: '0',
+                background: 'none', color: 'rgba(255,255,255,.92)',
+                border: 'none', textShadow: '0 1px 3px rgba(0,0,0,.9)'
             })
-            capa.appendChild(el)
-            return { el, l }
-        })
     }
 
     _colocarEtiquetas() {
@@ -528,29 +571,63 @@ class PlanoLotes extends HTMLElement {
         this._sucio = false
         const w = this.clientWidth, h = this.clientHeight
         const alto = this._alto()
+
+        const cola = this._cola || (this._cola = [])
+        cola.length = 0
         for (const E of this.etiquetas) {
             const l = E.l
-            /* En la página solo se ve el número del lote apuntado y el del
-               elegido. En el editor, todos. */
+            const destacada = this._sel === l.id || this._hov === l.id
             /* Sin número no hay etiqueta que mostrar: un lote simbólico se ve
                rojo y nada más. En el editor sí aparecen todas, con un punto
                donde todavía falta numerar. */
-            const vivo = (this._todosLosNumeros || this._sel === l.id || this._hov === l.id)
-                && (l.n != null || this._todosLosNumeros)
-            if (!vivo || !this._enFiltro(l)) {
-                if (E.on) { E.el.style.visibility = 'hidden'; E.on = false }
-                continue
-            }
+            const vivo = destacada || (this._todosLosNumeros && (l.n != null || this._editor))
+            if (!vivo || !this._enFiltro(l)) { this._ocultar(E); continue }
             const x = ((l.u - this._cu) / this._z + 0.5) * w
             const y = ((l.v - this._cv) / alto + 0.5) * h
-            if (x < -40 || y < -20 || x > w + 40 || y > h + 20) {
-                if (E.on) { E.el.style.visibility = 'hidden'; E.on = false }
-                continue
+            if (x < -40 || y < -20 || x > w + 40 || y > h + 20) { this._ocultar(E); continue }
+            E.x = x; E.y = y; E.destacada = destacada
+            cola.push(E)
+        }
+
+        /* Dos números pisándose no se leen ni uno ni otro, así que el plano
+           reparte el espacio: se va colocando de a uno y el que cae sobre algo
+           ya escrito se queda afuera hasta que el visitante se acerque. Van
+           primero el lote apuntado y el elegido, después los disponibles y al
+           final los vendidos: si el espacio alcanza para la mitad, que sea la
+           mitad que se puede comprar.
+
+           El tablero es una rejilla de celdas y no una lista de rectángulos:
+           con 202 números, compararlos todos contra todos en cada cuadro de la
+           cámara se nota. */
+        cola.sort((a, b) => prioridad(a) - prioridad(b))
+        const tomadas = this._celdas || (this._celdas = new Set())
+        tomadas.clear()
+        for (const E of cola) {
+            const anchoCaja = E.destacada ? E.ancho + 12 : E.ancho
+            const altoCaja = E.destacada ? 19 : 13
+            const c0 = Math.floor((E.x - anchoCaja / 2) / CELDA) + BORDE
+            const c1 = Math.floor((E.x + anchoCaja / 2) / CELDA) + BORDE
+            const f0 = Math.floor((E.y - altoCaja / 2) / CELDA) + BORDE
+            const f1 = Math.floor((E.y + altoCaja / 2) / CELDA) + BORDE
+            let libre = true
+            for (let c = c0; c <= c1 && libre; c++) {
+                for (let f = f0; f <= f1; f++) {
+                    if (tomadas.has(c * BORDE * 2 + f)) { libre = false; break }
+                }
             }
+            if (!libre && !E.destacada) { this._ocultar(E); continue }
+            for (let c = c0; c <= c1; c++) {
+                for (let f = f0; f <= f1; f++) tomadas.add(c * BORDE * 2 + f)
+            }
+            this._vestir(E, E.destacada)
             E.el.style.transform =
-                `translate3d(${Math.round(x)}px,${Math.round(y)}px,0) translate(-50%,-50%)`
+                `translate3d(${Math.round(E.x)}px,${Math.round(E.y)}px,0) translate(-50%,-50%)`
             if (!E.on) { E.el.style.visibility = 'visible'; E.on = true }
         }
+    }
+
+    _ocultar(E) {
+        if (E.on) { E.el.style.visibility = 'hidden'; E.on = false }
     }
 
     // ---------- lo que usa la página ----------
@@ -590,8 +667,18 @@ class PlanoLotes extends HTMLElement {
         if (!this._sel) this._volarA(this._encuadre(this.lotes.filter(l => this._enFiltro(l))))
     }
 
+    /**
+     * Si se dibujan todos los números o solo el del lote apuntado.
+     *
+     * La página los pide siempre, pero solo los muestran los planos donde el
+     * número es el de la escritura: donde lo puso un script ordenando por
+     * posición —Arena y Sol— escribirlo en cada lote lo haría pasar por un
+     * dato que todavía no está verificado. El editor los ve igual, que para
+     * eso está.
+     */
     setNumbers(todos) {
-        this._todosLosNumeros = !!todos && this.getAttribute('editor') === '1'
+        const propios = this.getAttribute('numeros') === 'todos'
+        this._todosLosNumeros = !!todos && (propios || this.getAttribute('editor') === '1')
         this._sucio = true
     }
 
