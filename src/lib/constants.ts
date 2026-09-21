@@ -10,6 +10,7 @@ export const SITE = {
     address: 'El Tabo, Región de Valparaíso, Chile',
     gtmId: 'GTM-TMLPLBN3',
     pixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || '1998226647754673',
+    clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || 'yluu5pj2p1',
     social: {
         instagram: '',
         facebook: '',
