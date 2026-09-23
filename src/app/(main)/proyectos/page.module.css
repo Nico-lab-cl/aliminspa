@@ -1,8 +1,8 @@
 .page {
     padding-top: calc(var(--navbar-height) + 3rem);
     padding-bottom: var(--section-gap);
-    background-color: #2F4F4F; /* Matching navbar and footer */
-    color: white;
+    background-color: var(--sec-bg);
+    color: var(--sec-text);
     min-height: 100vh;
 }
 
@@ -20,7 +20,7 @@
 
 .titleLine {
     height: 2px;
-    background-color: var(--gold);
+    background-color: var(--verde-lima);
     width: 60px; /* Adjust as needed */
 }
 
@@ -28,7 +28,7 @@
     font-size: 2.5rem;
     font-weight: 300;
     font-family: var(--font);
-    color: white;
+    color: var(--sec-text);
 }
 
 .grid {
@@ -40,6 +40,12 @@
 }
 
 .card {
+    border: var(--borde-tarjeta);
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,7 +59,7 @@
     font-style: italic;
     font-weight: 500;
     margin-bottom: 1.5rem;
-    color: white;
+    color: var(--sec-text);
     min-height: 7.2rem;
     display: flex;
     align-items: center;
@@ -84,7 +90,7 @@
     font-weight: 700;
     font-style: italic;
     margin-bottom: 0.5rem;
-    color: white;
+    color: var(--verde-solido);
     min-height: 2.2rem;
     display: flex;
     align-items: center;
@@ -94,7 +100,7 @@
 .lotInfo {
     font-size: 1.05rem;
     margin-bottom: 1.5rem;
-    color: white;
+    color: var(--sec-text);
     min-height: 1.5rem;
     display: flex;
     align-items: center;
@@ -104,7 +110,7 @@
 .description {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--sec-text-muted);
     margin-bottom: 2rem;
     max-width: 90%;
     min-height: 6rem;
@@ -118,8 +124,8 @@
 }
 
 .btnAction {
-    background-color: #E2B230; /* Bright gold from the screenshot */
-    color: #1a1a1a;
+    background: linear-gradient(135deg, var(--verde-lima), var(--verde-solido));
+    color: #fff;
     padding: 0.8rem 1.8rem;
     border-radius: var(--radius-full);
     font-size: 1.05rem;
@@ -131,7 +137,7 @@
 }
 
 .btnAction:hover {
-    background-color: var(--gold-light);
+    box-shadow: 0 6px 20px rgba(75, 166, 70, 0.35);
     transform: translateY(-2px);
 }
 
@@ -163,4 +169,8 @@
     .subtitle, .lotInfo, .description {
         min-height: auto;
     }
+}
+
+.card:hover {
+    border-color: var(--borde-tarjeta-hover);
 }

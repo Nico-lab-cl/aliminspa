@@ -90,6 +90,23 @@
   --bg-mint-2: #edf7e0;
   --text-heading-light: #1a2b3d;
   --text-secondary-light: #4B5563;
+
+  /* Secciones con foto de fondo del home (Beneficios, Ubicación,
+     Lugares cercanos, Formulario). --sec-overlay es un triplete RGB
+     que se usa como rgba(var(--sec-overlay), alfa). */
+  --sec-bg: #eef0ef;
+  --sec-overlay: 238, 240, 239;
+  --sec-text: #1f2933;
+  --sec-text-muted: #4b5563;
+  --sec-accent: var(--verde-solido);
+  --sec-card-bg: rgba(255, 255, 255, 0.88);
+  --sec-card-border: rgba(118, 216, 69, 0.55);
+
+  /* Borde verde de tarjetas y contenedores sobre fondos claros: sin él las
+     secciones gris claro se ven como texto suelto. */
+  --borde-tarjeta: 1.5px solid rgba(118, 216, 69, 0.55);
+  --borde-tarjeta-hover: var(--verde-lima);
+  --sec-card-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
 /* ── BASE ──────────────────────────────────────────────── */

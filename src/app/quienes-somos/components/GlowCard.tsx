@@ -37,7 +37,7 @@ export const GlowCard = ({ children }: { children: React.ReactNode }) => {
           transition: 'opacity 0.5s',
           pointerEvents: 'none',
           zIndex: 0,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(47,79,79,0.1), transparent 40%)`
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(118,216,69,0.14), transparent 40%)`
         }}
       />
       <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>

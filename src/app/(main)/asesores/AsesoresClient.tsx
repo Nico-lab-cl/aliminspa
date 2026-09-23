@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { MessageCircle, Phone, Sparkles, HelpCircle, Check } from 'lucide-react';
-import { PROJECTS, FAQ_ITEMS, WINTER_PROMO } from '@/lib/constants';
+import { MessageCircle, Phone, HelpCircle, Check } from 'lucide-react';
+import { PROJECTS, FAQ_ITEMS } from '@/lib/constants';
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView';
 import { trackMetaEvent } from '@/lib/track';
 import styles from './page.module.css';
@@ -29,7 +29,7 @@ const ADVISORS = [
     phone: "+56 9 5665 4833",
     cleanPhone: "56956654833",
     description: "Experta en entender necesidades y convertirlas en decisiones seguras. Siempre con una sonrisa y soluciones prácticas.",
-    message: "Hola Marcela, me interesa agendar una visita por la promo de Vacaciones de Invierno y conocer la Mystery Box 🎁"
+    message: "Hola Marcela, me interesa agendar una visita para conocer los terrenos disponibles"
   },
   {
     name: "Orlando Costa",
@@ -38,7 +38,7 @@ const ADVISORS = [
     phone: "+56 9 7307 7128",
     cleanPhone: "56973077128",
     description: "Cercano, claro y confiable. Te acompaña paso a paso para encontrar el terreno perfecto según tus metas.",
-    message: "Hola Orlando, me interesa agendar una visita por la promo de Vacaciones de Invierno y conocer la Mystery Box 🎁"
+    message: "Hola Orlando, me interesa agendar una visita para conocer los terrenos disponibles"
   }
 ];
 
@@ -88,7 +88,7 @@ export default function AsesoresClient() {
         <div className={styles.glowSphere2} />
       </div>
 
-      {/* Hero Header - Father's Day & Mystery Box Special */}
+      {/* Hero Header */}
       <section className={styles.hero}>
         {/* Full-bleed background image */}
         <Image
@@ -106,24 +106,13 @@ export default function AsesoresClient() {
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroContent}>
             <div className={styles.fathersDayTag}>
-              <Sparkles size={14} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle' }} />
-              {WINTER_PROMO.tag}
+              Asesoría personalizada
             </div>
             <h1 className={styles.heroTitle}>
-              <span className={styles.desktopText}>
-                Vacaciones de Invierno: ¡Mystery Box! 🎁
-              </span>
-              <span className={styles.mobileText}>
-                Vacaciones: <br /> ¡Mystery Box! 🎁
-              </span>
+              Habla con nuestros asesores
             </h1>
             <p className={styles.heroSubtitle}>
-              <span className={styles.desktopText}>
-                El Día del Padre terminó, pero extendemos la Mystery Box por todo Junio. ¡Visítanos junto a tu familia estas vacaciones y reserva tu terreno!
-              </span>
-              <span className={styles.mobileText}>
-                ¡Extendemos la Mystery Box por todo Junio! Visítanos estas vacaciones.
-              </span>
+              Te acompañamos a elegir tu terreno en El Tabo. Escríbenos por WhatsApp o llámanos directo.
             </p>
             <div className={styles.heroButtons}>
               <button onClick={handleScrollToAdvisors} className={styles.scheduleBtn}>
@@ -152,7 +141,7 @@ export default function AsesoresClient() {
         <div className="container">
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Contacto Directo</span>
-            <h2 className={styles.sectionTitle} style={{ color: '#ffffff' }}>Nuestros Asesores Inmobiliarios</h2>
+            <h2 className={styles.sectionTitle}>Nuestros Asesores Inmobiliarios</h2>
           </div>
           <div className={styles.advisorsGrid}>
             {ADVISORS.map((advisor, index) => {
@@ -244,7 +233,7 @@ export default function AsesoresClient() {
                     <div className={styles.featuresWrap}>
                       {project.features.map((feature, i) => (
                         <span key={i} className={styles.featureTag}>
-                          <Check size={10} style={{ display: 'inline', marginRight: '4px', color: '#1A8A7D' }} />
+                          <Check size={10} style={{ display: 'inline', marginRight: '4px', color: 'var(--verde-solido)' }} />
                           {feature}
                         </span>
                       ))}
@@ -267,7 +256,7 @@ export default function AsesoresClient() {
                         </span>
                         <div className={styles.consultAdvisorsGrid}>
                           {ADVISORS.map((adv) => {
-                            const projectMsg = `Hola ${adv.name}, me interesa obtener más información sobre el proyecto ${project.name} por la promo de Vacaciones de Invierno 🏠`;
+                            const projectMsg = `Hola ${adv.name}, me interesa obtener más información sobre el proyecto ${project.name} 🏠`;
                             const projectWaUrl = `https://wa.me/${adv.cleanPhone}?text=${encodeURIComponent(projectMsg)}`;
                             return (
                               <a

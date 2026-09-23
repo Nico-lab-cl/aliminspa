@@ -218,12 +218,12 @@ export default function LomasDelMarMetaClient() {
   const btn200Bg = 'linear-gradient(135deg,#325366,#4ba646)'
   const btn390Bg = 'linear-gradient(135deg,#325366,#76d845)'
 
-  const t200SelectedBg = t200 ? 'rgba(118,216,69,.22)' : 'rgba(255,255,255,.06)'
-  const t200SelectedBorder = t200 ? '2px solid #76d845' : '1.5px solid rgba(255,255,255,.12)'
-  const t200SelectedColor = t200 ? '#76d845' : 'rgba(255,255,255,.55)'
-  const t390SelectedBg = t390 ? 'rgba(118,216,69,.22)' : 'rgba(255,255,255,.06)'
-  const t390SelectedBorder = t390 ? '2px solid #76d845' : '1.5px solid rgba(255,255,255,.12)'
-  const t390SelectedColor = t390 ? '#76d845' : 'rgba(255,255,255,.55)'
+  const t200SelectedBg = t200 ? 'rgba(118,216,69,.18)' : '#f5f9f0'
+  const t200SelectedBorder = t200 ? '2px solid #4ba646' : '1.5px solid rgba(118,216,69,.55)'
+  const t200SelectedColor = t200 ? '#2d7a3a' : '#1f2933'
+  const t390SelectedBg = t390 ? 'rgba(118,216,69,.18)' : '#f5f9f0'
+  const t390SelectedBorder = t390 ? '2px solid #4ba646' : '1.5px solid rgba(118,216,69,.55)'
+  const t390SelectedColor = t390 ? '#2d7a3a' : '#1f2933'
 
   const terrenoSelected = form.terreno !== ''
   const formVisible = status !== 'success'
@@ -1688,7 +1688,7 @@ export default function LomasDelMarMetaClient() {
       
       <div>
         {formVisible && (
-      <div style={{"background":"rgba(14,26,36,.82)","backdropFilter":"blur(24px)","border":"1px solid rgba(118,216,69,.2)","borderRadius":"24px","padding":"40px","boxShadow":"0 24px 64px rgba(0,0,0,.4)"}}>
+      <div style={{"background":"rgba(255,255,255,.96)","backdropFilter":"blur(24px)","border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"24px","padding":"40px","boxShadow":"0 24px 64px rgba(0,0,0,.25)"}}>
         
         {terrenoSelected && (
           <div style={{"display":"flex","alignItems":"center","gap":"8px","background":"#eaf7d8","border":"1.5px solid #4ba646","borderRadius":"10px","padding":"10px 16px","marginBottom":"24px"}}>
@@ -1703,23 +1703,23 @@ export default function LomasDelMarMetaClient() {
           <div className="form-fields">
             
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
-              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)"}}>Nombre completo *</label>
-              <input type="text" value={vNombre} onInput={onNombre} placeholder="Tu nombre y apellido" required style={{"border":"1.5px solid #E5E7EB","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
+              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>Nombre completo *</label>
+              <input type="text" value={vNombre} onInput={onNombre} placeholder="Tu nombre y apellido" required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
             </div>
             
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
-              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)"}}>Correo electrónico *</label>
-              <input type="email" value={vEmail} onInput={onEmail} placeholder="ejemplo@correo.com" required style={{"border":"1.5px solid #E5E7EB","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
+              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>Correo electrónico *</label>
+              <input type="email" value={vEmail} onInput={onEmail} placeholder="ejemplo@correo.com" required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
             </div>
             
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
-              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)"}}>Teléfono / WhatsApp *</label>
-              <input type="tel" value={vTelefono} onInput={onTelefono} placeholder="+56 9 1234 5678" required style={{"border":"1.5px solid #E5E7EB","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
+              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>Teléfono / WhatsApp *</label>
+              <input type="tel" value={vTelefono} onInput={onTelefono} placeholder="+56 9 1234 5678" required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
             </div>
             
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
-              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)"}}>Región *</label>
-              <select value={vRegion} onChange={onRegion} required style={{"border":"1.5px solid #E5E7EB","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%","appearance":"none","WebkitAppearance":"none"}}>
+              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>Región *</label>
+              <select value={vRegion} onChange={onRegion} required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%","appearance":"none","WebkitAppearance":"none"}}>
                 <option value="">Selecciona tu región</option>
                 <option value="Arica y Parinacota">Arica y Parinacota</option>
                 <option value="Tarapacá">Tarapacá</option>
@@ -1741,13 +1741,13 @@ export default function LomasDelMarMetaClient() {
             </div>
             
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
-              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)"}}>Ciudad *</label>
-              <input type="text" value={vCiudad} onInput={onCiudad} placeholder="¿Desde dónde nos escribes?" required style={{"border":"1.5px solid #E5E7EB","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
+              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>Ciudad *</label>
+              <input type="text" value={vCiudad} onInput={onCiudad} placeholder="¿Desde dónde nos escribes?" required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
             </div>
             
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
-              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)"}}>¿Cómo nos conociste?</label>
-              <select value={vComo} onChange={onComo} style={{"border":"1.5px solid #E5E7EB","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%","appearance":"none","WebkitAppearance":"none"}}>
+              <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>¿Cómo nos conociste?</label>
+              <select value={vComo} onChange={onComo} style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%","appearance":"none","WebkitAppearance":"none"}}>
                 <option value="">Selecciona una opción</option>
                 <option value="Instagram">Instagram</option>
                 <option value="Facebook">Facebook</option>
@@ -1762,21 +1762,21 @@ export default function LomasDelMarMetaClient() {
 
           
           <div style={{"marginBottom":"24px"}}>
-            <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.85)","display":"block","marginBottom":"10px"}}>Terreno de interés *</label>
+            <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933","display":"block","marginBottom":"10px"}}>Terreno de interés *</label>
             <div className="terreno-btns">
               <button type="button" onClick={onTerreno200} style={{"background":t200SelectedBg,"border":t200SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t200SelectedColor,"marginBottom":"2px"}}>200 m²</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $5.500.000 · 60 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>Pie $5.500.000 · 60 cuotas $550K</div>
               </button>
               <button type="button" onClick={onTerreno390} style={{"background":t390SelectedBg,"border":t390SelectedBorder,"borderRadius":"12px","padding":"14px 16px","cursor":"pointer","transition":"all .2s","textAlign":"left","backdropFilter":"blur(8px)"}}>
                 <div style={{"font":"700 16px 'Montserrat',sans-serif","color":t390SelectedColor,"marginBottom":"2px"}}>390 m² ✦</div>
-                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#9CA3AF"}}>Pie $7.500.000 · 70 cuotas $550K</div>
+                <div style={{"font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>Pie $7.500.000 · 70 cuotas $550K</div>
               </button>
             </div>
           </div>
 
           
-          <button type="submit" disabled={submitDisabled} style={{"width":"100%","background":"linear-gradient(135deg,#325366,#4ba646)","color":"#fff","border":"none","padding":"16px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","letterSpacing":".02em","boxShadow":"0 6px 24px rgba(50,83,102,.35)","transition":"all .25s"}}>
+          <button type="submit" disabled={submitDisabled} style={{"width":"100%","background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","letterSpacing":".02em","boxShadow":"0 6px 24px rgba(75,166,70,.35)","transition":"all .25s"}}>
             {submitText}
           </button>
 
@@ -1787,7 +1787,7 @@ export default function LomasDelMarMetaClient() {
             </div>
           )}
 
-          <p style={{"textAlign":"center","marginTop":"14px","font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.35)"}}>🔒 Tus datos están seguros · Al registrarte aceptas nuestros términos · Sin spam</p>
+          <p style={{"textAlign":"center","marginTop":"14px","font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>🔒 Tus datos están seguros · Al registrarte aceptas nuestros términos · Sin spam</p>
         </form>
       </div>
     )}

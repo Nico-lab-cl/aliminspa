@@ -1,9 +1,9 @@
 .page {
-  padding-top: 100px;
-  background-color: #082823; /* Dark green matching navbar/footer */
+  padding-top: 0;
+  background-color: var(--sec-bg);
   min-height: 100vh;
   overflow-x: hidden;
-  color: #e2e8f0;
+  color: var(--sec-text);
   position: relative;
 }
 
@@ -26,7 +26,7 @@
   width: 450px;
   height: 450px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(26, 138, 125, 0.25) 0%, rgba(20, 105, 95, 0.08) 60%, transparent 100%);
+  background: radial-gradient(circle, rgba(118, 216, 69, 0.18) 0%, rgba(75, 166, 70, 0.06) 60%, transparent 100%);
   filter: blur(80px);
   animation: float1 25s infinite alternate ease-in-out;
 }
@@ -38,7 +38,7 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, rgba(26, 138, 125, 0.05) 60%, transparent 100%);
+  background: radial-gradient(circle, rgba(118, 216, 69, 0.12) 0%, rgba(75, 166, 70, 0.04) 60%, transparent 100%);
   filter: blur(95px);
   animation: float2 30s infinite alternate ease-in-out;
 }
@@ -63,9 +63,12 @@
 
 .hero {
   position: relative;
-  min-height: 680px;
+  /* Ocupa la pantalla completa; el padding deja el contenido bajo el menú fijo. */
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: 64px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   overflow: hidden;
   z-index: 2;
 }
@@ -85,14 +88,14 @@
   background:
     linear-gradient(
       to right,
-      rgba(5, 31, 27, 0.65) 0%,
-      rgba(5, 31, 27, 0.40) 45%,
-      rgba(5, 31, 27, 0.10) 80%,
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0.40) 45%,
+      rgba(0, 0, 0, 0.10) 80%,
       transparent 100%
     ),
     linear-gradient(
       to top,
-      rgba(5, 31, 27, 0.40) 0%,
+      rgba(0, 0, 0, 0.40) 0%,
       transparent 40%
     );
 }
@@ -101,8 +104,8 @@
 .heroInner {
   position: relative;
   z-index: 2;
-  padding-top: 4.5rem;
-  padding-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
 }
 
 .heroContent {
@@ -131,7 +134,7 @@
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--verde-lima);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-bottom: 1rem;
@@ -148,7 +151,7 @@
 }
 
 .heroTitle span {
-  color: var(--gold-light);
+  color: var(--verde-lima);
 }
 
 .heroSubtitle {
@@ -190,13 +193,13 @@
 }
 
 .advisorCard {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #fff;
+  border: var(--borde-tarjeta);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
   text-align: center;
   transition: all var(--transition-base);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -212,15 +215,15 @@
   left: 0;
   width: 100%;
   height: 5px;
-  background: var(--gradient-gold);
+  background: linear-gradient(90deg, var(--verde-lima), var(--verde-solido));
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
 
 .advisorCard:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
-  border-color: rgba(197, 160, 89, 0.4);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+  border-color: var(--borde-tarjeta-hover);
 }
 
 .advisorCard:hover::after {
@@ -238,22 +241,22 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 4px solid var(--bg-mint-2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   object-fit: cover;
   transition: transform var(--transition-base);
 }
 
 .advisorCard:hover .avatar {
   transform: scale(1.05);
-  border-color: var(--gold);
+  border-color: var(--verde-lima);
 }
 
 .advisorRole {
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--verde-solido);
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
 }
@@ -262,13 +265,13 @@
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sec-text);
   margin-bottom: 0.75rem;
 }
 
 .advisorDesc {
   font-size: 0.95rem;
-  color: #cbd5e1;
+  color: var(--sec-text-muted);
   line-height: 1.5;
   margin-bottom: 1.75rem;
   max-width: 320px;
@@ -307,14 +310,32 @@
 }
 
 .callBtn {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-mint);
+  color: var(--sec-text);
+  border: 1px solid rgba(75, 166, 70, 0.25);
 }
 
 .callBtn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--bg-mint-2);
   transform: translateY(-2px);
+}
+
+.hero .callBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.1rem 2rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(6px);
+  transition: all var(--transition-fast);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero .callBtn:hover {
+  background: rgba(255, 255, 255, 0.22);
 }
 
 /* Father's Day Promo styles */
@@ -357,9 +378,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(197, 160, 89, 0.15);
-  border: 1px solid var(--gold);
-  color: var(--gold-light);
+  background: rgba(118, 216, 69, 0.18);
+  border: 1px solid var(--verde-lima);
+  color: var(--verde-lima);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.4rem 1rem;
@@ -392,9 +413,9 @@
 }
 
 .scheduleBtn {
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(197, 160, 89, 0.35);
+  box-shadow: 0 4px 15px rgba(75, 166, 70, 0.35);
   padding: 1.1rem 2rem;
   font-weight: 700;
   border-radius: var(--radius-md);
@@ -403,7 +424,7 @@
 
 .scheduleBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(197, 160, 89, 0.5);
+  box-shadow: 0 8px 25px rgba(75, 166, 70, 0.5);
 }
 
 .contactTeamLink {
@@ -422,7 +443,7 @@
 /* Projects Showcase Section */
 .projectsSection {
   padding: 5rem 0;
-  background: #051f1b; /* Deeper dark green for contrast */
+  background: #ffffff;
   position: relative;
   z-index: 2;
 }
@@ -436,7 +457,7 @@
   display: inline-block;
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--verde-solido);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin-bottom: 0.75rem;
@@ -446,7 +467,7 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--sec-text);
 }
 
 .projectsGrid {
@@ -465,21 +486,21 @@
 }
 
 .projectCard {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--sec-bg);
+  border: var(--borde-tarjeta);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: all var(--transition-base);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   height: 100%;
 }
 
 .projectCard:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
-  border-color: rgba(197, 160, 89, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+  border-color: var(--borde-tarjeta-hover);
 }
 
 .projectImageWrapper {
@@ -515,7 +536,7 @@
 }
 
 .statusAvailable {
-  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+  background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
 }
 
 .statusSold {
@@ -533,14 +554,14 @@
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sec-text);
   margin-bottom: 0.25rem;
 }
 
 .projectDistance {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--gold-light);
+  color: var(--verde-solido);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 1rem;
@@ -548,7 +569,7 @@
 
 .projectDesc {
   font-size: 0.92rem;
-  color: #cbd5e1;
+  color: var(--sec-text-muted);
   line-height: 1.5;
   margin-bottom: 1.5rem;
   flex: 1;
@@ -563,9 +584,9 @@
 
 .featureTag {
   font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
+  background: #ffffff;
+  border: var(--borde-tarjeta);
+  color: var(--sec-text-muted);
   padding: 0.35rem 0.75rem;
   border-radius: 50px;
   font-weight: 600;
@@ -575,15 +596,15 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   padding-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .projectMetaLabel {
   font-size: 0.7rem;
-  color: #cbd5e1;
-  opacity: 0.6;
+  color: var(--sec-text-muted);
+  opacity: 0.8;
   text-transform: uppercase;
   margin-bottom: 0.15rem;
 }
@@ -591,14 +612,14 @@
 .projectMetaVal {
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sec-text);
 }
 
 .askAsesorBtn {
   width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  color: var(--verde-solido);
+  border: var(--borde-tarjeta);
   border-radius: var(--radius-md);
   padding: 0.85rem;
   font-size: 0.88rem;
@@ -611,15 +632,15 @@
 }
 
 .askAsesorBtn:hover {
-  background: #ffffff;
-  color: #082823;
-  border-color: #ffffff;
+  background: var(--verde-solido);
+  color: #ffffff;
+  border-color: var(--verde-solido);
 }
 
 /* FAQ Section */
 .faqSection {
   padding: 5rem 0;
-  background: #082823;
+  background: var(--sec-bg);
   position: relative;
   z-index: 2;
 }
@@ -630,8 +651,8 @@
 }
 
 .faqItem {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: var(--borde-tarjeta);
   border-radius: var(--radius-md);
   margin-bottom: 1rem;
   overflow: hidden;
@@ -639,12 +660,12 @@
 }
 
 .faqItem:hover {
-  border-color: rgba(197, 160, 89, 0.35);
+  border-color: var(--borde-tarjeta-hover);
 }
 
 .faqItemActive {
-  border-color: rgba(197, 160, 89, 0.5);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-color: var(--borde-tarjeta-hover);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
 .faqQuestionButton {
@@ -662,13 +683,13 @@
 .faqQuestion {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sec-text);
   line-height: 1.4;
 }
 
 .faqIcon {
   font-size: 1.25rem;
-  color: var(--gold);
+  color: var(--verde-solido);
   transition: transform var(--transition-base);
   flex-shrink: 0;
 }
@@ -690,7 +711,7 @@
 .faqAnswer {
   padding: 0 1.5rem 1.5rem 1.5rem;
   font-size: 0.95rem;
-  color: #cbd5e1;
+  color: var(--sec-text-muted);
   line-height: 1.6;
   opacity: 0.9;
 }
@@ -705,7 +726,7 @@
 .consultTitle {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sec-text);
   text-align: center;
   display: block;
   margin-bottom: 0.2rem;
@@ -728,43 +749,39 @@
   }
 
   .page {
-    padding-top: 80px;
+    padding-top: 0;
   }
 
   .hero {
-    min-height: 500px;
+    min-height: max(560px, 88svh);
+    align-items: flex-end;
   }
 
-  /* Shift image left so advisors on the right are fully visible */
+  /* Foto corrida a la derecha para que se vean los dos asesores completos */
   .heroBgImage {
-    object-position: 95% center;
+    object-position: 92% 15%;
   }
 
   /* Extremely light overlay gradient focusing on left-side readability, letting original colors shine */
   .heroOverlay {
     background:
       linear-gradient(
-        to right,
-        rgba(5, 31, 27, 0.70) 0%,
-        rgba(5, 31, 27, 0.35) 48%,
-        rgba(5, 31, 27, 0.05) 75%,
-        transparent 100%
-      ),
-      linear-gradient(
         to top,
-        rgba(5, 31, 27, 0.40) 0%,
-        transparent 40%
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.6) 35%,
+        rgba(0, 0, 0, 0.1) 60%,
+        transparent 75%
       );
   }
 
   .heroInner {
-    padding-top: 5rem;
-    padding-bottom: 4rem;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
     text-align: left;
   }
 
   .heroContent {
-    max-width: 48%; /* Occupies left side only, leaving right side for advisors */
+    max-width: 560px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -778,16 +795,16 @@
 
   .heroButtons {
     width: 100%;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.8rem;
     margin-top: 1.5rem;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .heroButtons button,
   .heroButtons a {
-    width: 100%;
-    max-width: 180px; /* Fits the narrow 48% column width nicely */
+    flex: 1;
+    max-width: 240px;
     font-size: 0.85rem;
     padding: 0.75rem 1rem;
     justify-content: center;
@@ -797,19 +814,19 @@
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 440px;
+    min-height: max(480px, 80svh);
   }
 
   /* Inherits the beautiful left-to-right gradient from 992px, no solid overlay */
 
   .heroInner {
-    padding-top: 4.5rem;
-    padding-bottom: 3.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
     text-align: left;
   }
 
   .heroTitle {
-    font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+    font-size: clamp(1.9rem, 7vw, 2.4rem);
     line-height: 1.25;
     margin-bottom: 0.75rem;
   }
@@ -877,38 +894,43 @@
 
 @media (max-width: 480px) {
   .hero {
-    min-height: 440px;
+    min-height: max(460px, 78svh);
   }
 
-  /* Keep background image shifted right so both advisors are visible */
+  /* Celular: la foto se centra entre las dos caras para que entren ambos asesores */
   .heroBgImage {
-    object-position: 98% center;
+    object-position: 81% 15%;
   }
 
   .heroInner {
-    padding-top: 4rem;
-    padding-bottom: 3rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
     text-align: left;
   }
 
   .heroContent {
-    max-width: 48%;
+    max-width: 100%;
+  }
+
+  .heroButtons {
+    flex-direction: column;
   }
 
   .heroTitle {
-    font-size: 1.35rem;
+    font-size: 1.9rem;
     line-height: 1.25;
   }
 
   .heroSubtitle {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     line-height: 1.35;
   }
 
   .heroButtons button,
   .heroButtons a {
+    flex: none;
     max-width: 100%;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     padding: 0.7rem 0.85rem;
   }
 
@@ -917,3 +939,19 @@
   }
 }
 
+
+/* Pantallas grandes: el texto crece con el hero para no quedar chico en 1600px+ */
+@media (min-width: 1600px) {
+  .heroContent {
+    max-width: 760px;
+  }
+
+  .heroTitle {
+    font-size: 4.2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.25rem;
+    max-width: 640px;
+  }
+}

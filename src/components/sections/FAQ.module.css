@@ -35,6 +35,7 @@
 }
 
 .item {
+    border: var(--borde-tarjeta);
     background: #fff;
     border-radius: 16px;
     overflow: hidden;
@@ -43,6 +44,7 @@
 }
 
 .item.open {
+    border-color: var(--borde-tarjeta-hover);
     box-shadow: 0 8px 28px rgba(118, 216, 69, 0.18);
 }
 

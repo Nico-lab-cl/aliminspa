@@ -2,7 +2,7 @@
     position: relative;
     padding: 80px 24px;
     overflow: hidden;
-    background: var(--navy-deep);
+    background: var(--sec-bg);
 }
 
 .bgWrapper {
@@ -25,10 +25,10 @@
     inset: 0;
     background: linear-gradient(
         180deg,
-        rgba(10, 21, 32, 0.95) 0%,
-        rgba(10, 21, 32, 0.85) 12%,
-        rgba(10, 21, 32, 0.85) 88%,
-        rgba(10, 21, 32, 0.95) 100%
+        rgba(var(--sec-overlay), 0.95) 0%,
+        rgba(var(--sec-overlay), 0.85) 12%,
+        rgba(var(--sec-overlay), 0.85) 88%,
+        rgba(var(--sec-overlay), 0.95) 100%
     );
 }
 
@@ -63,7 +63,7 @@
     font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--verde-lima);
+    color: var(--sec-accent);
 }
 
 .title {
@@ -71,7 +71,7 @@
     font-weight: 800;
     font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     line-height: 1.2;
-    color: #fff;
+    color: var(--sec-text);
     margin: 0;
 }
 
@@ -80,7 +80,7 @@
     font-weight: 600;
     font-size: 1.15rem;
     line-height: 1.5;
-    color: var(--verde-lima);
+    color: var(--sec-accent);
     margin: 14px 0 0;
 }
 
@@ -88,7 +88,7 @@
     font-family: var(--font);
     font-size: 0.95rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--sec-text-muted);
     max-width: 640px;
     margin: 16px auto 0;
 }

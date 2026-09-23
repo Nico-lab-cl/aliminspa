@@ -98,6 +98,7 @@
 }
 
 .videoCard {
+    border: var(--borde-tarjeta);
     position: relative;
     border-radius: 20px;
     overflow: hidden;

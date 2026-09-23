@@ -50,7 +50,7 @@ export const DirectionSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
             className={styles.sectionTitle}
-            style={{ color: '#fff' }}
+           
           >
             Liderazgo con <span className={styles.textGold}>visión</span>
           </motion.h2>

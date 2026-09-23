@@ -2,7 +2,7 @@
     position: relative;
     padding: 80px 20px;
     overflow: hidden;
-    background: var(--navy-deeper);
+    background: var(--sec-bg);
 }
 
 .bgImg {
@@ -15,7 +15,7 @@
 .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, rgba(10, 21, 32, 0.82) 0%, rgba(12, 26, 40, 0.75) 50%, rgba(10, 21, 32, 0.85) 100%);
+    background: linear-gradient(160deg, rgba(var(--sec-overlay), 0.82) 0%, rgba(var(--sec-overlay), 0.75) 50%, rgba(var(--sec-overlay), 0.85) 100%);
 }
 
 .orb {
@@ -57,7 +57,7 @@
     font-family: var(--font-heading);
     font-weight: 600;
     font-size: 0.75rem;
-    color: var(--verde-lima);
+    color: var(--sec-accent);
     text-transform: uppercase;
     letter-spacing: 0.12em;
 }
@@ -67,7 +67,7 @@
     font-weight: 800;
     font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     line-height: 1.2;
-    color: #fff;
+    color: var(--sec-text);
     margin-bottom: 12px;
 }
 
@@ -75,7 +75,7 @@
     font-family: var(--font);
     font-size: 0.95rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--sec-text-muted);
     max-width: 520px;
     margin: 0 auto;
 }
