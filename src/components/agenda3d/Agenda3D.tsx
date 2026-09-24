@@ -362,7 +362,7 @@ export default function Agenda3D({ proyecto = LOMAS_DEL_MAR }: { proyecto?: Proy
     const loteLabel = lot
         ? proyecto.numeraLotes
             ? proyecto.tieneEtapas ? `Etapa ${lot.stage} · Lote ${lot.n}` : `Lote ${lot.n}`
-            : `${proyecto.refPrefijo ?? 'Ref'}-${lot.n}`
+            : `${proyecto.refPrefijo ?? 'Ref-'}${lot.n}`
         : null
     // La misma información en prosa, para los títulos y los mensajes.
     const loteTexto = lot

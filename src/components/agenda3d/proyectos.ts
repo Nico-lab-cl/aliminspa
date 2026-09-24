@@ -38,19 +38,18 @@ export interface Proyecto {
      */
     planoVertical?: { alta: string; baja: string; mapa: string; lotes: string }
     /**
-     * Si los lotes tienen número de escritura.
+     * Si todos los lotes tienen número de escritura y se muestran como "Lote 12".
      *
-     * Arena y Sol todavía no: el tour solo dice, por color, si está vendido o
-     * disponible. Mientras sea false la página no dice "Lote 12", porque ese
-     * número lo puso un script ordenando por posición y no es el de la
-     * escritura. Ver scripts/importar-plano-arenaysol.js.
+     * Arena y Sol no: su plano de ventas rotula solo los disponibles (P61,
+     * P9...) y los vendidos van sin número. Con false la página nombra el lote
+     * con `refPrefijo` y no escribe números sobre el plano, que ya los trae
+     * dibujados. Ver scripts/importar-plano-arenaysol-ilustrado.js.
      */
     numeraLotes: boolean
     /**
-     * Sigla con que se nombra un lote sin número, como `AS-12`.
-     *
-     * Es una referencia interna para que el asesor sepa cuál marcó el
-     * visitante, no un número de lote. Solo se usa si `numeraLotes` es false.
+     * Cómo se nombra un lote cuando `numeraLotes` es false: el prefijo va
+     * pegado al número, así que lleva su propio separador si lo necesita
+     * (`P` da "P61"). Por defecto "Ref-".
      */
     refPrefijo?: string
     /** Qué entradas del glosario de colores aplican. Los nombres salen de GLOSARIO en Agenda3D. */
@@ -126,10 +125,11 @@ export const ARENA_Y_SOL: Proyecto = {
         lotes: '/arenaysol3d/plano-lotes-vertical.json',
     },
     numeraLotes: false,
-    refPrefijo: 'AS',
-    // El tour solo distingue vendido de disponible: no hay areas verdes ni
-    // equipamiento marcados, y un glosario con colores que no estan en el mapa confunde.
-    glosario: ['Disponible', 'Vendido'],
+    // Como en el plano de ventas: P61, P9...
+    refPrefijo: 'P',
+    // Solo los colores que el plano pinta: no hay áreas verdes ni
+    // estacionamiento marcados, y un glosario con colores ausentes confunde.
+    glosario: ['Disponible', 'Vendido', 'Equip. sanitario'],
     // El loteo es una franja angosta rodeada de casas y camino: con el
     // encuadre justo se lee como un recorte, y no se entiende donde esta.
     aire: 1.5,

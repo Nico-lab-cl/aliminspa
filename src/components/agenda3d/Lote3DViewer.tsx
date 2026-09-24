@@ -225,7 +225,7 @@ export default function Lote3DViewer({
                 // Sin números de escritura, la etiqueta del mapa lleva la sigla:
                 // así dice lo mismo que el panel y no simula un número de lote.
                 if (!proy.current.numeraLotes && proy.current.refPrefijo) {
-                    el.setAttribute('prefijo', proy.current.refPrefijo + '-')
+                    el.setAttribute('prefijo', proy.current.refPrefijo)
                 }
                 // Donde el número es el de la escritura, el plano los muestra
                 // todos: el visitante reconoce el lote que le nombró el asesor
