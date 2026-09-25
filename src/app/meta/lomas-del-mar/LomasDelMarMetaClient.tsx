@@ -7,6 +7,8 @@ import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
+import AgendaEnLanding from '@/components/agenda3d/AgendaEnLanding'
+import { LOMAS_DEL_MAR } from '@/components/agenda3d/proyectos'
 
 /* Landing de Lomas del Mar para tráfico de Meta Ads (/meta/lomas-del-mar).
    Copia independiente de /proyectos/lomas-del-mar: se puede iterar el copy y
@@ -974,6 +976,9 @@ export default function LomasDelMarMetaClient() {
     </div>
   </div>
 </nav>
+
+{/* Agendamiento en la misma landing, justo después del hero */}
+<AgendaEnLanding proyecto={LOMAS_DEL_MAR} detalle="Recorre Lomas del Mar en 3D con imágenes de dron, toca el lote que te gusta y reserva día y hora para visitarlo en El Tabo." />
 
 <section style={{"position":"relative","overflow":"hidden","padding":"0","background":"#0e1a24"}}>
   

@@ -15,8 +15,9 @@
     --linea: rgba(118, 216, 69, .3);
     /* El header del sitio es fixed y se monta encima del contenido, no lo
        empuja: la escena ocupa el alto completo y baja su propia barra y sus
-       controles esta franja para no quedar debajo. */
-    --nav-h: 64px;
+       controles esta franja para no quedar debajo. Una landing que monta el
+       agendador puede pasar su propio alto con --agenda-nav-h. */
+    --nav-h: var(--agenda-nav-h, 64px);
 
     position: relative;
     background: var(--navy);
@@ -28,7 +29,9 @@
 
 .map {
     position: relative;
-    height: 100svh;
+    /* --agenda-bottom: alto de una barra fija inferior de la landing que
+       contiene al agendador, para que no tape los paneles de abajo. */
+    height: calc(100svh - var(--agenda-bottom, 0px));
     min-height: 620px;
     overflow: hidden;
 }

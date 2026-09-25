@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { getUtmParams, newEventId } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import { FAQ_ARENA_Y_SOL } from './faq'
+import AgendaEnLanding from '@/components/agenda3d/AgendaEnLanding'
+import { ARENA_Y_SOL } from '@/components/agenda3d/proyectos'
 
 /* Landing de Arena y Sol para tráfico de Meta Ads (/meta/arena-y-sol).
    Copia independiente de /proyectos/arena-y-sol: se puede iterar el copy, los
@@ -59,7 +61,7 @@ const WA_PATH =
 const MARQUEE_ITEMS = [
     { lima: true, text: '⚠ Últimos terrenos disponibles en Arena y Sol' },
     { lima: false, text: '200 m² · Rol propio · A 8 min de la playa' },
-    { lima: false, text: 'Financiamiento directo, sin bancos ni intereses' },
+    { lima: false, text: 'Sin bancos, sin intereses y sin importar tu DICOM' },
 ]
 
 const TRUST_ITEMS = [
@@ -74,8 +76,8 @@ const TRUST_ITEMS = [
         ),
     },
     {
-        title: 'Agua certificada',
-        desc: 'Conexión lista en terreno',
+        title: 'Agua',
+        desc: 'Red en instalación hasta cada terreno',
         icon: <path d="M12 2.7s6 6 6 10.3a6 6 0 0 1-12 0C6 8.7 12 2.7 12 2.7z" />,
     },
     {
@@ -1041,9 +1043,9 @@ html{scroll-behavior:smooth}
                             animation: `aysFadeInUp .55s .2s ${EASE} both`,
                         }}
                     >
-                        Terrenos 100% urbanizados de 200 m² a 8 minutos de la playa.
+                        Terrenos de 200 m² con urbanización avanzada, a 8 minutos de la playa.
                         <br />
-                        Sin bancos, sin intereses y con financiamiento directo.
+                        Sin bancos, sin intereses, sin importar tu DICOM y con financiamiento directo.
                     </p>
 
                     <div
@@ -1095,6 +1097,12 @@ html{scroll-behavior:smooth}
                 </div>
             </section>
 
+            {/* ── 01b · Agendamiento en la misma landing ── */}
+            <AgendaEnLanding
+                proyecto={ARENA_Y_SOL}
+                detalle="Mira desde el dron qué lotes quedan en Arena y Sol, elige el tuyo y reserva día y hora para visitarlo en El Tabo."
+            />
+
             {/* ── 02 · Barra de confianza ── */}
             <section style={{ position: 'relative', overflow: 'hidden', background: '#0a1520', padding: '56px 20px' }}>
                 <img
@@ -1130,7 +1138,7 @@ html{scroll-behavior:smooth}
                             color: '#b8f07a',
                         }}
                     >
-                        Lo que ya está certificado
+                        Lo que incluye tu terreno
                     </div>
                     <div
                         style={{
@@ -1517,7 +1525,7 @@ html{scroll-behavior:smooth}
                             <div style={{ display: 'grid', gap: '12px', marginBottom: '26px' }}>
                                 {[
                                     'Rol propio, escritura a tu nombre',
-                                    'Agua certificada lista en terreno',
+                                    'Red de agua en instalación hasta cada terreno',
                                     'Luz eléctrica en el loteo',
                                     'Portón automático de acceso',
                                     'A 8 minutos de la playa de El Tabo',
