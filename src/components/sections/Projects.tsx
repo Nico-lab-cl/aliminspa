@@ -101,7 +101,7 @@ export default function Projects() {
                         <div className={styles.videoOverlay} />
                         <div className={styles.videoCaption}>
                             <div className={styles.videoTitle}>Arena y Sol</div>
-                            <div className={styles.videoDesc}>Terrenos de 200 m² · A 10 min de la playa</div>
+                            <div className={styles.videoDesc}>Terrenos de 200 m² · A 8 min de la playa</div>
                         </div>
                     </div>
                 </div>

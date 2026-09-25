@@ -58,7 +58,7 @@ const WA_PATH =
 
 const MARQUEE_ITEMS = [
     { lima: true, text: '⚠ Últimos terrenos disponibles en Arena y Sol' },
-    { lima: false, text: '200 m² · Rol propio · A 10 min de la playa' },
+    { lima: false, text: '200 m² · Rol propio · A 8 min de la playa' },
     { lima: false, text: 'Financiamiento directo, sin bancos ni intereses' },
 ]
 
@@ -126,7 +126,7 @@ const GALLERY: GalleryItem[] = [
 const PLACES = [
     {
         image: '/assets/minipie/pasted-1782761706285-0.png',
-        distance: '10 min',
+        distance: '8 min',
         category: 'Playa',
         title: 'El Tabo',
         description: 'Playa icónica del litoral con arena extensa y aguas del Pacífico',
@@ -1041,7 +1041,7 @@ html{scroll-behavior:smooth}
                             animation: `aysFadeInUp .55s .2s ${EASE} both`,
                         }}
                     >
-                        Terrenos 100% urbanizados de 200 m² a 10 minutos de la playa.
+                        Terrenos 100% urbanizados de 200 m² a 8 minutos de la playa.
                         <br />
                         Sin bancos, sin intereses y con financiamiento directo.
                     </p>
@@ -1088,7 +1088,7 @@ html{scroll-behavior:smooth}
                             animation: `aysFadeInUp .55s .4s ${EASE} both`,
                         }}
                     >
-                        <Pill>📍 A 10 min de la playa de El Tabo</Pill>
+                        <Pill>📍 A 8 min de la playa de El Tabo</Pill>
                         <Pill>200 m² por lote</Pill>
                         <Pill>Rol propio</Pill>
                     </div>
@@ -1339,7 +1339,7 @@ html{scroll-behavior:smooth}
                         <SectionHeader
                             kicker="Dónde estamos"
                             title="Arena y Sol · El Tabo"
-                            subtitle="📍 Litoral Central · Región de Valparaíso · A 10 minutos de la playa de El Tabo."
+                            subtitle="📍 Litoral Central · Región de Valparaíso · A 8 minutos de la playa de El Tabo."
                         />
                     </div>
                     <div
@@ -1363,7 +1363,7 @@ html{scroll-behavior:smooth}
                     </div>
                     <div data-animate style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '22px' }}>
                         <Pill>🚗 1h 40min desde Santiago por Ruta 78</Pill>
-                        <Pill>🏖 10 min a la playa de El Tabo</Pill>
+                        <Pill>🏖 8 min a la playa de El Tabo</Pill>
                         <Pill>🌲 Entorno de bosque</Pill>
                         <a
                             href="https://www.google.com/maps/place/Arena+y+Sol+-+Alimin+SPA/@-33.4347831,-71.6303648,613m/data=!3m1!1e3"
@@ -1520,7 +1520,7 @@ html{scroll-behavior:smooth}
                                     'Agua certificada lista en terreno',
                                     'Luz eléctrica en el loteo',
                                     'Portón automático de acceso',
-                                    'A 10 minutos de la playa de El Tabo',
+                                    'A 8 minutos de la playa de El Tabo',
                                 ].map((t) => (
                                     <div
                                         key={t}

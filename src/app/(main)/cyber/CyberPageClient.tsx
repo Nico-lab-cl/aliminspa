@@ -523,7 +523,7 @@ export default function CyberPageClient() {
                             </div>
                             <div className={styles.projectContent}>
                                 <h3 className={styles.projectName}>Arena y Sol</h3>
-                                <p className={styles.projectDistance}>A 10 minutos de la playa del Tabo</p>
+                                <p className={styles.projectDistance}>A 8 minutos de la playa del Tabo</p>
                                 <p className={styles.projectDesc}>
                                     El terreno perfecto para consolidar tu casa de descanso. Quedan muy pocas unidades en este exitoso proyecto ya consolidado en una de las mejores zonas costeras.
                                 </p>

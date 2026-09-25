@@ -105,7 +105,7 @@ export const ARENA_Y_SOL: Proyecto = {
     rotulo: 'ARENA Y SOL',
     modalidad: 'Visita en terreno, El Tabo',
     comuna: 'El Tabo',
-    ubicacionPie: 'El Tabo, Litoral Central · a 10 min de la playa del Tabo',
+    ubicacionPie: 'El Tabo, Litoral Central · a 8 min de la playa del Tabo',
     // La ficha real del loteo en Google, no unas coordenadas sueltas: así el
     // visitante ve el nombre y puede abrir la ruta desde ahí.
     mapaEmbed:

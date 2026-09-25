@@ -276,7 +276,7 @@ export default function VentaTerrenosClient() {
                                 <div style={s("position:absolute;top:10px;left:10px;background:rgba(118,216,69,.9);color:#0e1a24;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>✓ Crédito directo</div>
                                 <div style={s("position:absolute;bottom:12px;left:13px;right:13px")}>
                                     <div style={s("font:800 16px 'Montserrat',sans-serif;color:#fff;line-height:1.1;margin-bottom:2px")}>Lomas del Mar</div>
-                                    <div style={s("font:500 11px 'Roboto',sans-serif;color:rgba(255,255,255,.72)")}>200 · 390 m² · a 8 min de la playa</div>
+                                    <div style={s("font:500 11px 'Roboto',sans-serif;color:rgba(255,255,255,.72)")}>200 · 390 m² · a 10 min de la playa</div>
                                 </div>
                             </a>
                             <a href="#terrenos" className="al-hero-proj" style={s("position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;border:1.5px solid rgba(197,160,89,.4);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .3s")}>
@@ -285,7 +285,7 @@ export default function VentaTerrenosClient() {
                                 <div style={s("position:absolute;top:10px;left:10px;background:rgba(239,68,68,.85);color:#fff;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>⚠ 90% vendido</div>
                                 <div style={s("position:absolute;bottom:12px;left:13px;right:13px")}>
                                     <div style={s("font:800 16px 'Montserrat',sans-serif;color:#fff;line-height:1.1;margin-bottom:2px")}>Arena y Sol</div>
-                                    <div style={s("font:500 11px 'Roboto',sans-serif;color:rgba(255,255,255,.72)")}>200 m² · a 10 min de la playa</div>
+                                    <div style={s("font:500 11px 'Roboto',sans-serif;color:rgba(255,255,255,.72)")}>200 m² · a 8 min de la playa</div>
                                 </div>
                             </a>
                         </div>
@@ -466,7 +466,7 @@ export default function VentaTerrenosClient() {
                             <div style={s("position:absolute;top:16px;right:16px;z-index:5;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#FCA5A5;font:800 11px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.04em;padding:8px 13px;border-radius:100px")}>⚠ 90% vendido</div>
                             <div style={s("padding:26px 26px 0")}>
                                 <div style={s("display:inline-flex;align-items:center;gap:7px;background:rgba(197,160,89,.14);border:1px solid rgba(197,160,89,.35);border-radius:100px;padding:5px 12px;margin-bottom:14px")}>
-                                    <span style={s("font-size:11px")}>📍</span><span style={s("font:600 11px 'Montserrat',sans-serif;color:#dcbf7f")}>A 10 minutos de la playa</span>
+                                    <span style={s("font-size:11px")}>📍</span><span style={s("font:600 11px 'Montserrat',sans-serif;color:#dcbf7f")}>A 8 minutos de la playa</span>
                                 </div>
                                 <h3 style={s("font:800 26px 'Montserrat',sans-serif;color:#fff;margin:0 0 4px")}>Arena y Sol</h3>
                                 <p style={s("font:400 14px/1.5 'Roboto',sans-serif;color:rgba(255,255,255,.55);margin:0 0 6px")}>Terrenos urbanizados · Sin importar tu DICOM · Últimos cupos</p>
