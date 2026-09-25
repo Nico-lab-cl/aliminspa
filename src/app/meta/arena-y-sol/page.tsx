@@ -12,7 +12,7 @@ import { FAQ_ARENA_Y_SOL } from './faq'
 export const metadata: Metadata = {
     title: 'Arena y Sol | Terrenos de 200 m² en El Tabo',
     description:
-        'Terrenos 100% urbanizados de 200 m² en El Tabo, a 8 minutos de la playa. Rol propio, agua certificada, luz eléctrica y portón automático.',
+        'Terrenos de 200 m² en El Tabo, a 8 minutos de la playa. Rol propio, luz eléctrica, portón automático y red de agua en instalación.',
     robots: { index: false, follow: false },
     alternates: { canonical: `${SITE.url}/proyectos/arena-y-sol` },
 }

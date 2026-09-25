@@ -9,8 +9,8 @@ export const FAQ_ARENA_Y_SOL = [
         answer: 'Sí. Cada lote tiene rol propio: la escritura queda a tu nombre y eres dueño de verdad, no de un papel de promesa.',
     },
     {
-        question: '¿El agua ya está en el terreno?',
-        answer: 'Sí. Arena y Sol tiene agua certificada y la conexión ya está en terreno. No es un compromiso a futuro.',
+        question: '¿El terreno tiene agua?',
+        answer: 'La red de agua está en proceso de instalación, con cañerías hasta cada terreno. Al cotizar te contamos en qué etapa va la obra.',
     },
     {
         question: '¿Hay luz eléctrica?',
@@ -23,6 +23,10 @@ export const FAQ_ARENA_Y_SOL = [
     {
         question: '¿Cómo es la forma de pago?',
         answer: 'Pie de $20.000.000 y cuotas referenciales de $500.000. El valor total es $42.000.000 en pesos, fijo. Si pagas al contado, son $39.000.000.',
+    },
+    {
+        question: '¿Me sirve si estoy en DICOM?',
+        answer: 'Sí. El financiamiento es directo con Alimin, sin banco y sin evaluación bancaria, así que no importa tu DICOM.',
     },
     {
         question: '¿Cuándo puedo tomar posesión de mi terreno?',
