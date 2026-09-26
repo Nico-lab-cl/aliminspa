@@ -32,27 +32,66 @@ function Reserva({ texto }: { texto: string }) {
 }
 
 /* Las landings tienen su propio header fijo (marquesina + nav) y, en el
-   celular, una barra fija de "Cotizar" abajo. Se miden al montar el mapa para
-   que sus controles no queden tapados. */
-function medirBarrasFijas() {
-    let arriba = 0
-    let abajo = 0
+   celular, una barra fija de "Cotizar" abajo que aparece recién al bajar
+   de la portada. Se miden para que no tapen los controles del mapa: si la
+   barra de abajo tapa "Agendar visita", en el celular no se puede agendar.
+
+   barraEn busca, subiendo desde lo que hay en ese punto de la pantalla, una
+   barra fija de borde a borde (así no cuenta el personaje de Ali, que también
+   es fijo). Se ignora el propio mapa y lo que ocupe más del 40% del alto (una
+   portada sticky, por ejemplo). */
+function barraEn(y: number, mapa: HTMLElement | null): DOMRect | null {
     const ancho = window.innerWidth
     const alto = window.innerHeight
-    for (const el of Array.from(document.body.querySelectorAll<HTMLElement>('*'))) {
-        const pos = getComputedStyle(el).position
-        if (pos !== 'fixed' && pos !== 'sticky') continue
-        const r = el.getBoundingClientRect()
-        if (r.width < ancho * 0.6 || r.height === 0 || r.height > alto * 0.4) continue
-        if (r.top <= 1) arriba = Math.max(arriba, r.bottom)
-        else if (r.bottom >= alto - 1) abajo = Math.max(abajo, alto - r.top)
+    for (const hit of document.elementsFromPoint(ancho / 2, y)) {
+        if (mapa && mapa.contains(hit)) continue
+        for (let el: Element | null = hit; el && el !== document.body; el = el.parentElement) {
+            const pos = getComputedStyle(el).position
+            if (pos !== 'fixed' && pos !== 'sticky') continue
+            const r = el.getBoundingClientRect()
+            const deBordeABorde = r.left <= ancho * 0.1 && r.right >= ancho * 0.9
+            if (deBordeABorde && r.height > 0 && r.height <= alto * 0.4) return r
+        }
+    }
+    return null
+}
+
+/* Mide cuánto tapan las barras fijas arriba (pueden ser dos apiladas:
+   marquesina y nav) y abajo, en este momento. */
+function medirBarrasFijas(mapa: HTMLElement | null) {
+    const alto = window.innerHeight
+    let arriba = 0
+    for (let i = 0; i < 3; i++) {
+        const r = barraEn(arriba + 1, mapa)
+        if (!r || r.bottom <= arriba + 1) break
+        arriba = r.bottom
+    }
+    let abajo = 0
+    for (let i = 0; i < 3; i++) {
+        const r = barraEn(alto - abajo - 2, mapa)
+        if (!r || alto - r.top <= abajo + 1) break
+        abajo = alto - r.top
     }
     return { arriba: Math.round(arriba), abajo: Math.round(abajo) }
+}
+
+/* La landing de Arena y Sol escala su contenido con zoom (1,06 en celular y
+   hasta 1,24 en pantallas grandes). Dentro del mapa ese zoom desalinea los
+   toques con los lotes y lo agranda más allá de la pantalla, así que la
+   sección lo anula con el zoom inverso. */
+function zoomHeredado(el: HTMLElement | null) {
+    let z = 1
+    for (let p = el?.parentElement ?? null; p; p = p.parentElement) {
+        const v = parseFloat(getComputedStyle(p).zoom || '1')
+        if (Number.isFinite(v) && v > 0) z *= v
+    }
+    return z
 }
 
 export default function AgendaEnLanding({ proyecto }: { proyecto: Proyecto }) {
     const [montar, setMontar] = useState(false)
     const [barras, setBarras] = useState({ arriba: 64, abajo: 0 })
+    const [zoom, setZoom] = useState(1)
     const ancla = useRef<HTMLElement>(null)
 
     useEffect(() => {
@@ -61,7 +100,6 @@ export default function AgendaEnLanding({ proyecto }: { proyecto: Proyecto }) {
         const io = new IntersectionObserver(
             entradas => {
                 if (entradas.some(e => e.isIntersecting)) {
-                    setBarras(medirBarrasFijas())
                     setMontar(true)
                     io.disconnect()
                 }
@@ -72,13 +110,42 @@ export default function AgendaEnLanding({ proyecto }: { proyecto: Proyecto }) {
         return () => io.disconnect()
     }, [])
 
+    /* Las barras aparecen y desaparecen según el scroll (la de abajo, por
+       ejemplo, se muestra al pasar la portada), así que se vuelven a medir
+       mientras la persona baja (una vez por cuadro, como mucho) y cada segundo. */
+    useEffect(() => {
+        if (!montar) return
+        let pendiente = 0
+        const medir = () => {
+            pendiente = 0
+            setZoom(zoomHeredado(ancla.current))
+            const b = medirBarrasFijas(ancla.current)
+            setBarras(prev => (prev.arriba === b.arriba && prev.abajo === b.abajo ? prev : b))
+        }
+        const alMover = () => {
+            if (!pendiente) pendiente = requestAnimationFrame(medir)
+        }
+        medir()
+        window.addEventListener('scroll', alMover, { passive: true })
+        window.addEventListener('resize', alMover)
+        // Algunas barras aparecen un momento después del scroll (la de "Quiero
+        // mi terreno" se monta por estado); un repaso cada segundo las alcanza.
+        const repaso = window.setInterval(alMover, 1000)
+        return () => {
+            window.removeEventListener('scroll', alMover)
+            window.removeEventListener('resize', alMover)
+            window.clearInterval(repaso)
+            if (pendiente) cancelAnimationFrame(pendiente)
+        }
+    }, [montar])
+
     const variables = {
         '--agenda-nav-h': `${barras.arriba || 64}px`,
         '--agenda-bottom': `${barras.abajo}px`,
     } as CSSProperties
 
     return (
-        <section id="agendar" ref={ancla} aria-label="Elige tu lote y agenda tu visita" style={{ position: 'relative', background: '#eef0ef', ...variables }}>
+        <section id="agendar" ref={ancla} aria-label="Elige tu lote y agenda tu visita" style={{ position: 'relative', background: '#eef0ef', zoom: zoom === 1 ? undefined : 1 / zoom, ...variables }}>
             {montar ? <Agenda3D proyecto={proyecto} embebido /> : <Reserva texto="Mapa del loteo" />}
         </section>
     )

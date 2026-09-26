@@ -209,9 +209,10 @@ export default function Agenda3D({
         if (!started) return
         cargarAgenda()
         // La intro pudo quedar scrolleada: sin esto el mapa arranca cortado por
-        // arriba y los chips quedan fuera de pantalla.
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, [started, cargarAgenda])
+        // arriba y los chips quedan fuera de pantalla. Embebido en una landing
+        // no: el mapa se monta mientras la persona baja y la devolvería al hero.
+        if (!embebido) window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [started, cargarAgenda, embebido])
 
     // Se lee de la URL en un efecto y no con useSearchParams: ese hook obliga
     // a envolver la página en Suspense y le quita el render en servidor.
