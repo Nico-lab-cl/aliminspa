@@ -978,7 +978,7 @@ export default function LomasDelMarMetaClient() {
 </nav>
 
 {/* Agendamiento en la misma landing, justo después del hero */}
-<AgendaEnLanding proyecto={LOMAS_DEL_MAR} detalle="Recorre Lomas del Mar en 3D con imágenes de dron, toca el lote que te gusta y reserva día y hora para visitarlo en El Tabo." />
+<AgendaEnLanding proyecto={LOMAS_DEL_MAR} />
 
 <section style={{"position":"relative","overflow":"hidden","padding":"0","background":"#0e1a24"}}>
   

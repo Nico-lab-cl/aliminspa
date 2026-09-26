@@ -1626,3 +1626,47 @@
         height: 138px;
     }
 }
+
+
+/* ─── Mapa embebido en una landing ─── */
+
+/* Capa transparente sobre el visor: deja pasar el scroll de la página (no
+   frena la rueda ni el deslizar) y activa el mapa con un toque. Los paneles
+   del mapa vienen después en el DOM y quedan por encima. */
+.mapaVelo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    touch-action: pan-y;
+}
+
+.mapaVeloAviso {
+    padding: 11px 20px;
+    border-radius: 100px;
+    background: rgba(31, 41, 51, .82);
+    color: #fff;
+    font: 600 14px/1.2 Montserrat, system-ui, sans-serif;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+
+.mapaSalir {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px 14px;
+    border: 1.5px solid var(--verde);
+    border-radius: 100px;
+    background: #fff;
+    color: var(--lima-text);
+    font: 700 13px/1 Montserrat, system-ui, sans-serif;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+    cursor: pointer;
+}

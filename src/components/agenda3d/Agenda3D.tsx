@@ -108,12 +108,22 @@ function fechaLarga(iso: string): string {
     return `${dias[wd]} ${d} de ${MESES[m - 1].toLowerCase()}`
 }
 
-export default function Agenda3D({ proyecto = LOMAS_DEL_MAR }: { proyecto?: Proyecto }) {
+export default function Agenda3D({
+    proyecto = LOMAS_DEL_MAR,
+    embebido = false,
+}: {
+    proyecto?: Proyecto
+    /** Montado dentro de una landing: el mapa no toma la rueda ni el dedo
+        hasta que la persona lo toca, para que pueda seguir bajando la página. */
+    embebido?: boolean
+}) {
     /* El mapa se muestra de entrada. Antes había una portada con el vuelo de
        dron y un botón para entrar, pero quien abre este enlace viene a elegir
        un lote: la portada era una pantalla de más entre el clic y el mapa. */
     const [started] = useState(true)
     const [step, setStep] = useState<Step>('lote')
+    const [mapaActivo, setMapaActivo] = useState(!embebido)
+    const mapaRef = useRef<HTMLElement | null>(null)
 
     const viewer = useRef<ViewerHandle | null>(null)
     const [viewerReady, setViewerReady] = useState(false)
@@ -470,7 +480,16 @@ export default function Agenda3D({ proyecto = LOMAS_DEL_MAR }: { proyecto?: Proy
         <div className={styles.stage}>
             {/* Mapa + panel: el recorrido completo ocurre acá */}
             {started && (
-                <section className={styles.map} aria-label="Mapa 3D del loteo">
+                <section
+                    ref={mapaRef}
+                    className={styles.map}
+                    aria-label="Mapa 3D del loteo"
+                    /* En escritorio, al sacar el mouse del mapa la rueda vuelve a
+                       bajar la página. */
+                    onPointerLeave={e => {
+                        if (embebido && e.pointerType === 'mouse') setMapaActivo(false)
+                    }}
+                >
                     <Lote3DViewer
                         className={styles.viewer}
                         proyecto={proyecto}
@@ -479,6 +498,33 @@ export default function Agenda3D({ proyecto = LOMAS_DEL_MAR }: { proyecto?: Proy
                         onError={() => setStep('fecha')}
                         onAlign={setAl}
                     />
+
+                    {/* Embebido en una landing, una capa transparente recibe la
+                        rueda y el dedo: la página sigue bajando y el mapa se
+                        activa recién con un toque. Los paneles quedan encima. */}
+                    {embebido && !mapaActivo && (
+                        <button
+                            type="button"
+                            className={styles.mapaVelo}
+                            onClick={() => setMapaActivo(true)}
+                            aria-label="Explorar el mapa del loteo"
+                        >
+                            <span className={styles.mapaVeloAviso}>Toca el mapa para explorarlo</span>
+                        </button>
+                    )}
+                    {embebido && mapaActivo && movil && (
+                        <button
+                            type="button"
+                            className={styles.mapaSalir}
+                            onClick={() => {
+                                setMapaActivo(false)
+                                const r = mapaRef.current?.getBoundingClientRect()
+                                if (r) window.scrollBy({ top: r.bottom, behavior: 'smooth' })
+                            }}
+                        >
+                            Seguir bajando ↓
+                        </button>
+                    )}
 
                     {/* Plano de dron que recibe al visitante cuando la cámara
                         termina de bajar al lote. Es ambiente del proyecto, no

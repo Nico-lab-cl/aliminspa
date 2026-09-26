@@ -1098,10 +1098,7 @@ html{scroll-behavior:smooth}
             </section>
 
             {/* ── 01b · Agendamiento en la misma landing ── */}
-            <AgendaEnLanding
-                proyecto={ARENA_Y_SOL}
-                detalle="Mira desde el dron qué lotes quedan en Arena y Sol, elige el tuyo y reserva día y hora para visitarlo en El Tabo."
-            />
+            <AgendaEnLanding proyecto={ARENA_Y_SOL} />
 
             {/* ── 02 · Barra de confianza ── */}
             <section style={{ position: 'relative', overflow: 'hidden', background: '#0a1520', padding: '56px 20px' }}>
