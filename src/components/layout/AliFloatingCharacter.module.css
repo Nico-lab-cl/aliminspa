@@ -555,3 +555,18 @@
         max-height: calc(100dvh - 190px);
     }
 }
+
+/* Saludo del globo: largo en escritorio, corto en el celular. */
+.saludoCorto {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .saludoLargo {
+    display: none;
+  }
+
+  .saludoCorto {
+    display: inline;
+  }
+}

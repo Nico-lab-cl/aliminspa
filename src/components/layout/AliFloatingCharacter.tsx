@@ -284,7 +284,9 @@ export default function AliFloatingCharacter({
           tabIndex={0}
         >
           <span className={styles.speechBubbleText}>
-            Hola, soy <strong>Ali</strong>, estoy aquí para ayudarte 👋
+            {/* En el celular el globo tapaba media pantalla: ahí va solo el saludo. */}
+            <span className={styles.saludoLargo}>Hola, soy <strong>Ali</strong>, estoy aquí para ayudarte 👋</span>
+            <span className={styles.saludoCorto}>¡Hola, soy <strong>Ali</strong>! 👋</span>
           </span>
           <button
             className={styles.closeBubble}
