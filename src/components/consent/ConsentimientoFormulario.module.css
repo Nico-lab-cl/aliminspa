@@ -1,0 +1,45 @@
+.caja {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0 2px;
+    text-align: left;
+    font-family: var(--font, 'Roboto', sans-serif);
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: #4b5563;
+}
+
+.fila {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    cursor: pointer;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.fila input {
+    width: 16px;
+    height: 16px;
+    margin: 1px 0 0;
+    padding: 0;
+    flex-shrink: 0;
+    accent-color: #4ba646;
+    cursor: pointer;
+}
+
+.fila a {
+    color: #4ba646;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.oscuro {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.oscuro .fila a {
+    color: #76d845;
+}

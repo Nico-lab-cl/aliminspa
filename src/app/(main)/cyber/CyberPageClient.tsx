@@ -11,6 +11,7 @@ import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import Testimonials from '@/components/sections/Testimonials'
 import { getUtmParams } from '@/lib/track'
 import styles from './page.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 const ADVISORS = [
     {
@@ -67,6 +68,7 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
         proyecto: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
     // Sync lifted state to form's select value
     useEffect(() => {
@@ -105,7 +107,8 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
                     ...utm_data, 
                     fbp, 
                     fbc,
-                    mensaje: 'Interesado en Promoción Cyber Monday (Pie en 3 cuotas sin interés y asesoría gratuita)'
+                    mensaje: 'Interesado en Promoción Cyber Monday (Pie en 3 cuotas sin interés y asesoría gratuita)',
+                    ...consentimiento.datos(),
                 }),
             })
 
@@ -210,6 +213,8 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
                     <option value="Ambos / Consulta general">Ambos / Consulta general</option>
                 </select>
             </div>
+
+            <ConsentimientoFormulario consentimiento={consentimiento} tono="oscuro" style={{ marginTop: '1.5rem' }} />
 
             <motion.button
                 whileHover={{ scale: 1.02 }}

@@ -12,9 +12,15 @@ import {
     minLeadLabel,
 } from '@/lib/booking-rules'
 import { isSlotFree } from '@/lib/availability'
+import { aceptoMarketing, columnasConsentimiento, ipDe } from '@/lib/consent-server'
+import { dentroDelLimite } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
     try {
+        if (!dentroDelLimite(`bookings:${ipDe(request)}`, 10, 10 * 60 * 1000)) {
+            return NextResponse.json({ error: 'Demasiados intentos. Intenta en unos minutos.' }, { status: 429 })
+        }
+
         let body
         try {
             body = await request.json()
@@ -71,19 +77,30 @@ export async function POST(request: NextRequest) {
         }
 
         // Save booking to database
-        const booking = await prisma.booking.create({
-            data: {
-                nombre,
-                email,
-                celular,
-                proyecto,
-                fecha: new Date(fecha),
-                hora,
-                lote: typeof lote === 'string' && lote.trim() ? lote.trim() : null,
-                modalidad: typeof modalidad === 'string' && modalidad.trim() ? modalidad.trim() : null,
-                status: 'confirmed',
-            },
-        })
+        const bookingData = {
+            nombre,
+            email,
+            celular,
+            proyecto,
+            fecha: new Date(fecha),
+            hora,
+            lote: typeof lote === 'string' && lote.trim() ? lote.trim() : null,
+            modalidad: typeof modalidad === 'string' && modalidad.trim() ? modalidad.trim() : null,
+            status: 'confirmed',
+        }
+
+        // Las columnas de consentimiento (Ley 21.719, octubre 2026) se agregan
+        // con ALTER TABLE a mano: si el deploy llega antes, se guarda la visita
+        // igual sin ellas en vez de perderla.
+        let booking
+        try {
+            booking = await prisma.booking.create({
+                data: { ...bookingData, ...columnasConsentimiento(body, request) },
+            })
+        } catch (e) {
+            console.error('Fallo el insert con consentimiento, reintentando sin esas columnas:', e)
+            booking = await prisma.booking.create({ data: bookingData })
+        }
 
         // Create Google Calendar event with Google Meet
         const calendarResult = await createCalendarEvent({
@@ -97,33 +114,36 @@ export async function POST(request: NextRequest) {
             modalidad: booking.modalidad,
         })
 
-        // Send Meta event for tracking
-        const client_ip_address = request.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1'
+        // Send Meta event for tracking, solo con cookies de marketing aceptadas
+        // (ver /api/leads).
+        const client_ip_address = ipDe(request)
         const client_user_agent = request.headers.get('user-agent') || ''
         const eventSourceUrl = request.headers.get('referer') || 'https://aliminspa.cl'
 
-        try {
-            await sendMetaEvent(
-                'Schedule',
-                {
-                    em: email,
-                    ph: celular,
-                    fn: nombre,
-                    external_id: booking.id,
-                    client_ip_address,
-                    client_user_agent,
-                },
-                {
-                    content_name: proyecto,
-                    content_category: 'Real Estate Visit',
-                    ...(booking.lote ? { content_ids: [booking.lote] } : {}),
-                },
-                eventSourceUrl,
-                // Mismo ID que el evento del navegador: Meta descarta la copia repetida
-                eventId
-            )
-        } catch (err) {
-            console.error('Error sending Meta Schedule event:', err)
+        if (aceptoMarketing(request)) {
+            try {
+                await sendMetaEvent(
+                    'Schedule',
+                    {
+                        em: email,
+                        ph: celular,
+                        fn: nombre,
+                        external_id: booking.id,
+                        client_ip_address,
+                        client_user_agent,
+                    },
+                    {
+                        content_name: proyecto,
+                        content_category: 'Real Estate Visit',
+                        ...(booking.lote ? { content_ids: [booking.lote] } : {}),
+                    },
+                    eventSourceUrl,
+                    // Mismo ID que el evento del navegador: Meta descarta la copia repetida
+                    eventId
+                )
+            } catch (err) {
+                console.error('Error sending Meta Schedule event:', err)
+            }
         }
 
         return NextResponse.json({

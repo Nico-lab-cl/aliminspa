@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { PROJECTS } from '@/lib/constants'
 import { getUtmParams, newEventId } from '@/lib/track'
 import styles from './page.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 // Etiqueta de respaldo para la columna `proyecto` del CRM. Solo se usa cuando
 // el visitante no elige proyecto: si elige, va el nombre limpio ("Lomas del
@@ -37,6 +38,7 @@ export default function CotizarForm() {
         proyecto: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
     // El nombre del proyecto tal cual si lo eligió; el respaldo cubre tanto
     // "aún no lo sé" como no haber tocado el selector.
@@ -81,6 +83,7 @@ export default function CotizarForm() {
                     fbc: getCookie('_fbc'),
                     eventId,
                     ...utm_data,
+                    ...consentimiento.datos(),
                 }),
             })
 
@@ -174,6 +177,8 @@ export default function CotizarForm() {
                     <option value={SIN_DEFINIR}>Aún no lo sé</option>
                 </select>
             </div>
+
+            <ConsentimientoFormulario consentimiento={consentimiento} tono="oscuro" />
 
             <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
                 {status === 'loading' ? 'Enviando...' : 'Quiero cotizar →'}

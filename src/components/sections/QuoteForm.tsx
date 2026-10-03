@@ -3,6 +3,7 @@
 import { Suspense, useState, FormEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './QuoteForm.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 const REGION_CITIES: Record<string, string[]> = {
     'Arica y Parinacota': ['Arica', 'Putre', 'General Lagos'],
@@ -54,6 +55,7 @@ function QuoteFormInner({
         comoNosConociste: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
     const cities = form.region ? REGION_CITIES[form.region] ?? [] : []
 
@@ -94,6 +96,7 @@ function QuoteFormInner({
                     ...utm_data,
                     fbp,
                     fbc,
+                    ...consentimiento.datos(),
                 }),
             })
 
@@ -200,6 +203,8 @@ function QuoteFormInner({
                     ))}
                 </select>
             </div>
+
+            <ConsentimientoFormulario consentimiento={consentimiento} />
 
             <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
                 {status === 'loading' ? 'Enviando...' : submitLabel}

@@ -11,6 +11,7 @@ import {
     minLeadLabel,
 } from '@/lib/booking-rules'
 import styles from './BookingCalendar.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 /* ─── CONFIG ─── */
 const TIMEZONE = 'America/Santiago'
@@ -109,6 +110,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
     const [selectedTime, setSelectedTime] = useState('')
     const [form, setForm] = useState({ nombre: '', email: '', celular: '' })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
     const [meetLink, setMeetLink] = useState<string | null>(null)
     const [errorMsg, setErrorMsg] = useState('')
 
@@ -187,7 +189,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
         switch (step) {
             case 1: return !!selectedProject
             case 2: return !!selectedDate && !!selectedTime
-            case 3: return !!form.nombre && !!form.email && !!form.celular
+            case 3: return !!form.nombre && !!form.email && !!form.celular && consentimiento.contacto
             default: return false
         }
     }
@@ -211,6 +213,7 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                     // Fecha del día elegido sin zona horaria: es la que valida el servidor
                     fechaLocal: formatCalendarDate(toCalendarDate(selectedDate)),
                     hora: selectedTime,
+                    ...consentimiento.datos(),
                 }),
             })
 
@@ -560,6 +563,12 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
                                                 onChange={(e) => setForm({ ...form, celular: e.target.value })}
                                             />
                                         </div>
+
+                                        <ConsentimientoFormulario
+                                            consentimiento={consentimiento}
+                                            tono="oscuro"
+                                            textoContacto="y que Alimin use mis datos para coordinar esta visita."
+                                        />
 
                                         {status === 'error' && (
                                             <div style={{ padding: '0.75rem', borderRadius: '8px', background: 'rgba(239,68,68,0.1)', color: '#fca5a5', textAlign: 'center', fontSize: '0.9rem' }}>

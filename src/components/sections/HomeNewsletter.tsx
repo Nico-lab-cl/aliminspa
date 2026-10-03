@@ -2,10 +2,12 @@
 
 import { useState, FormEvent } from 'react'
 import styles from './HomeNewsletter.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 export default function HomeNewsletter() {
     const [email, setEmail] = useState('')
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -15,7 +17,7 @@ export default function HomeNewsletter() {
             const res = await fetch('/api/newsletter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, ...consentimiento.datos() }),
             })
 
             if (!res.ok) throw new Error('Error')
@@ -57,6 +59,7 @@ export default function HomeNewsletter() {
                             {status === 'loading' ? '...' : 'Suscribirme'}
                         </button>
                     </div>
+                    <ConsentimientoFormulario consentimiento={consentimiento} soloMarketing style={{ marginTop: 10 }} />
                     {status === 'success' && <span className={styles.success}>✅ ¡Suscrito correctamente!</span>}
                     {status === 'error' && <span className={styles.error}>❌ Error. Intenta de nuevo.</span>}
                 </form>

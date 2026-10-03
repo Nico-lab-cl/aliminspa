@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { PROJECTS } from '@/lib/constants'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import styles from './ContactForm.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 function ContactFormInner() {
     const searchParams = useSearchParams()
@@ -18,6 +19,7 @@ function ContactFormInner() {
         proyecto: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -48,7 +50,7 @@ function ContactFormInner() {
             const res = await fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...form, ...utm_data, fbp, fbc }),
+                body: JSON.stringify({ ...form, ...utm_data, fbp, fbc, ...consentimiento.datos() }),
             })
 
             if (!res.ok) throw new Error('Error al enviar')
@@ -70,6 +72,7 @@ function ContactFormInner() {
 
             setStatus('success')
             setForm({ nombre: '', email: '', celular: '', ciudad: '', proyecto: '' })
+            consentimiento.reiniciar()
 
             // Redirigir a la página de gracias después de un breve delay
             setTimeout(() => {
@@ -187,6 +190,8 @@ function ContactFormInner() {
                                     ))}
                                 </select>
                             </div>
+
+                            <ConsentimientoFormulario consentimiento={consentimiento} />
 
                             <button
                                 type="submit"

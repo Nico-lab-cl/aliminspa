@@ -5,6 +5,7 @@ import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
 import { REGIONES } from './regiones'
 import { FAQS } from './faqs'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 const ASSET = '/assets/venta-terrenos'
 
@@ -52,6 +53,7 @@ export default function VentaTerrenosClient() {
         nombre: '', telefono: '', email: '', proyecto: '', tamano: '', region: '', comuna: '', como: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
     const [filter, setFilter] = useState<'todos' | 'lomas' | 'arena'>('todos')
     const [activeStep, setActiveStep] = useState(0)
     const [lightboxProj, setLightboxProj] = useState<string | null>(null)
@@ -133,6 +135,7 @@ export default function VentaTerrenosClient() {
 
             const detalle = [form.proyecto, form.tamano].filter(Boolean).join(' ')
             const payload = {
+                ...consentimiento.datos(),
                 nombre: form.nombre,
                 email: form.email,
                 celular: form.telefono,
@@ -358,9 +361,10 @@ export default function VentaTerrenosClient() {
                                             </select>
                                         </div>
                                     </div>
+                                    <ConsentimientoFormulario consentimiento={consentimiento} tono="oscuro" style={{ marginBottom: 14 }} />
                                     <button type="submit" className="al-submit" disabled={status === 'loading'} style={s("width:100%;border:none;cursor:pointer;background:linear-gradient(135deg,#325366,#4ba646);color:#fff;font:700 15px 'Montserrat',sans-serif;letter-spacing:.02em;padding:16px;border-radius:14px;box-shadow:0 6px 22px rgba(50,83,102,.4);transition:transform .2s,box-shadow .2s")}>{status === 'loading' ? 'Enviando…' : 'QUIERO MI COTIZACIÓN →'}</button>
                                     {status === 'error' && <p style={s("text-align:center;margin:12px 0 0;font:600 12px 'Roboto',sans-serif;color:#FCA5A5")}>Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.</p>}
-                                    <p style={s("text-align:center;margin:14px 0 0;font:400 12px 'Roboto',sans-serif;color:rgba(255,255,255,.38)")}>🔒 Tus datos están seguros · Sin spam</p>
+                                    <p style={s("text-align:center;margin:14px 0 0;font:400 12px 'Roboto',sans-serif;color:rgba(255,255,255,.38)")}>🔒 Tus datos están seguros · Sin spam · <a href="/privacidad/derechos" style={{ color: 'inherit' }}>Tus derechos</a></p>
                                 </form>
                             </div>
                         ) : (

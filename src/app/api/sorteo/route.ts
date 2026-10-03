@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-const ADMIN_KEY = 'alimin2026';
+/**
+ * Clave del panel del sorteo. Vive solo en la variable de entorno
+ * SORTEO_ADMIN_KEY: antes había una clave por defecto escrita en el código,
+ * visible en el repo y en el JavaScript del sitio. Sin la variable, nadie
+ * puede escribir.
+ */
+const ADMIN_KEY = process.env.SORTEO_ADMIN_KEY
+
+function claveValida(adminKey: unknown): boolean {
+  return !!ADMIN_KEY && typeof adminKey === 'string' && adminKey === ADMIN_KEY
+}
 
 // GET: Retrieve the current sorteo state (public)
 export async function GET() {
@@ -38,7 +48,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { participants, winners, status, adminKey } = body;
 
-    if (adminKey !== ADMIN_KEY) {
+    if (!claveValida(adminKey)) {
       return NextResponse.json(
         { error: 'No autorizado' },
         { status: 401 }

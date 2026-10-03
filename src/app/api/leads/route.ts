@@ -2,9 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendMetaEvent } from '@/lib/meta-capi'
 import { forwardLeadToCrm } from '@/lib/crm-webhook'
+import { aceptoMarketing, columnasConsentimiento, ipDe } from '@/lib/consent-server'
+import { dentroDelLimite } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
     try {
+        // Generoso a propósito: detrás de una misma IP de celular puede haber
+        // mucha gente, y perder un lead real es peor que dejar pasar basura.
+        if (!dentroDelLimite(`leads:${ipDe(request)}`, 20, 10 * 60 * 1000)) {
+            return NextResponse.json({ error: 'Demasiados envíos. Intenta en unos minutos.' }, { status: 429 })
+        }
+
         let body
         try {
             body = await request.json()
@@ -40,18 +48,23 @@ export async function POST(request: NextRequest) {
             utm_term: utm_term || null,
         }
 
-        // La columna como_conocio se agregó en agosto de 2026. Si el deploy llega
-        // antes de que corra el ALTER TABLE en la base, el insert fallaría y se
-        // perdería el lead — que es lo peor que puede pasar acá. Por eso se
-        // reintenta sin la columna en vez de devolver error. Este fallback se
-        // puede borrar una vez que la columna exista en todos los ambientes.
+        // como_conocio (agosto 2026) y las columnas de consentimiento (octubre
+        // 2026) se agregaron con ALTER TABLE a mano. Si el deploy llega antes
+        // que el ALTER, el insert fallaría y se perdería el lead — que es lo
+        // peor que puede pasar acá. Por eso se reintenta solo con las columnas
+        // originales en vez de devolver error. Este fallback se puede borrar
+        // una vez que las columnas existan en todos los ambientes.
         let lead
         try {
             lead = await prisma.lead.create({
-                data: { ...baseData, como_conocio: como_conocio || null },
+                data: {
+                    ...baseData,
+                    como_conocio: como_conocio || null,
+                    ...columnasConsentimiento(body, request),
+                },
             })
         } catch (e) {
-            console.error('Fallo el insert con como_conocio, reintentando sin esa columna:', e)
+            console.error('Fallo el insert con como_conocio/consentimiento, reintentando sin esas columnas:', e)
             lead = await prisma.lead.create({ data: baseData })
         }
 
@@ -69,35 +82,39 @@ export async function POST(request: NextRequest) {
             utm_term,
         })
 
-        // Enviar evento a Meta Conversions API
-        const client_ip_address = request.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1'
-        const client_user_agent = request.headers.get('user-agent') || ''
-        const eventSourceUrl = request.headers.get('referer') || 'https://aliminspa.cl'
+        // Enviar evento a Meta Conversions API, solo si el visitante aceptó
+        // cookies de marketing: sin eso tampoco se cargó el Pixel, y mandar su
+        // correo y teléfono a Meta por el servidor saltaría su decisión.
+        if (aceptoMarketing(request)) {
+            const client_ip_address = ipDe(request)
+            const client_user_agent = request.headers.get('user-agent') || ''
+            const eventSourceUrl = request.headers.get('referer') || 'https://aliminspa.cl'
 
-        try {
-            await sendMetaEvent(
-                'Lead',
-                {
-                    em: email,
-                    ph: celular,
-                    fn: nombre,
-                    ct: ciudad,
-                    external_id: lead.id,
-                    client_ip_address,
-                    client_user_agent,
-                    fbp,
-                    fbc,
-                },
-                {
-                    content_name: proyecto || 'General',
-                    content_category: 'Real Estate',
-                },
-                eventSourceUrl,
-                // Mismo ID que el evento del navegador: Meta descarta la copia repetida
-                eventId
-            )
-        } catch (err) {
-            console.error('Error sending Meta Lead event:', err)
+            try {
+                await sendMetaEvent(
+                    'Lead',
+                    {
+                        em: email,
+                        ph: celular,
+                        fn: nombre,
+                        ct: ciudad,
+                        external_id: lead.id,
+                        client_ip_address,
+                        client_user_agent,
+                        fbp,
+                        fbc,
+                    },
+                    {
+                        content_name: proyecto || 'General',
+                        content_category: 'Real Estate',
+                    },
+                    eventSourceUrl,
+                    // Mismo ID que el evento del navegador: Meta descarta la copia repetida
+                    eventId
+                )
+            } catch (err) {
+                console.error('Error sending Meta Lead event:', err)
+            }
         }
 
         return NextResponse.json({ success: true, id: lead.id }, { status: 201 })

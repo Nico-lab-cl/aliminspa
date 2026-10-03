@@ -25,6 +25,10 @@ export default function SorteoPage() {
   const [filterDuplicates, setFilterDuplicates] = useState(true);
   const [currentWinner, setCurrentWinner] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  // La clave viaja en ?admin=... y la valida el servidor contra
+  // SORTEO_ADMIN_KEY; antes estaba escrita aquí y quedaba a la vista de
+  // cualquiera en el JavaScript del sitio.
+  const adminKeyRef = useRef('');
   const [sorteoStatus, setSorteoStatus] = useState<SorteoStatus>('pending');
   const [loading, setLoading] = useState(true);
   const [showParticipantPreview, setShowParticipantPreview] = useState(false);
@@ -45,7 +49,9 @@ export default function SorteoPage() {
   // Check admin & load data
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('admin') === 'alimin2026') {
+    const clave = params.get('admin');
+    if (clave) {
+      adminKeyRef.current = clave;
       setIsAdmin(true);
     }
 
@@ -96,7 +102,7 @@ export default function SorteoPage() {
           participants: newParticipants,
           winners: newWinners,
           status: newStatus,
-          adminKey: 'alimin2026',
+          adminKey: adminKeyRef.current,
         }),
       });
       if (res.ok) {

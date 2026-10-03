@@ -17,6 +17,18 @@ export const SITE = {
     },
 } as const
 
+/**
+ * Responsable de los datos para la política de privacidad (Ley 21.719 exige
+ * identificarlo). Faltan por completar: mientras estén vacíos, la política
+ * muestra solo el nombre comercial.
+ */
+export const LEGAL = {
+    // Así figura en el pie de página del sitio.
+    razonSocial: 'Alimin SpA',
+    rut: '',
+    domicilio: '',
+} as const
+
 export const CONTEST = {
     endDate: '2026-06-07',
     tag: '⚡ Cyber Day',

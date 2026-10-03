@@ -1,74 +1,218 @@
 import { Metadata } from 'next'
-import { SITE } from '@/lib/constants'
+import Link from 'next/link'
+import type { CSSProperties, ReactNode } from 'react'
+import { LEGAL, SITE } from '@/lib/constants'
+import { POLITICA_VERSION } from '@/lib/consent'
+import PreferenciasCookiesBoton from '@/components/consent/PreferenciasCookiesBoton'
 
 export const metadata: Metadata = {
     title: 'Política de Privacidad',
-    description: `Consulta cómo manejamos tus datos en ${SITE.name}. Tu privacidad es nuestra prioridad en El Tabo, Litoral Central.`,
+    description: `Cómo ${SITE.name} trata tus datos personales según la Ley 21.719: qué datos, para qué, con quién, por cuánto tiempo y cómo ejercer tus derechos.`,
     alternates: {
         canonical: `${SITE.url}/politica-de-privacidad`,
     },
 }
 
+/**
+ * Plazos de conservación. Son una propuesta para que Alimin los confirme: la
+ * ley no fija números, pide que sean los necesarios para cada fin y que se
+ * informen. Si cambian, actualizar también POLITICA_VERSION y las consultas
+ * de borrado de prisma/sql/2026-10-03-ley-21719.sql.
+ */
+const PLAZOS = {
+    consultas: '24 meses desde el último contacto',
+    visitas: '24 meses desde la fecha de la visita',
+    chat: '24 meses desde el último mensaje',
+}
+
+const h2: CSSProperties = { fontSize: '1.6rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)', scrollMarginTop: 'calc(var(--navbar-height) + 16px)' }
+const p: CSSProperties = { marginBottom: '1rem' }
+const ul: CSSProperties = { marginBottom: '1.5rem', paddingLeft: '1.5rem', listStyle: 'disc' }
+const tabla: CSSProperties = { width: '100%', borderCollapse: 'collapse', margin: '0.5rem 0 1.5rem', fontSize: '0.95rem', lineHeight: 1.5 }
+const celda: CSSProperties = { border: '1px solid var(--border-hover)', padding: '10px 12px', verticalAlign: 'top', textAlign: 'left' }
+
+function Tabla({ cabecera, filas }: { cabecera: string[]; filas: ReactNode[][] }) {
+    return (
+        <div style={{ overflowX: 'auto' }}>
+            <table style={tabla}>
+                <thead>
+                    <tr>
+                        {cabecera.map((c) => (
+                            <th key={c} style={{ ...celda, background: 'var(--sec-bg)' }}>{c}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {filas.map((fila, i) => (
+                        <tr key={i}>
+                            {fila.map((c, j) => (
+                                <td key={j} style={celda}>{c}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+function fechaLarga(iso: string) {
+    return new Date(`${iso}T12:00:00`).toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
 export default function PrivacyPolicyPage() {
+    const responsable = [LEGAL.razonSocial, LEGAL.rut && `RUT ${LEGAL.rut}`].filter(Boolean).join(', ')
+
     return (
         <div className="section">
-            <div className="container" style={{ maxWidth: '800px', paddingTop: 'var(--navbar-height)' }}>
+            <div className="container" style={{ maxWidth: '820px', paddingTop: 'var(--navbar-height)' }}>
                 <div className="section-header" style={{ textAlign: 'left' }}>
                     <span className="section-label">Privacidad</span>
                     <h1 className="section-title">Política de Privacidad</h1>
                     <p className="section-subtitle" style={{ marginLeft: 0 }}>
-                        Última actualización: 7 de marzo de 2026
+                        Versión vigente desde el {fechaLarga(POLITICA_VERSION)}. Cumple la Ley N° 21.719 sobre Protección de
+                        Datos Personales.
                     </p>
                 </div>
 
-                <div className="content" style={{ color: 'var(--text)', fontSize: '1.1rem', lineHeight: '1.8' }}>
-                    <p style={{ marginBottom: '1.5rem' }}>
-                        En <strong>{SITE.name}</strong>, la privacidad de nuestros usuarios es una prioridad. Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos su información personal cuando utiliza nuestro sitio web <strong>{SITE.domain}</strong> y nuestras aplicaciones asociadas en plataformas de Meta (Facebook, Instagram).
+                <div className="content" style={{ color: 'var(--text)', fontSize: '1.05rem', lineHeight: '1.8' }}>
+                    <p style={p}>
+                        Esta política explica qué datos personales tratamos cuando usas <strong>{SITE.domain}</strong>, nos
+                        escribes por el chat o WhatsApp, o respondes a nuestros anuncios en Facebook e Instagram; para qué
+                        los usamos, con quién los compartimos, cuánto tiempo los guardamos y cómo puedes ejercer tus
+                        derechos.
                     </p>
 
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>1. Información que Recopilamos</h2>
-                    <p style={{ marginBottom: '1rem' }}>
-                        Recopilamos información que usted nos proporciona voluntariamente a través de nuestros formularios de contacto y clientes potenciales (Leads), incluyendo:
+                    <h2 style={h2} id="responsable">1. Quién es responsable de tus datos</h2>
+                    <p style={p}>
+                        <strong>{SITE.name}</strong>
+                        {responsable && <> ({responsable})</>}, con domicilio en {LEGAL.domicilio || SITE.address}. Para
+                        cualquier tema de privacidad escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a> o usa
+                        el formulario de <Link href="/privacidad/derechos">ejercicio de derechos</Link>.
                     </p>
-                    <ul style={{ marginBottom: '1.5rem', paddingLeft: '1.5rem', listStyle: 'disc' }}>
-                        <li>Nombre y apellidos.</li>
-                        <li>Dirección de correo electrónico.</li>
-                        <li>Número de teléfono (WhatsApp).</li>
-                        <li>Mensajes o comentarios específicos sobre proyectos.</li>
+
+                    <h2 style={h2} id="datos">2. Qué datos tratamos</h2>
+                    <ul style={ul}>
+                        <li>
+                            <strong>Los que nos das en formularios:</strong> nombre, correo, celular, ciudad y región,
+                            proyecto o lote de interés, cómo nos conociste y, si agendas, la fecha y hora de la visita.
+                        </li>
+                        <li>
+                            <strong>Conversaciones:</strong> los mensajes y archivos que nos envías por el chat del sitio o
+                            por WhatsApp.
+                        </li>
+                        <li>
+                            <strong>Datos de navegación, solo si aceptas cookies:</strong> páginas visitadas, clics,
+                            dispositivo y navegador, ubicación aproximada según la IP, y la campaña o anuncio desde el que
+                            llegaste.
+                        </li>
+                        <li>
+                            <strong>Concursos y sorteos:</strong> el nombre de usuario de Instagram con el que participas.
+                        </li>
+                        <li>
+                            <strong>Encuestas del sitio:</strong> tu respuesta y una huella cifrada de la IP para evitar
+                            votos repetidos; no guardamos la IP.
+                        </li>
                     </ul>
+                    <p style={p}>
+                        No pedimos datos sensibles (salud, origen, creencias, etc.). El sitio no está dirigido a menores de
+                        edad y no recopilamos a sabiendas datos de menores de 14 años.
+                    </p>
 
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>2. Uso de la Información</h2>
-                    <p style={{ marginBottom: '1rem' }}>Utilizamos la información recopilada para:</p>
-                    <ul style={{ marginBottom: '1.5rem', paddingLeft: '1.5rem', listStyle: 'disc' }}>
-                        <li>Gestionar sus consultas sobre nuestros proyectos inmobiliarios en El Tabo.</li>
-                        <li>Enviarle información comercial y actualizaciones de disponibilidad de terrenos.</li>
-                        <li>Mejorar nuestros servicios y la experiencia de usuario en el sitio.</li>
-                        <li>Cumplir con los requisitos de las plataformas publicitarias de Meta para el seguimiento de conversiones y leads.</li>
+                    <h2 style={h2} id="finalidades">3. Para qué los usamos y con qué base legal</h2>
+                    <Tabla
+                        cabecera={['Para qué', 'Base legal']}
+                        filas={[
+                            ['Responder tu consulta, cotizar, coordinar la visita y hacer seguimiento de tu interés en un terreno.', 'Tu solicitud y tu consentimiento (casilla obligatoria del formulario).'],
+                            ['Enviarte novedades, ofertas y lanzamientos por correo o WhatsApp.', 'Tu consentimiento aparte y opcional. Puedes retirarlo cuando quieras.'],
+                            ['Medir y mejorar el sitio (Google Analytics, Microsoft Clarity).', 'Tu consentimiento en el banner de cookies (analítica).'],
+                            ['Medir nuestros anuncios y mostrarte publicidad de Alimin en Facebook e Instagram (Meta Pixel, API de Conversiones, audiencias personalizadas).', 'Tu consentimiento en el banner de cookies (marketing) y, para audiencias armadas con tu correo o teléfono, tu consentimiento para recibir publicidad.'],
+                            ['Proteger el sitio contra abusos y envíos automáticos.', 'Interés legítimo de Alimin en la seguridad del sitio.'],
+                            ['Si compras, preparar la promesa y la escritura, cobrar y cumplir obligaciones tributarias.', 'El contrato y las obligaciones legales.'],
+                        ]}
+                    />
+                    <p style={p}>
+                        No vendemos tus datos. No tomamos decisiones sobre ti basadas solo en tratamiento automatizado.
+                    </p>
+
+                    <h2 style={h2} id="terceros">4. Con quién los compartimos</h2>
+                    <p style={p}>
+                        Solo con proveedores que los tratan por encargo nuestro y para los fines de arriba:
+                    </p>
+                    <ul style={ul}>
+                        <li>Proveedor de hosting y base de datos del sitio.</li>
+                        <li>Nuestro sistema de gestión de clientes (CRM), donde los asesores ven tu consulta y te responden.</li>
+                        <li>Google (Analytics, Tag Manager y Calendar, que usamos para agendar visitas).</li>
+                        <li>Meta Platforms (Facebook, Instagram y WhatsApp).</li>
+                        <li>Microsoft (Clarity).</li>
                     </ul>
-
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>3. Herramientas de Meta y Terceros</h2>
-                    <p style={{ marginBottom: '1.5rem' }}>
-                        Para el funcionamiento de nuestras campañas en Facebook e Instagram, utilizamos herramientas como el Meta Pixel y el Conversions API. Estas herramientas nos permiten medir el rendimiento de nuestros anuncios y ofrecer contenido más relevante a los usuarios interesados en nuestros terrenos urbanizados.
+                    <p style={p}>
+                        Google, Meta y Microsoft pueden procesar datos fuera de Chile, principalmente en Estados Unidos. Lo
+                        hacen bajo sus términos de tratamiento de datos para empresas, y a Meta le enviamos el correo y el
+                        teléfono cifrados (hash), no en texto legible.
                     </p>
 
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>4. Cookies y Seguimiento</h2>
-                    <p style={{ marginBottom: '1.5rem' }}>
-                        Utilizamos cookies y tecnologías similares para entender el comportamiento de los usuarios en nuestro sitio y optimizar nuestras estrategias de marketing. Usted puede configurar su navegador para rechazar las cookies, aunque esto podría afectar la funcionalidad de algunas partes del sitio.
+                    <h2 style={h2} id="cookies">5. Cookies</h2>
+                    <p style={p}>
+                        Al entrar te preguntamos qué cookies aceptas. Las de analítica y marketing no se activan hasta que
+                        dices que sí, y rechazarlas no te impide usar el sitio.
+                    </p>
+                    <Tabla
+                        cabecera={['Tipo', 'Qué hace', 'Cuánto dura']}
+                        filas={[
+                            ['Necesarias', 'Recordar tu decisión sobre cookies (alimin_consent) y el funcionamiento del chat.', '6 meses'],
+                            ['Analítica', 'Google Analytics (_ga), Microsoft Clarity (_clck, _clsk).', 'Hasta 13 meses según el proveedor'],
+                            ['Marketing', 'Meta Pixel (_fbp, _fbc) e identificador del seguimiento de nuestro CRM.', 'Hasta 90 días (Meta); el del CRM, hasta que lo borres'],
+                        ]}
+                    />
+                    <p style={p}>
+                        Puedes cambiar o retirar tu consentimiento cuando quieras:{' '}
+                        <PreferenciasCookiesBoton style={{ color: 'var(--verde-solido)', textDecoration: 'underline', fontWeight: 600 }} />.
                     </p>
 
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>5. Protección de Datos</h2>
-                    <p style={{ marginBottom: '1.5rem' }}>
-                        Implementamos medidas de seguridad técnicas y organizativas para proteger sus datos contra acceso no autorizado, alteración o divulgación. No vendemos ni compartimos su información personal con terceros para fines publicitarios ajenos a <strong>{SITE.name}</strong>.
+                    <h2 style={h2} id="plazos">6. Cuánto tiempo los guardamos</h2>
+                    <ul style={ul}>
+                        <li>Consultas y cotizaciones que no terminan en compra: {PLAZOS.consultas}.</li>
+                        <li>Visitas agendadas: {PLAZOS.visitas}.</li>
+                        <li>Conversaciones del chat: {PLAZOS.chat}.</li>
+                        <li>Suscripción a novedades: hasta que te des de baja.</li>
+                        <li>Clientes: mientras dure la relación y los plazos que exigen las leyes tributarias y civiles.</li>
+                        <li>Solicitudes de derechos: el tiempo necesario para acreditar que las respondimos.</li>
+                    </ul>
+                    <p style={p}>Cumplidos esos plazos, los borramos o los dejamos anónimos.</p>
+
+                    <h2 style={h2} id="derechos">7. Tus derechos</h2>
+                    <p style={p}>Puedes pedirnos en cualquier momento y sin costo:</p>
+                    <ul style={ul}>
+                        <li><strong>Acceso:</strong> saber qué datos tuyos tenemos, de dónde salieron y con quién los compartimos.</li>
+                        <li><strong>Rectificación:</strong> corregir datos inexactos o incompletos.</li>
+                        <li><strong>Supresión:</strong> borrar tus datos, salvo los que una ley nos obligue a guardar.</li>
+                        <li><strong>Oposición:</strong> que dejemos de usarlos para publicidad o perfiles.</li>
+                        <li><strong>Portabilidad:</strong> recibir una copia en un formato estructurado.</li>
+                        <li><strong>Bloqueo:</strong> suspender temporalmente su uso mientras se resuelve otra solicitud.</li>
+                        <li><strong>Retirar tu consentimiento</strong>, sin que eso afecte lo hecho antes.</li>
+                    </ul>
+                    <p style={p}>
+                        Hazlo desde <Link href="/privacidad/derechos">este formulario</Link> o escribiendo a{' '}
+                        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Respondemos dentro de 30 días corridos,
+                        prorrogables una vez por otros 30 si lo justificamos; el bloqueo, dentro de 2 días hábiles. Para
+                        proteger tu información, podemos pedirte que confirmes tu identidad antes de entregar o borrar
+                        datos. Si no te respondemos o no estás de acuerdo con la respuesta, puedes reclamar ante la Agencia
+                        de Protección de Datos Personales.
                     </p>
 
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>6. Sus Derechos</h2>
-                    <p style={{ marginBottom: '1.5rem' }}>
-                        De acuerdo con la legislación chilena, usted tiene derecho a acceder, rectificar o eliminar sus datos personales en cualquier momento. Para ejercer estos derechos, simplemente envíe un correo electrónico a <strong>{SITE.email}</strong> indicando su solicitud.
+                    <h2 style={h2} id="seguridad">8. Seguridad</h2>
+                    <p style={p}>
+                        El sitio funciona solo con conexión cifrada (HTTPS), el acceso a la base de datos y al CRM está
+                        restringido al equipo que lo necesita, y las claves de los sistemas no se publican. Si ocurre un
+                        incidente que comprometa tus datos, lo informaremos a la Agencia y, cuando corresponda, a ti, sin
+                        demoras indebidas.
                     </p>
 
-                    <h2 style={{ fontSize: '1.8rem', margin: '2.5rem 0 1rem', color: 'var(--text-secondary)' }}>7. Contacto</h2>
-                    <p style={{ marginBottom: '1.5rem' }}>
-                        Si tiene alguna pregunta sobre esta política, puede contactarnos en <strong>{SITE.address}</strong> o a través de nuestro correo electrónico de soporte.
+                    <h2 style={h2} id="cambios">9. Cambios a esta política</h2>
+                    <p style={p}>
+                        Si la cambiamos, publicamos la nueva versión aquí con su fecha. Si el cambio afecta un uso que
+                        consentiste, te pediremos el consentimiento de nuevo.
                     </p>
                 </div>
             </div>

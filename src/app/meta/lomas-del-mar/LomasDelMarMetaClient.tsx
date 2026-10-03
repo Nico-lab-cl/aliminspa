@@ -9,6 +9,7 @@ import { getUtmParams, newEventId } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import AgendaEnLanding from '@/components/agenda3d/AgendaEnLanding'
 import { LOMAS_DEL_MAR } from '@/components/agenda3d/proyectos'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 /* Landing de Lomas del Mar para tráfico de Meta Ads (/meta/lomas-del-mar).
    Copia independiente de /proyectos/lomas-del-mar: se puede iterar el copy y
@@ -50,6 +51,7 @@ export default function LomasDelMarMetaClient() {
   })
   
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const consentimiento = useConsentimiento()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [showPlan, setShowPlan] = useState(false)
 
@@ -132,7 +134,8 @@ export default function LomasDelMarMetaClient() {
         ...utm_data,
         fbp,
         fbc,
-        eventId
+        eventId,
+        ...consentimiento.datos(),
       }
 
       const res = await fetch('/api/leads', {
@@ -1781,6 +1784,8 @@ export default function LomasDelMarMetaClient() {
           </div>
 
           
+          <ConsentimientoFormulario consentimiento={consentimiento} style={{ marginBottom: 14 }} />
+
           <button type="submit" disabled={submitDisabled} style={{"width":"100%","background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","letterSpacing":".02em","boxShadow":"0 6px 24px rgba(75,166,70,.35)","transition":"all .25s"}}>
             {submitText}
           </button>
@@ -1792,7 +1797,7 @@ export default function LomasDelMarMetaClient() {
             </div>
           )}
 
-          <p style={{"textAlign":"center","marginTop":"14px","font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>🔒 Tus datos están seguros · Al registrarte aceptas nuestros términos · Sin spam</p>
+          <p style={{"textAlign":"center","marginTop":"14px","font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>🔒 Tus datos están seguros · Sin spam · <a href="/privacidad/derechos" style={{ color: 'inherit' }}>Tus derechos</a></p>
         </form>
       </div>
     )}

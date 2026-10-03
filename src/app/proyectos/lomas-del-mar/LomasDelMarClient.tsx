@@ -7,6 +7,7 @@ import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 /* Landing de Lomas del Mar — Design System v2.
    Nació como la campaña Mini Pie, que terminó el 9 de agosto de 2026; desde
@@ -52,6 +53,7 @@ export default function LomasDelMarClient() {
   })
   
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const consentimiento = useConsentimiento()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [showPlan, setShowPlan] = useState(false)
 
@@ -134,7 +136,8 @@ export default function LomasDelMarClient() {
         ...utm_data,
         fbp,
         fbc,
-        eventId
+        eventId,
+        ...consentimiento.datos(),
       }
 
       const res = await fetch('/api/leads', {
@@ -1780,6 +1783,8 @@ export default function LomasDelMarClient() {
           </div>
 
           
+          <ConsentimientoFormulario consentimiento={consentimiento} style={{ marginBottom: 14 }} />
+
           <button type="submit" disabled={submitDisabled} style={{"width":"100%","background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","letterSpacing":".02em","boxShadow":"0 6px 24px rgba(75,166,70,.35)","transition":"all .25s"}}>
             {submitText}
           </button>
@@ -1791,7 +1796,7 @@ export default function LomasDelMarClient() {
             </div>
           )}
 
-          <p style={{"textAlign":"center","marginTop":"14px","font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>🔒 Tus datos están seguros · Al registrarte aceptas nuestros términos · Sin spam</p>
+          <p style={{"textAlign":"center","marginTop":"14px","font":"400 12px 'Roboto',sans-serif","color":"#6B7280"}}>🔒 Tus datos están seguros · Sin spam · <a href="/privacidad/derechos" style={{ color: 'inherit' }}>Tus derechos</a></p>
         </form>
       </div>
     )}

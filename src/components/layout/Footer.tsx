@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { SITE } from '@/lib/constants'
 import styles from './Footer.module.css'
 import { trackMetaEvent } from '@/lib/track'
+import PreferenciasCookiesBoton from '@/components/consent/PreferenciasCookiesBoton'
 
 export default function Footer() {
     return (
@@ -36,6 +37,8 @@ export default function Footer() {
                             <Link href="/blog">Blog</Link>
                             <Link href="/politica-de-privacidad">Política de Privacidad</Link>
                             <Link href="/terminos-del-servicio">Términos del Servicio</Link>
+                            <Link href="/privacidad/derechos">Tus datos y derechos</Link>
+                            <PreferenciasCookiesBoton style={{ textAlign: 'left', fontFamily: 'var(--font)', fontSize: '13.5px', color: '#fff' }} />
                         </div>
                     </div>
                     <div>

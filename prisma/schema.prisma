@@ -24,6 +24,13 @@ model Lead {
   utm_campaign String?
   utm_content  String?
   utm_term     String?
+  // Ley 21.719: prueba del consentimiento. Nullable porque las filas
+  // anteriores a octubre de 2026 no lo registraban.
+  consentimiento_contacto  Boolean?
+  consentimiento_marketing Boolean?
+  consentimiento_at        DateTime?
+  politica_version         String?
+  consentimiento_origen    String?
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("leads")
@@ -33,6 +40,11 @@ model NewsletterSubscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   active    Boolean  @default(true)
+  // Ley 21.719: cuándo y desde dónde se suscribió, y cuándo se dio de baja.
+  consentimiento_at     DateTime?
+  politica_version      String?
+  consentimiento_origen String?
+  baja_at               DateTime?
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("newsletter_subscribers")
@@ -53,9 +65,38 @@ model Booking {
   // como campo por si más adelante se ofrece videollamada u oficina.
   modalidad String?
   status    String   @default("confirmed")
+  // Ley 21.719: prueba del consentimiento (ver Lead).
+  consentimiento_contacto  Boolean?
+  consentimiento_marketing Boolean?
+  consentimiento_at        DateTime?
+  politica_version         String?
+  consentimiento_origen    String?
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("bookings")
+}
+
+// Solicitudes de derechos de la Ley 21.719 que llegan desde
+// /privacidad/derechos. La ley da 30 días corridos para responder
+// (prorrogables una vez); el bloqueo temporal, 2 días hábiles.
+model SolicitudDerecho {
+  id            String    @id @default(cuid())
+  // acceso | rectificacion | supresion | oposicion | portabilidad | bloqueo | baja_comunicaciones
+  tipo          String
+  nombre        String
+  email         String
+  celular       String?
+  detalle       String?   @db.Text
+  // pendiente | en_proceso | respondida | rechazada
+  estado        String    @default("pendiente")
+  vence_el      DateTime
+  respuesta     String?   @db.Text
+  respondida_at DateTime?
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([estado])
+  @@index([email])
+  @@map("solicitudes_derechos")
 }
 
 model Sorteo {

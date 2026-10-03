@@ -35,6 +35,7 @@ import { getUtmParams, newEventId } from '@/lib/track'
 import { SITE } from '@/lib/constants'
 import { LOMAS_DEL_MAR, type Proyecto } from './proyectos'
 import styles from './Agenda3D.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 /** Ventana que se le pide a la agenda, en días. */
 const VENTANA_DIAS = 60
@@ -122,6 +123,7 @@ export default function Agenda3D({
        un lote: la portada era una pantalla de más entre el clic y el mapa. */
     const [started] = useState(true)
     const [step, setStep] = useState<Step>('lote')
+    const consentimiento = useConsentimiento()
     const [mapaActivo, setMapaActivo] = useState(!embebido)
     const mapaRef = useRef<HTMLElement | null>(null)
 
@@ -413,7 +415,8 @@ export default function Agenda3D({
         form.celular.trim().length >= 8 &&
         /.+@.+\..+/.test(form.email) &&
         !!date &&
-        !!time
+        !!time &&
+        consentimiento.contacto
 
     const enviar = async () => {
         if (!puedeEnviar) return
@@ -438,6 +441,7 @@ export default function Agenda3D({
                     fechaLocal: date,
                     hora: time,
                     lote: loteLabel,
+                    ...consentimiento.datos(),
                     modalidad: proyecto.modalidad,
                     eventId,
                     ...utm,
@@ -1058,6 +1062,11 @@ export default function Agenda3D({
                                     <small>Te llega la cita a tu calendario con la ubicación exacta.</small>
                                 </label>
 
+                                <ConsentimientoFormulario
+                                    consentimiento={consentimiento}
+                                    textoContacto="y que Alimin use mis datos para coordinar esta visita."
+                                />
+
                                 {status === 'error' && <p className={styles.warn}>{errorMsg}</p>}
 
                                 <button
@@ -1073,7 +1082,7 @@ export default function Agenda3D({
                                     Cambiar día u hora
                                 </button>
                                 <small className={styles.legal}>
-                                    Usamos tus datos solo para coordinar esta visita.
+                                    Tus datos se usan para coordinar esta visita y, solo si lo marcas, para enviarte novedades.
                                 </small>
                             </div>
                         )}

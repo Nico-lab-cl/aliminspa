@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { getUtmParams, newEventId } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import { FAQ_ARENA_Y_SOL } from './faq'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 /* Landing de Arena y Sol — Design System v2 (mismo mundo visual que /minipie).
    La página es standalone: trae su propio header, footer y WhatsApp flotante,
@@ -439,6 +440,7 @@ function CtaButton({
 export default function ArenaYSolClient() {
     const [form, setForm] = useState({ nombre: '', email: '', celular: '', region: '', ciudad: '', como: '' })
     const [errors, setErrors] = useState<Record<string, string>>({})
+    const consentimiento = useConsentimiento()
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [openFaq, setOpenFaq] = useState<number | null>(0)
     const [scrollPct, setScrollPct] = useState(0)
@@ -579,8 +581,9 @@ export default function ArenaYSolClient() {
         if (form.celular.replace(/\D/g, '').length < 8) e.celular = 'Necesitamos un teléfono válido.'
         if (!form.region) e.region = 'Elige tu región.'
         if (!form.ciudad.trim()) e.ciudad = 'Cuéntanos desde qué ciudad nos escribes.'
+        if (!consentimiento.contacto) e.consentimiento = 'Marca la casilla para que podamos contactarte.'
         return e
-    }, [form])
+    }, [form, consentimiento.contacto])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -610,6 +613,7 @@ export default function ArenaYSolClient() {
             const eventId = newEventId()
 
             const payload = {
+                ...consentimiento.datos(),
                 nombre: form.nombre,
                 email: form.email,
                 celular: form.celular,
@@ -2096,6 +2100,14 @@ html{scroll-behavior:smooth}
                                                 </option>
                                             ))}
                                         </select>
+                                    </div>
+                                    <div style={{ display: 'grid', gap: '6px' }}>
+                                        <ConsentimientoFormulario consentimiento={consentimiento} tono="oscuro" />
+                                        {errors.consentimiento && (
+                                            <span role="alert" style={{ font: "400 12.5px 'Roboto',sans-serif", color: '#FCA5A5' }}>
+                                                {errors.consentimiento}
+                                            </span>
+                                        )}
                                     </div>
                                     <button
                                         type="submit"

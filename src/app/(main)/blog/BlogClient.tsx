@@ -7,12 +7,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Calendar, Clock, User, ArrowRight, BookOpen, SearchSlash, Mail } from 'lucide-react'
 import { BLOG_POSTS, BLOG_CATEGORIES, BlogPost } from '@/lib/blog-data'
 import styles from './blog.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 export default function BlogClient() {
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedCategory, setSelectedCategory] = useState<string>('Todo')
     const [email, setEmail] = useState('')
     const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
 
     // Find the featured post (e.g., the first post)
@@ -39,7 +41,7 @@ export default function BlogClient() {
             const res = await fetch('/api/newsletter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, ...consentimiento.datos() }),
             })
             if (!res.ok) throw new Error('Subscription failed')
 
@@ -273,6 +275,8 @@ export default function BlogClient() {
                                 {subscribeStatus === 'loading' ? 'Suscribiendo...' : 'Suscribirme'}
                             </button>
                             
+                            <ConsentimientoFormulario consentimiento={consentimiento} soloMarketing style={{ flexBasis: '100%' }} />
+
                             {subscribeStatus === 'success' && (
                                 <p className={styles.subscribeSuccess}>
                                     🎉 ¡Suscripción exitosa! Mantente atento a tu bandeja de entrada.

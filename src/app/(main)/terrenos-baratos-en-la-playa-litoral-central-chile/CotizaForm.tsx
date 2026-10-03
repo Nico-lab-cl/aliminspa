@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react'
 import { getUtmParams, newEventId } from '@/lib/track'
 import { TERRENOS } from './terrenos'
 import styles from '../../../components/sections/QuoteForm.module.css'
+import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
 // Mismo markup y estilos que QuoteForm (el formulario de la homepage). La
 // diferencia es que acá etiquetamos el lead con `proyecto`, igual que las
@@ -73,6 +74,7 @@ export default function CotizaForm({
         comoNosConociste: '',
     })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const consentimiento = useConsentimiento()
 
     const cities = form.region ? REGION_CITIES[form.region] ?? [] : []
 
@@ -118,6 +120,7 @@ export default function CotizaForm({
                     fbc: getCookie('_fbc'),
                     eventId,
                     ...utm_data,
+                    ...consentimiento.datos(),
                 }),
             })
 
@@ -246,6 +249,8 @@ export default function CotizaForm({
                     ))}
                 </select>
             </div>
+
+            <ConsentimientoFormulario consentimiento={consentimiento} />
 
             <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
                 {status === 'loading' ? 'Enviando...' : submitLabel}
