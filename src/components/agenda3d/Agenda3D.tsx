@@ -395,10 +395,12 @@ export default function Agenda3D({
         : `Hola, quiero reservar un lote en ${proyecto.nombre}. ¿Cómo sigo?`
 
     /* La reserva se cierra por WhatsApp con un asesor: acá solo se registra la
-       intención para poder medirla como conversión. */
+       intención. Va como Contact y no como Lead: nadie dejó sus datos todavía,
+       y contarlo como Lead ensuciaba el evento que optimizan las campañas de
+       formulario (el chat en vivo usa Contact por lo mismo). */
     const marcarReserva = () => {
         const w = window as unknown as { fbq?: (...args: unknown[]) => void }
-        w.fbq?.('track', 'Lead', {
+        w.fbq?.('track', 'Contact', {
             content_name: proyecto.nombre,
             content_category: 'Reserva de lote',
             ...(loteLabel ? { content_ids: [loteLabel] } : {}),
