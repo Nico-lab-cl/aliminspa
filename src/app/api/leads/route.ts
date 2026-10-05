@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
             utm_campaign,
             utm_content,
             utm_term,
+            como_conocio,
         })
 
         // Enviar evento a Meta Conversions API, solo si el visitante aceptó

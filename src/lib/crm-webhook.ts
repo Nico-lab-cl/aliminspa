@@ -20,6 +20,7 @@ interface CrmLeadPayload {
     utm_campaign?: string | null
     utm_content?: string | null
     utm_term?: string | null
+    como_conocio?: string | null
 }
 
 interface CrmNewsletterPayload {
@@ -65,6 +66,7 @@ export function forwardLeadToCrm(data: {
     utm_campaign?: string | null
     utm_content?: string | null
     utm_term?: string | null
+    como_conocio?: string | null
 }) {
     // El CRM concatena firstName + lastName para mostrar el nombre completo, así
     // que sin lastName la ficha del asesor termina en un "null" pegado al nombre.
@@ -83,6 +85,9 @@ export function forwardLeadToCrm(data: {
         utm_campaign: data.utm_campaign || null,
         utm_content: data.utm_content || null,
         utm_term: data.utm_term || null,
+        // "¿Cómo nos conociste?": el CRM lo muestra en el aviso de lead nuevo
+        // al grupo de WhatsApp del equipo.
+        como_conocio: data.como_conocio || null,
     })
 }
 
