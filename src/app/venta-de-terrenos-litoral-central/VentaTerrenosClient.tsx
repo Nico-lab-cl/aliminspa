@@ -6,6 +6,7 @@ import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import { REGIONES } from './regiones'
 import { FAQS } from './faqs'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
+import type { VarianteLanding } from '@/lib/landing-variante'
 
 const ASSET = '/assets/venta-terrenos'
 
@@ -48,7 +49,9 @@ const JLABELS = [
     '🎉 ¡Meta alcanzada! Tu terreno está a tu nombre.',
 ]
 
-export default function VentaTerrenosClient() {
+// Las landings /google/terrenos-litoral-central-con-luz-y-agua y
+// /google/terrenos-cerca-de-el-quisco usan esta misma página con otro H1 y otra etiqueta de lead.
+export default function VentaTerrenosClient({ variante }: { variante?: VarianteLanding } = {}) {
     const [form, setForm] = useState({
         nombre: '', telefono: '', email: '', proyecto: '', tamano: '', region: '', comuna: '', como: '',
     })
@@ -123,7 +126,7 @@ export default function VentaTerrenosClient() {
             const fbp = getCookie('_fbp')
             const fbc = getCookie('_fbc')
 
-            const utm_data = getUtmParams({
+            const utm_data = getUtmParams(variante?.utm ?? {
                 utm_source: 'venta_terrenos_seo',
                 utm_medium: 'organic',
                 utm_campaign: 'venta_terrenos_litoral_central',
@@ -140,7 +143,7 @@ export default function VentaTerrenosClient() {
                 email: form.email,
                 celular: form.telefono,
                 ciudad: [form.comuna, form.region].filter(Boolean).join(' - ') || 'No especificada',
-                proyecto: 'venta de terrenos litoral central' + (detalle ? ' - ' + detalle : ''),
+                proyecto: 'venta de terrenos litoral central' + (variante?.sufijoLead ?? '') + (detalle ? ' - ' + detalle : ''),
                 ...utm_data,
                 fbp,
                 fbc,
@@ -264,7 +267,7 @@ export default function VentaTerrenosClient() {
 
                 <div className="al-hero-grid" style={s("position:relative;z-index:2;max-width:1280px;margin:0 auto")}>
                     <div style={s("animation:fadeInUp .6s .05s ease both")}>
-                        <h1 style={s("font:900 clamp(2.4rem,5vw,4rem)/1.03 'Montserrat',sans-serif;letter-spacing:-.035em;margin:0 0 18px;color:#fff")}>Venta de Terrenos en el <em style={s("font-style:normal;background:linear-gradient(90deg,#76d845,#4ba646,#76d845) 0 0/200% text;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmerGold 3s linear infinite")}>Litoral Central</em></h1>
+                        <h1 style={s("font:900 clamp(2.4rem,5vw,4rem)/1.03 'Montserrat',sans-serif;letter-spacing:-.035em;margin:0 0 18px;color:#fff")}>{variante ? variante.h1.texto : 'Venta de Terrenos en el'} <em style={s("font-style:normal;background:linear-gradient(90deg,#76d845,#4ba646,#76d845) 0 0/200% text;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmerGold 3s linear infinite")}>{variante ? variante.h1.destacado : 'Litoral Central'}</em></h1>
                         <p style={s("font:300 clamp(1rem,2vw,1.18rem)/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.66);margin:0 0 26px;max-width:520px")}>Terrenos urbanizados en El Tabo, a minutos de la playa. Escritura a tu nombre, agua y luz certificadas, y financiamiento directo <strong style={s("color:#fff;font-weight:500")}>sin banco y sin importar tu DICOM.</strong></p>
                         <div style={s("display:flex;flex-wrap:wrap;gap:14px 26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.09)")}>
                             {['Rol propio incluido', 'Sin banco, sin DICOM', 'Agua certificada SEREMI'].map((t) => (

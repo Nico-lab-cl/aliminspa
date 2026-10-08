@@ -53,6 +53,16 @@ interface CotizaFormProps {
     submitLabel?: string
     /** Terreno preseleccionado al llegar desde una tarjeta de precio. */
     terrenoInicial?: string
+    /** Solo estos lotes en el selector (ids de TERRENOS). Por defecto, todos. */
+    terrenoIds?: string[]
+    /** Se agrega a la etiqueta del lead, p. ej. " - Google" para las landings de /google. */
+    sufijoEtiqueta?: string
+    /** Etiqueta cuando no elige lote. */
+    etiquetaRespaldo?: string
+    /** Identificador estable de la página para Pixel y CRM. */
+    nombrePagina?: string
+    /** UTM por defecto si la URL no trae las suyas. */
+    utmPorDefecto?: Record<string, string>
 }
 
 export default function CotizaForm({
@@ -61,7 +71,17 @@ export default function CotizaForm({
     subtitle = 'Te enviamos valores y lotes disponibles. Un asesor te contacta en menos de 24 horas.',
     submitLabel = 'Ver precios',
     terrenoInicial = '',
+    terrenoIds,
+    sufijoEtiqueta = '',
+    etiquetaRespaldo = ETIQUETA_RESPALDO,
+    nombrePagina = NOMBRE_PAGINA,
+    utmPorDefecto = {
+        utm_source: 'google',
+        utm_medium: 'organic',
+        utm_campaign: 'terrenos_baratos_litoral_central',
+    },
 }: CotizaFormProps) {
+    const terrenos = terrenoIds ? TERRENOS.filter((t) => terrenoIds.includes(t.id)) : TERRENOS
     const [form, setForm] = useState({
         nombre: '',
         email: '',
@@ -81,7 +101,7 @@ export default function CotizaForm({
     // "Lomas del Mar" / "Arena y Sol" según el lote elegido; el respaldo cubre
     // tanto "aún no lo sé" como el caso de no tocar el selector.
     const etiquetaLead =
-        TERRENOS.find((t) => t.id === form.terreno)?.proyecto ?? ETIQUETA_RESPALDO
+        (TERRENOS.find((t) => t.id === form.terreno)?.proyecto ?? etiquetaRespaldo) + sufijoEtiqueta
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -96,11 +116,7 @@ export default function CotizaForm({
                 return undefined
             }
 
-            const utm_data = getUtmParams({
-                utm_source: 'google',
-                utm_medium: 'organic',
-                utm_campaign: 'terrenos_baratos_litoral_central',
-            })
+            const utm_data = getUtmParams(utmPorDefecto)
 
             // Compartido entre el Pixel del navegador y la CAPI del servidor
             // para que Meta cuente un solo Lead.
@@ -131,7 +147,7 @@ export default function CotizaForm({
 
             if (typeof window !== 'undefined' && (window as any).fbq) {
                 ;(window as any).fbq('track', 'Lead', {
-                    content_name: NOMBRE_PAGINA,
+                    content_name: nombrePagina,
                     content_category: 'Real Estate',
                     currency: 'CLP',
                 }, { eventID: eventId })
@@ -144,7 +160,7 @@ export default function CotizaForm({
                     firstName: nameParts[0] || '',
                     lastName: nameParts.slice(1).join(' ') || '',
                     phone: form.celular,
-                    source: `Sitio Web - ${NOMBRE_PAGINA}`,
+                    source: `Sitio Web - ${nombrePagina}`,
                 }).catch((err: any) => console.error('Error de tracking CRM:', err))
             }
 
@@ -206,7 +222,7 @@ export default function CotizaForm({
                     aria-label="Terreno que te interesa"
                 >
                     <option value="">¿Qué terreno te interesa?</option>
-                    {TERRENOS.map((t) => (
+                    {terrenos.map((t) => (
                         <option key={t.id} value={t.id}>
                             {t.proyecto} — {t.superficie} · {t.contadoTexto}
                         </option>

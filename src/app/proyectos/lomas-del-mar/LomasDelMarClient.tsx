@@ -8,6 +8,7 @@ import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
+import type { VarianteLanding } from '@/lib/landing-variante'
 
 /* Landing de Lomas del Mar — Design System v2.
    Nació como la campaña Mini Pie, que terminó el 9 de agosto de 2026; desde
@@ -38,7 +39,9 @@ type TrackingWindow = {
   AliminCRM?: { identify: (contact: Record<string, string>) => Promise<unknown> }
 }
 
-export default function LomasDelMarClient() {
+export default function LomasDelMarClient({ variante }: { variante?: VarianteLanding } = {}) {
+  // /google/terrenos-en-el-tabo usa esta misma página con otro H1 y otra etiqueta de lead.
+  const utmPorDefecto = variante?.utm ?? UTM_CHAT
   const router = useRouter()
 
   // Form State
@@ -117,7 +120,7 @@ export default function LomasDelMarClient() {
       const fbp = getCookie('_fbp')
       const fbc = getCookie('_fbc')
 
-      const utm_data = getUtmParams(UTM_CHAT)
+      const utm_data = getUtmParams(utmPorDefecto)
 
       // Shared between the browser Pixel and the CAPI call below so Meta
       // deduplicates them into a single Lead.
@@ -131,7 +134,7 @@ export default function LomasDelMarClient() {
         email: form.email,
         celular: form.telefono,
         ciudad: form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
-        proyecto: 'Lomas del Mar' + (form.terreno ? ' - ' + form.terreno : ''),
+        proyecto: 'Lomas del Mar' + (variante?.sufijoLead ?? '') + (form.terreno ? ' - ' + form.terreno : ''),
         como_conocio: form.como || null,
         ...utm_data,
         fbp,
@@ -765,9 +768,10 @@ export default function LomasDelMarClient() {
           <span style={{"width":"7px","height":"7px","background":"#76d845","borderRadius":"50%","display":"inline-block"}}></span>
           <span style={{"font":"700 12px 'Montserrat',sans-serif","color":"#b8f07a","textTransform":"uppercase","letterSpacing":".1em"}}>Lomas del Mar · El Tabo</span>
         </div>
-        <h1 style={{"animation":"fadeInUp .55s .1s ease both","font":"900 clamp(3rem,8.5vw,6.2rem)/1.0 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.035em","marginBottom":"18px"}}>
-          TU TERRENO<br />
-          <em style={{"fontStyle":"normal","background":"linear-gradient(90deg, rgb(118, 216, 69), rgb(75, 166, 70), rgb(118, 216, 69)) 0% 0% / 200% text","WebkitTextFillColor":"transparent","animation":"3s linear 0s infinite normal none running shimmerGold"}}>SIN BANCO</em>&nbsp;</h1>
+        {/* El H1 de la variante es más largo que "TU TERRENO / SIN BANCO": va más chico para no tapar el menú ni empujar los precios. */}
+        <h1 style={{"animation":"fadeInUp .55s .1s ease both","font":variante ? "900 clamp(2.2rem,5.2vw,4rem)/1.02 'Montserrat',sans-serif" : "900 clamp(3rem,8.5vw,6.2rem)/1.0 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.035em","marginBottom":"18px"}}>
+          {variante ? variante.h1.texto : 'TU TERRENO'}<br />
+          <em style={{"fontStyle":"normal","background":"linear-gradient(90deg, rgb(118, 216, 69), rgb(75, 166, 70), rgb(118, 216, 69)) 0% 0% / 200% text","WebkitTextFillColor":"transparent","animation":"3s linear 0s infinite normal none running shimmerGold"}}>{variante ? variante.h1.destacado : 'SIN BANCO'}</em>&nbsp;</h1>
         <p style={{"animation":"fadeInUp .55s .2s ease both","font":"300 clamp(1rem,2.2vw,1.2rem)/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.65)","marginBottom":"32px","maxWidth":"540px"}}>
           Terrenos urbanizados con rol propio en el Litoral Central. Financiamiento directo con Alimin, en pesos y sin evaluación bancaria.
         </p>
@@ -2090,7 +2094,7 @@ export default function LomasDelMarClient() {
       {/* ── Chat en vivo de Ali ──
           Único widget fijo de la página, anclado abajo a la derecha igual que
           en el resto del sitio. */}
-      <AliFloatingCharacter utmPorDefecto={UTM_CHAT} />
+      <AliFloatingCharacter utmPorDefecto={utmPorDefecto} />
     </div>
   )
 }
