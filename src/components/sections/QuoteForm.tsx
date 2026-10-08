@@ -4,6 +4,7 @@ import { Suspense, useState, FormEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './QuoteForm.module.css'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
+import { newEventId, trackGoogleAdsLead } from '@/lib/track'
 
 const REGION_CITIES: Record<string, string[]> = {
     'Arica y Parinacota': ['Arica', 'Putre', 'General Lagos'],
@@ -101,6 +102,9 @@ function QuoteFormInner({
             })
 
             if (!res.ok) throw new Error('Error al enviar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(newEventId(), { email: form.email, telefono: form.celular })
 
             if (typeof window !== 'undefined' && (window as any).AliminCRM) {
                 const nameParts = form.nombre.trim().split(/\s+/)

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SITE } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { getUtmParams, newEventId } from '@/lib/track'
+import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
@@ -147,6 +147,9 @@ export default function LomasDelMarClient() {
       })
 
       if (!res.ok) throw new Error('Error al enviar')
+
+      // Conversión de Google Ads (solo con consentimiento de marketing).
+      trackGoogleAdsLead(eventId, { email: form.email, telefono: form.telefono })
 
       // Meta Pixel client-side Lead event. The server-side counterpart is sent
       // by /api/leads with the same eventId, so Meta keeps only one of the two.

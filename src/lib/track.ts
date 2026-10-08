@@ -1,3 +1,6 @@
+import { SITE } from '@/lib/constants'
+import { marketingCargado } from '@/components/consent/trackers'
+
 /**
  * Client-side tracking utility for Meta Conversions API.
  * Calls the /api/track endpoint to trigger server-to-server events.
@@ -39,6 +42,42 @@ export const newEventId = (): string => {
         return crypto.randomUUID()
     }
     return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+}
+
+/** Celular chileno en formato E.164 (+569XXXXXXXX), que es lo que piden las conversiones avanzadas. */
+const telefonoE164 = (telefono?: string | null): string | undefined => {
+    const d = (telefono || '').replace(/\D/g, '')
+    if (/^569\d{8}$/.test(d)) return `+${d}`
+    if (/^9\d{8}$/.test(d)) return `+56${d}`
+    return undefined
+}
+
+/**
+ * Conversión "Enviar formulario de clientes potenciales" de Google Ads.
+ * Se llama cuando el lead ya quedó guardado, igual que el Lead de Meta.
+ *
+ * - Solo sale si el visitante aceptó marketing (Ley 21.719); si no, no hace nada.
+ * - `eventId` va como transaction_id: si la misma persona reenvía el formulario,
+ *   Google no la cuenta dos veces.
+ * - Email y teléfono alimentan las conversiones avanzadas; gtag los convierte a
+ *   hash SHA-256 antes de enviarlos.
+ */
+export const trackGoogleAdsLead = (
+    eventId?: string,
+    user: { email?: string | null; telefono?: string | null } = {}
+) => {
+    if (typeof window === 'undefined' || !marketingCargado()) return
+    const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag
+    if (!gtag) return
+
+    const email = user.email?.trim().toLowerCase() || undefined
+    const phone_number = telefonoE164(user.telefono)
+    if (email || phone_number) gtag('set', 'user_data', { email, phone_number })
+
+    gtag('event', 'conversion', {
+        send_to: `${SITE.googleAdsId}/${SITE.googleAdsLeadLabel}`,
+        ...(eventId ? { transaction_id: eventId } : {}),
+    })
 }
 
 export const trackMetaEvent = async (

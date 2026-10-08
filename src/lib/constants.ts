@@ -11,6 +11,11 @@ export const SITE = {
     gtmId: 'GTM-TMLPLBN3',
     pixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || '1998226647754673',
     clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || 'yluu5pj2p1',
+    // Google Ads (cuenta Alimin Spa 735-520-3622). La etiqueta es la de la acción
+    // "Enviar formulario de clientes potenciales" (ID 7200499377), que es el
+    // objetivo de la campaña de Búsqueda.
+    googleAdsId: 'AW-17303083527',
+    googleAdsLeadLabel: 'LamsCLHNu-kaEIe04LpA',
     social: {
         instagram: '',
         facebook: '',

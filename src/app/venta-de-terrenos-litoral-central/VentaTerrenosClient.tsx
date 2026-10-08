@@ -2,7 +2,7 @@
 
 import { useState, useEffect, CSSProperties } from 'react'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
-import { getUtmParams, newEventId } from '@/lib/track'
+import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import { REGIONES } from './regiones'
 import { FAQS } from './faqs'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
@@ -153,6 +153,9 @@ export default function VentaTerrenosClient() {
                 body: JSON.stringify(payload),
             })
             if (!res.ok) throw new Error('Error al enviar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(eventId, { email: form.email, telefono: form.telefono })
 
             // The server-side counterpart is sent by /api/leads with the same
             // eventId, so Meta keeps only one of the two.

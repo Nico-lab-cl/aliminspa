@@ -6,6 +6,7 @@ import { PROJECTS } from '@/lib/constants'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import styles from './ContactForm.module.css'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
+import { newEventId, trackGoogleAdsLead } from '@/lib/track'
 
 function ContactFormInner() {
     const searchParams = useSearchParams()
@@ -54,6 +55,9 @@ function ContactFormInner() {
             })
 
             if (!res.ok) throw new Error('Error al enviar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(newEventId(), { email: form.email, telefono: form.celular })
 
             // Registrar en el CRM Alimin
             if (typeof window !== 'undefined' && (window as any).AliminCRM) {

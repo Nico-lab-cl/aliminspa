@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { getUtmParams, newEventId } from '@/lib/track'
+import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import { FAQ_ARENA_Y_SOL } from './faq'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
@@ -634,6 +634,9 @@ export default function ArenaYSolClient() {
                 body: JSON.stringify(payload),
             })
             if (!res.ok) throw new Error('Error al enviar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(eventId, { email: form.email, telefono: form.celular })
 
             const w = window as unknown as TrackingWindow
 

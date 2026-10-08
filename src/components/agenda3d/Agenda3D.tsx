@@ -31,7 +31,7 @@ import {
 import Lote3DViewer, { Conteo, Listo, Lot, ViewerHandle, Vuelo } from './Lote3DViewer'
 import EditorLotes from './EditorLotes'
 import EditorPlano, { type VisorPlano } from './EditorPlano'
-import { getUtmParams, newEventId } from '@/lib/track'
+import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import { SITE } from '@/lib/constants'
 import { LOMAS_DEL_MAR, type Proyecto } from './proyectos'
 import styles from './Agenda3D.module.css'
@@ -452,6 +452,9 @@ export default function Agenda3D({
 
             const data = await res.json().catch(() => ({}))
             if (!res.ok) throw new Error(data?.error || 'No pudimos agendar tu visita.')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(eventId, { email: form.email, telefono: form.celular })
 
             setMeetLink(data.meetLink || null)
 

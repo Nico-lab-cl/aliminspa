@@ -9,7 +9,7 @@ import { Clock, ShieldCheck, Check, CheckCircle, MessageCircle, Phone, ArrowRigh
 import { SITE, PROJECTS, CONTEST } from '@/lib/constants'
 import MetaTrackPageView from '@/components/analytics/MetaTrackPageView'
 import Testimonials from '@/components/sections/Testimonials'
-import { getUtmParams } from '@/lib/track'
+import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import styles from './page.module.css'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
@@ -113,6 +113,9 @@ function CyberForm({ proyectoInteres, setProyectoInteres }: CyberFormProps) {
             })
 
             if (!res.ok) throw new Error('Error al enviar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(newEventId(), { email: form.email, telefono: form.celular })
 
             // Registrar en el CRM Alimin
             if (typeof window !== 'undefined' && (window as any).AliminCRM) {

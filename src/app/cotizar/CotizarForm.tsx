@@ -3,7 +3,7 @@
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { PROJECTS } from '@/lib/constants'
-import { getUtmParams, newEventId } from '@/lib/track'
+import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import styles from './page.module.css'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 
@@ -88,6 +88,9 @@ export default function CotizarForm() {
             })
 
             if (!res.ok) throw new Error('Error al enviar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(eventId, { email: form.email, telefono: form.celular })
 
             if (typeof window !== 'undefined' && (window as any).fbq) {
                 ;(window as any).fbq('track', 'Lead', {

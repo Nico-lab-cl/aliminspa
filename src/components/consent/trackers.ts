@@ -5,7 +5,8 @@ import type { CookieConsent } from '@/lib/consent'
  * Carga de los scripts de terceros, según lo que aceptó el visitante.
  *
  * - Analítica: Google Analytics 4, Google Tag Manager y Microsoft Clarity.
- * - Marketing: Meta Pixel y el rastreador del CRM (public/crm-tracker.js).
+ * - Marketing: Meta Pixel, la etiqueta de Google Ads y el rastreador del CRM
+ *   (public/crm-tracker.js).
  *
  * Antes se cargaban todos en el <head> apenas entraba alguien. La Ley 21.719
  * exige consentimiento previo, específico e informado para medir y perfilar,
@@ -23,6 +24,7 @@ type W = Window & {
 }
 
 const cargados = { analitica: false, marketing: false }
+let gtagListo = false
 
 function inyectar(src: string, id: string) {
     if (document.getElementById(id)) return
@@ -50,13 +52,23 @@ function gtagConsent(modo: 'default' | 'update', c: CookieConsent) {
     })
 }
 
+/**
+ * GA4 y Google Ads comparten gtag: el consentimiento por defecto y el 'js' van
+ * una sola vez, aunque se acepte primero una categoría y después la otra.
+ */
+function prepararGtag(c: CookieConsent) {
+    if (gtagListo) return
+    gtagListo = true
+    gtagConsent('default', c)
+    ;(window as W).gtag!('js', new Date())
+}
+
 function cargarAnalitica(c: CookieConsent) {
     if (cargados.analitica) return
     cargados.analitica = true
     const w = window as W
 
-    gtagConsent('default', c)
-    w.gtag!('js', new Date())
+    prepararGtag(c)
     w.gtag!('config', GA_ID)
     inyectar(`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`, 'ga4')
 
@@ -72,10 +84,15 @@ function cargarAnalitica(c: CookieConsent) {
     inyectar(`https://www.clarity.ms/tag/${SITE.clarityId}`, 'ms-clarity')
 }
 
-function cargarMarketing() {
+function cargarMarketing(c: CookieConsent) {
     if (cargados.marketing) return
     cargados.marketing = true
     const w = window as W
+
+    // Google Ads: mide los leads de la campaña de Búsqueda (ver trackGoogleAdsLead).
+    prepararGtag(c)
+    w.gtag!('config', SITE.googleAdsId, { allow_enhanced_conversions: true })
+    inyectar(`https://www.googletagmanager.com/gtag/js?id=${SITE.googleAdsId}`, 'google-ads')
 
     // Snippet oficial del Pixel, sin el <script> en línea.
     if (!w.fbq) {
@@ -100,8 +117,13 @@ function cargarMarketing() {
 /** Carga lo aceptado. Es idempotente: se puede llamar en cada cambio. */
 export function aplicarConsentimiento(c: CookieConsent) {
     if (c.analitica) cargarAnalitica(c)
-    if (cargados.analitica) gtagConsent('update', c)
-    if (c.marketing) cargarMarketing()
+    if (gtagListo) gtagConsent('update', c)
+    if (c.marketing) cargarMarketing(c)
+}
+
+/** ¿El visitante aceptó marketing en esta página? Sin eso no se mide ninguna conversión de anuncios. */
+export function marketingCargado(): boolean {
+    return cargados.marketing
 }
 
 /** ¿Hay que recargar para sacar algo que ya estaba cargado y ahora se rechazó? */
@@ -124,7 +146,7 @@ export function limpiarRastros(c: CookieConsent) {
         nombres.filter((n) => /^(_ga|_gid|_gat|_clck|_clsk|CLID|MUID)/.test(n)).forEach(borrar)
     }
     if (!c.marketing) {
-        nombres.filter((n) => /^(_fbp|_fbc|fr)$/.test(n)).forEach(borrar)
+        nombres.filter((n) => /^(_fbp|_fbc|fr|_gcl_au|_gcl_aw|_gcl_dc|_gcl_gs)$/.test(n)).forEach(borrar)
         try {
             localStorage.removeItem('crm_lead_id')
             localStorage.removeItem('crm_anonymous_id')

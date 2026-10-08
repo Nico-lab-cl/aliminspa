@@ -12,6 +12,7 @@ import {
 } from '@/lib/booking-rules'
 import styles from './BookingCalendar.module.css'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
+import { newEventId, trackGoogleAdsLead } from '@/lib/track'
 
 /* ─── CONFIG ─── */
 const TIMEZONE = 'America/Santiago'
@@ -219,6 +220,10 @@ export default function BookingCalendar({ defaultProject }: BookingCalendarProps
 
             const data = await res.json().catch(() => ({}))
             if (!res.ok) throw new Error(data?.error || 'Error al agendar')
+
+            // Conversión de Google Ads (solo con consentimiento de marketing).
+            trackGoogleAdsLead(newEventId(), { email: form.email, telefono: form.celular })
+
             setMeetLink(data.meetLink || null)
             setStatus('success')
             setStep(4)
