@@ -15,7 +15,7 @@ export interface Faq {
 export const FAQS: Faq[] = [
     {
         q: '¿Cuánto cuesta un terreno barato en la playa del Litoral Central?',
-        a: 'El terreno más barato de Alimin en el Litoral Central cuesta $35.000.000 al contado: 200 m² urbanizados en Lomas del Mar, El Tabo, a 8 minutos de la playa. Financiado queda en $37.990.000 con un pie de $5.500.000 y 60 cuotas de $550.000. El de mejor precio por m² es el lote de 390 m² a $110.256 el m².',
+        a: 'El terreno más barato de Alimin en el Litoral Central cuesta $35.000.000 al contado: 200 m² urbanizados en Lomas del Mar, El Tabo, a 10 minutos de la playa. Financiado queda en $37.990.000 con un pie de $5.500.000 y 60 cuotas de $550.000. El de mejor precio por m² es el lote de 390 m² a $110.256 el m².',
     },
     {
         q: '¿Dónde encuentro los terrenos más baratos en la playa en Chile?',
@@ -23,7 +23,7 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿Por qué estos terrenos son más baratos que los de los portales inmobiliarios?',
-        a: 'Porque compras directo al dueño del loteo, sin corredor de por medio, así que el precio no incluye comisión de corretaje. Además urbanizamos cientos de lotes a la vez —el costo de agua, luz, calles y portón se reparte entre todos— y financiamos nosotros, sin banco, por lo que no pagas intereses bancarios, tasación ni gastos operacionales.',
+        a: 'Porque compras directo al dueño del loteo, sin corredor de por medio, así que el precio no incluye comisión de corretaje. Además financiamos nosotros, sin banco, por lo que no pagas intereses bancarios, tasación ni gastos operacionales.',
     },
     {
         q: '¿Los terrenos baratos incluyen agua y luz?',

@@ -1174,3 +1174,39 @@
 
 @media (max-width: 460px) {
 }
+
+/* La foto del terreno es un enlace al formulario. */
+a.terrenoImgWrap {
+    display: block;
+    cursor: pointer;
+}
+
+/* Celular: solo lo esencial (precio, qué incluye, prueba y formulario). El
+   texto oculto sigue en el HTML para Google. En Clarity el 97% de las visitas
+   en celular no pasaba del 35% de la página. */
+@media (max-width: 720px) {
+    .mOcultar {
+        display: none !important;
+    }
+
+    /* Qué incluye: ícono y título en dos columnas */
+    .incluidoGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .incluidoCard {
+        padding: 16px 14px;
+        gap: 8px;
+    }
+
+    /* Testimonios: el video, la cita y dos reseñas */
+    .testimoniosCompactos [class*='reviewCard']:nth-child(n + 3) {
+        display: none;
+    }
+
+    /* Preguntas frecuentes: las 4 primeras */
+    .faqList > .faqItem:nth-child(n + 5) {
+        display: none;
+    }
+}

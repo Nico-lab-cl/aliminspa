@@ -133,9 +133,10 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         nombre: form.nombre,
         email: form.email,
         celular: form.telefono,
-        ciudad: form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
+        // En /google el formulario es corto: no pregunta región, ciudad ni cómo nos conoció.
+        ciudad: variante ? 'No especificada' : form.ciudad + (form.region ? ' (' + form.region + ')' : ''),
         proyecto: 'Lomas del Mar' + (variante?.sufijoLead ?? '') + (form.terreno ? ' - ' + form.terreno : ''),
-        como_conocio: form.como || null,
+        como_conocio: variante ? 'Google' : form.como || null,
         ...utm_data,
         fbp,
         fbc,
@@ -693,6 +694,11 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       .footer-bottom{flex-direction:column;align-items:flex-start;gap:8px}
       .footer-inner{padding:32px 16px 24px}
 
+      /* Solo lo esencial: los párrafos de apoyo siguen en el HTML para Google
+         pero no se muestran, y de las reseñas quedan dos. */
+      .m-ocultar{display:none!important}
+      .testimonials-grid>div:nth-child(n+3){display:none}
+
     }
 
     /* ── SMALL MOBILE ≤ 390px ── */
@@ -772,7 +778,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <h1 style={{"animation":"fadeInUp .55s .1s ease both","font":variante ? "900 clamp(2.2rem,5.2vw,4rem)/1.02 'Montserrat',sans-serif" : "900 clamp(3rem,8.5vw,6.2rem)/1.0 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.035em","marginBottom":"18px"}}>
           {variante ? variante.h1.texto : 'TU TERRENO'}<br />
           <em style={{"fontStyle":"normal","background":"linear-gradient(90deg, rgb(118, 216, 69), rgb(75, 166, 70), rgb(118, 216, 69)) 0% 0% / 200% text","WebkitTextFillColor":"transparent","animation":"3s linear 0s infinite normal none running shimmerGold"}}>{variante ? variante.h1.destacado : 'SIN BANCO'}</em>&nbsp;</h1>
-        <p style={{"animation":"fadeInUp .55s .2s ease both","font":"300 clamp(1rem,2.2vw,1.2rem)/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.65)","marginBottom":"32px","maxWidth":"540px"}}>
+        <p className="m-ocultar" style={{"animation":"fadeInUp .55s .2s ease both","font":"300 clamp(1rem,2.2vw,1.2rem)/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.65)","marginBottom":"32px","maxWidth":"540px"}}>
           Terrenos urbanizados con rol propio en el Litoral Central. Financiamiento directo con Alimin, en pesos y sin evaluación bancaria.
         </p>
         <div className="price-cards-row" style={{"animation":"fadeInUp .55s .3s ease both","display":"flex","flexWrap":"wrap","gap":"12px","marginBottom":"40px"}}>
@@ -1066,7 +1072,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <span style={{"display":"inline-block","width":"32px","height":"2px","background":"linear-gradient(90deg,#4ba646,#76d845)"}}></span>
       </div>
       <h2 style={{"font":"800 clamp(1.8rem,3.5vw,2.6rem)/1.2 'Montserrat',sans-serif","color":"#fff","marginBottom":"12px"}}>Tu terreno en el Litoral Central</h2>
-      <p style={{"font":"400 16px/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","maxWidth":"560px","margin":"0 auto"}}>Dos opciones de terreno, mismo precio de cuota mensual. Elige el que se adapta a tu proyecto de vida.</p>
+      <p className="m-ocultar" style={{"font":"400 16px/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","maxWidth":"560px","margin":"0 auto"}}>Dos opciones de terreno, mismo precio de cuota mensual. Elige el que se adapta a tu proyecto de vida.</p>
     </div>
 
     
@@ -1351,7 +1357,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <span style={{"display":"inline-block","width":"32px","height":"2px","background":"linear-gradient(90deg,#4ba646,#76d845)"}}></span>
       </div>
       <h2 style={{"font":"800 clamp(1.8rem,3.5vw,2.8rem)/1.2 'Montserrat',sans-serif","color":"#fff","marginBottom":"12px"}}>Lomas del Mar</h2>
-      <p style={{"font":"400 15px/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.55)","maxWidth":"520px","margin":"0 auto"}}>Recorre el proyecto desde el aire. Toca para activar el sonido y explorar cada detalle del terreno.</p>
+      <p className="m-ocultar" style={{"font":"400 15px/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.55)","maxWidth":"520px","margin":"0 auto"}}>Recorre el proyecto desde el aire. Toca para activar el sonido y explorar cada detalle del terreno.</p>
     </div>
 
     
@@ -1437,7 +1443,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <span style={{"display":"inline-block","width":"32px","height":"2px","background":"linear-gradient(90deg,#4ba646,#76d845)"}}></span>
       </div>
       <h2 style={{"font":"800 clamp(1.8rem,3.5vw,2.6rem)/1.2 'Montserrat',sans-serif","color":"#fff","marginBottom":"12px"}}>Todo lo que te espera<br />a minutos de tu terreno</h2>
-      <p style={{"font":"400 15px/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.5)","maxWidth":"520px","margin":"0 auto"}}>Lomas del Mar está rodeado de los destinos más icónicos del Litoral Central de Chile.</p>
+      <p className="m-ocultar" style={{"font":"400 15px/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.5)","maxWidth":"520px","margin":"0 auto"}}>Lomas del Mar está rodeado de los destinos más icónicos del Litoral Central de Chile.</p>
     </div>
 
     
@@ -1501,7 +1507,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px 40px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 8px 32px rgba(118,216,69,.4)","letterSpacing":".02em"}}>
         Quiero mi terreno aquí →
       </button>
-      <p style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.3)","marginTop":"12px"}}>Todo esto a minutos de Lomas del Mar</p>
+      <p className="m-ocultar" style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.3)","marginTop":"12px"}}>Todo esto a minutos de Lomas del Mar</p>
     </div>
   </div>
 </section>
@@ -1680,10 +1686,10 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <span style={{"font":"600 12px 'Montserrat',sans-serif","color":"#4ba646","letterSpacing":".08em","textTransform":"uppercase"}}>Cotiza sin compromiso</span>
       </div>
       <h2 style={{"font":"800 clamp(1.8rem,4vw,2.8rem)/1.1 'Montserrat',sans-serif","color":"#fff","marginBottom":"14px"}}>Reserva tu terreno en Lomas del Mar</h2>
-      <p style={{"font":"400 15px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","maxWidth":"480px","margin":"0 auto"}}>Completa el formulario y un asesor te contactará en menos de 24 horas para guiarte en el proceso.</p>
+      <p className="m-ocultar" style={{"font":"400 15px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","maxWidth":"480px","margin":"0 auto"}}>Completa el formulario y un asesor te contactará en menos de 24 horas para guiarte en el proceso.</p>
 
-      {/* Aviso para quienes llegan por links antiguos de la promo Mini Pie */}
-      <div style={{"maxWidth":"620px","margin":"28px auto 0","background":"rgba(255,255,255,.06)","border":"1px solid rgba(255,255,255,.14)","borderRadius":"16px","padding":"18px 22px","textAlign":"left","display":"flex","gap":"14px","alignItems":"flex-start"}}>
+      {/* Aviso para quienes llegan por links antiguos de la promo Mini Pie. En /google no: nadie llega buscándola. */}
+      {!variante && <div className="m-ocultar" style={{"maxWidth":"620px","margin":"28px auto 0","background":"rgba(255,255,255,.06)","border":"1px solid rgba(255,255,255,.14)","borderRadius":"16px","padding":"18px 22px","textAlign":"left","display":"flex","gap":"14px","alignItems":"flex-start"}}>
         <span style={{"fontSize":"20px","lineHeight":"1.2","flexShrink":"0"}}>📌</span>
         <div>
           <div style={{"font":"700 14px 'Montserrat',sans-serif","color":"#fff","marginBottom":"5px"}}>¿Llegaste buscando la promoción Mini Pie?</div>
@@ -1693,7 +1699,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
             una nueva promoción, eres de los primeros en enterarte.
           </p>
         </div>
-      </div>
+      </div>}
     </div>
 
     
@@ -1731,6 +1737,9 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
               <input type="tel" value={vTelefono} onInput={onTelefono} placeholder="+56 9 1234 5678" required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%"}} />
             </div>
             
+            {/* Región, ciudad y "cómo nos conociste" no van en /google: en Clarity
+                la mitad de los que llegaban al formulario se iba ahí. */}
+            {!variante && (<>
             <div style={{"display":"flex","flexDirection":"column","gap":"6px"}}>
               <label style={{"font":"500 13px 'Montserrat',sans-serif","color":"#1f2933"}}>Región *</label>
               <select value={vRegion} onChange={onRegion} required style={{"border":"1.5px solid rgba(118,216,69,.55)","borderRadius":"10px","padding":"12px 14px","color":"#1a2b3d","background":"#fff","width":"100%","appearance":"none","WebkitAppearance":"none"}}>
@@ -1772,6 +1781,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
                 <option value="Otro">Otro</option>
               </select>
             </div>
+            </>)}
           </div>
 
           
@@ -1919,7 +1929,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     </div>
     <div style={{"display":"flex","flexDirection":"column","gap":"8px"}} data-animate-stagger="">
       
-      <div style={{"background":faq0bg,"borderRadius":"14px","border":"1.5px solid #e0eecc","overflow":"hidden","transition":"background .25s"}}>
+      <div hidden={!!variante} style={{"background":faq0bg,"borderRadius":"14px","border":"1.5px solid #e0eecc","overflow":"hidden","transition":"background .25s"}}>
         <button onClick={toggleFaq0} style={{"width":"100%","display":"flex","justifyContent":"space-between","alignItems":"center","padding":"18px 22px","background":"none","border":"none","cursor":"pointer","textAlign":"left","gap":"12px"}}>
           <span style={{"font":"600 15px 'Montserrat',sans-serif","color":"#1a2b3d"}}>¿Sigue vigente la promoción Mini Pie?</span>
           <span style={{"font":"700 22px 'Montserrat',sans-serif","color":"#4ba646","flexShrink":"0","transition":"transform .3s"}}>{faq0icon}</span>
@@ -1985,7 +1995,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <span style={{"display":"inline-block","width":"32px","height":"2px","background":"linear-gradient(90deg,#4ba646,#76d845)"}}></span>
       </div>
       <h2 style={{"font":"800 clamp(1.8rem,3.5vw,2.6rem)/1.2 'Montserrat',sans-serif","color":"#fff","marginBottom":"12px"}}>Habla con un asesor ahora</h2>
-      <p style={{"font":"400 15px 'Roboto',sans-serif","color":"rgba(255,255,255,.5)","maxWidth":"480px","margin":"0 auto"}}>Contáctanos directamente por WhatsApp. Respondemos en minutos.</p>
+      <p className="m-ocultar" style={{"font":"400 15px 'Roboto',sans-serif","color":"rgba(255,255,255,.5)","maxWidth":"480px","margin":"0 auto"}}>Contáctanos directamente por WhatsApp. Respondemos en minutos.</p>
     </div>
     <div className="advisors-grid" data-animate-stagger="">
 
@@ -2002,7 +2012,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         </div>
         
         <div style={{"padding":"22px"}}>
-          <p style={{"font":"400 13px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.55)","marginBottom":"16px"}}>Te asesora con soluciones rápidas y transparentes para asegurar tu inversión en Lomas del Mar.</p>
+          <p className="m-ocultar" style={{"font":"400 13px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.55)","marginBottom":"16px"}}>Te asesora con soluciones rápidas y transparentes para asegurar tu inversión en Lomas del Mar.</p>
           <div style={{"display":"flex","alignItems":"center","gap":"7px","marginBottom":"16px"}}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#76d845" strokeWidth="2.5" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.62 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09"></path></svg>
             <span style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>+56 9 5665 4833</span>
@@ -2027,7 +2037,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         </div>
         
         <div style={{"padding":"22px"}}>
-          <p style={{"font":"400 13px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.55)","marginBottom":"16px"}}>Te acompaña paso a paso para encontrar el lote ideal para tu familia en Lomas del Mar.</p>
+          <p className="m-ocultar" style={{"font":"400 13px/1.6 'Roboto',sans-serif","color":"rgba(255,255,255,.55)","marginBottom":"16px"}}>Te acompaña paso a paso para encontrar el lote ideal para tu familia en Lomas del Mar.</p>
           <div style={{"display":"flex","alignItems":"center","gap":"7px","marginBottom":"16px"}}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#76d845" strokeWidth="2.5" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.62 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09"></path></svg>
             <span style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>+56 9 7307 7128</span>

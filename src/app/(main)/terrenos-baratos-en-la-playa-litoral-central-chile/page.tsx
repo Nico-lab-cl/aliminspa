@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         absolute: 'Terrenos Baratos en la Playa Litoral Central Chile — $35.000.000',
     },
     description:
-        'Terrenos baratos en la playa del Litoral Central, Chile. Lotes urbanizados en El Tabo desde $35.000.000, a 8 minutos de la playa. Pie desde $5.500.000, cuotas desde $500.000, sin banco y sin importar tu DICOM. Rol propio, agua y luz incluidas. Ve precios y disponibilidad.',
+        'Terrenos baratos en la playa del Litoral Central, Chile. Lotes urbanizados en El Tabo desde $35.000.000, a 10 minutos de la playa. Pie desde $5.500.000, cuotas desde $500.000, sin banco y sin importar tu DICOM. Rol propio, agua y luz incluidas. Ve precios y disponibilidad.',
     keywords: [
         'terrenos baratos en la playa litoral central chile',
         'terrenos baratos litoral central',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         locale: 'es_CL',
         title: 'Terrenos Baratos en la Playa Litoral Central Chile — Desde $35.000.000',
         description:
-            'Lotes urbanizados en El Tabo desde $35.000.000, a 8 minutos de la playa. Pie desde $5.500.000 y cuotas desde $500.000, sin banco. Rol propio, agua y luz incluidas.',
+            'Lotes urbanizados en El Tabo desde $35.000.000, a 10 minutos de la playa. Pie desde $5.500.000 y cuotas desde $500.000, sin banco. Rol propio, agua y luz incluidas.',
         images: [
             {
                 url: OG_IMAGE,
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Terrenos Baratos en la Playa Litoral Central Chile — Desde $35.000.000',
         description:
-            'Lotes urbanizados en El Tabo desde $35.000.000, a 8 minutos de la playa. Sin banco y sin DICOM.',
+            'Lotes urbanizados en El Tabo desde $35.000.000, a 10 minutos de la playa. Sin banco y sin DICOM.',
         images: [OG_IMAGE],
     },
     robots: {
@@ -145,7 +145,7 @@ function JsonLd() {
                         '@type': 'Product',
                         '@id': `${PAGE_URL}#${t.id}`,
                         name: `Terreno ${t.superficie} en ${t.proyecto}, El Tabo — Litoral Central`,
-                        description: `Terreno urbanizado de ${t.superficie} en ${t.proyecto}, El Tabo, Litoral Central, a 8 minutos de la playa. Incluye rol propio, agua certificada y luz. Pie de ${t.pie} y ${t.plazo.toLowerCase()} de ${t.cuota}, sin banco.`,
+                        description: `Terreno urbanizado de ${t.superficie} en ${t.proyecto}, El Tabo, Litoral Central, a ${t.proyecto === 'Arena y Sol' ? 8 : 10} minutos de la playa. Incluye rol propio, agua certificada y luz. Pie de ${t.pie} y ${t.plazo.toLowerCase()} de ${t.cuota}, sin banco.`,
                         image: `${SITE.url}${t.imagen}`,
                         brand: { '@type': 'Brand', name: SITE.name },
                         category: 'Terrenos / Bienes Raíces',

@@ -63,6 +63,12 @@ interface CotizaFormProps {
     nombrePagina?: string
     /** UTM por defecto si la URL no trae las suyas. */
     utmPorDefecto?: Record<string, string>
+    /**
+     * Formulario corto para las landings de Google Ads: sin región, ciudad ni
+     * "¿cómo nos conociste?" (llegó por el anuncio). Siete campos eran muchos
+     * en celular; en Clarity la caída fuerte estaba justo en el formulario.
+     */
+    corto?: boolean
 }
 
 export default function CotizaForm({
@@ -80,6 +86,7 @@ export default function CotizaForm({
         utm_medium: 'organic',
         utm_campaign: 'terrenos_baratos_litoral_central',
     },
+    corto = false,
 }: CotizaFormProps) {
     const terrenos = terrenoIds ? TERRENOS.filter((t) => terrenoIds.includes(t.id)) : TERRENOS
     const [form, setForm] = useState({
@@ -129,9 +136,12 @@ export default function CotizaForm({
                     nombre: form.nombre,
                     email: form.email,
                     celular: form.celular,
-                    ciudad: form.ciudad ? `${form.ciudad}, ${form.region}` : form.region,
+                    // /api/leads exige ciudad; el formulario corto no la pregunta.
+                    ciudad: corto
+                        ? 'No especificada'
+                        : form.ciudad ? `${form.ciudad}, ${form.region}` : form.region,
                     proyecto: etiquetaLead,
-                    como_conocio: form.comoNosConociste || null,
+                    como_conocio: corto ? 'Google / Búsqueda web' : form.comoNosConociste || null,
                     fbp: getCookie('_fbp'),
                     fbc: getCookie('_fbc'),
                     eventId,
@@ -229,6 +239,7 @@ export default function CotizaForm({
                     ))}
                     <option value="sin-definir">Aún no lo sé, quiero ver todas las opciones</option>
                 </select>
+                {!corto && (<>
                 <select
                     className={styles.input}
                     required
@@ -267,6 +278,7 @@ export default function CotizaForm({
                         <option key={o} value={o}>{o}</option>
                     ))}
                 </select>
+                </>)}
             </div>
 
             <ConsentimientoFormulario consentimiento={consentimiento} />

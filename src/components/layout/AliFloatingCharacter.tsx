@@ -67,7 +67,10 @@ export default function AliFloatingCharacter({
      grande del loteo. Achicado sigue estando a un toque, que es para lo que
      el visitante lo busca. */
   const pathname = usePathname();
-  const enMapa = pathname === '/agendar-visita';
+  /* Igual en las landings de Google Ads: en Clarity, cerrar el chat sumaba el
+     10% de los toques en Lomas del Mar (se abría sin querer porque el
+     personaje tapa el segundo botón del hero en el celular). */
+  const enMapa = pathname === '/agendar-visita' || (pathname?.startsWith('/google/') ?? false);
 
   // Auto show speech bubble with smooth delay if closed
   useEffect(() => {

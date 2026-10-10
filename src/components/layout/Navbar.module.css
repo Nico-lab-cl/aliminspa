@@ -207,3 +207,12 @@
         display: none;
     }
 }
+
+/* Landings de Google Ads: sin menú, el "Cotizar" queda visible también en celular. */
+@media (max-width: 1024px) {
+    .actions .ctaLanding {
+        display: inline-flex;
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}

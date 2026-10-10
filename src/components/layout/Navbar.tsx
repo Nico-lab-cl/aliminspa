@@ -3,12 +3,17 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import styles from './Navbar.module.css'
 import { SITE } from '@/lib/constants'
 import PromoBanner from './PromoBanner'
 
 export default function Navbar() {
     const [isMobileOpen, setIsMobileOpen] = useState(false)
+    // Las landings de Google Ads (/google/*) llevan solo logo y "Cotizar", que
+    // baja al formulario de la misma página. En Clarity el 15% de los toques en
+    // la landing de terrenos baratos era abrir el menú e irse a otra página.
+    const enLandingAds = usePathname()?.startsWith('/google/') ?? false
 
     useEffect(() => {
         if (isMobileOpen) {
@@ -27,6 +32,35 @@ export default function Navbar() {
         { href: '/blog', label: 'Blog' },
         { href: '/#formulario', label: 'Contacto' },
     ]
+
+    if (enLandingAds) {
+        return (
+            <header className={styles.header}>
+                <nav className={styles.nav} aria-label="Navegación principal">
+                    <a href="#inicio" className={styles.logo} aria-label={SITE.shortName}>
+                        <Image
+                            src="/assets/homepage-v2/logo-alimin-menu.webp"
+                            alt="Alimin"
+                            width={128}
+                            height={34}
+                            className={styles.logoImg}
+                            priority
+                        />
+                    </a>
+                    <div className={styles.actions}>
+                        <a
+                            href="#cotizar"
+                            className={`${styles.ctaButton} ${styles.ctaLanding} crm-track-click`}
+                            data-crm-name="Cotizar - Menu Landing Google"
+                            data-crm-category="Navegacion"
+                        >
+                            Cotizar →
+                        </a>
+                    </div>
+                </nav>
+            </header>
+        )
+    }
 
     return (
         <header className={styles.header}>

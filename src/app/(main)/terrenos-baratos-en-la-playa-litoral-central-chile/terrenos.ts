@@ -142,8 +142,8 @@ export const INCLUIDO = [
         desc: 'Calles compactadas con maicillo, veredas con soleras y luminarias solares.',
     },
     {
-        titulo: 'A 8 minutos de la playa',
-        desc: 'El Tabo, Litoral Central. Playa, supermercados y la ruta a Santiago a minutos.',
+        titulo: 'A minutos de la playa',
+        desc: 'Arena y Sol a 8 minutos y Lomas del Mar a 10. Supermercados y la ruta a Santiago, cerca.',
     },
     {
         titulo: 'Áreas verdes',

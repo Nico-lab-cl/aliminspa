@@ -144,6 +144,8 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                 celular: form.telefono,
                 ciudad: [form.comuna, form.region].filter(Boolean).join(' - ') || 'No especificada',
                 proyecto: 'venta de terrenos litoral central' + (variante?.sufijoLead ?? '') + (detalle ? ' - ' + detalle : ''),
+                // Antes este formulario preguntaba "¿cómo nos conociste?" pero no lo enviaba.
+                como_conocio: variante ? 'Google' : form.como || null,
                 ...utm_data,
                 fbp,
                 fbc,
@@ -242,14 +244,15 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                         <img src={ASSET + '/logo-alimin-icon.png'} alt="Alimin Inmobiliaria" style={s("height:40px;width:auto;display:block")} />
                         <span style={s("font:900 21px 'Montserrat',sans-serif;color:#fff;letter-spacing:-.02em")}>ALIMIN</span>
                     </a>
-                    <nav style={s("display:flex;gap:26px;align-items:center;margin-left:auto")} className="al-desktop-nav">
+                    {/* En /google no hay menú: los enlaces sacaban al visitante de la landing. */}
+                    {!variante && <nav style={s("display:flex;gap:26px;align-items:center;margin-left:auto")} className="al-desktop-nav">
                         <a href="/" className="al-nav-link">Inicio</a>
                         <a href="/proyectos" className="al-nav-link">Proyectos</a>
                         <a href="/quienes-somos" className="al-nav-link">Quiénes somos</a>
                         <a href="/asesores" className="al-nav-link">Asesores</a>
                         <a href="/blog" className="al-nav-link">Blog</a>
                         <a href="/contacto" className="al-nav-link">Contacto</a>
-                    </nav>
+                    </nav>}
                     <a href="#cotizar" className="al-cta" style={s("margin-left:auto;background:#fff;color:#2d7a3a;font:700 14px 'Montserrat',sans-serif;padding:11px 22px;border-radius:100px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;white-space:nowrap")}>Cotizar →</a>
                 </div>
             </header>
@@ -268,7 +271,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                 <div className="al-hero-grid" style={s("position:relative;z-index:2;max-width:1280px;margin:0 auto")}>
                     <div style={s("animation:fadeInUp .6s .05s ease both")}>
                         <h1 style={s("font:900 clamp(2.4rem,5vw,4rem)/1.03 'Montserrat',sans-serif;letter-spacing:-.035em;margin:0 0 18px;color:#fff")}>{variante ? variante.h1.texto : 'Venta de Terrenos en el'} <em style={s("font-style:normal;background:linear-gradient(90deg,#76d845,#4ba646,#76d845) 0 0/200% text;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmerGold 3s linear infinite")}>{variante ? variante.h1.destacado : 'Litoral Central'}</em></h1>
-                        <p style={s("font:300 clamp(1rem,2vw,1.18rem)/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.66);margin:0 0 26px;max-width:520px")}>Terrenos urbanizados en El Tabo, a minutos de la playa. Escritura a tu nombre, agua y luz certificadas, y financiamiento directo <strong style={s("color:#fff;font-weight:500")}>sin banco y sin importar tu DICOM.</strong></p>
+                        <p className="m-ocultar" style={s("font:300 clamp(1rem,2vw,1.18rem)/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.66);margin:0 0 26px;max-width:520px")}>Terrenos urbanizados en El Tabo, a minutos de la playa. Escritura a tu nombre, agua y luz certificadas, y financiamiento directo <strong style={s("color:#fff;font-weight:500")}>sin banco y sin importar tu DICOM.</strong></p>
                         <div style={s("display:flex;flex-wrap:wrap;gap:14px 26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.09)")}>
                             {['Rol propio incluido', 'Sin banco, sin DICOM', 'Agua certificada SEREMI'].map((t) => (
                                 <div key={t} style={s("display:flex;align-items:center;gap:9px")}>
@@ -278,7 +281,9 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             ))}
                         </div>
 
-                        <div style={s("display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px")}>
+                        {/* En celular las dos fotos de proyecto empujaban el formulario
+                            hacia abajo; los proyectos siguen en la sección de terrenos. */}
+                        <div className="m-ocultar" style={s("display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px")}>
                             <a href="#terrenos" className="al-hero-proj" style={s("position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;border:1.5px solid rgba(118,216,69,.4);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .3s")}>
                                 <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-arena-y-sol.webp'} alt="Loteo Lomas del Mar, terrenos en venta en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s ease")} /></div>
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(8,16,24,.92) 6%,rgba(8,16,24,.15) 55%,transparent)")}></div>
@@ -339,6 +344,9 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                                 {tamanoOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                                             </select>
                                         </div>
+                                        {/* Región, comuna y "cómo nos conociste" no van en /google: el
+                                            formulario pasa de 8 campos a 5. */}
+                                        {!variante && (<>
                                         <div className="al-field">
                                             <label>Región *</label>
                                             <select required value={form.region} onChange={setField('region')}>
@@ -366,6 +374,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                                 <option value="Otro">Otro</option>
                                             </select>
                                         </div>
+                                        </>)}
                                     </div>
                                     <ConsentimientoFormulario consentimiento={consentimiento} tono="oscuro" style={{ marginBottom: 14 }} />
                                     <button type="submit" className="al-submit" disabled={status === 'loading'} style={s("width:100%;border:none;cursor:pointer;background:linear-gradient(135deg,#325366,#4ba646);color:#fff;font:700 15px 'Montserrat',sans-serif;letter-spacing:.02em;padding:16px;border-radius:14px;box-shadow:0 6px 22px rgba(50,83,102,.4);transition:transform .2s,box-shadow .2s")}>{status === 'loading' ? 'Enviando…' : 'QUIERO MI COTIZACIÓN →'}</button>
@@ -397,7 +406,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             <span style={s("width:32px;height:2px;background:linear-gradient(90deg,#76d845,#4ba646)")}></span>
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.4vw,2.5rem)/1.15 'Montserrat',sans-serif;color:#fff;margin:0 0 14px")}>La escritura queda a tu nombre</h2>
-                        <p style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.68);max-width:560px;margin:0 auto")}>Olvídate de los "loteos brujos". Cada terreno se firma ante notario y se inscribe en el Conservador de Bienes Raíces.</p>
+                        <p className="m-ocultar" style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.68);max-width:560px;margin:0 auto")}>Olvídate de los "loteos brujos". Cada terreno se firma ante notario y se inscribe en el Conservador de Bienes Raíces.</p>
                     </div>
                     <div style={s("display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px")}>
                         {[
@@ -415,7 +424,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                     )}
                                 </div>
                                 <h3 style={s("font:700 17px 'Montserrat',sans-serif;color:#1a2b3d;margin:0 0 8px")}>{c.t}</h3>
-                                <p style={s("font:400 14px/1.6 'Roboto',sans-serif;color:#4B5563;margin:0")}>{c.d}</p>
+                                <p className="m-ocultar" style={s("font:400 14px/1.6 'Roboto',sans-serif;color:#4B5563;margin:0")}>{c.d}</p>
                             </div>
                         ))}
                     </div>
@@ -434,7 +443,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             <span style={s("width:32px;height:2px;background:linear-gradient(90deg,#76d845,#4ba646)")}></span>
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.4vw,2.5rem)/1.15 'Montserrat',sans-serif;color:#fff;margin:0 0 14px")}>Dos proyectos en El Tabo, Litoral Central</h2>
-                        <p style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.58);max-width:560px;margin:0 auto")}>Terrenos urbanizados a minutos de la playa. Compara y elige el que se adapta a tu proyecto de vida.</p>
+                        <p className="m-ocultar" style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.58);max-width:560px;margin:0 auto")}>Terrenos urbanizados a minutos de la playa. Compara y elige el que se adapta a tu proyecto de vida.</p>
                     </div>
 
                     <div style={s("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px")}>
@@ -530,7 +539,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.6vw,2.6rem)/1.12 'Montserrat',sans-serif;color:#1a2b3d;margin:0 auto 12px")}>Masterplan y distribución de sitios</h2>
                         <div style={s("width:64px;height:4px;border-radius:100px;background:linear-gradient(90deg,#76d845,#C5A059);margin:0 auto 16px")}></div>
-                        <p style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:#4B5563;max-width:560px;margin:0 auto")}>Explora la distribución real de los sitios, accesos y áreas comunes de cada proyecto. Amplía el plano y cotiza el lote que más te gusta.</p>
+                        <p className="m-ocultar" style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:#4B5563;max-width:560px;margin:0 auto")}>Explora la distribución real de los sitios, accesos y áreas comunes de cada proyecto. Amplía el plano y cotiza el lote que más te gusta.</p>
                     </div>
 
                     <div style={s("display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:16px")}>
@@ -582,7 +591,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             <span style={s("font:600 12px 'Montserrat',sans-serif;color:#76d845;text-transform:uppercase;letter-spacing:.12em")}>Litoral Central</span>
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.4vw,2.5rem)/1.15 'Montserrat',sans-serif;color:#fff;margin:0 0 16px")}>Por qué comprar en El Tabo</h2>
-                        <p style={s("font:300 16px/1.75 'Roboto',sans-serif;color:rgba(255,255,255,.68);margin:0")}>El Tabo es uno de los balnearios con mayor crecimiento del Litoral Central: playas tranquilas, bosque nativo y la cultura de Isla Negra a la vuelta de la esquina. Comprar aquí no es solo un terreno — es patrimonio familiar que se valoriza cada verano.</p>
+                        <p className="m-ocultar" style={s("font:300 16px/1.75 'Roboto',sans-serif;color:rgba(255,255,255,.68);margin:0")}>El Tabo es uno de los balnearios con mayor crecimiento del Litoral Central: playas tranquilas, bosque nativo y la cultura de Isla Negra a la vuelta de la esquina. Comprar aquí no es solo un terreno — es patrimonio familiar que se valoriza cada verano.</p>
                     </div>
                     <div style={s("display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px")}>
                         {[
@@ -620,7 +629,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             <span style={s("width:32px;height:2px;background:linear-gradient(90deg,#76d845,#4ba646)")}></span>
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.4vw,2.5rem)/1.15 'Montserrat',sans-serif;color:#1a2b3d;margin:0 0 12px")}>Así están los terrenos hoy</h2>
-                        <p style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:#4B5563;max-width:580px;margin:0 auto")}>Fotografías de nuestros proyectos en El Tabo · Toca cualquier imagen para verla en grande</p>
+                        <p className="m-ocultar" style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:#4B5563;max-width:580px;margin:0 auto")}>Fotografías de nuestros proyectos en El Tabo · Toca cualquier imagen para verla en grande</p>
                     </div>
                     <div className="al-galgrid" style={s("columns:4 240px;column-gap:16px")}>
                         {GALLERY.map((g, i) => (
@@ -663,7 +672,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             <span style={s("width:32px;height:2px;background:linear-gradient(90deg,#76d845,#4ba646)")}></span>
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.4vw,2.5rem)/1.15 'Montserrat',sans-serif;color:#1a2b3d;margin:0 0 12px")}>El camino a tu terreno</h2>
-                        <p style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:#4B5563;max-width:520px;margin:0 auto")}>Avanza etapa por etapa: cada paso te acerca a tener tu terreno propio en el Litoral Central.</p>
+                        <p className="m-ocultar" style={s("font:400 15.5px/1.7 'Roboto',sans-serif;color:#4B5563;max-width:520px;margin:0 auto")}>Avanza etapa por etapa: cada paso te acerca a tener tu terreno propio en el Litoral Central.</p>
                     </div>
 
                     <div style={s("position:relative;max-width:960px;margin:0 auto 30px")}>
@@ -725,7 +734,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                         </div>
                         <h2 style={s("font:800 clamp(1.8rem,3.4vw,2.5rem)/1.15 'Montserrat',sans-serif;color:#1a2b3d;margin:0 0 10px")}>Familias que ya son dueñas</h2>
                     </div>
-                    <p style={s("text-align:center;font:400 12.5px 'Roboto',sans-serif;color:#94A3B8;max-width:560px;margin:0 auto 28px")}>Reseñas reales de nuestros clientes en Google · Fotos de nuevos propietarios en Lomas del Mar</p>
+                    <p className="m-ocultar" style={s("text-align:center;font:400 12.5px 'Roboto',sans-serif;color:#94A3B8;max-width:560px;margin:0 auto 28px")}>Reseñas reales de nuestros clientes en Google · Fotos de nuevos propietarios en Lomas del Mar</p>
 
                     <div style={s("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:24px")}>
                         <div className="al-videofeat" style={s("position:relative;border-radius:22px;overflow:hidden;background:#0e1a24;box-shadow:0 16px 48px rgba(14,26,36,.28);min-height:380px;cursor:pointer")}>
@@ -813,7 +822,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                         {FAQS.map((f, i) => {
                             const open = openFaq === i
                             return (
-                                <div key={i} style={s("background:#fff;border:1px solid #e3ebe0;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(50,83,102,.06)")}>
+                                <div key={i} className="al-faq-item" style={s("background:#fff;border:1px solid #e3ebe0;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(50,83,102,.06)")}>
                                     <button type="button" onClick={() => setOpenFaq(open ? null : i)} style={s("width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;background:none;border:none;cursor:pointer;padding:20px 22px;font:700 15.5px 'Montserrat',sans-serif;color:#1a2b3d")}>
                                         <span>{f.q}</span>
                                         <span style={{ ...s("flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(118,216,69,.16);color:#2d7a3a;display:flex;align-items:center;justify-content:center;font-size:17px;transition:transform .25s"), transform: open ? 'rotate(45deg)' : 'none' }}>+</span>
@@ -941,4 +950,6 @@ const CSS = `
 @media(max-width:900px){#venta-terrenos section{padding-top:60px;padding-bottom:60px}#venta-terrenos #al-satmap{height:380px}}
 @media(max-width:640px){#venta-terrenos section{padding-left:16px;padding-right:16px;padding-top:50px;padding-bottom:50px}#venta-terrenos #inicio{padding-top:36px}#venta-terrenos #cotizar{padding:22px;border-radius:20px}#venta-terrenos #al-satmap{height:300px}#venta-terrenos .al-galgrid{columns:2 140px;column-gap:12px}#venta-terrenos .al-station{min-width:0;flex:1 0 30%}#venta-terrenos .al-marquee-track img{width:150px;height:188px}#venta-terrenos .al-videofeat{min-height:280px}}
 @media(hover:none){#venta-terrenos .al-plano-hint{opacity:1}}
+/* Celular: solo lo esencial. Los párrafos de apoyo siguen en el HTML para Google; de las preguntas quedan 4. */
+@media(max-width:640px){#venta-terrenos .m-ocultar{display:none!important}#venta-terrenos .al-faq-item:nth-child(n+5){display:none}}
 `

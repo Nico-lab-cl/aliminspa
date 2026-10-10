@@ -25,8 +25,15 @@ const CheckIcon = () => (
  * /google/terrenos-baratos-en-la-playa; con `variante` cambian el H1 y la etiqueta del lead.
  */
 export default function TerrenosBaratosLanding({ variante }: { variante?: VarianteLanding } = {}) {
+    // En /google el formulario va corto (nombre, correo, teléfono y terreno):
+    // quien llega del anuncio ya viene de Google y la campaña es solo para la RM.
     const formVariante = variante
-        ? { sufijoEtiqueta: variante.sufijoLead, utmPorDefecto: variante.utm, nombrePagina: 'Terrenos Baratos Litoral Central - Google' }
+        ? {
+              sufijoEtiqueta: variante.sufijoLead,
+              utmPorDefecto: variante.utm,
+              nombrePagina: 'Terrenos Baratos Litoral Central - Google',
+              corto: true,
+          }
         : {}
     const whatsappUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
         'Hola, vi los terrenos baratos en la playa del Litoral Central en aliminspa.cl y quiero la lista de precios 👋'
@@ -64,9 +71,9 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                             )}
                         </h1>
 
-                        <p className={styles.heroSubtitle}>
+                        <p className={`${styles.heroSubtitle} ${styles.mOcultar}`}>
                             Lotes urbanizados en El Tabo{' '}
-                            <strong className={styles.heroSubtitleStrong}>desde {PRECIO_DESDE}</strong>, a 8 minutos
+                            <strong className={styles.heroSubtitleStrong}>desde {PRECIO_DESDE}</strong>, a 8 y 10 minutos
                             de la playa. Con rol propio, agua y luz incluidas, y financiamiento directo{' '}
                             <strong className={styles.heroSubtitleStrong}>sin banco</strong>.
                         </p>
@@ -119,6 +126,8 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
             </section>
 
             {/* ===================== BREADCRUMB ===================== */}
+            {/* En /google no: son enlaces que sacan al visitante de la landing. */}
+            {!variante && (
             <nav className={styles.breadcrumb} aria-label="Ruta de navegación">
                 <div className={styles.breadcrumbInner}>
                     <Link href="/">Inicio</Link>
@@ -128,6 +137,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                     <span className={styles.breadcrumbCurrent}>Terrenos baratos en la playa</span>
                 </div>
             </nav>
+            )}
 
             {/* ===================== LISTADO DE PRECIOS ===================== */}
             <section className={styles.preciosSection} id="precios">
@@ -155,7 +165,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         <h2 className={`${styles.sectionTitle} ${styles.sectionTitleDark}`}>
                             Cuánto cuesta un terreno barato en la playa del Litoral Central
                         </h2>
-                        <p className={`${styles.sectionDesc} ${styles.sectionDescDark}`}>
+                        <p className={`${styles.sectionDesc} ${styles.sectionDescDark} ${styles.mOcultar}`}>
                             Estos son nuestros terrenos disponibles en El Tabo, ordenados del más barato al más
                             caro. El precio que ves es el del terreno urbanizado y listo para construir: incluye
                             rol propio, agua certificada, luz, calles y portón automático.
@@ -169,7 +179,15 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                                 id={t.id}
                                 className={`${styles.terrenoCard} ${t.destacado ? styles.terrenoCardDestacado : ''}`}
                             >
-                                <div className={styles.terrenoImgWrap}>
+                                {/* La foto lleva al formulario: en Clarity era lo más tocado de
+                                    la página (19% de los toques) y no hacía nada. */}
+                                <Link
+                                    href="#cotizar"
+                                    className={`${styles.terrenoImgWrap} crm-track-click`}
+                                    data-crm-name={`Foto ${t.proyecto} ${t.superficie} - Terrenos Baratos`}
+                                    data-crm-category="Cotizacion"
+                                    aria-label={`Cotizar el terreno de ${t.superficie} en ${t.proyecto}`}
+                                >
                                     <Image
                                         src={t.imagen}
                                         alt={`Terreno barato de ${t.superficie} en ${t.proyecto}, El Tabo, Litoral Central, desde ${t.contadoTexto}`}
@@ -184,7 +202,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                                         {t.badge}
                                     </span>
                                     <span className={styles.terrenoStock}>{t.disponibilidadTexto}</span>
-                                </div>
+                                </Link>
 
                                 <div className={styles.terrenoBody}>
                                     <h3 className={styles.terrenoProyecto}>{t.proyecto}</h3>
@@ -226,9 +244,12 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                                         >
                                             Cotizar este terreno
                                         </Link>
-                                        <Link href={`/proyectos/${t.slug}`} className={styles.btnCardGhost}>
-                                            Ver proyecto {t.proyecto}
-                                        </Link>
+                                        {/* En /google este enlace sacaba al visitante de la landing. */}
+                                        {!variante && (
+                                            <Link href={`/proyectos/${t.slug}`} className={styles.btnCardGhost}>
+                                                Ver proyecto {t.proyecto}
+                                            </Link>
+                                        )}
                                     </div>
                                 </div>
                             </article>
@@ -237,7 +258,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
 
                     {/* Tabla comparativa: mismo dato en formato escaneable. Google
                         la lee bien y en móvil hace scroll horizontal sin romper la página. */}
-                    <div className={styles.tablaWrap}>
+                    <div className={`${styles.tablaWrap} ${styles.mOcultar}`}>
                         <table className={styles.tabla}>
                             <caption>
                                 Comparativa de precios: terrenos baratos en la playa del Litoral Central (El Tabo)
@@ -269,7 +290,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         </table>
                     </div>
 
-                    <p className={styles.preciosNota}>
+                    <p className={`${styles.preciosNota} ${styles.mOcultar}`}>
                         Precios referenciales en pesos chilenos, vigentes a la fecha de publicación y sujetos a
                         disponibilidad de lotes. El precio por m² se calcula sobre el valor contado. Cotiza para
                         recibir la lista actualizada y los lotes que quedan libres en el plano.
@@ -290,7 +311,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         <h2 className={`${styles.sectionTitle} ${styles.sectionTitleLight}`}>
                             Barato, pero urbanizado y listo para construir
                         </h2>
-                        <p className={`${styles.sectionDesc} ${styles.sectionDescLight}`}>
+                        <p className={`${styles.sectionDesc} ${styles.sectionDescLight} ${styles.mOcultar}`}>
                             En los portales un terreno barato suele venir pelado: sin agua, sin luz y sin
                             urbanizar. Acá el valor publicado ya trae todo esto adentro, sin cobros aparte.
                         </p>
@@ -301,7 +322,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                             <div key={item.titulo} className={styles.incluidoCard}>
                                 <span className={styles.incluidoIcon}>{ICONOS_INCLUIDO[i]}</span>
                                 <h3 className={styles.incluidoTitle}>{item.titulo}</h3>
-                                <p className={styles.incluidoDesc}>{item.desc}</p>
+                                <p className={`${styles.incluidoDesc} ${styles.mOcultar}`}>{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -320,7 +341,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         <h2 className={`${styles.sectionTitle} ${styles.sectionTitleDark}`}>
                             Por qué nuestros terrenos en la playa son más baratos
                         </h2>
-                        <p className={`${styles.sectionDesc} ${styles.sectionDescDark}`}>
+                        <p className={`${styles.sectionDesc} ${styles.sectionDescDark} ${styles.mOcultar}`}>
                             No es magia ni oferta de temporada: es cómo está armado el negocio. Estas son las
                             cuatro razones por las que el mismo terreno cuesta menos comprándolo con nosotros.
                         </p>
@@ -332,7 +353,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                                 <span className={styles.porqueNum}>{item.num}</span>
                                 <div>
                                     <h3 className={styles.porqueTitle}>{item.titulo}</h3>
-                                    <p className={styles.porqueDesc}>{item.desc}</p>
+                                    <p className={`${styles.porqueDesc} ${styles.mOcultar}`}>{item.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -350,9 +371,9 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                             <span className={styles.ruleRight} />
                         </div>
                         <h2 className={`${styles.sectionTitle} ${styles.sectionTitleLight}`}>
-                            Terrenos en El Tabo, a 8 minutos de la playa
+                            Terrenos en El Tabo, a minutos de la playa
                         </h2>
-                        <p className={`${styles.sectionDesc} ${styles.sectionDescLight}`}>
+                        <p className={`${styles.sectionDesc} ${styles.sectionDescLight} ${styles.mOcultar}`}>
                             Nuestros dos loteos están en la comuna de El Tabo, Región de Valparaíso, a unos 4 km
                             del borde costero y a poco más de una hora de Santiago por la Ruta 78. A minutos
                             tienes El Quisco, Isla Negra, Algarrobo, supermercados y terminal de buses.
@@ -392,10 +413,14 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
             </section>
 
             {/* Lugares cercanos: se reutiliza tal cual el bloque de la homepage. */}
-            <NearbyPlaces />
+            <div className={styles.mOcultar}>
+                <NearbyPlaces />
+            </div>
 
             {/* Testimonios reales: se reutiliza tal cual el bloque de la homepage. */}
-            <Testimonials />
+            <div className={styles.testimoniosCompactos}>
+                <Testimonials />
+            </div>
 
             {/* ===================== FORMULARIO ===================== */}
             <section className={styles.formSection} id="cotizar">
@@ -414,7 +439,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         <h2 className={styles.formTitleBig}>
                             Pide la lista de precios de los terrenos disponibles
                         </h2>
-                        <p className={styles.formDesc}>
+                        <p className={`${styles.formDesc} ${styles.mOcultar}`}>
                             Déjanos tus datos y te enviamos los valores actualizados, los tamaños y qué lotes
                             quedan libres en el plano de El Tabo. Sin costo y sin compromiso.
                         </p>
@@ -460,7 +485,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         <h2 className={`${styles.sectionTitle} ${styles.sectionTitleDark}`}>
                             Todo sobre los terrenos baratos en la playa del Litoral Central
                         </h2>
-                        <p className={`${styles.sectionDesc} ${styles.sectionDescDark}`}>
+                        <p className={`${styles.sectionDesc} ${styles.sectionDescDark} ${styles.mOcultar}`}>
                             Precios, metro cuadrado, financiamiento y distancia a la playa. Las dudas que nos
                             llegan todos los días, respondidas.
                         </p>
@@ -470,7 +495,12 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                 </div>
             </section>
 
-            <HomeNewsletter />
+            {/* El newsletter compite con el formulario: en /google no va y en celular se oculta. */}
+            {!variante && (
+                <div className={styles.mOcultar}>
+                    <HomeNewsletter />
+                </div>
+            )}
         </>
     )
 }
