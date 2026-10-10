@@ -40,7 +40,7 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿Puedo visitar los terrenos antes de comprar?',
-        a: '¡Por supuesto! Coordinamos visitas guiadas gratuitas con nuestro equipo de asesores. Completa el formulario de cotización o escríbenos por WhatsApp y agendamos tu visita al loteo en El Tabo.',
+        a: '¡Por supuesto! Coordinamos visitas guiadas gratuitas con nuestro equipo de asesores. Completa el formulario de cotización o escríbenos por WhatsApp y agendamos tu visita a los terrenos en El Tabo.',
     },
     {
         q: '¿Qué necesito para comprar un terreno en el Litoral Central?',

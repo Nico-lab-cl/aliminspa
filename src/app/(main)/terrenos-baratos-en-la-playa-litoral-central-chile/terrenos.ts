@@ -135,7 +135,7 @@ export const INCLUIDO = [
     },
     {
         titulo: 'Recinto cerrado',
-        desc: 'Portón automático y control de acceso al loteo, incluido en el valor del terreno.',
+        desc: 'Portón automático y control de acceso al proyecto, incluido en el valor del terreno.',
     },
     {
         titulo: 'Calles y veredas',
@@ -147,7 +147,7 @@ export const INCLUIDO = [
     },
     {
         titulo: 'Áreas verdes',
-        desc: 'Áreas verdes y estacionamiento de visitas dentro del loteo, sin gasto común extra.',
+        desc: 'Áreas verdes y estacionamiento de visitas dentro del proyecto, sin gasto común extra.',
     },
 ]
 
@@ -162,7 +162,7 @@ export const INCLUIDO = [
 export const POR_QUE_BARATO = [
     {
         num: '01',
-        titulo: 'Compras directo al dueño del loteo',
+        titulo: 'Compras directo al dueño del terreno',
         desc: 'Alimin es la inmobiliaria propietaria del terreno. No hay corredor intermediario, así que el precio no carga comisión de corretaje.',
     },
     {

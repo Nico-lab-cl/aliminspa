@@ -374,7 +374,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                             Terrenos en El Tabo, a minutos de la playa
                         </h2>
                         <p className={`${styles.sectionDesc} ${styles.sectionDescLight} ${styles.mOcultar}`}>
-                            Nuestros dos loteos están en la comuna de El Tabo, Región de Valparaíso, a unos 4 km
+                            Nuestros dos proyectos están en la comuna de El Tabo, Región de Valparaíso, a unos 4 km
                             del borde costero y a poco más de una hora de Santiago por la Ruta 78. A minutos
                             tienes El Quisco, Isla Negra, Algarrobo, supermercados y terminal de buses.
                         </p>
@@ -454,7 +454,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                             </div>
                             <div className={styles.trustItem}>
                                 <span className={styles.checkIcon}><CheckIcon /></span>
-                                <span>Visita al loteo gratuita y sin compromiso</span>
+                                <span>Visita a los terrenos gratuita y sin compromiso</span>
                             </div>
                             <div className={styles.trustItem}>
                                 <span className={styles.checkIcon}><CheckIcon /></span>

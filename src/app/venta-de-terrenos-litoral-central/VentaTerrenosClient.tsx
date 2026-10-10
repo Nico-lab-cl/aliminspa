@@ -36,14 +36,14 @@ const GALLERY = [
 
 const STEPS = [
     { label: 'Cotiza', title: 'Cotiza en línea', desc: 'Completa el formulario y recibe precios y disponibilidad al instante, sin compromiso.', icon: '📝' },
-    { label: 'Visita', title: 'Agenda tu visita', desc: 'Recorre el loteo junto a un asesor de Alimin, sin costo, para conocer tu terreno en persona.', icon: '📍' },
+    { label: 'Visita', title: 'Agenda tu visita', desc: 'Recorre los terrenos junto a un asesor de Alimin, sin costo, para conocer tu terreno en persona.', icon: '📍' },
     { label: 'Reserva', title: 'Elige y reserva', desc: 'Bloquea el lote que más te gusta con el pie inicial. Sin banco y sin importar tu DICOM.', icon: '🤝' },
     { label: 'Firma', title: 'Firma en notaría', desc: 'Firmamos un contrato de compraventa claro ante notario, con todo el respaldo legal.', icon: '✍️' },
     { label: 'Escritura', title: 'Escritura a tu nombre', desc: 'Recibe tu terreno urbanizado con el rol propio inscrito en el Conservador. Eres dueño.', icon: '🔑' },
 ]
 const JLABELS = [
     '¡Comienza tu camino! Estás a 5 pasos de tu terreno.',
-    '¡Vas avanzando! Conoce el loteo en persona.',
+    '¡Vas avanzando! Conoce los terrenos en persona.',
     'A mitad de camino — elige y asegura tu lote.',
     'Casi listo: la firma que te hace dueño.',
     '🎉 ¡Meta alcanzada! Tu terreno está a tu nombre.',
@@ -285,7 +285,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             hacia abajo; los proyectos siguen en la sección de terrenos. */}
                         <div className="m-ocultar" style={s("display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px")}>
                             <a href="#terrenos" className="al-hero-proj" style={s("position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;border:1.5px solid rgba(118,216,69,.4);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .3s")}>
-                                <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-arena-y-sol.webp'} alt="Loteo Lomas del Mar, terrenos en venta en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s ease")} /></div>
+                                <div style={s("aspect-ratio:16/11;overflow:hidden")}><img src={ASSET + '/hero-arena-y-sol.webp'} alt="Proyecto Lomas del Mar, terrenos en venta en El Tabo, Litoral Central" style={s("width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s ease")} /></div>
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(8,16,24,.92) 6%,rgba(8,16,24,.15) 55%,transparent)")}></div>
                                 <div style={s("position:absolute;top:10px;left:10px;background:rgba(118,216,69,.9);color:#0e1a24;font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:100px")}>✓ Crédito directo</div>
                                 <div style={s("position:absolute;bottom:12px;left:13px;right:13px")}>
@@ -886,7 +886,7 @@ function PlanoCard({ title, badge, img, onCotizar, onOpen, borderColor }: { titl
                 <div style={s("position:absolute;top:16px;left:16px;z-index:3;display:flex;flex-direction:column;gap:10px;align-items:flex-start")}>
                     <span style={s("background:#325366;color:#fff;font:800 12px 'Montserrat',sans-serif;letter-spacing:.03em;padding:11px 18px;border-radius:100px;box-shadow:0 6px 18px rgba(50,83,102,.35)")}>VER PLANO DEL PROYECTO</span>
                 </div>
-                <img src={img} alt={'Plano del loteo ' + title + ' — sitios disponibles en venta en El Tabo, Litoral Central'} />
+                <img src={img} alt={'Plano del proyecto ' + title + ' — sitios disponibles en venta en El Tabo, Litoral Central'} />
                 <div className="al-plano-hint" style={s("position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:22px;background:linear-gradient(to top,rgba(10,21,32,.5),transparent 45%)")}>
                     <span style={s("background:rgba(255,255,255,.95);color:#1a2b3d;font:700 13px 'Montserrat',sans-serif;padding:11px 22px;border-radius:100px;box-shadow:0 8px 24px rgba(0,0,0,.25)")}>🔍 Ampliar y explorar el plano</span>
                 </div>

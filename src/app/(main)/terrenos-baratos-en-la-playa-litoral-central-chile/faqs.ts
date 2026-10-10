@@ -19,11 +19,11 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿Dónde encuentro los terrenos más baratos en la playa en Chile?',
-        a: 'En el Litoral Central, a pocos kilómetros del borde costero. Las comunas de El Tabo, El Quisco, Algarrobo e Isla Negra concentran los terrenos de playa más accesibles cerca de Santiago. Nuestros loteos están en El Tabo, Región de Valparaíso, a unos 4 km de la playa y a poco más de una hora de Santiago por la Ruta 78.',
+        a: 'En el Litoral Central, a pocos kilómetros del borde costero. Las comunas de El Tabo, El Quisco, Algarrobo e Isla Negra concentran los terrenos de playa más accesibles cerca de Santiago. Nuestros terrenos están en El Tabo, Región de Valparaíso, a unos 4 km de la playa y a poco más de una hora de Santiago por la Ruta 78.',
     },
     {
         q: '¿Por qué estos terrenos son más baratos que los de los portales inmobiliarios?',
-        a: 'Porque compras directo al dueño del loteo, sin corredor de por medio, así que el precio no incluye comisión de corretaje. Además financiamos nosotros, sin banco, por lo que no pagas intereses bancarios, tasación ni gastos operacionales.',
+        a: 'Porque compras directo al dueño del terreno, sin corredor de por medio, así que el precio no incluye comisión de corretaje. Además financiamos nosotros, sin banco, por lo que no pagas intereses bancarios, tasación ni gastos operacionales.',
     },
     {
         q: '¿Los terrenos baratos incluyen agua y luz?',
@@ -39,7 +39,7 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿A cuánto está el metro cuadrado de terreno en el Litoral Central?',
-        a: 'En nuestros loteos de El Tabo el metro cuadrado va desde $110.256 en el lote de 390 m² y desde $175.000 en los lotes de 200 m², calculado sobre el valor al contado. El lote más grande siempre rinde mejor por metro cuadrado.',
+        a: 'En nuestros proyectos de El Tabo el metro cuadrado va desde $110.256 en el lote de 390 m² y desde $175.000 en los lotes de 200 m², calculado sobre el valor al contado. El lote más grande siempre rinde mejor por metro cuadrado.',
     },
     {
         q: '¿Qué tan lejos de la playa quedan estos terrenos baratos?',
@@ -47,10 +47,10 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿Los terrenos son legales y tienen rol propio?',
-        a: 'Sí. Cada terreno se firma ante notario y se inscribe con rol propio individual en el Conservador de Bienes Raíces, con la escritura a tu nombre. Los loteos cuentan con todos los permisos y están urbanizados, listos para construir.',
+        a: 'Sí. Cada terreno se firma ante notario y se inscribe con rol propio individual en el Conservador de Bienes Raíces, con la escritura a tu nombre. Los proyectos cuentan con todos los permisos y están urbanizados, listos para construir.',
     },
     {
         q: '¿Puedo visitar los terrenos antes de comprar?',
-        a: 'Sí, las visitas son gratuitas y sin compromiso. Coordinamos un recorrido guiado por el loteo en El Tabo con uno de nuestros asesores. Completa el formulario de cotización o escríbenos por WhatsApp y agendamos el día que te acomode.',
+        a: 'Sí, las visitas son gratuitas y sin compromiso. Coordinamos un recorrido guiado por los terrenos en El Tabo con uno de nuestros asesores. Completa el formulario de cotización o escríbenos por WhatsApp y agendamos el día que te acomode.',
     },
 ]

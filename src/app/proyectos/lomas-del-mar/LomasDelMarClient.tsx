@@ -1868,7 +1868,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     <div onClick={stopProp} style={{"position":"relative","maxWidth":"1100px","width":"100%","cursor":"default"}}>
       <img src="/assets/minipie/plano-loteo.jpeg" alt="Plano Lomas del Mar" style={{"width":"100%","borderRadius":"16px","display":"block","boxShadow":"0 32px 80px rgba(0,0,0,.6)"}} />
       <button onClick={closePlan} style={{"position":"absolute","top":"-14px","right":"-14px","width":"40px","height":"40px","background":"#76d845","border":"none","borderRadius":"50%","cursor":"pointer","display":"flex","alignItems":"center","justifyContent":"center","font":"700 20px 'Montserrat',sans-serif","color":"#fff","boxShadow":"0 4px 16px rgba(0,0,0,.4)"}}>×</button>
-      <div style={{"textAlign":"center","marginTop":"14px","font":"600 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.6)"}}>Plano de loteo · Lomas del Mar · El Tabo · Toca fuera para cerrar</div>
+      <div style={{"textAlign":"center","marginTop":"14px","font":"600 13px 'Montserrat',sans-serif","color":"rgba(255,255,255,.6)"}}>Plano del proyecto · Lomas del Mar · El Tabo · Toca fuera para cerrar</div>
     </div>
   </div>
 )}
