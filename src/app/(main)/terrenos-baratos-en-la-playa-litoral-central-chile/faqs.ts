@@ -23,7 +23,7 @@ export const FAQS: Faq[] = [
     },
     {
         q: '¿Por qué estos terrenos son más baratos que los de los portales inmobiliarios?',
-        a: 'Porque compras directo al dueño del terreno, sin corredor de por medio, así que el precio no incluye comisión de corretaje. Además financiamos nosotros, sin banco, por lo que no pagas intereses bancarios, tasación ni gastos operacionales.',
+        a: 'Porque compras directo a la inmobiliaria, sin corredor de por medio, así que el precio no incluye comisión de corretaje. Además financiamos nosotros, sin banco, por lo que no pagas intereses bancarios, tasación ni gastos operacionales.',
     },
     {
         q: '¿Los terrenos baratos incluyen agua y luz?',

@@ -162,7 +162,7 @@ export const INCLUIDO = [
 export const POR_QUE_BARATO = [
     {
         num: '01',
-        titulo: 'Compras directo al dueño del terreno',
+        titulo: 'Compras directo a la inmobiliaria',
         desc: 'Alimin es la inmobiliaria propietaria del terreno. No hay corredor intermediario, así que el precio no carga comisión de corretaje.',
     },
     {
