@@ -135,6 +135,75 @@ window.AliminCRM = (function() {
     });
   }
 
+  // Tiempo activo en cada página, para el lead score del CRM.
+  //
+  // Solo cuenta mientras la pestaña está visible: una pestaña olvidada abierta
+  // toda la noche no es interés. Se manda al ocultar la pestaña, al salir y al
+  // cambiar de página dentro del sitio, con sendBeacon porque un fetch normal
+  // se corta cuando el navegador cierra la página. El cuerpo va como texto
+  // plano a propósito: así el navegador no pide preflight de CORS, que un
+  // beacon no puede hacer.
+  var tiempoVisibleDesde = document.visibilityState === 'visible' ? Date.now() : null;
+  var tiempoAcumuladoMs = 0;
+  var paginaActual = { url: window.location.href, title: document.title };
+
+  function pausarTiempo() {
+    if (tiempoVisibleDesde !== null) {
+      tiempoAcumuladoMs += Date.now() - tiempoVisibleDesde;
+      tiempoVisibleDesde = null;
+    }
+  }
+
+  function reanudarTiempo() {
+    if (tiempoVisibleDesde === null && document.visibilityState === 'visible') {
+      tiempoVisibleDesde = Date.now();
+    }
+  }
+
+  function enviarTiempo() {
+    pausarTiempo();
+    var segundos = Math.round(tiempoAcumuladoMs / 1000);
+    tiempoAcumuladoMs = 0;
+    if (segundos < 5) return;
+
+    var cuerpo = JSON.stringify({
+      lead_id: getLeadId() || null,
+      anonymous_id: getOrCreateAnonymousId(),
+      event_type: 'PAGE_TIME',
+      page_url: paginaActual.url,
+      page_title: paginaActual.title,
+      details: { active_seconds: Math.min(segundos, 3600) }
+    });
+    var destino = CRM_API_URL + '/api/track/activity';
+    var enviado = false;
+    try {
+      enviado = navigator.sendBeacon ? navigator.sendBeacon(destino, cuerpo) : false;
+    } catch (e) {
+      enviado = false;
+    }
+    if (!enviado) {
+      fetch(destino, { method: 'POST', body: cuerpo, keepalive: true }).catch(function() {});
+    }
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+      enviarTiempo();
+    } else {
+      reanudarTiempo();
+    }
+  });
+  window.addEventListener('pagehide', enviarTiempo);
+
+  /** Cierra el tiempo de la página que se deja y empieza a contar la nueva. */
+  function cambioDePagina() {
+    enviarTiempo();
+    setTimeout(function() {
+      paginaActual = { url: window.location.href, title: document.title };
+      reanudarTiempo();
+    }, 150);
+  }
+
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     trackPageView();
   } else {
@@ -143,6 +212,8 @@ window.AliminCRM = (function() {
 
   const originalPushState = history.pushState;
   history.pushState = function() {
+    // Antes de cambiar la URL: el tiempo es de la página que se deja.
+    cambioDePagina();
     originalPushState.apply(this, arguments);
     setTimeout(function() {
       trackPageView();
@@ -158,6 +229,9 @@ window.AliminCRM = (function() {
   };
 
   window.addEventListener('popstate', function() {
+    // popstate llega con la URL ya cambiada: el tiempo acumulado se manda con
+    // la página guardada en paginaActual, que todavía es la anterior.
+    cambioDePagina();
     trackPageView();
   });
 
