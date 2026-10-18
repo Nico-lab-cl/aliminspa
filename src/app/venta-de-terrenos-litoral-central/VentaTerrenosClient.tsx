@@ -87,15 +87,25 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
         }
     }
 
-    const cotizar = (proyecto: string) => (e?: any) => {
+    const cotizar = (proyecto: string, tamano?: string) => (e?: any) => {
         if (e && e.preventDefault) e.preventDefault()
         setForm((prev) => {
             const next: any = { ...prev, proyecto }
-            next.tamano = proyecto === 'Arena y Sol' ? '200 m²' : ''
+            next.tamano = tamano ?? (proyecto === 'Arena y Sol' ? '200 m²' : '')
             return next
         })
         setTimeout(scrollToForm, 70)
     }
+
+    // Las tarjetas de precio parecían botones y la gente las tocaba sin que pasara
+    // nada (clics muertos en Clarity): ahora llevan al formulario con ese terreno.
+    const tarjetaCotizable = (proyecto: string, tamano?: string) => ({
+        role: 'button' as const,
+        tabIndex: 0,
+        onClick: cotizar(proyecto, tamano),
+        onKeyDown: (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') cotizar(proyecto, tamano)(e) },
+        className: 'al-tarjeta-cotizable',
+    })
 
     const playVideo = () => {
         const v = document.getElementById('al-video-andres') as HTMLVideoElement | null
@@ -179,9 +189,11 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
     }
 
     // ---- Leaflet satellite map ----
+    // Leaflet y las teselas pesan y competían con el formulario en celular (INP
+    // de 860 ms en Clarity): se cargan recién cuando el mapa se acerca a la pantalla.
     useEffect(() => {
         let cancelled = false
-        // Inject Leaflet CSS + JS once (idempotent).
+        const cargarLeaflet = () => {
         if (!document.getElementById('leaflet-css')) {
             const link = document.createElement('link')
             link.id = 'leaflet-css'
@@ -195,13 +207,16 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
             sc.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
             document.body.appendChild(sc)
         }
+        }
         const initMap = () => {
             const el = document.getElementById('al-satmap') as any
             const L = (window as any).L
             if (!L || !el || el._leaflet_id) return
             const lomas: [number, number] = [-33.4617574, -71.6158903]
             const arena: [number, number] = [-33.4347434, -71.6290669]
-            const map = L.map(el, { scrollWheelZoom: false, zoomControl: true }).setView([-33.4482, -71.6224], 13)
+            // En pantallas táctiles el mapa no se arrastra con un dedo: atrapaba el
+            // scroll y los toques quedaban como clics muertos.
+            const map = L.map(el, { scrollWheelZoom: false, zoomControl: true, dragging: !L.Browser.mobile }).setView([-33.4482, -71.6224], 13)
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }).addTo(map)
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, opacity: 0.85 }).addTo(map)
             const pin = (color: string, name: string) => L.divIcon({ className: '', iconSize: [0, 0], iconAnchor: [0, 0], html: '<div class="al-mappin"><span class="al-pin-head" style="border-color:' + color + '">' + name + '</span><span class="al-pin-dot" style="background:' + color + '"></span></div>' })
@@ -219,8 +234,17 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
             if ((window as any).L && el) { initMap(); return }
             if (tries-- > 0) setTimeout(tick, 250)
         }
-        tick()
-        return () => { cancelled = true }
+        const arrancar = () => { cargarLeaflet(); tick() }
+        const el = document.getElementById('al-satmap')
+        if (!el || typeof IntersectionObserver === 'undefined') {
+            arrancar()
+            return () => { cancelled = true }
+        }
+        const io = new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting)) { io.disconnect(); arrancar() }
+        }, { rootMargin: '600px 0px' })
+        io.observe(el)
+        return () => { cancelled = true; io.disconnect() }
     }, [])
 
     const showLomas = filter === 'todos' || filter === 'lomas'
@@ -260,7 +284,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
             {/* ===================== HERO ===================== */}
             <section id="inicio" style={s("position:relative;background:#0e1a24;overflow:hidden;padding:64px 22px 76px")}>
                 <div aria-hidden="true" data-scene="mar" data-motion="cine" style={s("position:absolute;inset:0;overflow:hidden;pointer-events:none")}>
-                    <div className="al-bg-layer al-bg-mar"><div className="al-bg-img" style={s("background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2400&auto=format&fit=crop&q=80')")}></div></div>
+                    <div className="al-bg-layer al-bg-mar"><div className="al-bg-img" style={s("background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&auto=format&fit=crop&q=70')")}></div></div>
                     <div className="al-bg-layer al-bg-bosque"><div className="al-bg-img" style={s("background-image:url('" + ASSET + "/hero-arena-y-sol.webp')")}></div></div>
                     <div style={s("position:absolute;inset:0;background:linear-gradient(100deg,rgba(8,16,24,.95) 0%,rgba(9,18,28,.86) 34%,rgba(10,20,30,.5) 66%,rgba(12,24,34,.66) 100%)")}></div>
                     <div style={s("position:absolute;inset:0;background:linear-gradient(to top,#0e1a24 0%,rgba(14,26,36,.4) 14%,transparent 55%)")}></div>
@@ -268,8 +292,11 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                     <div style={s("position:absolute;bottom:-22%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(50,83,102,.35) 0%,transparent 70%)")}></div>
                 </div>
 
+                {/* El título y el formulario se pintan sin animación de entrada: en
+                    celular la animación los dejaba invisibles mientras cargaba la
+                    página y la gente se iba antes de verlos (Clarity, oct-2026). */}
                 <div className="al-hero-grid" style={s("position:relative;z-index:2;max-width:1280px;margin:0 auto")}>
-                    <div style={s("animation:fadeInUp .6s .05s ease both")}>
+                    <div>
                         <h1 style={s("font:900 clamp(2.4rem,5vw,4rem)/1.03 'Montserrat',sans-serif;letter-spacing:-.035em;margin:0 0 18px;color:#fff")}>{variante ? variante.h1.texto : 'Venta de Terrenos en el'} <em style={s("font-style:normal;background:linear-gradient(90deg,#76d845,#4ba646,#76d845) 0 0/200% text;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmerGold 3s linear infinite")}>{variante ? variante.h1.destacado : 'Litoral Central'}</em></h1>
                         <p className="m-ocultar" style={s("font:300 clamp(1rem,2vw,1.18rem)/1.7 'Roboto',sans-serif;color:rgba(255,255,255,.66);margin:0 0 26px;max-width:520px")}>Terrenos urbanizados en El Tabo, a minutos de la playa. Escritura a tu nombre, agua y luz certificadas, y financiamiento directo <strong style={s("color:#fff;font-weight:500")}>sin banco y sin importar tu DICOM.</strong></p>
                         <div style={s("display:flex;flex-wrap:wrap;gap:14px 26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.09)")}>
@@ -306,7 +333,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                     </div>
 
                     {/* Right: cotización form */}
-                    <div id="cotizar" style={s("animation:fadeInUp .6s .18s ease both;background:rgba(14,26,36,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1.5px solid rgba(118,216,69,.28);border-radius:24px;padding:32px;box-shadow:0 24px 64px rgba(0,0,0,.5)")}>
+                    <div id="cotizar" style={s("background:rgba(14,26,36,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1.5px solid rgba(118,216,69,.28);border-radius:24px;padding:32px;box-shadow:0 24px 64px rgba(0,0,0,.5)")}>
                         {status !== 'success' ? (
                             <div>
                                 <div style={s("display:inline-flex;align-items:center;gap:8px;margin-bottom:6px")}>
@@ -329,14 +356,18 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                             <label>Correo electrónico *</label>
                                             <input type="email" placeholder="ejemplo@correo.com" required value={form.email} onChange={setField('email')} />
                                         </div>
-                                        <div className="al-field">
-                                            <label>Proyecto de interés *</label>
-                                            <select required value={form.proyecto} onChange={setField('proyecto')}>
-                                                <option value="">Selecciona un proyecto</option>
+                                        {/* En /google el proyecto es opcional y no se pide el tamaño: dos
+                                            selects encadenados frenaban a quien ya había tocado "Cotizar"
+                                            (Clarity, oct-2026). El asesor lo conversa en la llamada. */}
+                                        <div className="al-field" style={variante ? s("grid-column:1/-1") : undefined}>
+                                            <label>{variante ? 'Proyecto de interés' : 'Proyecto de interés *'}</label>
+                                            <select required={!variante} value={form.proyecto} onChange={setField('proyecto')}>
+                                                <option value="">{variante ? 'Me interesan ambos / aún no sé' : 'Selecciona un proyecto'}</option>
                                                 <option value="Lomas del Mar">Lomas del Mar</option>
                                                 <option value="Arena y Sol">Arena y Sol</option>
                                             </select>
                                         </div>
+                                        {!variante && (
                                         <div className="al-field">
                                             <label>Tamaño del terreno *</label>
                                             <select required value={form.tamano} onChange={setField('tamano')} disabled={!form.proyecto}>
@@ -344,8 +375,8 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                                 {tamanoOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                                             </select>
                                         </div>
-                                        {/* Región, comuna y "cómo nos conociste" no van en /google: el
-                                            formulario pasa de 8 campos a 5. */}
+                                        )}
+                                        {/* Región, comuna y "cómo nos conociste" tampoco van en /google. */}
                                         {!variante && (<>
                                         <div className="al-field">
                                             <label>Región *</label>
@@ -462,13 +493,14 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                     { m: '200 m²', pie: '$5.500.000', total: '$37.990.000', cuota: '$550.000', plazo: '60 cuotas', contado: '$35.000.000' },
                                     { m: '390 m²', pie: '$7.500.000', total: '$45.990.000', cuota: '$550.000', plazo: '70 cuotas', contado: '$43.000.000' },
                                 ].map((x) => (
-                                    <div key={x.m} style={s("background:rgba(0,0,0,.28);border:1px solid rgba(118,216,69,.22);border-radius:14px;padding:16px")}>
+                                    <div key={x.m} {...tarjetaCotizable('Lomas del Mar', x.m)} style={s("background:rgba(0,0,0,.28);border:1px solid rgba(118,216,69,.22);border-radius:14px;padding:16px")}>
                                         <div style={s("font:900 22px 'Montserrat',sans-serif;color:#fff;margin-bottom:2px")}>{x.m}</div>
                                         <div style={s("font:600 11px 'Montserrat',sans-serif;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px")}>Pie <span style={s("color:#76d845;font-weight:900;font-size:15px;letter-spacing:0;text-transform:none")}>{x.pie}</span></div>
                                         <div style={s("display:flex;justify-content:space-between;font:400 12.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:4px 0")}><span>Valor total</span><b style={s("color:#fff;font-weight:600")}>{x.total}</b></div>
                                         <div style={s("display:flex;justify-content:space-between;font:400 12.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:4px 0")}><span>Cuota ref.</span><b style={s("color:#fff;font-weight:600")}>{x.cuota}</b></div>
                                         <div style={s("display:flex;justify-content:space-between;font:400 12.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:4px 0")}><span>Plazo aprox.</span><b style={s("color:#fff;font-weight:600")}>{x.plazo}</b></div>
                                         <div style={s("display:flex;justify-content:space-between;font:400 12.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:4px 0;border-top:1px solid rgba(255,255,255,.08);margin-top:4px")}><span>Contado</span><b style={s("color:#76d845;font-weight:700")}>{x.contado}</b></div>
+                                        <div style={s("margin-top:8px;font:700 12px 'Montserrat',sans-serif;color:#76d845")}>Cotizar {x.m} →</div>
                                     </div>
                                 ))}
                             </div>
@@ -492,7 +524,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                 <p style={s("font:700 13px 'Montserrat',sans-serif;color:#C5A059;margin:0 0 18px")}>Terrenos de 200 m²</p>
                             </div>
                             <div style={s("padding:0 26px")}>
-                                <div style={s("background:rgba(0,0,0,.28);border:1px solid rgba(197,160,89,.24);border-radius:14px;padding:20px")}>
+                                <div {...tarjetaCotizable('Arena y Sol', '200 m²')} style={s("background:rgba(0,0,0,.28);border:1px solid rgba(197,160,89,.24);border-radius:14px;padding:20px")}>
                                     <div style={s("display:flex;align-items:baseline;gap:10px;margin-bottom:14px")}>
                                         <div style={s("font:900 26px 'Montserrat',sans-serif;color:#fff")}>200 m²</div>
                                         <div style={s("font:600 11px 'Montserrat',sans-serif;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em")}>Pie <span style={s("color:#C5A059;font-weight:900;font-size:17px;letter-spacing:0;text-transform:none")}>$20.000.000</span></div>
@@ -500,6 +532,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                     <div style={s("display:flex;justify-content:space-between;font:400 13.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:6px 0")}><span>Valor total</span><b style={s("color:#fff;font-weight:600")}>$42.000.000</b></div>
                                     <div style={s("display:flex;justify-content:space-between;font:400 13.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:6px 0")}><span>Cuota referencial</span><b style={s("color:#fff;font-weight:600")}>$500.000</b></div>
                                     <div style={s("display:flex;justify-content:space-between;font:400 13.5px 'Roboto',sans-serif;color:rgba(255,255,255,.6);padding:6px 0;border-top:1px solid rgba(255,255,255,.08);margin-top:6px")}><span>Pago de contado</span><b style={s("color:#C5A059;font-weight:700")}>$39.000.000</b></div>
+                                    <div style={s("margin-top:8px;font:700 12px 'Montserrat',sans-serif;color:#dcbf7f")}>Cotizar 200 m² →</div>
                                 </div>
                             </div>
                             <div style={s("padding:16px 26px 8px;display:flex;flex-wrap:wrap;gap:6px")}>
@@ -512,7 +545,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                     </div>
 
                     {/* SATELLITE MAP */}
-                    <div style={s("margin-top:30px;background:rgba(10,21,32,.6);border:1.5px solid rgba(118,216,69,.2);border-radius:22px;overflow:hidden")}>
+                    <div id="ubicacion" style={s("margin-top:30px;background:rgba(10,21,32,.6);border:1.5px solid rgba(118,216,69,.2);border-radius:22px;overflow:hidden;scroll-margin-top:80px")}>
                         <div style={s("padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px")}>
                             <div>
                                 <h3 style={s("font:800 19px 'Montserrat',sans-serif;color:#fff;margin:0 0 3px")}>Ubicación de los proyectos</h3>
@@ -524,6 +557,12 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             </div>
                         </div>
                         <div id="al-satmap" className="al-mapwrap" style={s("width:100%;height:460px;display:block;background:#0a1520")}></div>
+                        {/* La gente tocaba el mapa buscando cómo llegar: un enlace directo
+                            a Google Maps responde eso sin pelear con el mapa en celular. */}
+                        <div style={s("display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:14px 24px 0")}>
+                            <a href="https://www.google.com/maps?q=-33.4617574,-71.6158903" target="_blank" rel="noopener noreferrer" style={s("font:700 13px 'Montserrat',sans-serif;color:#0e1a24;background:#76d845;padding:10px 16px;border-radius:100px;text-decoration:none")}>📍 Lomas del Mar en Google Maps</a>
+                            <a href="https://www.google.com/maps?q=-33.4347434,-71.6290669" target="_blank" rel="noopener noreferrer" style={s("font:700 13px 'Montserrat',sans-serif;color:#0e1a24;background:#C5A059;padding:10px 16px;border-radius:100px;text-decoration:none")}>📍 Arena y Sol en Google Maps</a>
+                        </div>
                         <p style={s("margin:0;padding:12px 24px 18px;font:400 12px 'Roboto',sans-serif;color:rgba(255,255,255,.4);text-align:center")}>Vista satelital · Imagery © Esri · Marcadores en las coordenadas reales · Ninguno de los proyectos es frente al mar</p>
                     </div>
                 </div>
@@ -600,8 +639,9 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                             { img: 'isla-negra', min: '12 min', tag: 'Cultura · Patrimonio', name: 'Isla Negra', desc: 'La casa de Pablo Neruda, Patrimonio Mundial de la UNESCO' },
                             { img: 'algarrobo', min: '20 min', tag: 'Turismo · Recreación', name: 'Algarrobo', desc: 'La piscina más grande del mundo · Playas exclusivas del Litoral' },
                         ].map((p) => (
-                            <div key={p.name} className="al-placecard" style={s("position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;border:2px solid rgba(118,216,69,.4);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s")}>
-                                <img src={ASSET + '/places/' + p.img + '.webp'} alt={p.name + ' — cerca de los terrenos en venta en el Litoral Central'} style={s("position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease")} />
+                            // Se tocaban sin respuesta (clics muertos): ahora llevan al mapa de los proyectos.
+                            <a key={p.name} href="#ubicacion" aria-label={'Ver ' + p.name + ' en el mapa de los proyectos'} className="al-placecard" style={s("position:relative;display:block;border-radius:20px;overflow:hidden;aspect-ratio:3/4;border:2px solid rgba(118,216,69,.4);text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s")}>
+                                <img src={ASSET + '/places/' + p.img + '.webp'} alt={p.name + ' — cerca de los terrenos en venta en el Litoral Central'} loading="lazy" style={s("position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease")} />
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(10,18,28,.92) 0%,rgba(10,18,28,.3) 45%,transparent 100%)")}></div>
                                 <div style={s("position:absolute;top:14px;left:14px;background:rgba(118,216,69,.9);backdrop-filter:blur(8px);border-radius:100px;padding:5px 12px;font:700 11px 'Montserrat',sans-serif;color:#fff")}>📍 {p.min}</div>
                                 <div style={s("position:absolute;bottom:0;left:0;right:0;padding:24px 20px")}>
@@ -609,7 +649,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                                     <div style={s("font:800 22px 'Montserrat',sans-serif;color:#fff;line-height:1.1;margin-bottom:6px")}>{p.name}</div>
                                     <div style={s("font:400 13px 'Roboto',sans-serif;color:rgba(255,255,255,.6);line-height:1.5")}>{p.desc}</div>
                                 </div>
-                            </div>
+                            </a>
                         ))}
                     </div>
                     <div style={s("text-align:center;margin-top:44px")}>
@@ -798,7 +838,7 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                         <div className="al-marquee-mask" style={s("overflow:hidden;width:100%")}>
                             <div className="al-marquee-track">
                                 {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((n, idx) => (
-                                    <img key={idx} src={ASSET + '/clients/testimonio-' + n + '.webp'} alt="Cliente Alimin en Lomas del Mar, El Tabo" style={s("width:236px;height:295px;object-fit:cover;border-radius:16px;flex-shrink:0;box-shadow:0 8px 28px rgba(0,0,0,.25)")} />
+                                    <img key={idx} src={ASSET + '/clients/testimonio-' + n + '.webp'} alt="Cliente Alimin en Lomas del Mar, El Tabo" loading="lazy" style={s("width:236px;height:295px;object-fit:cover;border-radius:16px;flex-shrink:0;box-shadow:0 8px 28px rgba(0,0,0,.25)")} />
                                 ))}
                             </div>
                         </div>
@@ -939,6 +979,8 @@ const CSS = `
 #venta-terrenos .al-plano:hover .al-plano-hint{opacity:1}
 #venta-terrenos .al-hero-proj:hover{transform:translateY(-3px)}
 #venta-terrenos .al-hero-proj:hover img{transform:scale(1.08)}
+#venta-terrenos .al-tarjeta-cotizable{cursor:pointer;transition:border-color .2s,transform .2s}
+#venta-terrenos .al-tarjeta-cotizable:hover{border-color:rgba(118,216,69,.6)!important;transform:translateY(-2px)}
 #venta-terrenos .al-placecard:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(0,0,0,.4);border-color:rgba(118,216,69,.8)}
 #venta-terrenos .al-placecard:hover img{transform:scale(1.05)}
 #venta-terrenos .al-galcard:hover img{transform:scale(1.06)}

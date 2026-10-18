@@ -100,20 +100,33 @@
     background: #3f8f3b;
 }
 
+/* En celular es una barra baja pegada al borde: la tarjeta grande tapaba el
+   formulario del hero de las landings (Clarity, oct-2026). Rechazar y Aceptar
+   quedan del mismo tamaño, como pide la Ley 21.719. */
 @media (max-width: 480px) {
     .banner {
-        left: 16px;
-        right: 16px;
-        bottom: 12px;
+        left: 0;
+        right: 0;
+        bottom: 0;
         width: auto;
+        max-height: 70vh;
+        padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+        border-radius: var(--radius-md) var(--radius-md) 0 0;
+        font-size: 12.5px;
+        line-height: 1.4;
+    }
+
+    .titulo {
+        display: none;
     }
 
     .botones {
-        grid-template-columns: 1fr 1fr;
+        margin-top: 8px;
+        gap: 6px;
     }
 
-    .principal {
-        grid-column: 1 / -1;
-        grid-row: 1;
+    .boton {
+        padding: 8px 4px;
+        font-size: 12.5px;
     }
 }

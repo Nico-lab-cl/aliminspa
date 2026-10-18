@@ -99,6 +99,15 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     }
   }
 
+  // El hero es un scroll pegajoso de dos paneles: el panel 1 (ubicación) aparece
+  // pasado el 65% del recorrido del sticky-wrap.
+  const irAPanel = (n: 0 | 1) => () => {
+    const wrap = document.getElementById('sticky-wrap')
+    if (!wrap) return
+    const recorrido = wrap.offsetHeight - window.innerHeight
+    window.scrollTo({ top: wrap.offsetTop + (n === 1 ? recorrido * 0.75 : 0), behavior: 'smooth' })
+  }
+
   const selectTerreno = (val: string) => () => {
     setForm(s => ({ ...s, terreno: val }))
     setTimeout(toForm, 120)
@@ -307,9 +316,24 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       heroEnMovil ? '/videos/lomas-del-mar/hero-mobile.mp4' : '/videos/lomas-del-mar/hero-desktop.mp4',
       true
     )
-    setupVideo('location-video', '/assets/minipie/1-ff5c0f74.mp4', true)
-    setupVideo('terrain-video',  '/assets/minipie/1-ff5c0f74.mp4', true)
-    setupVideo('urbano-video',   '/assets/minipie/Rural_terrain_transforming_into_..._202606290523.mp4', true)
+    // Los demás videos esperaban junto al hero y en celular competían con él y con
+    // el formulario (LCP 3,1 s e INP 860 ms en Clarity): ahora se piden recién
+    // cuando la persona baja (los de ubicación) o se acerca a cada video.
+    const cuandoCerca = (id: string, fn: () => void) => {
+      const el = document.getElementById(id)
+      if (!el || typeof IntersectionObserver === 'undefined') { fn(); return }
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { io.disconnect(); fn() }
+      }, { rootMargin: '600px 0px' })
+      io.observe(el)
+    }
+    const cargarUbicacion = () => {
+      window.removeEventListener('scroll', cargarUbicacion)
+      setupVideo('location-video', '/assets/minipie/1-ff5c0f74.mp4', true)
+      setupVideo('terrain-video',  '/assets/minipie/1-ff5c0f74.mp4', true)
+    }
+    window.addEventListener('scroll', cargarUbicacion, { passive: true })
+    cuandoCerca('urbano-video', () => setupVideo('urbano-video', '/assets/minipie/Rural_terrain_transforming_into_..._202606290523.mp4', true))
 
     // ── Scrollytelling sticky ──
     const wrap        = document.getElementById('sticky-wrap')
@@ -428,8 +452,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       v.loop = true
       v.playsInline = true
       v.setAttribute('playsinline', '')
-      v.load()
-      v.play().catch(() => {})
+      cuandoCerca(id, () => { v.load(); v.play().catch(() => {}) })
 
       const btn = document.getElementById(`mute-${i+1}`)
       if (!btn) return
@@ -445,9 +468,14 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       }
 
       btn.addEventListener('click', clickHandler)
+      // La tarjeta entera decía "toca para activar el sonido" pero solo el botón
+      // respondía: el resto eran clics muertos en Clarity.
+      const card = document.getElementById(`vcard-${i+1}`)
+      card?.addEventListener('click', clickHandler)
 
       return () => {
         btn.removeEventListener('click', clickHandler)
+        card?.removeEventListener('click', clickHandler)
       }
     })
 
@@ -770,18 +798,18 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     
     <div id="panel-hero" style={{"position":"absolute","inset":"0","zIndex":"5","display":"flex","alignItems":"center","transition":"opacity .9s ease,transform .9s ease"}}>
       <div className="hero-panel-inner">
-        <div className="hero-promo-badge" style={{"animation":"fadeInUp .55s .05s ease both","display":"inline-flex","alignItems":"center","gap":"8px","background":"rgba(118,216,69,.18)","border":"1px solid rgba(118,216,69,.4)","borderRadius":"100px","padding":"5px 14px","marginBottom":"16px"}}>
+        <div className="hero-promo-badge" style={{"animation":"fadeInUp .35s ease both","display":"inline-flex","alignItems":"center","gap":"8px","background":"rgba(118,216,69,.18)","border":"1px solid rgba(118,216,69,.4)","borderRadius":"100px","padding":"5px 14px","marginBottom":"16px"}}>
           <span style={{"width":"7px","height":"7px","background":"#76d845","borderRadius":"50%","display":"inline-block"}}></span>
           <span style={{"font":"700 12px 'Montserrat',sans-serif","color":"#b8f07a","textTransform":"uppercase","letterSpacing":".1em"}}>Lomas del Mar · El Tabo</span>
         </div>
         {/* El H1 de la variante es más largo que "TU TERRENO / SIN BANCO": va más chico para no tapar el menú ni empujar los precios. */}
-        <h1 style={{"animation":"fadeInUp .55s .1s ease both","font":variante ? "900 clamp(2.2rem,5.2vw,4rem)/1.02 'Montserrat',sans-serif" : "900 clamp(3rem,8.5vw,6.2rem)/1.0 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.035em","marginBottom":"18px"}}>
+        <h1 style={{"animation":"fadeInUp .35s ease both","font":variante ? "900 clamp(2.2rem,5.2vw,4rem)/1.02 'Montserrat',sans-serif" : "900 clamp(3rem,8.5vw,6.2rem)/1.0 'Montserrat',sans-serif","color":"#fff","letterSpacing":"-.035em","marginBottom":"18px"}}>
           {variante ? variante.h1.texto : 'TU TERRENO'}<br />
           <em style={{"fontStyle":"normal","background":"linear-gradient(90deg, rgb(118, 216, 69), rgb(75, 166, 70), rgb(118, 216, 69)) 0% 0% / 200% text","WebkitTextFillColor":"transparent","animation":"3s linear 0s infinite normal none running shimmerGold"}}>{variante ? variante.h1.destacado : 'SIN BANCO'}</em>&nbsp;</h1>
-        <p className="m-ocultar" style={{"animation":"fadeInUp .55s .2s ease both","font":"300 clamp(1rem,2.2vw,1.2rem)/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.65)","marginBottom":"32px","maxWidth":"540px"}}>
+        <p className="m-ocultar" style={{"animation":"fadeInUp .35s ease both","font":"300 clamp(1rem,2.2vw,1.2rem)/1.7 'Roboto',sans-serif","color":"rgba(255,255,255,.65)","marginBottom":"32px","maxWidth":"540px"}}>
           Terrenos urbanizados con rol propio en el Litoral Central. Financiamiento directo con Alimin, en pesos y sin evaluación bancaria.
         </p>
-        <div className="price-cards-row" style={{"animation":"fadeInUp .55s .3s ease both","display":"flex","flexWrap":"wrap","gap":"12px","marginBottom":"40px"}}>
+        <div className="price-cards-row" style={{"animation":"fadeInUp .35s ease both","display":"flex","flexWrap":"wrap","gap":"12px","marginBottom":"40px"}}>
 
 
           <div style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px"}}>
@@ -804,7 +832,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
           </div>
 
         </div>
-        <div className="hero-ctas" style={{"animation":"fadeInUp .55s .4s ease both"}}>
+        <div className="hero-ctas" style={{"animation":"fadeInUp .35s ease both"}}>
           <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845 0%,#4ba646 100%)","color":"#fff","border":"none","padding":"15px 32px","borderRadius":"14px","font":"700 15px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 6px 28px rgba(118,216,69,.38)","transition":"transform .2s,box-shadow .2s","letterSpacing":".01em"}}>
             COTIZAR MI TERRENO →
           </button>
@@ -812,7 +840,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
             Ver terrenos <span style={{"fontSize":"16px"}}>↓</span>
           </a>
         </div>
-        <div className="hero-trust" style={{"animation":"fadeInUp .55s .5s ease both"}}>
+        <div className="hero-trust" style={{"animation":"fadeInUp .35s ease both"}}>
           <div style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.5)","display":"flex","alignItems":"center","gap":"7px"}}>
             <span style={{"width":"18px","height":"18px","background":"rgba(118,216,69,.2)","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","fontSize":"10px","color":"#76d845","flexShrink":"0"}}>✓</span> Sin banco
           </div>
@@ -956,12 +984,14 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     <div style={{"position":"absolute","bottom":"28px","left":"50%","transform":"translateX(-50%)","zIndex":"20","display":"flex","flexDirection":"column","alignItems":"center","gap":"10px"}}>
       
       <div style={{"display":"flex","alignItems":"center","gap":"20px"}}>
-        <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"5px"}}>
-          <div id="dot-0" style={{"width":"28px","height":"4px","background":"#76d845","borderRadius":"3px","transition":"all .45s ease","boxShadow":"0 0 8px rgba(118,216,69,.6)"}}></div>
+        {/* Parecían pestañas y se tocaban sin respuesta (clics muertos en Clarity):
+            ahora llevan a cada parte del hero. */}
+        <div role="button" tabIndex={0} aria-label="Ver el terreno" onClick={irAPanel(0)} style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"5px","cursor":"pointer","padding":"6px"}}>
+          <div id="dot-0"style={{"width":"28px","height":"4px","background":"#76d845","borderRadius":"3px","transition":"all .45s ease","boxShadow":"0 0 8px rgba(118,216,69,.6)"}}></div>
           <span id="label-0" style={{"font":"700 9px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".08em","transition":"opacity .45s ease","whiteSpace":"nowrap"}}>El terreno</span>
         </div>
-        <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"5px"}}>
-          <div id="dot-1" style={{"width":"4px","height":"4px","background":"rgba(255,255,255,.3)","borderRadius":"3px","transition":"all .45s ease"}}></div>
+        <div role="button" tabIndex={0} aria-label="Ver la ubicación" onClick={irAPanel(1)} style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"5px","cursor":"pointer","padding":"6px"}}>
+          <div id="dot-1"style={{"width":"4px","height":"4px","background":"rgba(255,255,255,.3)","borderRadius":"3px","transition":"all .45s ease"}}></div>
           <span id="label-1" style={{"font":"700 9px 'Montserrat',sans-serif","color":"rgba(255,255,255,.3)","textTransform":"uppercase","letterSpacing":".08em","transition":"opacity .45s ease","whiteSpace":"nowrap"}}>Ubicación</span>
         </div>
       </div>
@@ -1365,7 +1395,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","background":"#071510","boxShadow":"0 20px 60px rgba(0,0,0,.5)","border":"2px solid rgba(118,216,69,.4)","aspectRatio":"16/9","cursor":"pointer"}} id="vcard-1">
-        <video id="drone-1" src="/assets/minipie/video_terreno_1.webm" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block"}} muted loop playsInline preload="auto"></video>
+        <video id="drone-1" src="/assets/minipie/video_terreno_1.webm" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block"}} muted loop playsInline preload="none"></video>
         
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,21,32,.75) 0%,transparent 45%)","pointerEvents":"none"}}></div>
         
@@ -1386,7 +1416,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","background":"#071510","boxShadow":"0 20px 60px rgba(0,0,0,.5)","border":"2px solid rgba(118,216,69,.4)","aspectRatio":"16/9","cursor":"pointer"}} id="vcard-2">
-        <video id="drone-2" src="/assets/minipie/video_terreno_2.webm" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block"}} muted loop playsInline preload="auto"></video>
+        <video id="drone-2" src="/assets/minipie/video_terreno_2.webm" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block"}} muted loop playsInline preload="none"></video>
         
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,21,32,.75) 0%,transparent 45%)","pointerEvents":"none"}}></div>
         
@@ -1832,7 +1862,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       <div>
         
         <div style={{"borderRadius":"20px","overflow":"hidden","position":"relative","background":"#071510","boxShadow":"0 20px 60px rgba(0,0,0,.5)","border":"2px solid rgba(118,216,69,.4)","marginBottom":"20px"}}>
-          <video id="urbano-video" src="/assets/minipie/Rural_terrain_transforming_into_..._202606290523.mp4" style={{"width":"100%","display":"block","maxHeight":"420px","objectFit":"cover"}} muted loop playsInline preload="auto"></video>
+          <video id="urbano-video" src="/assets/minipie/Rural_terrain_transforming_into_..._202606290523.mp4" style={{"width":"100%","display":"block","maxHeight":"420px","objectFit":"cover"}} muted loop playsInline preload="none"></video>
           <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,21,32,.8) 0%,transparent 50%)","pointerEvents":"none"}}></div>
           <div style={{"position":"absolute","bottom":"18px","left":"18px"}}>
             <div style={{"font":"700 9px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".1em","marginBottom":"4px"}}>🔴 EN PROGRESO</div>

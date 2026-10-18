@@ -78,10 +78,10 @@ export default function CookieBanner() {
     return (
         <div className={styles.banner} role="dialog" aria-modal="false" aria-labelledby="cookies-titulo">
             <p id="cookies-titulo" className={styles.titulo}>Tu privacidad</p>
+            {/* Corto a propósito: en celular el banner no puede tapar el formulario de la landing. */}
             <p className={styles.texto}>
-                Usamos cookies propias y de Google, Meta y Microsoft para medir las visitas y mostrarte
-                anuncios de nuestros proyectos. Solo las activamos si tú aceptas. Más detalle en la{' '}
-                <Link href="/politica-de-privacidad#cookies">política de privacidad</Link>.
+                Usamos cookies de Google, Meta y Microsoft para medir visitas y mostrarte anuncios, solo si
+                aceptas. <Link href="/politica-de-privacidad#cookies">Política de privacidad</Link>.
             </p>
 
             {detalle && (
