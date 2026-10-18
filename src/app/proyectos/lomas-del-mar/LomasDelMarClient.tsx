@@ -812,7 +812,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
         <div className="price-cards-row" style={{"animation":"fadeInUp .35s ease both","display":"flex","flexWrap":"wrap","gap":"12px","marginBottom":"40px"}}>
 
 
-          <div style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px"}}>
+          <div role="button" onClick={select200} style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px","cursor":"pointer"}}>
             <div style={{"font":"700 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.45)","textTransform":"uppercase","letterSpacing":".08em"}}>200 m²</div>
             <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
               <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>Pie</span>
@@ -822,7 +822,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
           </div>
 
 
-          <div style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px"}}>
+          <div role="button" onClick={select390} style={{"background":"rgba(0,0,0,.35)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"14px","padding":"10px 16px","display":"flex","flexDirection":"column","gap":"3px","cursor":"pointer"}}>
             <div style={{"font":"700 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.45)","textTransform":"uppercase","letterSpacing":".08em"}}>390 m²</div>
             <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
               <span style={{"font":"600 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.45)"}}>Pie</span>
@@ -1109,7 +1109,8 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     <div className="terrenos-grid" data-animate-stagger="">
 
       
-      <div style={{"background":"rgba(14,26,36,.75)","backdropFilter":"blur(16px)","borderRadius":"22px","overflow":"hidden","border":card200Border,"boxShadow":card200Shadow,"transition":"border-color .3s,box-shadow .3s,transform .3s"}} >
+      {/* Toda la tarjeta elige el terreno: en Clarity el plano SVG, el pie y "Sin banco · Sin aval" eran lo más tocado y no respondían. */}
+      <div onClick={select200} style={{"background":"rgba(14,26,36,.75)","backdropFilter":"blur(16px)","borderRadius":"22px","overflow":"hidden","border":card200Border,"boxShadow":card200Shadow,"transition":"border-color .3s,box-shadow .3s,transform .3s","cursor":"pointer"}} >
         
         <div style={{"background":"linear-gradient(180deg,#EAF3EC 0%,#DDF0E2 100%)","padding":"0","overflow":"hidden","position":"relative","height":"220px"}}>
           <svg viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" style={{"width":"100%","height":"100%","display":"block"}}>
@@ -1234,7 +1235,7 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
       </div>
 
       
-      <div style={{"background":"rgba(14,26,36,.75)","backdropFilter":"blur(16px)","borderRadius":"22px","overflow":"hidden","border":card390Border,"boxShadow":card390Shadow,"transition":"border-color .3s,box-shadow .3s,transform .3s","position":"relative"}} >
+      <div onClick={select390} style={{"background":"rgba(14,26,36,.75)","backdropFilter":"blur(16px)","borderRadius":"22px","overflow":"hidden","border":card390Border,"boxShadow":card390Shadow,"transition":"border-color .3s,box-shadow .3s,transform .3s","position":"relative","cursor":"pointer"}} >
         
         <div style={{"position":"absolute","top":"14px","right":"14px","zIndex":"10","background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","padding":"5px 14px","borderRadius":"100px","font":"700 11px 'Montserrat',sans-serif","boxShadow":"0 4px 12px rgba(118,216,69,.5)"}}>
           ✦ MÁS POPULAR
