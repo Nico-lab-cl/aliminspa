@@ -72,18 +72,46 @@ export default function AliFloatingCharacter({
      personaje tapa el segundo botón del hero en el celular). */
   const enMapa = pathname === '/agendar-visita' || (pathname?.startsWith('/google/') ?? false);
 
+  /* En el celular, mientras la persona está en la portada, Ali va chico, sin
+     globo y sin la escena 3D: en Clarity el globo tapaba "Ver terrenos" del
+     hero y cerrarlo sumaba ~30 toques al mes en Lomas del Mar, y la escena
+     competía con la carga de la portada. Al bajar vuelve a su tamaño, saluda y
+     carga la escena. En escritorio no cambia nada (la clase solo actúa en el
+     media query del celular y el efecto la apaga al montar). */
+  const [enPortada, setEnPortada] = useState(true);
+  useEffect(() => {
+    // En el mapa de lotes la página no se baja: ahí rige solo el modo compacto.
+    // Las landings /google sí se bajan y también se benefician de no cargar la escena.
+    if (pathname === '/agendar-visita' || !window.matchMedia('(max-width:768px)').matches) {
+      // El ancho de pantalla solo se conoce en el navegador: el servidor no sabe.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setEnPortada(false);
+      return;
+    }
+    const revisar = () => {
+      if (window.scrollY > window.innerHeight * 0.6) {
+        setEnPortada(false);
+        window.removeEventListener('scroll', revisar);
+      }
+    };
+    revisar();
+    window.addEventListener('scroll', revisar, { passive: true });
+    return () => window.removeEventListener('scroll', revisar);
+  }, [pathname]);
+
   // Auto show speech bubble with smooth delay if closed
   useEffect(() => {
-    if (enMapa) return;
+    if (enMapa || enPortada) return;
     const timer = setTimeout(() => {
       setShowSpeechBubble(true);
     }, 800);
     return () => clearTimeout(timer);
-  }, [enMapa]);
+  }, [enMapa, enPortada]);
 
   // Defer the heavy 3D scene until the page has settled, so it never
   // competes with initial/critical page rendering on any route.
   useEffect(() => {
+    if (enPortada) return;
     const load = () => setShouldLoadScene(true);
     const idle = (window as any).requestIdleCallback
       ? (window as any).requestIdleCallback(load, { timeout: 2500 })
@@ -92,7 +120,7 @@ export default function AliFloatingCharacter({
       if ((window as any).cancelIdleCallback) (window as any).cancelIdleCallback(idle);
       else clearTimeout(idle);
     };
-  }, []);
+  }, [enPortada]);
 
   // Cuando el visitante sale por un enlace, la navegación ya mueve el
   // historial: no hay que consumir además la entrada del modal.
@@ -140,7 +168,7 @@ export default function AliFloatingCharacter({
 
   return (
     <div
-      className={enMapa ? `${styles.floatingWrapper} ${styles.compacto}` : styles.floatingWrapper}
+      className={[styles.floatingWrapper, enMapa && styles.compacto, enPortada && styles.enPortada].filter(Boolean).join(' ')}
       id="whatsapp-float"
       /* La variable la leen tanto el anclaje del wrapper como el techo del
          modal, para que al levantarlo no se salga por el borde superior. */
@@ -279,7 +307,7 @@ export default function AliFloatingCharacter({
       )}
 
       {/* ── SPEECH BUBBLE TOOLTIP ────────────────────────── */}
-      {showSpeechBubble && !isModalOpen && !enMapa && (
+      {showSpeechBubble && !isModalOpen && !enMapa && !enPortada && (
         <div
           className={styles.speechBubble}
           onClick={handleCharacterClick}

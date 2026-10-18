@@ -526,6 +526,16 @@
   }
 }
 
+/* ─── Ali en la portada, en el celular ─────────────────────────────────────
+   Mientras la persona no baja, Ali es del porte de un botón para no tapar los
+   botones del hero. La clase solo tiene efecto acá; en escritorio no cambia. */
+@media (max-width: 768px) {
+  .enPortada .characterBox {
+    width: 84px;
+    height: 90px;
+  }
+}
+
 /* ─── Ali achicado: el mapa de lotes ───────────────────────────────────────
 
    Ahí la página entera es la herramienta y el personaje a tamaño normal se

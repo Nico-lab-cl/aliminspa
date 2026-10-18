@@ -475,7 +475,31 @@ export default function ArenaYSolMetaClient() {
         const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
         if (conn?.saveData) return
         const mobile = window.matchMedia('(max-width:768px)').matches
-        setHeroVideo(mobile ? '/videos/arena-y-sol/hero-mobile.mp4' : '/videos/arena-y-sol/hero-desktop.mp4')
+        // El video del hero (1,8 MB en celular) se pide cuando la página ya cargó:
+        // el póster pinta el hero igual y el video no le quita ancho de banda al
+        // primer render ni al JavaScript que hace responder los botones.
+        const cargar = () => setHeroVideo(mobile ? '/videos/arena-y-sol/hero-mobile.mp4' : '/videos/arena-y-sol/hero-desktop.mp4')
+        if (document.readyState === 'complete') cargar()
+        else window.addEventListener('load', cargar, { once: true })
+        return () => window.removeEventListener('load', cargar)
+    }, [])
+
+    // Los videos de la galería tenían autoPlay, que ignora preload="none": los
+    // dos (1,4 MB) se bajaban al abrir la página aunque están mucho más abajo.
+    // Ahora parten recién cuando aparecen en pantalla y se pausan al salir.
+    useEffect(() => {
+        const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-en-vista]'))
+        if (!videos.length || typeof IntersectionObserver === 'undefined') return
+        const io = new IntersectionObserver(
+            entradas => entradas.forEach(e => {
+                const v = e.target as HTMLVideoElement
+                if (e.isIntersecting) v.play().catch(() => {})
+                else v.pause()
+            }),
+            { rootMargin: '200px 0px' },
+        )
+        videos.forEach(v => io.observe(v))
+        return () => io.disconnect()
     }, [])
 
     // El fundido se dispara con un listener nativo sobre el <video>: los eventos
@@ -905,10 +929,18 @@ html{scroll-behavior:smooth}
             </header>
 
             {/* ── 01 · Hero ── */}
+            {/* El fondo del hero (el video del loteo) era lo más tocado de la
+                landing: 149 toques en 30 días que no hacían nada (Clarity). Tocar
+                fuera del texto y los botones lleva a la galería de la obra. */}
             <section
                 ref={heroRef}
+                onClick={(e) => {
+                    if ((e.target as HTMLElement).closest('[data-hero-contenido], a, button')) return
+                    document.getElementById('loteo')?.scrollIntoView({ behavior: 'smooth' })
+                }}
                 style={{
                     position: 'relative',
+                    cursor: 'pointer',
                     minHeight: 'calc(100dvh / var(--ays-zoom))',
                     display: 'flex',
                     alignItems: 'center',
@@ -986,7 +1018,7 @@ html{scroll-behavior:smooth}
                     }}
                 />
 
-                <div style={{ position: 'relative', zIndex: 1, maxWidth: 'var(--ays-w)', margin: '0 auto', width: '100%' }}>
+                <div data-hero-contenido="" style={{ position: 'relative', zIndex: 1, maxWidth: 'var(--ays-w)', margin: '0 auto', width: '100%', cursor: 'auto' }}>
                     <div
                         style={{
                             display: 'flex',
@@ -1002,7 +1034,11 @@ html{scroll-behavior:smooth}
                             alt="Alimin SpA"
                             style={{ height: '44px', width: 'auto', display: 'block' }}
                         />
-                        <div
+                        {/* Era lo más tocado de la landing (105 toques en 30 días, Clarity)
+                            y no respondía: ahora lleva a las fotos y videos de la obra. */}
+                        <a
+                            href="#loteo"
+                            className="ays-sello-avance"
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -1012,6 +1048,7 @@ html{scroll-behavior:smooth}
                                 background: 'rgba(10,18,28,.82)',
                                 backdropFilter: 'blur(8px)',
                                 border: '1.5px solid rgba(118,216,69,.45)',
+                                textDecoration: 'none',
                             }}
                         >
                             <span
@@ -1034,7 +1071,18 @@ html{scroll-behavior:smooth}
                             >
                                 Estado de proyecto avanzado
                             </span>
-                        </div>
+                            <span
+                                style={{
+                                    font: "700 12px 'Montserrat',sans-serif",
+                                    color: '#fff',
+                                    paddingLeft: '9px',
+                                    borderLeft: '1px solid rgba(118,216,69,.45)',
+                                    whiteSpace: 'nowrap',
+                                }}
+                            >
+                                Ver avance →
+                            </span>
+                        </a>
                     </div>
 
                     <h1 className="ays-h1" style={{ animation: `aysFadeInUp .55s .1s ${EASE} both` }}>
@@ -1292,7 +1340,7 @@ html{scroll-behavior:smooth}
                                         muted
                                         loop
                                         playsInline
-                                        autoPlay
+                                        data-en-vista=""
                                         controls
                                         preload="none"
                                         aria-label={item.alt}

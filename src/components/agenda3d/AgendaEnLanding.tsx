@@ -94,20 +94,36 @@ export default function AgendaEnLanding({ proyecto }: { proyecto: Proyecto }) {
     const [zoom, setZoom] = useState(1)
     const ancla = useRef<HTMLElement>(null)
 
+    /* Como la sección va pegada al hero, con 600 px de margen el visor (Three.js,
+       ~550 KB comprimido, más el terreno) se montaba apenas abría la página y
+       competía con el hero en el navegador de Facebook/Instagram, que es el 73%
+       del tráfico (Clarity, oct-2026). Ahora se descarga y se monta recién
+       cuando la persona empieza a bajar y el mapa está a menos de 400 px. No
+       se precarga: compilar Three.js de fondo igual traba los toques del hero. */
     useEffect(() => {
         const el = ancla.current
         if (!el) return
+        let bajo = window.scrollY > 0
+        let cerca = false
+        const intentar = () => {
+            if (bajo && cerca) {
+                setMontar(true)
+                io.disconnect()
+                window.removeEventListener('scroll', alBajar)
+            }
+        }
+        const alBajar = () => { bajo = true; intentar() }
         const io = new IntersectionObserver(
-            entradas => {
-                if (entradas.some(e => e.isIntersecting)) {
-                    setMontar(true)
-                    io.disconnect()
-                }
-            },
-            { rootMargin: '600px 0px' },
+            entradas => { cerca = entradas.some(e => e.isIntersecting); intentar() },
+            { rootMargin: '400px 0px' },
         )
         io.observe(el)
-        return () => io.disconnect()
+        window.addEventListener('scroll', alBajar, { passive: true })
+
+        return () => {
+            io.disconnect()
+            window.removeEventListener('scroll', alBajar)
+        }
     }, [])
 
     /* Las barras aparecen y desaparecen según el scroll (la de abajo, por
