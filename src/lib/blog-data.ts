@@ -45,7 +45,7 @@ export const BLOG_POSTS: BlogPost[] = [
             
             <p>Cuando un terreno tiene Rol Propio, significa que:</p>
             <ul>
-                <li>Está debidamente subdividido de acuerdo a las normativas de la Dirección de Obras Municipales (DOM) y el Servicio Agrícola y Ganadero (SAG).</li>
+                <li>Cuenta con subdivisión aprobada por la Dirección de Obras Municipales (DOM) y recepción municipal.</li>
                 <li>Cuenta con su propia inscripción de dominio en el Conservador de Bienes Raíces (CBR) correspondiente.</li>
                 <li>Te permite ser el <strong>dueño exclusivo y absoluto</strong> de esa porción de tierra, y no de un porcentaje de un terreno más grande.</li>
             </ul>
@@ -101,7 +101,7 @@ export const BLOG_POSTS: BlogPost[] = [
             <p>Antes de transferir dinero o firmar una promesa de compraventa, realiza los siguientes pasos:</p>
             <ul>
                 <li><strong>Solicita el Certificado de Dominio Vigente:</strong> Pídelo a la inmobiliaria y compruébalo directamente en el Conservador de Bienes Raíces (para El Tabo, corresponde al Conservador de San Antonio).</li>
-                <li><strong>Revisa el plano de subdivisión aprobado:</strong> Asegúrate de que el plano del loteo cuente con el timbre oficial del SAG y esté archivado en el Conservador de Bienes Raíces.</li>
+                <li><strong>Revisa el plano de subdivisión aprobado:</strong> Asegúrate de que el plano cuente con el timbre de la Dirección de Obras Municipales (DOM), tenga recepción municipal y esté archivado en el Conservador de Bienes Raíces.</li>
                 <li><strong>Consulta en el SII:</strong> Ingresa al portal web del Servicio de Impuestos Internos y busca el rol en el mapa de avalúos para confirmar que corresponde exactamente a la ubicación física del lote que te están ofreciendo.</li>
             </ul>
 
@@ -404,7 +404,7 @@ export const BLOG_POSTS: BlogPost[] = [
             </ul>
 
             <h2>Invierte Seguro con Alimin</h2>
-            <p>En Alimin Inmobiliaria rechazamos de forma categórica las prácticas informales de subdivisión. Todos nuestros proyectos en El Tabo cuentan con loteos debidamente visados por el SAG, roles individuales registrados y asignados por el SII y factibilidades reales de urbanización básica. Con nosotros, compras con escritura pública inscrita en el Conservador a tu nombre y garantizas el patrimonio de tu familia.</p>
+            <p>En Alimin Inmobiliaria rechazamos de forma categórica las prácticas informales de subdivisión. Todos nuestros proyectos en El Tabo son terrenos urbanos con subdivisión aprobada por la Dirección de Obras Municipales y recepción municipal, roles individuales registrados y asignados por el SII y factibilidades reales de urbanización básica. Con nosotros, compras con escritura pública inscrita en el Conservador a tu nombre y garantizas el patrimonio de tu familia.</p>
         `
     },
     {
