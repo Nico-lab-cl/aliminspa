@@ -52,6 +52,8 @@ const ANCHO_LITE = 1200
 /*
  * Un punto por lote, en píxeles del plano de 1600x900.
  * p: número de escritura (disponible). Sin p: vendido. tipo: otro uso del suelo.
+ * vendido: se vendió después de este plano. Conserva su número, que el plano
+ * todavía trae escrito, y el visor lo pinta de rojo.
  */
 const LOTES = [
     // franja de arriba, sobre Calle 1
@@ -64,9 +66,9 @@ const LOTES = [
     { x: 256, y: 422 }, { x: 321, y: 420 }, { x: 384, y: 418 }, { x: 446, y: 416 }, { x: 508, y: 414 },
     { x: 569, y: 413 }, { x: 630, y: 411 }, { x: 692, y: 403 }, { x: 752, y: 411 },
     // bloque arriba a la derecha
-    { x: 905, y: 362 }, { x: 906, y: 425 }, { x: 1023, y: 416 }, { x: 1162, y: 448 }, { x: 1313, y: 488 }, { x: 1450, y: 526, p: 60 },
+    { x: 905, y: 362 }, { x: 906, y: 425 }, { x: 1023, y: 416 }, { x: 1162, y: 448 }, { x: 1313, y: 488 }, { x: 1450, y: 526, p: 60, vendido: true },
     // bloque abajo a la izquierda, fila de arriba
-    { x: 157, y: 567, p: 61 }, { x: 228, y: 561 }, { x: 294, y: 558 }, { x: 360, y: 555 },
+    { x: 157, y: 567, p: 61, vendido: true }, { x: 228, y: 561 }, { x: 294, y: 558 }, { x: 360, y: 555 },
     { x: 427, y: 556, parte: 'P6' },
     { x: 492, y: 549 }, { x: 557, y: 546 }, { x: 622, y: 545 }, { x: 690, y: 544, p: 18 }, { x: 756, y: 542 },
     // fila de abajo
@@ -216,7 +218,7 @@ async function main() {
                 id,
                 n: l.p ?? null,
                 stage: null,
-                sold: !l.p,
+                sold: !l.p || !!l.vendido,
                 area: null,
                 tipo: l.tipo ?? (l.p ? 'lote' : 'vendido'),
                 u: f(sx[id] / cuenta[id] / W),
