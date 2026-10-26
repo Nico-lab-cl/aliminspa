@@ -1,0 +1,49 @@
+/* /credito: solo la calculadora, sobre el gris claro del sitio. */
+
+.pagina {
+    min-height: 100dvh;
+    background: var(--sec-bg);
+    padding: 28px 16px 40px;
+    color: var(--sec-text);
+}
+
+.contenido {
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+.encabezado {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+/* El archivo del logo trae mucho aire arriba y abajo: se recorta al centro. */
+.logo {
+    display: block;
+    width: 150px;
+    aspect-ratio: 1920 / 560;
+    object-fit: cover;
+    margin: 0 auto 18px;
+}
+
+.titulo {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--sec-text);
+}
+
+.destacado {
+    color: var(--verde-solido);
+}
+
+.bajada {
+    font-family: var(--font);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: var(--sec-text-muted);
+    margin: 0.7rem 0 0;
+}

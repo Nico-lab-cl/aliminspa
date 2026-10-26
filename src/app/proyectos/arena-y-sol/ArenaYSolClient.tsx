@@ -6,6 +6,7 @@ import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import { FAQ_ARENA_Y_SOL } from './faq'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
+import SeccionCalculadora from '@/components/credito/SeccionCalculadora'
 
 /* Landing de Arena y Sol — Design System v2 (mismo mundo visual que /minipie).
    La página es standalone: trae su propio header, footer y WhatsApp flotante,
@@ -31,6 +32,9 @@ const UTM_CHAT = {
 // vista, en la barra de progreso.
 const VENDIDOS_PCT = 60
 const PLAZO_CUOTAS = 44
+// Con lo que parte la calculadora de cuotas: el plan publicado ($42M en total,
+// pie de $20M y cuotas de $500 mil), que da exactamente PLAZO_CUOTAS.
+const PLAN_CALCULADORA = { valorTotal: 42_000_000, pie: 20_000_000, dividendo: 500_000 }
 
 const WA_MARCELA = '56956654833'
 const WA_ORLANDO = '56973077128'
@@ -1770,6 +1774,8 @@ html{scroll-behavior:smooth}
                     </div>
                 </div>
             </section>
+
+            <SeccionCalculadora origen="Arena y Sol" valoresIniciales={PLAN_CALCULADORA} />
 
             {/* ── 07 · Lugares cercanos ── */}
             <section style={{ position: 'relative', padding: '80px 20px', overflow: 'hidden', background: '#0a1520' }}>

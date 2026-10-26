@@ -8,6 +8,7 @@ import HomeContactForm from '@/components/sections/HomeContactForm'
 import FAQ from '@/components/sections/FAQ'
 import HomeNewsletter from '@/components/sections/HomeNewsletter'
 import { FAQSchema } from '@/components/seo/JsonLd'
+import SeccionCalculadora from '@/components/credito/SeccionCalculadora'
 
 export default function HomePage() {
     return (
@@ -16,6 +17,7 @@ export default function HomePage() {
             <Hero />
             <Benefits />
             <Projects />
+            <SeccionCalculadora origen="Inicio" />
             <StrategicLocation />
             <Testimonials />
             <NearbyPlaces />

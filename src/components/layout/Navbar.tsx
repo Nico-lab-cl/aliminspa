@@ -27,6 +27,7 @@ export default function Navbar() {
     const navLinks = [
         { href: '/', label: 'Inicio' },
         { href: '/proyectos', label: 'Proyectos' },
+        { href: '/credito', label: 'Crédito' },
         { href: '/quienes-somos', label: 'Quiénes somos' },
         { href: '/asesores', label: 'Asesores' },
         { href: '/blog', label: 'Blog' },

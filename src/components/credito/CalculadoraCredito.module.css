@@ -1,0 +1,220 @@
+/* Calculadora de cuotas + formulario de lead. Tarjeta blanca con borde verde,
+   pensada para ir sobre el gris claro de las secciones (--sec-bg); en /credito
+   y en las páginas de proyecto también se pone sobre fondo oscuro. */
+
+.tarjeta {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    background: #fff;
+    border: var(--borde-tarjeta);
+    border-radius: 22px;
+    padding: 26px;
+    box-shadow: 0 18px 48px rgba(31, 41, 51, 0.12);
+    color: var(--sec-text);
+    text-align: left;
+}
+
+.titulo {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--sec-text);
+    margin-bottom: 16px;
+}
+
+/* Selector de tamaño (Lomas del Mar: 200 m² / 390 m²). */
+.planes {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.plan {
+    flex: 1;
+    height: 44px;
+    border: var(--borde-tarjeta);
+    border-radius: 100px;
+    background: #fff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--sec-text);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.plan:hover {
+    border-color: var(--borde-tarjeta-hover);
+}
+
+.planActivo {
+    background: var(--verde-solido);
+    border-color: var(--verde-solido);
+    color: #fff;
+}
+
+.calculadora {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border: var(--borde-tarjeta);
+    border-radius: 12px;
+    background: #fff;
+    transition: border-color 0.2s ease;
+}
+
+.fila:focus-within {
+    border-color: var(--borde-tarjeta-hover);
+    box-shadow: 0 0 0 3px rgba(118, 216, 69, 0.18);
+}
+
+.etiqueta {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.86rem;
+    color: var(--sec-text-muted);
+}
+
+.monto {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: none;
+}
+
+.signo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--sec-text);
+}
+
+.inputMonto {
+    width: 9.5ch;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: right;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    /* 16px como mínimo: con menos, Safari de iPhone hace zoom al enfocar. */
+    font-size: 1rem;
+    color: var(--sec-text);
+}
+
+/* La celda calculada: fondo verde para que se lea como resultado y no como campo. */
+.resultado {
+    background: var(--bg-mint-2);
+    border-color: var(--verde-solido);
+}
+
+.resultado .etiqueta {
+    color: var(--sec-text);
+}
+
+.valorResultado {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.35rem;
+    color: var(--verde-solido);
+}
+
+.nota {
+    margin: 14px 0 16px;
+    font-family: var(--font);
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--sec-text-muted);
+}
+
+.campos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    background: #fff;
+    border: var(--borde-tarjeta);
+    border-radius: 10px;
+    color: var(--sec-text);
+    font-family: var(--font);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+    color: rgba(31, 41, 51, 0.45);
+}
+
+.input:focus {
+    border-color: var(--borde-tarjeta-hover);
+    box-shadow: 0 0 0 3px rgba(118, 216, 69, 0.18);
+}
+
+.boton {
+    width: 100%;
+    height: 52px;
+    margin-top: 18px;
+    background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(75, 166, 70, 0.32);
+    transition: transform 0.2s ease;
+}
+
+.boton:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.boton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.aviso,
+.error {
+    margin-top: 10px;
+    font-size: 0.84rem;
+    text-align: center;
+}
+
+.aviso {
+    color: var(--sec-text-muted);
+}
+
+.error {
+    color: #c0392b;
+}
+
+@media (max-width: 640px) {
+    .tarjeta {
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+
+    .fila {
+        padding: 9px 12px;
+    }
+
+    .etiqueta {
+        font-size: 0.8rem;
+    }
+}

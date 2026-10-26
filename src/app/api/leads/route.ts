@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
         const {
             nombre, email, celular, ciudad, proyecto, como_conocio,
-            fbp, fbc, eventId,
+            fbp, fbc, eventId, content_name,
             utm_source, utm_medium, utm_campaign, utm_content, utm_term
         } = body
 
@@ -106,7 +106,9 @@ export async function POST(request: NextRequest) {
                         fbc,
                     },
                     {
-                        content_name: proyecto || 'General',
+                        // Formularios cuya etiqueta lleva datos variables (la
+                        // calculadora de crédito) mandan un nombre fijo aparte.
+                        content_name: content_name || proyecto || 'General',
                         content_category: 'Real Estate',
                     },
                     eventSourceUrl,

@@ -9,6 +9,7 @@ import { getUtmParams, newEventId, trackGoogleAdsLead } from '@/lib/track'
 import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 import type { VarianteLanding } from '@/lib/landing-variante'
+import SeccionCalculadora from '@/components/credito/SeccionCalculadora'
 
 /* Landing de Lomas del Mar — Design System v2.
    Nació como la campaña Mini Pie, que terminó el 9 de agosto de 2026; desde
@@ -28,6 +29,12 @@ const UTM_CHAT = {
   utm_medium: 'web',
   utm_campaign: 'lomasdelmar_2026',
 }
+/* Planes de la calculadora de cuotas, uno por tamaño: el pie cambia con los m².
+   Son los mismos montos de las tarjetas de "Detalle financiero" de esta página. */
+const PLANES_CALCULADORA = [
+  { etiqueta: '200 m²', datos: { valorTotal: 37_990_000, pie: 5_500_000, dividendo: 550_000 } },
+  { etiqueta: '390 m²', datos: { valorTotal: 45_990_000, pie: 7_500_000, dividendo: 550_000 } },
+]
 /* Globales que inyecta el layout raíz: el Pixel de Meta y el tracker del CRM. */
 type TrackingWindow = {
   fbq?: (
@@ -1369,6 +1376,9 @@ export default function LomasDelMarClient({ variante }: { variante?: VarianteLan
     </div>
   </div>
 </section>
+
+{/* Las variantes de /google/* van sin calculadora: son landings cortas de un solo formulario. */}
+{!variante && <SeccionCalculadora origen="Lomas del Mar" planes={PLANES_CALCULADORA} />}
 
 
 <section id="el-proyecto" style={{"position":"relative","overflow":"hidden","background":"#1a3d1a","padding":"80px 20px"}}>
