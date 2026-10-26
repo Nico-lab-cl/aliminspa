@@ -6,6 +6,7 @@ import {
     abrirSesion,
     enviarAdjunto,
 } from '@/lib/web-chat'
+import { aliHabilitada, programarAli } from '@/lib/ali/motor'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,7 +45,9 @@ export async function POST(request: NextRequest) {
             durationMs: Number.isFinite(duracion) && duracion > 0 ? duracion : undefined,
         })
 
-        return NextResponse.json(datos)
+        // Ali mira las fotos; los audios y videos los deriva a un asesor.
+        programarAli(sesion, request)
+        return NextResponse.json({ ...datos, ali: aliHabilitada() })
     } catch (error) {
         if (error instanceof ChatConfigError) {
             return NextResponse.json(

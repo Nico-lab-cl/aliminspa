@@ -5,10 +5,11 @@ import { getUtmParams } from '@/lib/track';
 import styles from './AliChat.module.css';
 
 /**
- * Chat en vivo con un asesor.
+ * Chat en vivo, atendido por Ali (la asistente con IA) y por los asesores.
  *
  * La conversación vive en el CRM: acá sólo se envía lo que escribe el visitante
- * y se consulta cada pocos segundos si el asesor respondió.
+ * y se consulta cada pocos segundos si Ali o un asesor respondieron. Ali corre
+ * en el servidor (src/lib/ali); el widget sólo muestra su "escribiendo...".
  *
  * El visitante escribe primero y recién ahí se le piden los datos: pedirlos
  * antes de dejarlo hablar espantaba a quien sólo quería preguntar un precio.
@@ -41,6 +42,8 @@ interface Mensaje {
 }
 
 const INTERVALO_POLL_MS = 3000;
+/** Mientras Ali responde. */
+const INTERVALO_POLL_ALI_MS = 1000;
 
 /** Lo mismo que valida el CRM, repetido acá para avisar antes de subir nada. */
 const LIMITES_POR_TIPO: Record<string, number> = {
@@ -99,6 +102,10 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
     const [enviando, setEnviando] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [mostrarAcuse, setMostrarAcuse] = useState(false);
+    /** Ali está escribiendo, según el servidor. */
+    const [aliEscribiendo, setAliEscribiendo] = useState(false);
+    /** Se envió algo y Ali todavía no responde: se consulta más seguido. */
+    const [esperandoAli, setEsperandoAli] = useState(false);
 
     /** Hay conversación abierta en el CRM: sin esto no se puede despachar nada. */
     const [haySesion, setHaySesion] = useState(false);
@@ -168,8 +175,11 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
             if (!res.ok) return;
 
             const datos = await res.json();
-            incorporar(datos.mensajes || []);
+            const entrantes: Mensaje[] = datos.mensajes || [];
+            incorporar(entrantes);
             setHaySesion(true);
+            setAliEscribiendo(Boolean(datos.escribiendo));
+            if (entrantes.some((m) => m.deAsesor)) setEsperandoAli(false);
         } catch {
             // Un fallo puntual de red no debe romper la vista; el siguiente ciclo reintenta.
         }
@@ -199,22 +209,47 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
         consultar();
     }, [consultar]);
 
-    // Consulta periódica, en pausa cuando la pestaña no está visible.
+    // Consulta periódica, en pausa cuando la pestaña no está visible. Mientras
+    // Ali responde se consulta más seguido, para que el "escribiendo..." y su
+    // mensaje aparezcan sin desfase.
+    const rapido = esperandoAli || aliEscribiendo;
     useEffect(() => {
         if (!haySesion) return;
 
         const intervalo = setInterval(() => {
             if (document.visibilityState === 'visible') consultar();
-        }, INTERVALO_POLL_MS);
+        }, rapido ? INTERVALO_POLL_ALI_MS : INTERVALO_POLL_MS);
 
         return () => clearInterval(intervalo);
-    }, [haySesion, consultar]);
+    }, [haySesion, consultar, rapido]);
+
+    // Si Ali no llega a responder (un asesor tomó el chat, o se cayó algo), se
+    // vuelve al ritmo normal de consulta.
+    useEffect(() => {
+        if (!esperandoAli) return;
+        const tope = setTimeout(() => setEsperandoAli(false), 60000);
+        return () => clearTimeout(tope);
+    }, [esperandoAli]);
+
+    /**
+     * Tras enviar algo: si Ali atiende, se espera su respuesta; si no (Ali
+     * apagada), queda el acuse de siempre. El acuse se muestra sólo en el
+     * widget, no se guarda en el CRM, para que el asesor no vea un mensaje que
+     * él no escribió.
+     */
+    const esperarRespuesta = (atiendeAli: boolean) => {
+        if (atiendeAli) {
+            setEsperandoAli(true);
+        } else {
+            setMostrarAcuse(true);
+        }
+    };
 
     useEffect(() => {
         if (listaRef.current) {
             listaRef.current.scrollTop = listaRef.current.scrollHeight;
         }
-    }, [mensajes, mostrarAcuse]);
+    }, [mensajes, mostrarAcuse, aliEscribiendo]);
 
     // En pantallas bajas el formulario no cabe entero: se arrastra el modal
     // hasta el botón para que nadie se quede sin ver cómo enviar.
@@ -385,9 +420,7 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                 desdeRef.current = datos.createdAt;
             }
 
-            // Acuse de recibo: se muestra sólo en el widget, no se guarda en el CRM,
-            // para que el asesor no vea un mensaje que él no escribió.
-            setMostrarAcuse(true);
+            esperarRespuesta(Boolean(datos.ali));
         } catch {
             setMensajes((previos) =>
                 previos.map((m) => (m.id === idTemporal ? { ...m, estado: 'error' } : m))
@@ -509,7 +542,7 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                 desdeRef.current = datos.createdAt;
             }
 
-            setMostrarAcuse(true);
+            esperarRespuesta(Boolean(datos.ali));
         } catch {
             setMensajes((previos) =>
                 previos.map((m) => (m.id === idTemporal ? { ...m, estado: 'error' } : m))
@@ -768,6 +801,20 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                         )}
                     </div>
                 ))}
+
+                {aliEscribiendo && (
+                    <div
+                        className={`${styles.burbuja} ${styles.deAsesor} ${styles.escribiendo}`}
+                        aria-label="Ali está escribiendo"
+                    >
+                        <span className={styles.autor}>Ali</span>
+                        <span className={styles.puntos}>
+                            <span />
+                            <span />
+                            <span />
+                        </span>
+                    </div>
+                )}
 
                 {mostrarAcuse && !mensajes.some((m) => m.deAsesor) && (
                     <p className={styles.acuse}>

@@ -6,6 +6,7 @@ import {
     abrirSesion,
     enviarMensaje,
 } from '@/lib/web-chat'
+import { aliHabilitada, programarAli } from '@/lib/ali/motor'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,7 +40,17 @@ export async function POST(request: NextRequest) {
 
     try {
         const guardado = await enviarMensaje(sesion, text)
-        return NextResponse.json({ id: guardado.id, createdAt: guardado.createdAt })
+
+        // Ali responde en segundo plano; el widget ve su respuesta en la
+        // siguiente consulta. Si un asesor ya tomó la conversación, Ali lo
+        // detecta al leer el contexto y no escribe.
+        programarAli(sesion, request)
+
+        return NextResponse.json({
+            id: guardado.id,
+            createdAt: guardado.createdAt,
+            ali: aliHabilitada(),
+        })
     } catch (error) {
         if (error instanceof ChatConfigError) {
             return NextResponse.json(

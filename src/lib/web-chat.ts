@@ -239,3 +239,58 @@ export async function leerAdjunto(session: ChatSession, mediaId: string) {
         mimeType: respuesta.headers.get('content-type') || 'application/octet-stream',
     }
 }
+
+/* ── Ali, la asistente con IA ────────────────────────────────────── */
+
+export interface MensajeParaAli {
+    id: string
+    texto: string
+    de: 'cliente' | 'ali' | 'asesor'
+    derivacion: boolean
+    createdAt: string
+    adjunto: { id: string; tipo: 'image' | 'audio' | 'video'; mimeType: string } | null
+}
+
+export interface ContextoAli {
+    /** Ningún asesor escribió todavía: Ali puede responder. */
+    activa: boolean
+    /** Cuándo pidió Ali un asesor por última vez, si lo pidió. */
+    derivadaAt: string | null
+    mensajes: MensajeParaAli[]
+    cliente: { nombre: string | null; telefono: string | null; email: string | null; interes: string | null }
+    asesorAsignado: string | null
+}
+
+/** Datos del cliente y conversación reciente, tal como los guarda el CRM. */
+export async function contextoAli(session: ChatSession): Promise<ContextoAli> {
+    const params = new URLSearchParams({
+        conversationId: session.conversationId,
+        sessionId: session.sessionId,
+    })
+    return llamarCrm(`/api/public/web-chat/ali?${params.toString()}`, { method: 'GET' })
+}
+
+/**
+ * Guarda en el CRM un mensaje de Ali. Con `derivacion`, el CRM además avisa a
+ * los asesores. Devuelve null si un asesor ya tomó la conversación.
+ */
+export async function publicarMensajeAli(
+    session: ChatSession,
+    text: string,
+    derivacion?: { motivo: string; resumen: string } | null
+): Promise<{ id: string; createdAt: string } | null> {
+    try {
+        return await llamarCrm('/api/public/web-chat/ali', {
+            method: 'POST',
+            body: JSON.stringify({ ...session, text, derivacion: derivacion || undefined }),
+        })
+    } catch (error) {
+        if (error instanceof ChatUpstreamError && error.status === 502) {
+            // llamarCrm convierte el 409 del CRM en 502; se distingue por si
+            // la conversación ya la tomó un asesor consultando el estado.
+            const { activa } = await contextoAli(session).catch(() => ({ activa: true }))
+            if (!activa) return null
+        }
+        throw error
+    }
+}

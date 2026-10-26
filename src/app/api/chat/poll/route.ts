@@ -6,6 +6,7 @@ import {
     abrirSesion,
     leerMensajes,
 } from '@/lib/web-chat'
+import { aliEscribiendo } from '@/lib/ali/motor'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,7 +25,10 @@ export async function GET(request: NextRequest) {
             sesion,
             request.nextUrl.searchParams.get('since')
         )
-        return NextResponse.json({ mensajes: messages || [] })
+        return NextResponse.json({
+            mensajes: messages || [],
+            escribiendo: aliEscribiendo(sesion.conversationId),
+        })
     } catch (error) {
         if (error instanceof ChatConfigError) {
             return NextResponse.json(
