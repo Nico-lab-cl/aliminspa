@@ -107,11 +107,16 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
         className: 'al-tarjeta-cotizable',
     })
 
+    // El video (8,7 MB) no se descarga hasta que lo tocan: con preload="metadata"
+    // el celular igual lo bajaba entero al abrir la página y frenaba todo lo
+    // demás. Y suena al tocarlo: antes partía en silencio y la gente lo volvía a
+    // tocar buscando el audio (clics muertos en Clarity).
     const playVideo = () => {
         const v = document.getElementById('al-video-andres') as HTMLVideoElement | null
         const ov = document.getElementById('al-video-andres-overlay')
         if (!v) return
         v.setAttribute('controls', 'controls')
+        v.muted = false
         if (ov) ov.style.display = 'none'
         const p = v.play()
         if (p && p.catch) p.catch(() => { if (ov) ov.style.display = 'block'; v.removeAttribute('controls') })
@@ -220,8 +225,12 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }).addTo(map)
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, opacity: 0.85 }).addTo(map)
             const pin = (color: string, name: string) => L.divIcon({ className: '', iconSize: [0, 0], iconAnchor: [0, 0], html: '<div class="al-mappin"><span class="al-pin-head" style="border-color:' + color + '">' + name + '</span><span class="al-pin-dot" style="background:' + color + '"></span></div>' })
-            L.marker(lomas, { icon: pin('#76d845', 'Lomas del Mar') }).addTo(map)
-            L.marker(arena, { icon: pin('#C5A059', 'Arena y Sol') }).addTo(map)
+            // En computador la gente hace clic en los pines (clics muertos en
+            // Clarity): abren el mismo punto en Google Maps que los botones de abajo.
+            const abrirEnMaps = ([lat, lng]: [number, number]) => () =>
+                window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank', 'noopener')
+            L.marker(lomas, { icon: pin('#76d845', 'Lomas del Mar') }).on('click', abrirEnMaps(lomas)).addTo(map)
+            L.marker(arena, { icon: pin('#C5A059', 'Arena y Sol') }).on('click', abrirEnMaps(arena)).addTo(map)
             map.fitBounds([lomas, arena], { padding: [70, 70] })
             setTimeout(() => map.invalidateSize(), 200)
         }
@@ -778,8 +787,8 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
 
                     <div style={s("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:24px")}>
                         <div className="al-videofeat" style={s("position:relative;border-radius:22px;overflow:hidden;background:#0e1a24;box-shadow:0 16px 48px rgba(14,26,36,.28);min-height:380px;cursor:pointer")}>
-                            <video id="al-video-andres" playsInline muted preload="metadata" style={s("position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#0e1a24")}>
-                                <source src={ASSET + '/video/testimonio.mp4#t=0.1'} type="video/mp4" />
+                            <video id="al-video-andres" playsInline preload="none" poster={ASSET + '/video/testimonio-poster.webp'} style={s("position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#0e1a24")}>
+                                <source src={ASSET + '/video/testimonio.mp4'} type="video/mp4" />
                             </video>
                             <div id="al-video-andres-overlay" onClick={playVideo} style={s("position:absolute;inset:0;cursor:pointer")}>
                                 <div style={s("position:absolute;inset:0;background:linear-gradient(to top,rgba(14,26,36,.88) 0%,rgba(14,26,36,.1) 45%,rgba(14,26,36,.4) 100%)")}></div>
@@ -968,7 +977,7 @@ const CSS = `
 #venta-terrenos .al-marquee-track{display:flex;gap:18px;width:max-content;animation:marqueeScroll 40s linear infinite}
 #venta-terrenos .al-marquee-mask{-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
 #venta-terrenos .al-mapwrap .leaflet-container{background:#0a1520;font-family:'Roboto',sans-serif}
-#venta-terrenos .al-mappin{display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%)}
+#venta-terrenos .al-mappin{display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%);cursor:pointer}
 #venta-terrenos .al-pin-head{white-space:nowrap;font:800 12px 'Montserrat',sans-serif;color:#fff;background:rgba(10,21,32,.92);border:1px solid;border-radius:100px;padding:5px 12px;box-shadow:0 6px 18px rgba(0,0,0,.5);margin-bottom:3px}
 #venta-terrenos .al-pin-dot{width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(45deg);border:2.5px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.5)}
 #venta-terrenos .al-videofeat:hover .al-playbig{transform:translate(-50%,-50%) scale(1.08);background:#76d845}

@@ -130,28 +130,28 @@ const GALLERY: GalleryItem[] = [
 
 const PLACES = [
     {
-        image: '/assets/minipie/pasted-1782761706285-0.png',
+        image: '/assets/minipie/pasted-1782761706285-0.webp',
         distance: '8 min',
         category: 'Playa',
         title: 'El Tabo',
         description: 'Playa icónica del litoral con arena extensa y aguas del Pacífico',
     },
     {
-        image: '/assets/minipie/pasted-1782761902415-0.png',
+        image: '/assets/minipie/pasted-1782761902415-0.webp',
         distance: '12 min',
         category: 'Naturaleza',
         title: 'Quebrada de Córdova',
         description: 'Paisaje natural único donde el río se une al océano Pacífico',
     },
     {
-        image: '/assets/minipie/pasted-1782761935471-0.png',
+        image: '/assets/minipie/pasted-1782761935471-0.webp',
         distance: '15 min',
         category: 'Cultura · Patrimonio',
         title: 'Isla Negra',
         description: 'La casa de Pablo Neruda, Patrimonio Mundial de la UNESCO',
     },
     {
-        image: '/assets/minipie/pasted-1782761947129-0.png',
+        image: '/assets/minipie/pasted-1782761947129-0.webp',
         distance: '20 min',
         category: 'Turismo · Recreación',
         title: 'Algarrobo',

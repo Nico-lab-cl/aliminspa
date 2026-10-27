@@ -1442,7 +1442,7 @@ export default function LomasDelMarMetaClient() {
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","aspectRatio":"3/4","cursor":"default","transition":"transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s","border":"2px solid rgba(118,216,69,.4)"}} >
-        <img src="/assets/minipie/pasted-1782761706285-0.png" alt="Playa El Tabo" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
+        <img src="/assets/minipie/pasted-1782761706285-0.webp" loading="lazy" decoding="async" alt="Playa El Tabo" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
         
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,18,28,.92) 0%,rgba(10,18,28,.3) 45%,transparent 100%)"}}></div>
         
@@ -1457,7 +1457,7 @@ export default function LomasDelMarMetaClient() {
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","aspectRatio":"3/4","cursor":"default","transition":"transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s","border":"2px solid rgba(118,216,69,.4)"}} >
-        <img src="/assets/minipie/pasted-1782761902415-0.png" alt="Quebrada de Córdova" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
+        <img src="/assets/minipie/pasted-1782761902415-0.webp" loading="lazy" decoding="async" alt="Quebrada de Córdova" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,18,28,.92) 0%,rgba(10,18,28,.3) 45%,transparent 100%)"}}></div>
         <div style={{"position":"absolute","top":"14px","left":"14px","background":"rgba(118,216,69,.9)","backdropFilter":"blur(8px)","borderRadius":"100px","padding":"5px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#fff"}}>📍 8 min</div>
         <div style={{"position":"absolute","bottom":"0","left":"0","right":"0","padding":"24px 20px"}}>
@@ -1469,7 +1469,7 @@ export default function LomasDelMarMetaClient() {
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","aspectRatio":"3/4","cursor":"default","transition":"transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s","border":"2px solid rgba(118,216,69,.4)"}} >
-        <img src="/assets/minipie/pasted-1782761935471-0.png" alt="Isla Negra — Casa de Pablo Neruda" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
+        <img src="/assets/minipie/pasted-1782761935471-0.webp" loading="lazy" decoding="async" alt="Isla Negra — Casa de Pablo Neruda" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,18,28,.92) 0%,rgba(10,18,28,.3) 45%,transparent 100%)"}}></div>
         <div style={{"position":"absolute","top":"14px","left":"14px","background":"rgba(118,216,69,.9)","backdropFilter":"blur(8px)","borderRadius":"100px","padding":"5px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#fff"}}>📍 12 min</div>
         <div style={{"position":"absolute","bottom":"0","left":"0","right":"0","padding":"24px 20px"}}>
@@ -1481,7 +1481,7 @@ export default function LomasDelMarMetaClient() {
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","aspectRatio":"3/4","cursor":"default","transition":"transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s","border":"2px solid rgba(118,216,69,.4)"}} >
-        <img src="/assets/minipie/pasted-1782761947129-0.png" alt="Algarrobo — La piscina más grande del mundo" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
+        <img src="/assets/minipie/pasted-1782761947129-0.webp" loading="lazy" decoding="async" alt="Algarrobo — La piscina más grande del mundo" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,18,28,.92) 0%,rgba(10,18,28,.3) 45%,transparent 100%)"}}></div>
         <div style={{"position":"absolute","top":"14px","left":"14px","background":"rgba(118,216,69,.9)","backdropFilter":"blur(8px)","borderRadius":"100px","padding":"5px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#fff"}}>📍 20 min</div>
         <div style={{"position":"absolute","bottom":"0","left":"0","right":"0","padding":"24px 20px"}}>
@@ -1533,7 +1533,7 @@ export default function LomasDelMarMetaClient() {
 
       
       <div style={{"position":"relative","borderRadius":"22px","overflow":"hidden","background":"#0e1a24","boxShadow":"0 16px 48px rgba(14,26,36,.28)","minHeight":"420px"}}>
-        <video id="testimonial-video" src="/assets/minipie/testimonio-video.mp4" playsInline preload="metadata" style={{"width":"100%","height":"100%","objectFit":"cover","display":"block","position":"absolute","inset":"0"}}></video>
+        <video id="testimonial-video" src="/assets/minipie/testimonio-video.mp4" playsInline preload="none" poster="/assets/minipie/testimonio-video-poster.webp" style={{"width":"100%","height":"100%","objectFit":"cover","display":"block","position":"absolute","inset":"0"}}></video>
         
         <div id="video-overlay" onClick={playTestimonial} style={{"position":"absolute","inset":"0","zIndex":"2","cursor":"pointer","display":"flex","flexDirection":"column","justifyContent":"flex-end","background":"linear-gradient(to top,rgba(14,26,36,.85) 0%,rgba(14,26,36,.1) 45%,rgba(14,26,36,.35) 100%)","transition":"opacity .4s ease"}}>
           
@@ -1990,7 +1990,7 @@ export default function LomasDelMarMetaClient() {
       <div style={{"background":"rgba(255,255,255,.06)","border":"1px solid rgba(255,255,255,.12)","borderRadius":"22px","overflow":"hidden","transition":"all .3s"}} >
         
         <div style={{"position":"relative","height":"360px","overflow":"hidden"}}>
-          <img src="/assets/minipie/Marcela.png" alt="Marcela Escobar" style={{"width":"100%","height":"100%","objectFit":"contain","objectPosition":"center bottom","display":"block","background":"#0a1a26"}} />
+          <img src="/assets/minipie/Marcela.webp" loading="lazy" decoding="async" alt="Marcela Escobar" style={{"width":"100%","height":"100%","objectFit":"contain","objectPosition":"center bottom","display":"block","background":"#0a1a26"}} />
           <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(14,26,36,.92) 0%,rgba(14,26,36,.1) 55%,transparent 100%)"}}></div>
           <div style={{"position":"absolute","bottom":"20px","left":"22px"}}>
             <div style={{"font":"600 10px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".1em","marginBottom":"4px"}}>Asesora inmobiliaria</div>
@@ -2015,7 +2015,7 @@ export default function LomasDelMarMetaClient() {
       <div style={{"background":"rgba(255,255,255,.06)","border":"1px solid rgba(255,255,255,.12)","borderRadius":"22px","overflow":"hidden","transition":"all .3s"}} >
         
         <div style={{"position":"relative","height":"360px","overflow":"hidden"}}>
-          <img src="/assets/minipie/Orlando.png" alt="Orlando Costa" style={{"width":"100%","height":"100%","objectFit":"contain","objectPosition":"center bottom","display":"block","background":"#0a1a26"}} />
+          <img src="/assets/minipie/Orlando.webp" loading="lazy" decoding="async" alt="Orlando Costa" style={{"width":"100%","height":"100%","objectFit":"contain","objectPosition":"center bottom","display":"block","background":"#0a1a26"}} />
           <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(14,26,36,.92) 0%,rgba(14,26,36,.1) 55%,transparent 100%)"}}></div>
           <div style={{"position":"absolute","bottom":"20px","left":"22px"}}>
             <div style={{"font":"600 10px 'Montserrat',sans-serif","color":"#76d845","textTransform":"uppercase","letterSpacing":".1em","marginBottom":"4px"}}>Asesor inmobiliario</div>
