@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
                 <div className="content" style={{ color: 'var(--text)', fontSize: '1.05rem', lineHeight: '1.8' }}>
                     <p style={p}>
                         Esta política explica qué datos personales tratamos cuando usas <strong>{SITE.domain}</strong>, nos
-                        escribes por el chat o WhatsApp, o respondes a nuestros anuncios en Facebook e Instagram; para qué
+                        escribes por el chat o WhatsApp, o respondes a nuestros anuncios en Facebook, Instagram o Google; para qué
                         los usamos, con quién los compartimos, cuánto tiempo los guardamos y cómo puedes ejercer tus
                         derechos.
                     </p>
@@ -96,6 +96,11 @@ export default function PrivacyPolicyPage() {
                         <li>
                             <strong>Los que nos das en formularios:</strong> nombre, correo, celular, ciudad y región,
                             proyecto o lote de interés, cómo nos conociste y, si agendas, la fecha y hora de la visita.
+                            Lo mismo si los dejas en un formulario dentro de un anuncio de Google.
+                        </li>
+                        <li>
+                            <strong>Si llegaste desde un anuncio de Google:</strong> el identificador del clic (gclid) que
+                            Google agrega a la dirección de la página. Solo se guarda si envías un formulario.
                         </li>
                         <li>
                             <strong>Conversaciones:</strong> los mensajes y archivos que nos envías por el chat del sitio o
@@ -127,6 +132,7 @@ export default function PrivacyPolicyPage() {
                             ['Enviarte novedades, ofertas y lanzamientos por correo o WhatsApp.', 'Tu consentimiento aparte y opcional. Puedes retirarlo cuando quieras.'],
                             ['Medir y mejorar el sitio (Google Analytics, Microsoft Clarity).', 'Tu consentimiento en el banner de cookies (analítica).'],
                             ['Medir nuestros anuncios y mostrarte publicidad de Alimin en Facebook e Instagram (Meta Pixel, API de Conversiones, audiencias personalizadas).', 'Tu consentimiento en el banner de cookies (marketing) y, para audiencias armadas con tu correo o teléfono, tu consentimiento para recibir publicidad.'],
+                            ['Saber qué anuncio de Google trajo tu consulta: le informamos a Google Ads el identificador del clic y la fecha y hora del envío, sin tu nombre, correo ni teléfono.', 'Interés legítimo de Alimin en medir sus anuncios. Puedes oponerte escribiéndonos.'],
                             ['Proteger el sitio contra abusos y envíos automáticos.', 'Interés legítimo de Alimin en la seguridad del sitio.'],
                             ['Si compras, preparar la promesa y la escritura, cobrar y cumplir obligaciones tributarias.', 'El contrato y las obligaciones legales.'],
                         ]}
@@ -142,7 +148,7 @@ export default function PrivacyPolicyPage() {
                     <ul style={ul}>
                         <li>Proveedor de hosting y base de datos del sitio.</li>
                         <li>Nuestro sistema de gestión de clientes (CRM), donde los asesores ven tu consulta y te responden.</li>
-                        <li>Google (Analytics, Tag Manager y Calendar, que usamos para agendar visitas).</li>
+                        <li>Google (Analytics, Tag Manager, Google Ads y Calendar, que usamos para agendar visitas).</li>
                         <li>Meta Platforms (Facebook, Instagram y WhatsApp).</li>
                         <li>Microsoft (Clarity).</li>
                     </ul>

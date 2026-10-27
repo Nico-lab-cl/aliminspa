@@ -14,7 +14,7 @@
  */
 
 /** Fecha de la versión vigente de /politica-de-privacidad. Cambiarla al editar la política. */
-export const POLITICA_VERSION = '2026-10-03'
+export const POLITICA_VERSION = '2026-10-27'
 
 export const CONSENT_COOKIE = 'alimin_consent'
 

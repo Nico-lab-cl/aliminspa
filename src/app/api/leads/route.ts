@@ -4,6 +4,7 @@ import { sendMetaEvent } from '@/lib/meta-capi'
 import { forwardLeadToCrm } from '@/lib/crm-webhook'
 import { aceptoMarketing, columnasConsentimiento, ipDe } from '@/lib/consent-server'
 import { dentroDelLimite } from '@/lib/rate-limit'
+import { idsDeClicGoogle } from '@/lib/google-ads-clic'
 
 export async function POST(request: NextRequest) {
     try {
@@ -54,18 +55,24 @@ export async function POST(request: NextRequest) {
         // peor que puede pasar acá. Por eso se reintenta solo con las columnas
         // originales en vez de devolver error. Este fallback se puede borrar
         // una vez que las columnas existan en todos los ambientes.
+        // El identificador del clic de Google Ads (octubre 2026) va aparte por la
+        // misma razón: si las columnas todavía no existen, el lead se guarda sin él.
+        const conConsentimiento = {
+            ...baseData,
+            como_conocio: como_conocio || null,
+            ...columnasConsentimiento(body, request),
+        }
         let lead
         try {
-            lead = await prisma.lead.create({
-                data: {
-                    ...baseData,
-                    como_conocio: como_conocio || null,
-                    ...columnasConsentimiento(body, request),
-                },
-            })
+            lead = await prisma.lead.create({ data: { ...conConsentimiento, ...idsDeClicGoogle(body) } })
         } catch (e) {
-            console.error('Fallo el insert con como_conocio/consentimiento, reintentando sin esas columnas:', e)
-            lead = await prisma.lead.create({ data: baseData })
+            console.error('Fallo el insert con gclid, reintentando sin esas columnas:', e)
+            try {
+                lead = await prisma.lead.create({ data: conConsentimiento })
+            } catch (e2) {
+                console.error('Fallo el insert con como_conocio/consentimiento, reintentando sin esas columnas:', e2)
+                lead = await prisma.lead.create({ data: baseData })
+            }
         }
 
         // Enviar lead al CRM en tiempo real (best-effort, nunca bloquea ni rompe el guardado)

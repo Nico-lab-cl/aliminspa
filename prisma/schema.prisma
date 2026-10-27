@@ -31,6 +31,13 @@ model Lead {
   consentimiento_at        DateTime?
   politica_version         String?
   consentimiento_origen    String?
+  // Identificador del clic de Google Ads (octubre 2026). Llega en la URL de la
+  // landing; con él se suben a Google los leads de quienes no aceptaron
+  // cookies (ver /api/google-ads/conversiones). gbraid y wbraid son los que
+  // usa Google en iPhone en vez de gclid.
+  gclid  String?
+  gbraid String?
+  wbraid String?
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("leads")

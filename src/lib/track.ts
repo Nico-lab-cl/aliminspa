@@ -11,6 +11,11 @@ import { marketingCargado } from '@/components/consent/trackers'
  * Used instead of next/navigation's useSearchParams(), which forces the whole
  * page into a Suspense fallback and prevents server-side rendering of content
  * (bad for SEO — crawlers see an empty page). Call this at submit time.
+ *
+ * También devuelve el identificador del clic de Google Ads (gclid, o gbraid/
+ * wbraid en iPhone). Se lee de la URL al enviar, sin cookies ni almacenamiento
+ * en el navegador, y solo viaja si la persona manda el formulario: así Google
+ * puede contar el lead aunque no haya aceptado cookies de marketing.
  */
 export const getUtmParams = (defaults: Record<string, string> = {}) => {
     const empty = {
@@ -19,6 +24,9 @@ export const getUtmParams = (defaults: Record<string, string> = {}) => {
         utm_campaign: defaults.utm_campaign || null,
         utm_content: (defaults.utm_content as string) || null,
         utm_term: (defaults.utm_term as string) || null,
+        gclid: null as string | null,
+        gbraid: null as string | null,
+        wbraid: null as string | null,
     }
     if (typeof window === 'undefined') return empty
     const p = new URLSearchParams(window.location.search)
@@ -28,6 +36,9 @@ export const getUtmParams = (defaults: Record<string, string> = {}) => {
         utm_campaign: p.get('utm_campaign') || empty.utm_campaign,
         utm_content: p.get('utm_content') || empty.utm_content,
         utm_term: p.get('utm_term') || empty.utm_term,
+        gclid: p.get('gclid'),
+        gbraid: p.get('gbraid'),
+        wbraid: p.get('wbraid'),
     }
 }
 
