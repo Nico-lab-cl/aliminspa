@@ -9,11 +9,12 @@ import FAQ from '@/components/sections/FAQ'
 import HomeNewsletter from '@/components/sections/HomeNewsletter'
 import { FAQSchema } from '@/components/seo/JsonLd'
 import SeccionCalculadora from '@/components/credito/SeccionCalculadora'
+import { PLANES_LOMAS_DEL_MAR } from '@/components/credito/planes'
 
 // La calculadora de la home parte con el plan publicado de Lomas del Mar 200 m²
 // (el mismo de su página), no con el ejemplo de la planilla ($38.490.000), que
 // no es un precio real y los leads lo dejaban tal cual.
-const PLAN_LOMAS_200 = { valorTotal: 37_990_000, pie: 5_500_000, dividendo: 550_000 }
+const PLAN_LOMAS_200 = PLANES_LOMAS_DEL_MAR[0].datos
 
 export default function HomePage() {
     return (

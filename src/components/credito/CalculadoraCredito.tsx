@@ -42,7 +42,7 @@ const CAMPOS: { clave: keyof DatosCredito; label: string }[] = [
 ]
 
 interface Props {
-    /** Dónde está la calculadora: va en la etiqueta del lead ("Crédito - Lomas del Mar | …"). Vacío en /credito. */
+    /** Dónde está la calculadora: va en la etiqueta del lead ("Crédito - Lomas del Mar | …"). */
     origen?: string
     /** Montos con los que parte. Por defecto, los de la planilla. */
     valoresIniciales?: DatosCredito

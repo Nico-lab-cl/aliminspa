@@ -7,6 +7,7 @@ import AliFloatingCharacter from '@/components/layout/AliFloatingCharacter'
 import { FAQ_ARENA_Y_SOL } from './faq'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 import SeccionCalculadora from '@/components/credito/SeccionCalculadora'
+import { PLANES_ARENA_Y_SOL } from '@/components/credito/planes'
 
 /* Landing de Arena y Sol — Design System v2 (mismo mundo visual que /minipie).
    La página es standalone: trae su propio header, footer y WhatsApp flotante,
@@ -34,7 +35,7 @@ const VENDIDOS_PCT = 60
 const PLAZO_CUOTAS = 44
 // Con lo que parte la calculadora de cuotas: el plan publicado ($42M en total,
 // pie de $20M y cuotas de $500 mil), que da exactamente PLAZO_CUOTAS.
-const PLAN_CALCULADORA = { valorTotal: 42_000_000, pie: 20_000_000, dividendo: 500_000 }
+const PLAN_CALCULADORA = PLANES_ARENA_Y_SOL[0].datos
 
 const WA_MARCELA = '56956654833'
 const WA_ORLANDO = '56973077128'

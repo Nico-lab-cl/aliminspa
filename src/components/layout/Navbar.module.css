@@ -117,6 +117,21 @@
     display: none;
 }
 
+/* Entre 1025 y 1240 px los siete links no caben en una línea con el espacio normal. */
+@media (min-width: 1025px) and (max-width: 1240px) {
+    .nav {
+        gap: 16px;
+    }
+
+    .links {
+        gap: 16px;
+    }
+
+    .link {
+        font-size: 13px;
+    }
+}
+
 /* Mobile responsive */
 @media (max-width: 1024px) {
     .logoImg {

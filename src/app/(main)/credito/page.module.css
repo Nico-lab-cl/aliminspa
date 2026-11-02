@@ -1,9 +1,8 @@
-/* /credito: solo la calculadora, sobre el gris claro del sitio. */
+/* /credito: la calculadora sobre el gris claro del sitio, bajo el navbar fijo. */
 
 .pagina {
-    min-height: 100dvh;
     background: var(--sec-bg);
-    padding: 28px 16px 40px;
+    padding: 140px 16px 64px;
     color: var(--sec-text);
 }
 
@@ -15,15 +14,6 @@
 .encabezado {
     text-align: center;
     margin-bottom: 22px;
-}
-
-/* El archivo del logo trae mucho aire arriba y abajo: se recorta al centro. */
-.logo {
-    display: block;
-    width: 150px;
-    aspect-ratio: 1920 / 560;
-    object-fit: cover;
-    margin: 0 auto 18px;
 }
 
 .titulo {
