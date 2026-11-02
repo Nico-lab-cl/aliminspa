@@ -56,6 +56,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         // landing que /proyectos/lomas-del-mar y hace canonical hacia ella.
         // Las landings de /meta/* tampoco se listan, van con noindex.
         {
+            url: `${baseUrl}/terrenos-litoral-central`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
             url: `${baseUrl}/venta-de-terrenos-litoral-central`,
             lastModified: new Date(),
             changeFrequency: 'weekly',

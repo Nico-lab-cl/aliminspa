@@ -1,0 +1,482 @@
+/* Pillar "Terrenos en la playa del Litoral Central". Página de lectura: fondos
+   gris claro (--sec-bg) alternados con blanco, tarjetas blancas con el borde
+   verde de marca (--borde-tarjeta) y texto grafito. Sin navy. */
+
+/* ── HERO ───────────────────────────────────────────────── */
+.hero {
+    background: var(--sec-bg);
+    padding: calc(var(--header-height, 110px) + 36px) 24px 56px;
+}
+
+.heroInner {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    color: var(--text-secondary-light);
+    margin-bottom: 22px;
+}
+
+.breadcrumb a {
+    color: var(--text-secondary-light);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: var(--verde-solido);
+}
+
+.breadcrumbCurrent {
+    color: var(--verde-solido);
+    font-weight: 600;
+}
+
+.kicker {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--verde-solido);
+    margin-bottom: 12px;
+}
+
+.h1 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.9rem, 4.4vw, 3rem);
+    line-height: 1.15;
+    color: #1f2933;
+    margin: 0 0 18px;
+}
+
+.highlight {
+    color: var(--verde-solido);
+}
+
+.lead {
+    font-family: var(--font);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    line-height: 1.7;
+    color: #1f2933;
+    margin: 0 0 26px;
+}
+
+.ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.btnPrimary,
+.btnGhost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 10px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.btnPrimary {
+    background: var(--verde-solido);
+    color: #fff;
+}
+
+.btnPrimary:hover {
+    background: #3f8f3b;
+}
+
+.btnGhost {
+    background: #fff;
+    color: #1f2933;
+    border: var(--borde-tarjeta);
+}
+
+.btnGhost:hover {
+    border-color: var(--borde-tarjeta-hover);
+}
+
+.indice {
+    background: #fff;
+    border: var(--borde-tarjeta);
+    border-radius: 14px;
+    padding: 18px 22px;
+}
+
+.indiceTitulo {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1f2933;
+    margin-bottom: 8px;
+}
+
+.indice ol {
+    margin: 0;
+    padding-left: 20px;
+    columns: 2;
+    column-gap: 32px;
+    font-family: var(--font);
+    font-size: 0.92rem;
+    line-height: 1.9;
+}
+
+.indice a {
+    color: var(--verde-solido);
+    text-decoration: none;
+}
+
+.indice a:hover {
+    text-decoration: underline;
+}
+
+/* ── SECCIONES ──────────────────────────────────────────── */
+.seccion {
+    background: var(--sec-bg);
+    padding: 64px 24px;
+    scroll-margin-top: calc(var(--header-height, 110px) + 8px);
+}
+
+.seccionBlanca {
+    background: #fff;
+}
+
+.inner {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.h2 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    line-height: 1.25;
+    color: #1f2933;
+    margin: 0 0 14px;
+}
+
+.h3,
+.h3Seccion {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.08rem;
+    color: #1f2933;
+    margin: 0 0 8px;
+}
+
+.h3 a {
+    color: inherit;
+}
+
+.h3Seccion {
+    font-size: 1.25rem;
+    margin: 40px 0 16px;
+}
+
+.h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1f2933;
+    margin: 0 0 6px;
+}
+
+.parrafo {
+    font-family: var(--font);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text-secondary-light);
+    max-width: 760px;
+    margin: 0 0 28px;
+}
+
+.nota {
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-secondary-light);
+    margin: 14px 0 0;
+}
+
+.nota a,
+.enlaceFlecha {
+    color: var(--verde-solido);
+    font-weight: 600;
+}
+
+.enlaceFlecha {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.enlaceFlecha:hover {
+    text-decoration: underline;
+}
+
+/* ── TARJETAS ───────────────────────────────────────────── */
+.tarjeta {
+    background: #fff;
+    border: var(--borde-tarjeta);
+    border-radius: 14px;
+    padding: 22px;
+    transition: border-color 0.2s;
+}
+
+.tarjeta:hover {
+    border-color: var(--borde-tarjeta-hover);
+}
+
+.tarjetaLocal {
+    border-width: 2px;
+    border-color: var(--verde-lima);
+    box-shadow: 0 6px 20px rgba(118, 216, 69, 0.14);
+}
+
+.tarjetaTexto {
+    font-family: var(--font);
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--text-secondary-light);
+    margin: 0;
+}
+
+.etiqueta {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary-light);
+    background: var(--sec-bg);
+    border-radius: 999px;
+    padding: 4px 10px;
+    margin-bottom: 12px;
+}
+
+.etiquetaLocal {
+    color: #fff;
+    background: var(--verde-solido);
+}
+
+.comunasGrid,
+.factoresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.factoresGrid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.pagoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* ── TABLA DE PRECIOS ───────────────────────────────────── */
+.tablaWrap {
+    overflow-x: auto;
+    border: var(--borde-tarjeta);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font);
+    font-size: 0.93rem;
+    color: #1f2933;
+    min-width: 620px;
+}
+
+.tabla caption {
+    text-align: left;
+    padding: 14px 18px 4px;
+    font-size: 0.82rem;
+    color: var(--text-secondary-light);
+}
+
+.tabla th,
+.tabla td {
+    text-align: left;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(31, 41, 51, 0.08);
+}
+
+.tabla thead th {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary-light);
+}
+
+.tabla tbody tr:last-child th,
+.tabla tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla tbody th a {
+    color: #1f2933;
+    font-weight: 700;
+}
+
+.tablaPrecio {
+    font-weight: 700;
+    color: var(--verde-solido);
+}
+
+/* ── PROYECTOS ──────────────────────────────────────────── */
+.proyectosGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.proyecto {
+    display: block;
+    background: #fff;
+    border: var(--borde-tarjeta);
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: border-color 0.2s;
+}
+
+.proyecto:hover {
+    border-color: var(--borde-tarjeta-hover);
+}
+
+.proyectoImg {
+    position: relative;
+    aspect-ratio: 16 / 9;
+}
+
+.proyectoImg img {
+    object-fit: cover;
+}
+
+.proyectoBody {
+    padding: 18px 22px 20px;
+}
+
+/* ── FORMULARIO ─────────────────────────────────────────── */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr minmax(320px, 440px);
+    gap: 40px;
+    align-items: start;
+}
+
+/* ── FAQ ────────────────────────────────────────────────── */
+.faqList {
+    display: grid;
+    gap: 12px;
+    max-width: 860px;
+}
+
+.faqItem {
+    background: #fff;
+    border: var(--borde-tarjeta);
+    border-radius: 14px;
+    padding: 0 22px;
+}
+
+.faqItem[open] {
+    border-color: var(--borde-tarjeta-hover);
+}
+
+.faqPregunta {
+    cursor: pointer;
+    list-style: none;
+    padding: 18px 0;
+}
+
+.faqPregunta::-webkit-details-marker {
+    display: none;
+}
+
+.faqPregunta h3 {
+    display: inline;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1f2933;
+    margin: 0;
+}
+
+.faqPregunta::after {
+    content: '+';
+    float: right;
+    font-weight: 700;
+    color: var(--verde-solido);
+}
+
+.faqItem[open] .faqPregunta::after {
+    content: '−';
+}
+
+.faqRespuesta {
+    font-family: var(--font);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-secondary-light);
+    margin: 0 0 18px;
+}
+
+/* ── MÓVIL ──────────────────────────────────────────────── */
+@media (max-width: 760px) {
+    .hero {
+        padding: calc(var(--header-height, 96px) + 20px) 16px 40px;
+    }
+
+    .seccion {
+        padding: 44px 16px;
+    }
+
+    .indice ol {
+        columns: 1;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .btnPrimary,
+    .btnGhost {
+        width: 100%;
+    }
+}

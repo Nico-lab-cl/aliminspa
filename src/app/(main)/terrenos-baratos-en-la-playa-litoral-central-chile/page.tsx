@@ -178,8 +178,8 @@ function JsonLd() {
                     {
                         '@type': 'ListItem',
                         position: 2,
-                        name: 'Venta de terrenos Litoral Central',
-                        item: `${SITE.url}/venta-de-terrenos-litoral-central`,
+                        name: 'Terrenos en el Litoral Central',
+                        item: `${SITE.url}/terrenos-litoral-central`,
                     },
                     {
                         '@type': 'ListItem',

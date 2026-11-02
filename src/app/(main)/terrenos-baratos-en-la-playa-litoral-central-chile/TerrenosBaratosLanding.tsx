@@ -132,7 +132,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                 <div className={styles.breadcrumbInner}>
                     <Link href="/">Inicio</Link>
                     <span aria-hidden="true">›</span>
-                    <Link href="/venta-de-terrenos-litoral-central">Venta de terrenos Litoral Central</Link>
+                    <Link href="/terrenos-litoral-central">Terrenos en el Litoral Central</Link>
                     <span aria-hidden="true">›</span>
                     <span className={styles.breadcrumbCurrent}>Terrenos baratos en la playa</span>
                 </div>
