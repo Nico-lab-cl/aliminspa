@@ -96,7 +96,7 @@ function JsonLd() {
                 offers: {
                     '@type': 'Offer',
                     priceCurrency: 'CLP',
-                    price: '29990000',
+                    price: '35000000',
                     availability: 'https://schema.org/InStock',
                     url: PAGE_URL,
                     areaServed: 'El Tabo, Litoral Central, Chile',
@@ -117,7 +117,7 @@ function JsonLd() {
                 offers: {
                     '@type': 'Offer',
                     priceCurrency: 'CLP',
-                    price: '42000000',
+                    price: '39000000',
                     availability: 'https://schema.org/LimitedAvailability',
                     url: PAGE_URL,
                     areaServed: 'El Tabo, Litoral Central, Chile',

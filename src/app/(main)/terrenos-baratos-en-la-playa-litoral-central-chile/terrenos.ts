@@ -75,7 +75,7 @@ export const TERRENOS: TerrenoBarato[] = [
         contadoTexto: '$39.000.000',
         pie: '$20.000.000',
         cuota: '$500.000',
-        plazo: 'Cuotas mensuales',
+        plazo: '44 cuotas',
         precioM2: '$195.000',
         imagen: '/assets/venta-terrenos/gallery/g01.webp',
         plano: '/assets/venta-terrenos/plano-arena-y-sol-2026-08-24.webp',
