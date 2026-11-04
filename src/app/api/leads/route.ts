@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendMetaEvent } from '@/lib/meta-capi'
-import { forwardLeadToCrm } from '@/lib/crm-webhook'
+import { forwardLeadToCrm, registrarActividadCrmWeb } from '@/lib/crm-webhook'
+import { EBOOKS, type EbookSlug } from '@/lib/ebooks'
 import { aceptoMarketing, columnasConsentimiento, ipDe } from '@/lib/consent-server'
 import { dentroDelLimite } from '@/lib/rate-limit'
 import { idsDeClicGoogle } from '@/lib/google-ads-clic'
@@ -28,6 +29,12 @@ export async function POST(request: NextRequest) {
             utm_source, utm_medium, utm_campaign, utm_content, utm_term
         } = body
 
+        // Descarga de un ebook (src/lib/ebooks.ts): entra al CRM como "Ebook",
+        // sin asesor, y a Meta no va como Lead, para no mezclar un contacto frío
+        // con las cotizaciones de las que aprenden las campañas.
+        const ebook = typeof body.ebook === 'string' && body.ebook in EBOOKS ? EBOOKS[body.ebook as EbookSlug] : null
+        const etiquetaProyecto = ebook ? `Ebook - ${ebook.titulo}` : proyecto || null
+
         if (!nombre || !email || !celular || !ciudad) {
             return NextResponse.json(
                 { error: 'Todos los campos son obligatorios: nombre, email, celular, ciudad' },
@@ -40,7 +47,7 @@ export async function POST(request: NextRequest) {
             email,
             celular,
             ciudad,
-            proyecto: proyecto || null,
+            proyecto: etiquetaProyecto,
             fuente: 'web',
             utm_source: utm_source || null,
             utm_medium: utm_medium || null,
@@ -76,19 +83,33 @@ export async function POST(request: NextRequest) {
         }
 
         // Enviar lead al CRM en tiempo real (best-effort, nunca bloquea ni rompe el guardado)
-        await forwardLeadToCrm({
+        const leadCrm = await forwardLeadToCrm({
             nombre,
             email,
             celular,
             ciudad,
-            proyecto,
+            proyecto: etiquetaProyecto,
             utm_source,
             utm_medium,
             utm_campaign,
             utm_content,
             utm_term,
             como_conocio,
+            origen: ebook ? 'Ebook' : undefined,
         })
+
+        // La descarga se registra desde aquí y no con el rastreador del
+        // navegador, que no carga sin cookies de marketing. El CRM web manda la
+        // secuencia del ebook solo a quien aceptó recibir novedades: el PDF ya
+        // lo descargó en la página.
+        if (ebook && leadCrm?.id) {
+            await registrarActividadCrmWeb({
+                leadId: leadCrm.id,
+                tipo: 'EBOOK_DOWNLOAD',
+                pagina: request.headers.get('referer'),
+                detalles: { ebook: ebook.slug, marketing: body.consentimiento_marketing === true },
+            })
+        }
 
         // Enviar evento a Meta Conversions API, solo si el visitante aceptó
         // cookies de marketing: sin eso tampoco se cargó el Pixel, y mandar su
@@ -100,7 +121,7 @@ export async function POST(request: NextRequest) {
 
             try {
                 await sendMetaEvent(
-                    'Lead',
+                    ebook ? 'CompleteRegistration' : 'Lead',
                     {
                         em: email,
                         ph: celular,

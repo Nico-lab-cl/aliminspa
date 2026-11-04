@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import CookieBanner from '@/components/consent/CookieBanner'
+import EbookPopup from '@/components/ebooks/EbookPopup'
 import '@/styles/globals.css'
 import { SITE } from '@/lib/constants'
 import Navbar from '@/components/layout/Navbar'
@@ -94,6 +95,10 @@ export default function RootLayout({
             del CRM ya no van en el <head>: los carga este banner solo si el
             visitante los acepta (Ley 21.719). Ver src/components/consent. */}
         <CookieBanner />
+
+        {/* Ofrece un ebook solo a quien muestra interés y solo en las páginas
+            que lista src/lib/ebooks.ts (ver EbookPopup). */}
+        <EbookPopup />
       </body>
     </html>
   )

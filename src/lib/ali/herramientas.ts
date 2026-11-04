@@ -266,8 +266,11 @@ const PAGINAS = [
     '/proyectos/libertad-y-alegria',
     '/quienes-somos',
     '/asesores',
-    '/venta-de-terrenos-litoral-central',
+    // /venta-de-terrenos-litoral-central redirige (301) aquí desde nov-2026.
     '/terrenos-baratos-en-la-playa-litoral-central-chile',
+    '/terrenos-litoral-central',
+    '/ebooks/terreno-urbano-o-parcela-rural',
+    '/ebooks/preguntas-frecuentes',
     '/blog',
     ...BLOG_POSTS.map(p => `/blog/${p.slug}`),
 ]
