@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { SITE, PROJECTS } from '@/lib/constants'
 import { BLOG_POSTS } from '@/lib/blog-data'
+import { LISTA_EBOOKS } from '@/lib/ebooks'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = SITE.url
@@ -46,12 +47,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         ...blogRoutes,
-        {
-            url: `${baseUrl}/cyber`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
+        // /cyber salió en nov-2026: la promoción terminó y no hay otra vigente.
+        ...LISTA_EBOOKS.map((e) => ({
+            url: `${baseUrl}/ebooks/${e.slug}`,
+            lastModified: new Date('2026-11-04'),
+            changeFrequency: 'monthly' as const,
+            priority: 0.7,
+        })),
         // /minipie queda fuera del sitemap a propósito: renderiza la misma
         // landing que /proyectos/lomas-del-mar y hace canonical hacia ella.
         // Las landings de /meta/* tampoco se listan, van con noindex.
@@ -61,12 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'weekly',
             priority: 0.9,
         },
-        {
-            url: `${baseUrl}/venta-de-terrenos-litoral-central`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.9,
-        },
+        // /venta-de-terrenos-litoral-central redirige (301) a la de terrenos
+        // baratos: un sitemap no lista URLs que redirigen.
         {
             url: `${baseUrl}/terrenos-baratos-en-la-playa-litoral-central-chile`,
             lastModified: new Date(),

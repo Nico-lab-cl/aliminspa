@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     description:
         '¿Buscas terreno en El Quisco? Mira El Tabo, la comuna vecina: lotes urbanizados con rol propio, agua y luz, y financiamiento directo sin banco.',
     robots: { index: false, follow: false },
-    alternates: { canonical: `${SITE.url}/venta-de-terrenos-litoral-central` },
+    // /venta-de-terrenos-litoral-central redirige (301) a la landing de terrenos baratos.
+    alternates: { canonical: `${SITE.url}/terrenos-baratos-en-la-playa-litoral-central-chile` },
 }
 
 export default function GoogleTerrenosCercaDeElQuiscoPage() {
