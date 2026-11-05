@@ -1,0 +1,118 @@
+/* Brochure: gris claro, bordes verdes y el verde lima de los botones. */
+
+.pagina {
+    background: #f4f6f8;
+    padding: clamp(96px, 12vw, 140px) 16px clamp(48px, 8vw, 96px);
+}
+
+.cabecera,
+.cierre {
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.antetitulo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--verde-solido);
+    margin: 0 0 8px;
+}
+
+.cabecera h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: #1f2933;
+    margin: 0 0 12px;
+}
+
+.bajada {
+    color: #4a5561;
+    font-size: 1.05rem;
+    margin: 0 auto 24px;
+    max-width: 560px;
+}
+
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.boton,
+.botonSecundario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 100px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.boton {
+    background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
+    color: #fff;
+}
+
+.botonSecundario {
+    background: #fff;
+    color: #1f2933;
+    border: var(--borde-tarjeta);
+}
+
+.boton:hover,
+.botonSecundario:hover {
+    transform: translateY(-2px);
+}
+
+.boton:hover {
+    color: #fff;
+}
+
+.paginas {
+    max-width: 1120px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.hoja {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+    border: var(--borde-tarjeta);
+    background: #fff;
+}
+
+.cierre h2 {
+    font-family: var(--font-heading);
+    color: #1f2933;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin: 0 0 8px;
+}
+
+.cierre > p {
+    color: #4a5561;
+    margin: 0 0 20px;
+}
+
+.otro {
+    margin-top: 24px !important;
+    font-size: 0.95rem;
+}
+
+.otro a {
+    color: var(--verde-solido);
+    font-weight: 700;
+}

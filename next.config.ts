@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         destination: '/terrenos-baratos-en-la-playa-litoral-central-chile',
         statusCode: 301,
       },
+      // Enlaces cortos de los brochures para que los asesores los peguen a
+      // mano. Van a la página (que mide en Clarity) y no al PDF directo.
+      { source: '/lomas.pdf', destination: '/brochure/lomas-del-mar', permanent: false },
+      { source: '/lomas', destination: '/brochure/lomas-del-mar', permanent: false },
+      { source: '/arena-y-sol.pdf', destination: '/brochure/arena-y-sol', permanent: false },
+      { source: '/arenaysol', destination: '/brochure/arena-y-sol', permanent: false },
     ];
   },
 };
