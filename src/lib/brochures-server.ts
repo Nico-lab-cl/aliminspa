@@ -9,7 +9,8 @@
  */
 
 const CRM_BASE_URL = (process.env.CRM_BASE_URL || 'https://crm.aliminlomasdelmar.com').replace(/\/$/, '')
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+// Id completo de la conversación, o sus 8 primeros caracteres (enlace corto /b/…).
+const UUID = /^[0-9a-f]{8}(-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$/i
 
 /**
  * Meta abre cada enlace que se manda por Messenger o Instagram para armar la
