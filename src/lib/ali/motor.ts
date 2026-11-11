@@ -10,6 +10,7 @@ import {
 import { TIMEZONE } from '@/lib/booking-rules'
 import { INSTRUCCIONES_ALI } from './conocimiento'
 import { HERRAMIENTAS, ejecutarHerramienta, type ContextoHerramientas } from './herramientas'
+import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso } from './config-remota'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -312,10 +313,18 @@ async function historial(contexto: ContextoAli, sesion: ChatSession) {
  * Se exporta para probar conversaciones sin pasar por el CRM.
  */
 export async function conversar(contexto: ContextoAli, herramientas: ContextoHerramientas, sesion: ChatSession) {
-    const mensajes = await historial(contexto, sesion)
+    const [mensajes, remota] = await Promise.all([historial(contexto, sesion), configRemota()])
+
+    // La config del CRM web solo cuenta si el equipo dejó el agente activo;
+    // si no, o si no llegó, Ali sigue con lo local tal cual.
+    const config = remota?.agente.activo ? remota : null
+    const apagadas = config ? herramientasApagadas(config) : []
+    const herramientasActivas = HERRAMIENTAS.filter(h => !apagadas.includes(h.name))
+    const extra = config ? bloqueRemoto(config, HERRAMIENTAS.map(h => h.name)) : null
 
     const system: Anthropic.TextBlockParam[] = [
         { type: 'text', text: INSTRUCCIONES_ALI, cache_control: { type: 'ephemeral' } },
+        ...(extra ? [{ type: 'text' as const, text: extra, cache_control: { type: 'ephemeral' as const } }] : []),
         { type: 'text', text: datosDelMomento(contexto) },
     ]
 
@@ -324,13 +333,21 @@ export async function conversar(contexto: ContextoAli, herramientas: ContextoHer
             model: MODELO,
             max_tokens: 4096,
             system,
-            tools: HERRAMIENTAS,
+            tools: herramientasActivas,
             messages: mensajes,
         })
 
         const uso = respuesta.usage
+        reportarUso({
+            conversacionId: sesion.conversationId,
+            modelo: MODELO,
+            input_tokens: uso.input_tokens,
+            output_tokens: uso.output_tokens,
+            cache_read_input_tokens: uso.cache_read_input_tokens,
+            cache_creation_input_tokens: uso.cache_creation_input_tokens,
+        })
         console.log(
-            `[ali] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}`
+            `[ali] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${config ? ` · config ${config.version}` : ''}`
         )
 
         if (respuesta.stop_reason !== 'tool_use') {
