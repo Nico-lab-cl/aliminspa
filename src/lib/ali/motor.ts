@@ -135,12 +135,20 @@ export function enBurbujas(texto: string) {
     return [...partes.slice(0, 2), partes.slice(2).join('\n\n')]
 }
 
-/** La respuesta sin markdown, partida en los bloques que el modelo separó con una línea en blanco. */
+/**
+ * La respuesta sin markdown y sin dos puntos, partida en los bloques que el
+ * modelo separó con una línea en blanco. Los dos puntos hacen que suene a
+ * ficha y no a persona (Nicolás, 12-11-2026): "Arena y Sol: entrega
+ * inmediata" queda "Arena y Sol, entrega inmediata" y un título que termina
+ * en ":" queda sin ellos. Los enlaces (https://) y las horas (16:00) no se tocan.
+ */
 export function partirEnBloques(texto: string) {
     const limpio = texto
         .replace(/\*\*(.+?)\*\*/g, '$1')
         .replace(/(^|\s)\*(\S.*?\S|\S)\*(?=\s|$)/g, '$1$2')
         .replace(/^#+\s*/gm, '')
+        .replace(/\s*:[ \t]*$/gm, '')
+        .replace(/:[ \t]+(?=\S)/g, ', ')
         .trim()
     return limpio.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean)
 }

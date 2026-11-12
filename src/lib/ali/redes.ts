@@ -13,16 +13,17 @@ import {
 import { correrModelo, partirEnBloques } from './motor'
 
 /**
- * Mensajes para IG/FB. Un título que termina en ":" va pegado a la lista que
- * sigue, y una línea con ✅ nunca sale sola: el modelo a veces deja una línea
- * en blanco entre el título y la lista y se mandaba como dos mensajes (prueba
- * del 12-11-2026). Máximo 3 mensajes, con la pregunta final aparte.
+ * Mensajes para IG/FB. Una línea con ✅ nunca sale sola (va pegada a su
+ * título) y un enlace suelto va con la frase de antes: el modelo a veces deja
+ * líneas en blanco ahí y se mandaban como mensajes separados (prueba del
+ * 12-11-2026). Máximo 3 mensajes, con la pregunta final aparte.
  */
 export function burbujasRedes(texto: string) {
     const unidas: string[] = []
     for (const p of partirEnBloques(texto)) {
         const anterior = unidas[unidas.length - 1]
-        if (anterior !== undefined && (anterior.endsWith(':') || p.startsWith('✅'))) {
+        const pegada = p.startsWith('✅') || /^(lo puedes ver aquí|aquí|acá)?\s*https?:\/\/\S+$/i.test(p)
+        if (anterior !== undefined && pegada) {
             unidas[unidas.length - 1] = `${anterior}\n${p}`
         } else {
             unidas.push(p)
