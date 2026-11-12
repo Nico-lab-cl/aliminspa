@@ -181,7 +181,11 @@ function datosDelMomento(entrada: EntradaRedes) {
     const red = entrada.canal === 'instagram' ? 'Instagram' : 'Facebook'
     const { nombre, telefono, email } = entrada.cliente
     const faltan = [!nombre && 'nombre', !telefono && 'teléfono', !email && 'correo'].filter(Boolean)
-    const primerMensaje = !entrada.mensajes.some(m => m.de === 'ali')
+    // El brochure automático del primer contacto llega marcado: no cuenta como
+    // que Ali ya se presentó (Nicolás, 12-11-2026: brochure primero, Ali después).
+    const esBrochure = (m: MensajeRedes) => m.de === 'ali' && /^\[Mensaje automático/.test(m.texto)
+    const yaMandoBrochure = entrada.mensajes.some(esBrochure)
+    const primerMensaje = !entrada.mensajes.some(m => m.de === 'ali' && !esBrochure(m))
 
     return [
         `Ahora en Chile: ${ahora} (hoy es ${hoyISO}).`,
@@ -189,7 +193,10 @@ function datosDelMomento(entrada: EntradaRedes) {
         entrada.publicacion ? `Publicación comentada: "${entrada.publicacion}"` : null,
         `Datos que ya tienes del cliente: nombre ${nombre || '(no lo sabes)'}, teléfono ${telefono ? 'sí' : 'no'}, correo ${email ? 'sí' : 'no'}.`,
         faltan.length ? `Te falta: ${faltan.join(', ')}.` : 'Ya tienes todos sus datos: no se los vuelvas a pedir.',
-        primerMensaje ? 'Es tu primer mensaje en esta conversación.' : null,
+        yaMandoBrochure
+            ? 'Al principio de la conversación salió un mensaje automático con el brochure, los precios y el enlace: no lo repitas, responde lo que la persona pregunta ahora.'
+            : null,
+        primerMensaje ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
     ]
         .filter(Boolean)
         .join('\n')

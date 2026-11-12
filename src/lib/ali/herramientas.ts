@@ -301,7 +301,7 @@ async function agendar(
         return {
             ok: false,
             error: redes
-                ? 'Para agendar faltan datos: pide el nombre, el teléfono y el correo que falten, para coordinar la visita. Si no quiere darlos, ofrécele el enlace de la agenda del proyecto.'
+                ? 'Para agendar faltan datos: pide el nombre, el teléfono y el correo que falten, para coordinar la visita. Si no quiere darlos, no insistas.'
                 : 'Faltan datos de contacto del cliente. Deriva a un asesor.',
         }
     }
