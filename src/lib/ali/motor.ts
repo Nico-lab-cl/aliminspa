@@ -357,6 +357,16 @@ export async function correrModelo(p: {
     etiquetaConfig: string | null
 }) {
     const { system, mensajes, herramientas } = p
+    const textoDe = (content: Anthropic.ContentBlock[]) =>
+        content
+            .filter((b): b is Anthropic.TextBlock => b.type === 'text')
+            .map(b => b.text)
+            .join('\n\n')
+            .trim()
+    // A veces el modelo escribe la respuesta junto con la llamada a una
+    // herramienta (guardar_contacto) y, con el resultado, termina sin texto.
+    // Sin esto la persona se quedaba sin respuesta (prueba del 12-11-2026).
+    let textoAnterior = ''
     for (let vuelta = 0; vuelta < MAX_VUELTAS; vuelta++) {
         const respuesta = await anthropic().messages.create({
             model: MODELO,
@@ -381,13 +391,10 @@ export async function correrModelo(p: {
         )
 
         if (respuesta.stop_reason !== 'tool_use') {
-            return respuesta.content
-                .filter((b): b is Anthropic.TextBlock => b.type === 'text')
-                .map(b => b.text)
-                .join('\n\n')
-                .trim()
+            return textoDe(respuesta.content) || textoAnterior
         }
 
+        textoAnterior = textoDe(respuesta.content) || textoAnterior
         mensajes.push({ role: 'assistant', content: respuesta.content })
 
         const llamadas = respuesta.content.filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use')
