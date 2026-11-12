@@ -60,6 +60,12 @@ export interface EntradaRedes {
     publicacion: string | null
     cliente: { nombre: string | null; telefono: string | null; email: string | null }
     mensajes: MensajeRedes[]
+    /**
+     * Lo que el CRM sabe de la persona antes de esta conversación: ficha del
+     * lead, movimientos del pipeline y lo que habló antes aquí y en otros
+     * canales (lib/memoriaLead.ts del CRM móvil). Texto para Ali, no para el cliente.
+     */
+    memoria: string | null
 }
 
 export interface RespuestaRedes {
@@ -144,6 +150,7 @@ export function validarEntrada(json: unknown): EntradaRedes | null {
             email: texto(c.email, 120) || null,
         },
         mensajes,
+        memoria: texto(j.memoria, 8000) || null,
     }
 }
 
@@ -217,7 +224,11 @@ function datosDelMomento(entrada: EntradaRedes) {
         yaMandoBrochure
             ? 'Al principio de la conversación salió un mensaje automático con el brochure, los precios y el enlace: no lo repitas, responde lo que la persona pregunta ahora.'
             : null,
-        primerMensaje ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensaje && !entrada.memoria ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensaje && entrada.memoria
+            ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`
+            : null,
+        entrada.memoria ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${entrada.memoria}` : null,
     ]
         .filter(Boolean)
         .join('\n')

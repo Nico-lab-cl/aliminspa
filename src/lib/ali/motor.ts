@@ -261,6 +261,9 @@ function datosDelMomento(contexto: ContextoAli) {
         contexto.derivadaAt
             ? 'Ya derivaste esta conversación a un asesor. No vuelvas a derivar por el mismo tema; si preguntan, di que el asesor ya está avisado y le responde por este chat.'
             : null,
+        contexto.memoria
+            ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${contexto.memoria.slice(0, 8000)}`
+            : null,
     ]
         .filter(Boolean)
         .join('\n')

@@ -259,6 +259,12 @@ export interface ContextoAli {
     mensajes: MensajeParaAli[]
     cliente: { nombre: string | null; telefono: string | null; email: string | null; interes: string | null }
     asesorAsignado: string | null
+    /**
+     * Lo que el CRM sabe de la persona antes de este chat (ficha del lead,
+     * movimientos, lo que habló por Instagram o Facebook). Puede no venir si
+     * el CRM todavía no tiene la versión que la manda.
+     */
+    memoria?: string | null
 }
 
 /** Datos del cliente y conversación reciente, tal como los guarda el CRM. */
