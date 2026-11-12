@@ -10,7 +10,27 @@ import {
     type ContactoAli,
     type ContextoHerramientas,
 } from './herramientas'
-import { correrModelo, enBurbujas } from './motor'
+import { correrModelo, partirEnBloques } from './motor'
+
+/**
+ * Mensajes para IG/FB. Un título que termina en ":" va pegado a la lista que
+ * sigue, y una línea con ✅ nunca sale sola: el modelo a veces deja una línea
+ * en blanco entre el título y la lista y se mandaba como dos mensajes (prueba
+ * del 12-11-2026). Máximo 3 mensajes, con la pregunta final aparte.
+ */
+export function burbujasRedes(texto: string) {
+    const unidas: string[] = []
+    for (const p of partirEnBloques(texto)) {
+        const anterior = unidas[unidas.length - 1]
+        if (anterior !== undefined && (anterior.endsWith(':') || p.startsWith('✅'))) {
+            unidas[unidas.length - 1] = `${anterior}\n${p}`
+        } else {
+            unidas.push(p)
+        }
+    }
+    if (unidas.length <= 3) return unidas
+    return [unidas[0], unidas.slice(1, -1).join('\n\n'), unidas[unidas.length - 1]]
+}
 
 /**
  * Ali en Instagram y Facebook.
@@ -247,7 +267,7 @@ export async function conversarRedes(entrada: EntradaRedes, request: NextRequest
     if (!final && ctx.derivacion) final = 'Ya le avisé a un asesor y te responde por este mismo chat a la brevedad 🙌'
 
     return {
-        burbujas: final ? enBurbujas(final) : [],
+        burbujas: final ? burbujasRedes(final) : [],
         contacto: ctx.contacto ?? null,
         derivacion: ctx.derivacion,
         visita: ctx.visita ?? null,

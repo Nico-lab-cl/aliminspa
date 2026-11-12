@@ -130,15 +130,19 @@ function tiempoDeEscritura(texto: string) {
  * que quiere mandar por separado; más de tres burbujas seguidas se lee como spam.
  */
 export function enBurbujas(texto: string) {
+    const partes = partirEnBloques(texto)
+    if (partes.length <= 3) return partes
+    return [...partes.slice(0, 2), partes.slice(2).join('\n\n')]
+}
+
+/** La respuesta sin markdown, partida en los bloques que el modelo separó con una línea en blanco. */
+export function partirEnBloques(texto: string) {
     const limpio = texto
         .replace(/\*\*(.+?)\*\*/g, '$1')
         .replace(/(^|\s)\*(\S.*?\S|\S)\*(?=\s|$)/g, '$1$2')
         .replace(/^#+\s*/gm, '')
         .trim()
-
-    const partes = limpio.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean)
-    if (partes.length <= 3) return partes
-    return [...partes.slice(0, 2), partes.slice(2).join('\n\n')]
+    return limpio.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean)
 }
 
 async function responder(turno: Turno) {
