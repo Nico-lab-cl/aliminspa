@@ -23,6 +23,15 @@ const PROYECTOS_EN_VENTA: Record<string, Proyecto> = {
     'Arena y Sol': ARENA_Y_SOL,
 }
 
+export type CanalAli = 'web' | 'instagram' | 'facebook'
+
+export interface ContactoAli {
+    nombre: string | null
+    telefono: string | null
+    email: string | null
+    interes: string | null
+}
+
 export interface ContextoHerramientas {
     cliente: { nombre: string | null; telefono: string | null; email: string | null }
     request: NextRequest
@@ -30,6 +39,84 @@ export interface ContextoHerramientas {
     derivacion: { motivo: string; resumen: string } | null
     /** Para probar conversaciones: agendar_visita valida pero no guarda nada. */
     simulacion?: boolean
+    /** Por dónde conversa. Sin indicar, el chat web. */
+    canal?: CanalAli
+    /** Lo que dejó guardar_contacto en esta respuesta (solo redes). */
+    contacto?: ContactoAli | null
+    /** La visita que quedó agendada en esta respuesta, si quedó una. */
+    visita?: { proyecto: string; fecha: string; hora: string } | null
+}
+
+/**
+ * Solo en Instagram y Facebook: ahí la persona no pasó por el formulario del
+ * chat web, así que Ali pide los datos en la conversación y los guarda con
+ * esta herramienta. El CRM crea o completa el lead con lo que devuelve.
+ */
+export const HERRAMIENTA_GUARDAR_CONTACTO: Anthropic.Tool = {
+    name: 'guardar_contacto',
+    description:
+        'Guarda los datos que la persona te dio en la conversación: nombre, teléfono, correo y en una frase qué busca. Llámala cada vez que la persona te dé un dato nuevo. Deja vacío lo que no te dio; nunca inventes un dato.',
+    input_schema: {
+        type: 'object',
+        properties: {
+            nombre: { type: 'string', description: 'Nombre (y apellido si lo dio). Vacío si no lo dio.' },
+            telefono: { type: 'string', description: 'Teléfono tal como lo escribió. Vacío si no lo dio.' },
+            email: { type: 'string', description: 'Correo electrónico. Vacío si no lo dio.' },
+            interes: {
+                type: 'string',
+                description: 'Qué busca en una frase, para el asesor: proyecto, tamaño, contado o crédito, para qué lo quiere.',
+            },
+        },
+        required: ['nombre', 'telefono', 'email', 'interes'],
+        additionalProperties: false,
+    },
+    strict: true,
+}
+
+const CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+/** Celular chileno a +569XXXXXXXX; otros números se dejan con su + si tienen 8 a 15 dígitos. */
+export function normalizarTelefono(valor: string): string | null {
+    const digitos = valor.replace(/\D/g, '')
+    if (/^9\d{8}$/.test(digitos)) return `+56${digitos}`
+    if (/^569\d{8}$/.test(digitos)) return `+${digitos}`
+    if (/^\d{8}$/.test(digitos)) return `+569${digitos}`
+    if (valor.trim().startsWith('+') && digitos.length >= 8 && digitos.length <= 15) return `+${digitos}`
+    return null
+}
+
+function guardarContacto(entrada: Record<string, string | undefined>, ctx: ContextoHerramientas) {
+    const previo = ctx.contacto || { nombre: null, telefono: null, email: null, interes: null }
+    const nombre = String(entrada.nombre || '').trim().slice(0, 80) || null
+    const telefonoCrudo = String(entrada.telefono || '').trim()
+    const emailCrudo = String(entrada.email || '').trim().toLowerCase()
+    const telefono = telefonoCrudo ? normalizarTelefono(telefonoCrudo) : null
+    const email = emailCrudo && CORREO.test(emailCrudo) && emailCrudo.length <= 120 ? emailCrudo : null
+    const interes = String(entrada.interes || '').trim().slice(0, 300) || null
+
+    const contacto: ContactoAli = {
+        nombre: nombre || previo.nombre,
+        telefono: telefono || previo.telefono,
+        email: email || previo.email,
+        interes: interes || previo.interes,
+    }
+    ctx.contacto = contacto
+    // agendar_visita lee ctx.cliente: lo nuevo le sirve en esta misma respuesta.
+    ctx.cliente = {
+        nombre: contacto.nombre || ctx.cliente.nombre,
+        telefono: contacto.telefono || ctx.cliente.telefono,
+        email: contacto.email || ctx.cliente.email,
+    }
+
+    const avisos: string[] = []
+    if (telefonoCrudo && !telefono) avisos.push('El teléfono no parece válido: confírmalo con la persona.')
+    if (emailCrudo && !email) avisos.push('El correo no parece válido: confírmalo con la persona.')
+    const faltan = [
+        !ctx.cliente.nombre && 'nombre',
+        !ctx.cliente.telefono && 'teléfono',
+        !ctx.cliente.email && 'correo',
+    ].filter(Boolean)
+    return { ok: true, faltan, avisos }
 }
 
 export const HERRAMIENTAS: Anthropic.Tool[] = [
@@ -209,8 +296,14 @@ async function agendar(
     if (!proyecto) return { ok: false, error: 'Proyecto desconocido.' }
 
     const { nombre, telefono, email } = ctx.cliente
+    const redes = ctx.canal === 'instagram' || ctx.canal === 'facebook'
     if (!nombre || !telefono || !email) {
-        return { ok: false, error: 'Faltan datos de contacto del cliente. Deriva a un asesor.' }
+        return {
+            ok: false,
+            error: redes
+                ? 'Para agendar faltan datos: pide el nombre, el teléfono y el correo que falten, para coordinar la visita. Si no quiere darlos, ofrécele el enlace de la agenda del proyecto.'
+                : 'Faltan datos de contacto del cliente. Deriva a un asesor.',
+        }
     }
 
     const dia = parseCalendarDate(entrada.fecha)
@@ -220,8 +313,16 @@ async function agendar(
     if (ctx.simulacion) {
         const horaTexto = `${String(hora).padStart(2, '0')}:00`
         if (!isSlotBookable(dia, horaTexto)) return { ok: false, error: 'Ese horario no se puede agendar.' }
+        ctx.visita = { proyecto: proyecto.nombre, fecha: entrada.fecha, hora: horaTexto }
         return { ok: true, proyecto: proyecto.nombre, fecha: entrada.fecha, hora: horaTexto, mapa: proyecto.mapaLugar }
     }
+
+    const origen =
+        ctx.canal === 'instagram'
+            ? 'Mensaje privado de Instagram con Ali'
+            : ctx.canal === 'facebook'
+              ? 'Mensaje privado de Facebook con Ali'
+              : 'Chat web con Ali'
 
     const resultado = await agendarVisita(
         {
@@ -237,12 +338,15 @@ async function agendar(
         },
         ctx.request,
         {
-            // El visitante autorizó el contacto en la puerta de entrada del chat.
-            consentimiento: { consentimiento_contacto: true, consentimiento_origen: 'Chat web con Ali' },
+            // Web: el visitante autorizó el contacto en la puerta de entrada del
+            // chat. Redes: dio sus datos para coordinar la visita. Nada de
+            // marketing: sin la cookie del navegador no sale el evento a Meta.
+            consentimiento: { consentimiento_contacto: true, consentimiento_origen: origen },
         }
     )
 
     if (!resultado.ok) return { ok: false, error: resultado.error }
+    ctx.visita = { proyecto: proyecto.nombre, fecha: entrada.fecha, hora: `${String(hora).padStart(2, '0')}:00` }
     return {
         ok: true,
         proyecto: proyecto.nombre,
@@ -384,6 +488,8 @@ export async function ejecutarHerramienta(
                 resumen: String(entrada.resumen || '').slice(0, 600),
             }
             return { ok: true, nota: 'Listo: los asesores quedan avisados cuando envíes tu respuesta.' }
+        case 'guardar_contacto':
+            return guardarContacto(entrada, ctx)
         case 'buscar_en_sitio':
             return buscarEnSitio(String(entrada.consulta || ''))
         case 'leer_pagina':

@@ -9,7 +9,7 @@ import {
 } from '@/lib/web-chat'
 import { TIMEZONE } from '@/lib/booking-rules'
 import { INSTRUCCIONES_ALI } from './conocimiento'
-import { HERRAMIENTAS, ejecutarHerramienta, type ContextoHerramientas } from './herramientas'
+import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramientas } from './herramientas'
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso } from './config-remota'
 
 /**
@@ -129,7 +129,7 @@ function tiempoDeEscritura(texto: string) {
  * Parte la respuesta en mensajes. El modelo separa con una línea en blanco lo
  * que quiere mandar por separado; más de tres burbujas seguidas se lee como spam.
  */
-function enBurbujas(texto: string) {
+export function enBurbujas(texto: string) {
     const limpio = texto
         .replace(/\*\*(.+?)\*\*/g, '$1')
         .replace(/(^|\s)\*(\S.*?\S|\S)\*(?=\s|$)/g, '$1$2')
@@ -328,18 +328,44 @@ export async function conversar(contexto: ContextoAli, herramientas: ContextoHer
         { type: 'text', text: datosDelMomento(contexto) },
     ]
 
+    return correrModelo({
+        system,
+        mensajes,
+        tools: herramientasActivas,
+        herramientas,
+        conversacionId: sesion.conversationId,
+        canal: 'web',
+        etiquetaConfig: config?.version ?? null,
+    })
+}
+
+/**
+ * El ciclo con Claude: pide respuesta, ejecuta las herramientas que pida y
+ * repite hasta tener el texto final. Lo usan el chat web y las redes.
+ */
+export async function correrModelo(p: {
+    system: Anthropic.TextBlockParam[]
+    mensajes: Anthropic.MessageParam[]
+    tools: Anthropic.Tool[]
+    herramientas: ContextoHerramientas
+    conversacionId: string
+    canal: CanalAli
+    etiquetaConfig: string | null
+}) {
+    const { system, mensajes, herramientas } = p
     for (let vuelta = 0; vuelta < MAX_VUELTAS; vuelta++) {
         const respuesta = await anthropic().messages.create({
             model: MODELO,
             max_tokens: 4096,
             system,
-            tools: herramientasActivas,
+            tools: p.tools,
             messages: mensajes,
         })
 
         const uso = respuesta.usage
         reportarUso({
-            conversacionId: sesion.conversationId,
+            conversacionId: p.conversacionId,
+            canal: p.canal,
             modelo: MODELO,
             input_tokens: uso.input_tokens,
             output_tokens: uso.output_tokens,
@@ -347,7 +373,7 @@ export async function conversar(contexto: ContextoAli, herramientas: ContextoHer
             cache_creation_input_tokens: uso.cache_creation_input_tokens,
         })
         console.log(
-            `[ali] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${config ? ` · config ${config.version}` : ''}`
+            `[ali${p.canal === 'web' ? '' : `:${p.canal}`}] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${p.etiquetaConfig ? ` · config ${p.etiquetaConfig}` : ''}`
         )
 
         if (respuesta.stop_reason !== 'tool_use') {

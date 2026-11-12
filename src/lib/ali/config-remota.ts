@@ -230,6 +230,8 @@ export function bloqueRemoto(config: ConfigRemota, nombresDeHerramientas: string
 
 export interface UsoDeTokens {
     conversacionId: string
+    /** web, instagram o facebook. Sin indicar, web. */
+    canal?: string
     modelo: string
     input_tokens: number | null
     output_tokens: number | null
@@ -247,7 +249,7 @@ export function reportarUso(uso: UsoDeTokens) {
         headers: { 'content-type': 'application/json', 'x-ia-secret': crm.secreto },
         body: JSON.stringify({
             agente: AGENTE,
-            canal: 'web',
+            canal: uso.canal || 'web',
             conversacion_id: uso.conversacionId,
             modelo: uso.modelo,
             input_tokens: uso.input_tokens ?? 0,
