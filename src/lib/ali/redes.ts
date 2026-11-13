@@ -11,6 +11,7 @@ import {
     type ContextoHerramientas,
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
+import { modoCierre } from './cierre'
 
 /**
  * Mensajes para IG/FB. Una línea con ✅ nunca sale sola (va pegada a su
@@ -66,6 +67,8 @@ export interface EntradaRedes {
      * canales (lib/memoriaLead.ts del CRM móvil). Texto para Ali, no para el cliente.
      */
     memoria: string | null
+    /** "cierre" si ya llegó a la visita y no reservó (lo decide el CRM móvil). Sin dato, Ali. */
+    agente: string | null
 }
 
 export interface RespuestaRedes {
@@ -151,6 +154,7 @@ export function validarEntrada(json: unknown): EntradaRedes | null {
         },
         mensajes,
         memoria: texto(j.memoria, 8000) || null,
+        agente: j.agente === 'cierre' || j.agente === 'cierre_prueba' ? j.agente : null,
     }
 }
 
@@ -236,11 +240,12 @@ function datosDelMomento(entrada: EntradaRedes) {
 
 /** Corre a Ali sobre una conversación de redes y devuelve lo que hay que mandar. */
 export async function conversarRedes(entrada: EntradaRedes, request: NextRequest): Promise<RespuestaRedes> {
-    const remota = await configRemota()
+    const nombres = HERRAMIENTAS.map(h => h.name)
+    const [remota, cierre] = await Promise.all([configRemota(), modoCierre(entrada.agente, nombres)])
     const config = remota?.agente.activo ? remota : null
-    const apagadas = config ? herramientasApagadas(config) : []
+    const apagadas = [...(config ? herramientasApagadas(config) : []), ...cierre.apagadas]
     const tools = [...HERRAMIENTAS.filter(h => !apagadas.includes(h.name)), HERRAMIENTA_GUARDAR_CONTACTO]
-    const extra = config ? bloqueRemoto(config, HERRAMIENTAS.map(h => h.name)) : null
+    const extra = config ? bloqueRemoto(config, nombres) : null
 
     // Mismo prefijo que el chat web (ficha + config aprobada) para compartir el
     // caché; lo de redes va después.
@@ -248,6 +253,8 @@ export async function conversarRedes(entrada: EntradaRedes, request: NextRequest
         { type: 'text', text: INSTRUCCIONES_ALI, cache_control: { type: 'ephemeral' } },
         ...(extra ? [{ type: 'text' as const, text: extra, cache_control: { type: 'ephemeral' as const } }] : []),
         { type: 'text', text: INSTRUCCIONES_REDES, cache_control: { type: 'ephemeral' } },
+        // Si la persona ya llegó a la visita y el Cierre está encendido.
+        ...cierre.bloques,
         { type: 'text', text: datosDelMomento(entrada) },
     ]
 
@@ -274,7 +281,8 @@ export async function conversarRedes(entrada: EntradaRedes, request: NextRequest
         herramientas: ctx,
         conversacionId: entrada.conversacionId,
         canal: entrada.canal,
-        etiquetaConfig: config?.version ?? null,
+        agente: cierre.agente,
+        etiquetaConfig: cierre.version ?? config?.version ?? null,
     })
     if (!final && ctx.derivacion) final = 'Ya le avisé a un asesor y te responde por este mismo chat a la brevedad 🙌'
 

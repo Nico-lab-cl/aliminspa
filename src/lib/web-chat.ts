@@ -265,6 +265,11 @@ export interface ContextoAli {
      * el CRM todavía no tiene la versión que la manda.
      */
     memoria?: string | null
+    /**
+     * Qué agente atiende según la etapa del lead (lib/agenteIA.ts del CRM
+     * móvil): "cierre" si ya llegó a la visita y no reservó. Sin dato, Ali.
+     */
+    agente?: string | null
 }
 
 /** Datos del cliente y conversación reciente, tal como los guarda el CRM. */

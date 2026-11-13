@@ -10,7 +10,8 @@ import {
 import { TIMEZONE } from '@/lib/booking-rules'
 import { INSTRUCCIONES_ALI } from './conocimiento'
 import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramientas } from './herramientas'
-import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso } from './config-remota'
+import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
+import { modoCierre } from './cierre'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -328,18 +329,25 @@ async function historial(contexto: ContextoAli, sesion: ChatSession) {
  * Se exporta para probar conversaciones sin pasar por el CRM.
  */
 export async function conversar(contexto: ContextoAli, herramientas: ContextoHerramientas, sesion: ChatSession) {
-    const [mensajes, remota] = await Promise.all([historial(contexto, sesion), configRemota()])
+    const nombres = HERRAMIENTAS.map(h => h.name)
+    const [mensajes, remota, cierre] = await Promise.all([
+        historial(contexto, sesion),
+        configRemota(),
+        modoCierre(contexto.agente, nombres),
+    ])
 
     // La config del CRM web solo cuenta si el equipo dejó el agente activo;
     // si no, o si no llegó, Ali sigue con lo local tal cual.
     const config = remota?.agente.activo ? remota : null
-    const apagadas = config ? herramientasApagadas(config) : []
+    const apagadas = [...(config ? herramientasApagadas(config) : []), ...cierre.apagadas]
     const herramientasActivas = HERRAMIENTAS.filter(h => !apagadas.includes(h.name))
-    const extra = config ? bloqueRemoto(config, HERRAMIENTAS.map(h => h.name)) : null
+    const extra = config ? bloqueRemoto(config, nombres) : null
 
     const system: Anthropic.TextBlockParam[] = [
         { type: 'text', text: INSTRUCCIONES_ALI, cache_control: { type: 'ephemeral' } },
         ...(extra ? [{ type: 'text' as const, text: extra, cache_control: { type: 'ephemeral' as const } }] : []),
+        // Si la persona ya llegó a la visita y el Cierre está encendido.
+        ...cierre.bloques,
         { type: 'text', text: datosDelMomento(contexto) },
     ]
 
@@ -350,7 +358,8 @@ export async function conversar(contexto: ContextoAli, herramientas: ContextoHer
         herramientas,
         conversacionId: sesion.conversationId,
         canal: 'web',
-        etiquetaConfig: config?.version ?? null,
+        agente: cierre.agente,
+        etiquetaConfig: cierre.version ?? config?.version ?? null,
     })
 }
 
@@ -365,6 +374,8 @@ export async function correrModelo(p: {
     herramientas: ContextoHerramientas
     conversacionId: string
     canal: CanalAli
+    /** Ali (atracción) por defecto, o Cierre: se registra aparte en el CRM web. */
+    agente?: AgenteChat
     etiquetaConfig: string | null
 }) {
     const { system, mensajes, herramientas } = p
@@ -391,6 +402,7 @@ export async function correrModelo(p: {
         reportarUso({
             conversacionId: p.conversacionId,
             canal: p.canal,
+            agente: p.agente,
             modelo: MODELO,
             input_tokens: uso.input_tokens,
             output_tokens: uso.output_tokens,
@@ -398,7 +410,7 @@ export async function correrModelo(p: {
             cache_creation_input_tokens: uso.cache_creation_input_tokens,
         })
         console.log(
-            `[ali${p.canal === 'web' ? '' : `:${p.canal}`}] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${p.etiquetaConfig ? ` · config ${p.etiquetaConfig}` : ''}`
+            `[ali${p.canal === 'web' ? '' : `:${p.canal}`}${p.agente === 'cierre' ? ':cierre' : ''}] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${p.etiquetaConfig ? ` · config ${p.etiquetaConfig}` : ''}`
         )
 
         if (respuesta.stop_reason !== 'tool_use') {

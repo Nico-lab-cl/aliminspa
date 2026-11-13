@@ -9,8 +9,11 @@
  * `conocimiento.ts`. El reporte de uso nunca se espera ni corta la respuesta.
  */
 
-/** El agente que atiende el chat web dentro del flujo del CRM. */
-const AGENTE = 'atraccion'
+/**
+ * Los agentes que conversan con el cliente dentro del flujo del CRM: Ali
+ * (atracción) y Cierre, que atiende a quien ya llegó a la visita (12-11-2026).
+ */
+export type AgenteChat = 'atraccion' | 'cierre'
 const TIMEOUT_MS = 3000
 /** Cuánto se reutiliza una config buena antes de volver a pedirla. */
 const VIGENCIA_MS = 5 * 60 * 1000
@@ -50,32 +53,35 @@ function credenciales() {
 
 /* ── Lectura de la config ────────────────────────────────────────── */
 
-let cache: { config: ConfigRemota | null; vence: number } | null = null
+const caches = new Map<AgenteChat, { config: ConfigRemota | null; vence: number }>()
 /** Si llegan varios mensajes a la vez con el caché vencido, se pide una sola vez. */
-let enCurso: Promise<ConfigRemota | null> | null = null
+const enCurso = new Map<AgenteChat, Promise<ConfigRemota | null>>()
 
-/** La config vigente del agente de atracción, o null para seguir con lo local. */
-export async function configRemota(): Promise<ConfigRemota | null> {
+/** La config vigente del agente (Ali por defecto), o null para seguir con lo local. */
+export async function configRemota(agente: AgenteChat = 'atraccion'): Promise<ConfigRemota | null> {
+    const cache = caches.get(agente)
     if (cache && Date.now() < cache.vence) return cache.config
-    if (!enCurso) {
-        enCurso = pedirConfig()
+    let pedido = enCurso.get(agente)
+    if (!pedido) {
+        pedido = pedirConfig(agente)
             .then(config => {
-                cache = { config, vence: Date.now() + (config ? VIGENCIA_MS : VIGENCIA_FALLO_MS) }
+                caches.set(agente, { config, vence: Date.now() + (config ? VIGENCIA_MS : VIGENCIA_FALLO_MS) })
                 return config
             })
             .finally(() => {
-                enCurso = null
+                enCurso.delete(agente)
             })
+        enCurso.set(agente, pedido)
     }
-    return enCurso
+    return pedido
 }
 
-async function pedirConfig(): Promise<ConfigRemota | null> {
+async function pedirConfig(agente: AgenteChat): Promise<ConfigRemota | null> {
     const crm = credenciales()
     if (!crm) return null
 
     try {
-        const res = await fetch(`${crm.url}/api/webhooks/ia/config?agente=${AGENTE}`, {
+        const res = await fetch(`${crm.url}/api/webhooks/ia/config?agente=${agente}`, {
             headers: { 'x-ia-secret': crm.secreto },
             cache: 'no-store',
             signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -232,6 +238,8 @@ export interface UsoDeTokens {
     conversacionId: string
     /** web, instagram o facebook. Sin indicar, web. */
     canal?: string
+    /** Qué agente gastó: Ali (atracción) por defecto o Cierre. */
+    agente?: AgenteChat
     modelo: string
     input_tokens: number | null
     output_tokens: number | null
@@ -248,7 +256,7 @@ export function reportarUso(uso: UsoDeTokens) {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-ia-secret': crm.secreto },
         body: JSON.stringify({
-            agente: AGENTE,
+            agente: uso.agente || 'atraccion',
             canal: uso.canal || 'web',
             conversacion_id: uso.conversacionId,
             modelo: uso.modelo,
