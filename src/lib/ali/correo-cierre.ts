@@ -104,7 +104,15 @@ export async function escribirCorreoCierre(p: PedidoCorreo): Promise<CorreoCierr
         system,
         tools: [HERRAMIENTA],
         tool_choice: { type: 'tool', name: HERRAMIENTA.name },
-        messages: [{ role: 'user', content: 'Escribe el correo de este paso para esta persona.' }],
+        messages: [
+            {
+                role: 'user',
+                content:
+                    p.paso.posicion === 1
+                        ? 'Escribe el correo del paso 1 para esta persona.'
+                        : `Escribe el correo del paso ${p.paso.posicion} para esta persona. Ya le agradecimos la visita en el paso 1: no la agradezcas de nuevo, entra directo al tema.`,
+            },
+        ],
     })
     const uso = respuesta.usage
     reportarUso({
@@ -120,15 +128,36 @@ export async function escribirCorreoCierre(p: PedidoCorreo): Promise<CorreoCierr
 
     const llamada = respuesta.content.find((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use')
     const c = (llamada?.input || {}) as Record<string, unknown>
-    const parrafos = Array.isArray(c.parrafos)
+    let parrafos = Array.isArray(c.parrafos)
         ? c.parrafos.map(x => limpiar(String(x))).filter(x => x.length > 0).slice(0, 4)
         : []
     const asunto = limpiar(texto(c.asunto, 90)).slice(0, 70)
-    if (!asunto || parrafos.length < 1) return null
-    return {
-        asunto,
-        preheader: limpiar(texto(c.preheader, 150)),
-        titulo: limpiar(texto(c.titulo, 80)).slice(0, 60) || asunto,
-        parrafos,
+    let titulo = limpiar(texto(c.titulo, 80)).slice(0, 60) || asunto
+    // Desde el paso 2 el modelo a veces vuelve a agradecer la visita aunque la
+    // regla lo prohíbe (prueba del 14-11-2026): se quita acá.
+    if (p.paso.posicion > 1) {
+        if (/gracias/i.test(titulo)) titulo = TITULO_POR_PASO[p.paso.posicion] || asunto
+        parrafos = parrafos.map((t, i) => (i === 0 ? sinAgradecimiento(t) : t)).filter(t => t.length > 0)
     }
+    if (!asunto || parrafos.length < 1) return null
+    return { asunto, preheader: limpiar(texto(c.preheader, 150)), titulo, parrafos }
+}
+
+const TITULO_POR_PASO: Record<number, string> = {
+    2: 'Así puedes pagar tu terreno',
+    3: 'Lo que recibes con tu terreno',
+    4: 'Tu terreno sigue disponible',
+}
+
+/**
+ * "Juan, gracias por venir a conocer Lomas del Mar. Ver el terreno…" →
+ * "Juan, ver el terreno…". Si no empieza agradeciendo, queda igual.
+ */
+export function sinAgradecimiento(t: string): string {
+    const m = t.match(/^((?:[A-ZÁÉÍÓÚÑ][\wáéíóúñ]*),\s*)?(?:muchas\s+)?gracias por [^.!?]*[.!?]\s*/i)
+    if (!m) return t
+    const resto = t.slice(m[0].length).trim()
+    if (!resto) return ''
+    const nombre = m[1] || ''
+    return nombre ? `${nombre}${resto.charAt(0).toLocaleLowerCase('es-CL')}${resto.slice(1)}` : resto
 }
