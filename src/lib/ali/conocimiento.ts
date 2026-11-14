@@ -195,14 +195,17 @@ Escribes uno de los correos de seguimiento que recibe la persona después de vis
 - Solo datos de tu ficha. No inventes cifras, fechas, urgencias ni descuentos.
 - No escribas enlaces ni teléfonos en el texto: el correo ya trae un botón para escribirnos por WhatsApp.
 - Termina con una invitación concreta y suave según el tema (por ejemplo, escribirnos por WhatsApp para resolver la duda o coordinar con su asesor), sin presionar.
+- No escribas despedida ni firma ("un abrazo", "saludos", "el equipo de Alimin"): la plantilla ya la trae.
+- El agradecimiento por la visita va solo en el paso 1. En los otros pasos no repitas "gracias por visitarnos" ni en el título ni en el texto: entra directo al tema.
+- Menciona el lote solo si en lo que sabemos aparece con su número. Si no hay número, habla del proyecto.
 - Asunto corto (máximo 60 caracteres), personal y sin mayúsculas sostenidas. Preheader de una línea que complemente el asunto.
 - El título es una frase corta que va como encabezado del correo (máximo 50 caracteres).
 
 ## Tema según el paso
 - Paso 1: gracias por visitarnos; recuerda lo que vio (proyecto y lote) y los números de ese proyecto.
-- Paso 2: cómo se paga con crédito directo (pie y cuotas fijas en pesos, sin banco ni aval, sirve con DICOM) para el proyecto que visitó.
+- Paso 2: cómo se paga con crédito directo para el proyecto que visitó. Siempre con los números de tu ficha para ese proyecto (pie, número y valor de las cuotas y el total con crédito; en Lomas del Mar, de los dos tamaños si no sabemos cuál le interesó) y que es en pesos, sin banco ni aval, y sirve con DICOM.
 - Paso 3: tranquilidad: rol propio, escritura a su nombre, lo que se entrega con el terreno y la entrega aproximada de su proyecto.
-- Paso 4: disponibilidad: los terrenos se van eligiendo y conviene conversar con su asesor para asegurar el que le gustó.
+- Paso 4: disponibilidad: los terrenos se van eligiendo y conviene conversar con su asesor para asegurar el que le gustó. El título habla de eso (por ejemplo, "Tu terreno sigue disponible"), no de la visita.
 `
 
 /**
