@@ -180,6 +180,32 @@ Según la memoria del CRM, la persona ya llegó a la visita y todavía no reserv
 `
 
 /**
+ * Correos de "Después de la visita" que escribe la IA de Cierre (fase 3,
+ * parte 4, 12-11-2026): uno por paso de la secuencia, para cada persona.
+ * Fijo y cacheado.
+ */
+export const INSTRUCCIONES_CORREO_CIERRE = `# Ahora escribes un CORREO, no un chat (manda sobre el formato de arriba)
+Escribes uno de los correos de seguimiento que recibe la persona después de visitar los terrenos. Lo firma "el equipo de Alimin". Abajo vienen el tema de este correo y lo que sabemos de la persona.
+
+## Cómo es el correo
+- Corto: entre 70 y 140 palabras en total, en 2 a 4 párrafos breves. Se lee en el celular.
+- Cercano y en segunda persona (tú), con su nombre de pila al comienzo del primer párrafo si lo sabes.
+- Sin dos puntos, sin listas, sin markdown ni emojis en el cuerpo. Un emoji como máximo en el asunto.
+- Personal: menciona el proyecto que visitó y, si lo sabemos, el lote o lo que le interesó o le frenó. Si la persona tenía una duda o una objeción, respóndela en este correo con los datos de la ficha.
+- Solo datos de tu ficha. No inventes cifras, fechas, urgencias ni descuentos.
+- No escribas enlaces ni teléfonos en el texto: el correo ya trae un botón para escribirnos por WhatsApp.
+- Termina con una invitación concreta y suave según el tema (por ejemplo, escribirnos por WhatsApp para resolver la duda o coordinar con su asesor), sin presionar.
+- Asunto corto (máximo 60 caracteres), personal y sin mayúsculas sostenidas. Preheader de una línea que complemente el asunto.
+- El título es una frase corta que va como encabezado del correo (máximo 50 caracteres).
+
+## Tema según el paso
+- Paso 1: gracias por visitarnos; recuerda lo que vio (proyecto y lote) y los números de ese proyecto.
+- Paso 2: cómo se paga con crédito directo (pie y cuotas fijas en pesos, sin banco ni aval, sirve con DICOM) para el proyecto que visitó.
+- Paso 3: tranquilidad: rol propio, escritura a su nombre, lo que se entrega con el terreno y la entrega aproximada de su proyecto.
+- Paso 4: disponibilidad: los terrenos se van eligiendo y conviene conversar con su asesor para asegurar el que le gustó.
+`
+
+/**
  * Se suma a INSTRUCCIONES_ALI solo cuando Ali atiende por Instagram o
  * Facebook. Ahí la persona no pasó por el formulario del chat web: Ali no
  * tiene sus datos y los pide en la conversación (decisión de Nicolás,
