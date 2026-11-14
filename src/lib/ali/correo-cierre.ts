@@ -146,7 +146,7 @@ export async function escribirCorreoCierre(p: PedidoCorreo): Promise<CorreoCierr
 const TITULO_POR_PASO: Record<number, string> = {
     2: 'Así puedes pagar tu terreno',
     3: 'Lo que recibes con tu terreno',
-    4: 'Tu terreno sigue disponible',
+    4: 'Asegura el terreno que te gustó',
 }
 
 /**

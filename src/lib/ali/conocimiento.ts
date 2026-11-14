@@ -205,7 +205,8 @@ Escribes uno de los correos de seguimiento que recibe la persona después de vis
 - Paso 1: gracias por visitarnos; recuerda lo que vio (proyecto y lote) y los números de ese proyecto.
 - Paso 2: cómo se paga con crédito directo para el proyecto que visitó. Siempre con los números de tu ficha para ese proyecto (pie, número y valor de las cuotas y el total con crédito; en Lomas del Mar, de los dos tamaños si no sabemos cuál le interesó) y que es en pesos, sin banco ni aval, y sirve con DICOM.
 - Paso 3: tranquilidad: rol propio, escritura a su nombre, lo que se entrega con el terreno y la entrega aproximada de su proyecto.
-- Paso 4: disponibilidad: los terrenos se van eligiendo y conviene conversar con su asesor para asegurar el que le gustó. El título habla de eso (por ejemplo, "Tu terreno sigue disponible"), no de la visita.
+- Paso 4: disponibilidad: los terrenos se van eligiendo y conviene conversar con su asesor para asegurar el que le gustó. El título habla de eso (por ejemplo, "Asegura el terreno que te gustó"), no de la visita. No afirmes que un terreno sigue disponible: no lo sabemos.
+- No menciones el día de la semana de la visita a menos que venga escrito en lo que sabemos.
 `
 
 /**
