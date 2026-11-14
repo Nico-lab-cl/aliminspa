@@ -12,6 +12,7 @@ import { INSTRUCCIONES_ALI } from './conocimiento'
 import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramientas } from './herramientas'
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
+import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -389,6 +390,9 @@ export async function correrModelo(p: {
     // herramienta (guardar_contacto) y, con el resultado, termina sin texto.
     // Sin esto la persona se quedaba sin respuesta (prueba del 12-11-2026).
     let textoAnterior = ''
+    // Oficina IA: el personaje se pone a trabajar (sin datos del cliente).
+    const agenteOficina = p.agente === 'cierre' ? 'cierre' : 'ali'
+    oficinaTrabaja(agenteOficina, p.canal)
     for (let vuelta = 0; vuelta < MAX_VUELTAS; vuelta++) {
         const respuesta = await anthropic().messages.create({
             model: MODELO,
@@ -414,6 +418,7 @@ export async function correrModelo(p: {
         )
 
         if (respuesta.stop_reason !== 'tool_use') {
+            oficinaDice(agenteOficina, fraseDeRespuesta(p.canal, herramientas))
             return textoDe(respuesta.content) || textoAnterior
         }
 

@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { INSTRUCCIONES_ALI, INSTRUCCIONES_CIERRE, INSTRUCCIONES_CORREO_CIERRE } from './conocimiento'
 import { configRemota, reportarUso, bloqueRemoto } from './config-remota'
+import { oficinaDice, oficinaTrabaja } from './oficina'
 
 /**
  * Correos de "Después de la visita" escritos por la IA de Cierre (12-11-2026).
@@ -98,6 +99,7 @@ export async function escribirCorreoCierre(p: PedidoCorreo): Promise<CorreoCierr
         { type: 'text', text: datos },
     ]
 
+    oficinaTrabaja('cierre', 'correo')
     const respuesta = await anthropic().messages.create({
         model: MODELO,
         max_tokens: 1200,
@@ -140,6 +142,7 @@ export async function escribirCorreoCierre(p: PedidoCorreo): Promise<CorreoCierr
         parrafos = parrafos.map((t, i) => (i === 0 ? sinAgradecimiento(t) : t)).filter(t => t.length > 0)
     }
     if (!asunto || parrafos.length < 1) return null
+    oficinaDice('cierre', `Escribí el correo post-visita ${p.paso.posicion} de ${p.paso.total}`)
     return { asunto, preheader: limpiar(texto(c.preheader, 150)), titulo, parrafos }
 }
 
