@@ -169,23 +169,15 @@ async function responder(turno: Turno) {
     const inicio = Date.now()
     const yaDerivada = contexto.derivadaAt !== null
 
-    // Audios y videos: Ali no los puede escuchar, así que entra un asesor.
-    // Se resuelve sin el modelo para que nunca invente lo que dice un audio.
+    // Audios y videos: Ali no los puede escuchar. Se resuelve sin el modelo
+    // para que nunca invente lo que dice un audio, y ya no deriva: pide que se
+    // lo escriban (Nicolás, 15-11-2026: derivar solo si piden una persona).
     if (sinResponder.some(m => m.adjunto && m.adjunto.tipo !== 'image')) {
         const texto = yaDerivada
             ? 'No puedo escuchar audios ni ver videos por aquí 🙈 El asesor que va a tomar tu conversación lo revisa y te responde.'
-            : 'No puedo escuchar audios ni ver videos por aquí 🙈 Ya le avisé a un asesor para que lo revise y te responda por este mismo chat.'
+            : 'No puedo escuchar audios ni ver videos por aquí 🙈 ¿Me lo puedes escribir? Así te ayudo enseguida.'
         await dormir(tiempoDeEscritura(texto))
-        await publicarMensajeAli(
-            sesion,
-            texto,
-            yaDerivada
-                ? null
-                : {
-                      motivo: 'Mandó un audio o video por el chat',
-                      resumen: resumenCorto(contexto),
-                  }
-        )
+        await publicarMensajeAli(sesion, texto, null)
         return
     }
 
