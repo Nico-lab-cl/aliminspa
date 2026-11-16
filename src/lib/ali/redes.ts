@@ -230,8 +230,16 @@ function datosDelMomento(entrada: EntradaRedes) {
         .join('\n')
 }
 
-/** Corre a Ali sobre una conversación de redes y devuelve lo que hay que mandar. */
-export async function conversarRedes(entrada: EntradaRedes, request: NextRequest): Promise<RespuestaRedes> {
+/**
+ * Corre a Ali sobre una conversación de redes y devuelve lo que hay que mandar.
+ * Con `prueba` (página /probar-ali) la agenda queda simulada y no se reporta
+ * uso al CRM web ni se avisa a la Oficina IA.
+ */
+export async function conversarRedes(
+    entrada: EntradaRedes,
+    request: NextRequest,
+    opciones: { prueba?: boolean } = {}
+): Promise<RespuestaRedes> {
     const nombres = HERRAMIENTAS.map(h => h.name)
     const [remota, cierre] = await Promise.all([configRemota(), modoCierre(entrada.agente, nombres)])
     const config = remota?.agente.activo ? remota : null
@@ -257,7 +265,7 @@ export async function conversarRedes(entrada: EntradaRedes, request: NextRequest
         canal: entrada.canal,
         contacto: null,
         visita: null,
-        simulacion: process.env.ALI_REDES_SIMULACION === 'true',
+        simulacion: Boolean(opciones.prueba) || process.env.ALI_REDES_SIMULACION === 'true',
     }
 
     const publica = entrada.via === 'comentario' ? respuestaPublica() : null
@@ -274,6 +282,7 @@ export async function conversarRedes(entrada: EntradaRedes, request: NextRequest
         canal: entrada.canal,
         agente: cierre.agente,
         etiquetaConfig: cierre.version ?? config?.version ?? null,
+        prueba: opciones.prueba,
     })
     if (!final && ctx.derivacion) final = 'Ya le avisé a un asesor y te responde por este mismo chat a la brevedad 🙌'
 

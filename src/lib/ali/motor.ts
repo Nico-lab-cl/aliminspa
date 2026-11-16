@@ -370,6 +370,8 @@ export async function correrModelo(p: {
     /** Ali (atracción) por defecto, o Cierre: se registra aparte en el CRM web. */
     agente?: AgenteChat
     etiquetaConfig: string | null
+    /** Página de prueba (/probar-ali): no reporta uso al CRM web ni avisa a la Oficina IA. */
+    prueba?: boolean
 }) {
     const { system, mensajes, herramientas } = p
     const textoDe = (content: Anthropic.ContentBlock[]) =>
@@ -384,7 +386,7 @@ export async function correrModelo(p: {
     let textoAnterior = ''
     // Oficina IA: el personaje se pone a trabajar (sin datos del cliente).
     const agenteOficina = p.agente === 'cierre' ? 'cierre' : 'ali'
-    oficinaTrabaja(agenteOficina, p.canal)
+    if (!p.prueba) oficinaTrabaja(agenteOficina, p.canal)
     for (let vuelta = 0; vuelta < MAX_VUELTAS; vuelta++) {
         const respuesta = await anthropic().messages.create({
             model: MODELO,
@@ -395,7 +397,7 @@ export async function correrModelo(p: {
         })
 
         const uso = respuesta.usage
-        reportarUso({
+        if (!p.prueba) reportarUso({
             conversacionId: p.conversacionId,
             canal: p.canal,
             agente: p.agente,
@@ -406,11 +408,11 @@ export async function correrModelo(p: {
             cache_creation_input_tokens: uso.cache_creation_input_tokens,
         })
         console.log(
-            `[ali${p.canal === 'web' ? '' : `:${p.canal}`}${p.agente === 'cierre' ? ':cierre' : ''}] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${p.etiquetaConfig ? ` · config ${p.etiquetaConfig}` : ''}`
+            `[ali${p.prueba ? ':prueba' : ''}${p.canal === 'web' ? '' : `:${p.canal}`}${p.agente === 'cierre' ? ':cierre' : ''}] vuelta ${vuelta + 1}: ${respuesta.stop_reason} · entrada ${uso.input_tokens} (caché ${uso.cache_read_input_tokens ?? 0}) · salida ${uso.output_tokens}${p.etiquetaConfig ? ` · config ${p.etiquetaConfig}` : ''}`
         )
 
         if (respuesta.stop_reason !== 'tool_use') {
-            oficinaDice(agenteOficina, fraseDeRespuesta(p.canal, herramientas))
+            if (!p.prueba) oficinaDice(agenteOficina, fraseDeRespuesta(p.canal, herramientas))
             return textoDe(respuesta.content) || textoAnterior
         }
 
