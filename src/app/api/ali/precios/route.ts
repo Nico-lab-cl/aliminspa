@@ -5,9 +5,10 @@ import { respuestaPublica } from '@/lib/ali/redes'
 export const dynamic = 'force-dynamic'
 
 /**
- * Texto con los precios reales para la respuesta pública bajo un comentario
- * de Instagram/Facebook. Lo pide el CRM móvil cuando manda el brochure
- * automático (x-ia-secret = IA_SECRET). Sale de PROJECTS en constants.ts.
+ * Texto para la respuesta pública bajo un comentario de Instagram/Facebook
+ * (sin precios desde el 16-11-2026: los valores van solo por interno).
+ * Lo pide el CRM móvil cuando manda el brochure
+ * automático (x-ia-secret = IA_SECRET).
  * GET ?texto=<publicación + comentario> → { publica }
  */
 function autorizado(request: NextRequest) {
@@ -21,6 +22,5 @@ function autorizado(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
     if (!autorizado(request)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-    const texto = (new URL(request.url).searchParams.get('texto') || '').slice(0, 2000)
-    return NextResponse.json({ publica: respuestaPublica(texto) })
+    return NextResponse.json({ publica: respuestaPublica() })
 }

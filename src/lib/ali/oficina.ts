@@ -10,7 +10,7 @@
 export type AgenteOficina = 'ali' | 'cierre'
 
 const NOMBRE: Record<AgenteOficina, string> = { ali: 'Ali', cierre: 'Cierre' }
-const CANAL: Record<string, string> = { web: 'el chat web', instagram: 'Instagram', facebook: 'Facebook', correo: 'un correo' }
+const CANAL: Record<string, string> = { web: 'el chat web', instagram: 'Instagram', facebook: 'Facebook', whatsapp: 'WhatsApp', correo: 'un correo' }
 
 function enviar(ruta: string, cuerpo: unknown) {
     const base = process.env.OFICINA_IA_URL?.replace(/\/+$/, '')

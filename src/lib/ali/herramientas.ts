@@ -23,7 +23,7 @@ const PROYECTOS_EN_VENTA: Record<string, Proyecto> = {
     'Arena y Sol': ARENA_Y_SOL,
 }
 
-export type CanalAli = 'web' | 'instagram' | 'facebook'
+export type CanalAli = 'web' | 'instagram' | 'facebook' | 'whatsapp'
 
 export interface ContactoAli {
     nombre: string | null
@@ -296,13 +296,10 @@ async function agendar(
     if (!proyecto) return { ok: false, error: 'Proyecto desconocido.' }
 
     const { nombre, telefono, email } = ctx.cliente
-    const redes = ctx.canal === 'instagram' || ctx.canal === 'facebook'
     if (!nombre || !telefono || !email) {
         return {
             ok: false,
-            error: redes
-                ? 'Para agendar faltan datos: pide el nombre, el teléfono y el correo que falten, para coordinar la visita. Si no quiere darlos, no insistas.'
-                : 'Para agendar faltan datos: pide el nombre, el teléfono y el correo que falten, para coordinar la visita. Si no quiere darlos, no insistas.',
+            error: 'Para agendar faltan datos: pide el nombre, el teléfono y el correo que falten, para coordinar la visita. Si no quiere darlos, no insistas.',
         }
     }
 
@@ -322,7 +319,9 @@ async function agendar(
             ? 'Mensaje privado de Instagram con Ali'
             : ctx.canal === 'facebook'
               ? 'Mensaje privado de Facebook con Ali'
-              : 'Chat web con Ali'
+              : ctx.canal === 'whatsapp'
+                ? 'WhatsApp con Ali'
+                : 'Chat web con Ali'
 
     const resultado = await agendarVisita(
         {

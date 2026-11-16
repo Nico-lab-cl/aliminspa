@@ -1,7 +1,6 @@
 import type Anthropic from '@anthropic-ai/sdk'
 import type { NextRequest } from 'next/server'
 import { TIMEZONE } from '@/lib/booking-rules'
-import { PROJECTS } from '@/lib/constants'
 import { INSTRUCCIONES_ALI, INSTRUCCIONES_REDES } from './conocimiento'
 import { bloqueRemoto, configRemota, herramientasApagadas } from './config-remota'
 import {
@@ -44,7 +43,7 @@ export function burbujasRedes(texto: string) {
  * que mandar y los datos que juntó, y el CRM envía, guarda y crea el lead.
  */
 
-export type CanalRedes = 'instagram' | 'facebook'
+export type CanalRedes = 'instagram' | 'facebook' | 'whatsapp'
 
 export interface MensajeRedes {
     de: 'cliente' | 'ali' | 'asesor'
@@ -76,41 +75,28 @@ export interface RespuestaRedes {
     contacto: ContactoAli | null
     derivacion: { motivo: string; resumen: string } | null
     visita: { proyecto: string; fecha: string; hora: string } | null
-    /** Respuesta pública bajo el comentario, con los precios reales (solo vía comentario). */
+    /** Respuesta pública bajo el comentario, sin precios (solo vía comentario). */
     publica: string | null
 }
 
-/* ── Respuesta pública con precios ───────────────────────────────────── */
+/* ── Respuesta pública bajo el comentario ────────────────────────────── */
 
-const pesos = (v: string) => (v.trim().startsWith('$') ? v.trim() : `$${v.trim()}`)
-const aNumero = (v: string) => Number(v.replace(/\D/g, ''))
-
-/** "200 m²: $35.000.000 al contado o pie de $5.500.000 + 60 cuotas de $550.000 ($37.990.000 en total)". */
-function lineaDePrecio(o: { terreno: string; pie: string; cuotaReferencial: string; valorTotal: string; pagoContado: string; plazo?: string }) {
-    // Arena y Sol no trae el plazo en constants.ts: se calcula con (total - pie) / cuota.
-    const cuotas = o.plazo
-        ? o.plazo.replace(/\D/g, '')
-        : String(Math.round((aNumero(o.valorTotal) - aNumero(o.pie)) / aNumero(o.cuotaReferencial)))
-    return `${o.terreno}: ${pesos(o.pagoContado)} al contado o pie de ${pesos(o.pie)} + ${cuotas} cuotas de ${pesos(o.cuotaReferencial)} (${pesos(o.valorTotal)} en total)`
-}
+const PUBLICAS = [
+    '¡Hola! Te escribimos por interno con toda la información 📩',
+    '¡Hola! Revisa tus mensajes, ahí te dejamos todo el detalle 😊',
+    '¡Gracias por comentar! Te mandamos la info por mensaje privado 📩',
+]
 
 /**
- * Lo que va en público bajo el comentario (decisión de Nicolás, 11-11-2026:
- * "digamos los precios como son"). Sale de PROJECTS en constants.ts, la
- * misma fuente que las tarjetas de precios del sitio: no hay otra copia.
+ * Lo que va en público bajo el comentario: SIN precios ni datos, solo que le
+ * escribimos por interno (Marcela, 16-11-2026; reemplaza el "digamos los
+ * precios como son" del 11-11). Con los valores en el muro la gente no
+ * pregunta, la conversación se corta antes de explicar cómo entregamos los
+ * proyectos y la publicación pierde comentarios. Los precios van solo por
+ * privado.
  */
-export function respuestaPublica(texto: string): string {
-    const t = texto.toLowerCase()
-    const lomas = PROJECTS.find(p => p.id === 'lomas-del-mar')
-    const arena = PROJECTS.find(p => p.id === 'arena-y-sol')
-    const habla = { lomas: /lomas/.test(t), arena: /arena/.test(t) }
-    const proyectos = [
-        lomas && (habla.lomas || !habla.arena) ? lomas : null,
-        arena && (habla.arena || !habla.lomas) ? arena : null,
-    ].filter((p): p is NonNullable<typeof p> => Boolean(p))
-
-    const partes = proyectos.map(p => `${p.name}: ${p.financing.options.map(lineaDePrecio).join('. ')}.`)
-    return `${partes.join(' ')} Te escribimos por interno con todo el detalle 📩`
+export function respuestaPublica(): string {
+    return PUBLICAS[Math.floor(Math.random() * PUBLICAS.length)]
 }
 
 const MAX_MENSAJES = 40
@@ -124,7 +110,7 @@ const texto = (v: unknown, max = MAX_TEXTO) => (typeof v === 'string' ? v.trim()
 export function validarEntrada(json: unknown): EntradaRedes | null {
     if (!json || typeof json !== 'object') return null
     const j = json as Record<string, unknown>
-    if (j.canal !== 'instagram' && j.canal !== 'facebook') return null
+    if (j.canal !== 'instagram' && j.canal !== 'facebook' && j.canal !== 'whatsapp') return null
     if (j.via !== 'comentario' && j.via !== 'dm') return null
     const conversacionId = texto(j.conversacionId, 120)
     if (!conversacionId || !Array.isArray(j.mensajes)) return null
@@ -210,7 +196,7 @@ function datosDelMomento(entrada: EntradaRedes) {
         minute: '2-digit',
     })
     const hoyISO = new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE })
-    const red = entrada.canal === 'instagram' ? 'Instagram' : 'Facebook'
+    const red = entrada.canal === 'instagram' ? 'Instagram' : entrada.canal === 'whatsapp' ? 'WhatsApp' : 'Facebook'
     const { nombre, telefono, email } = entrada.cliente
     const faltan = [!nombre && 'nombre', !telefono && 'teléfono', !email && 'correo'].filter(Boolean)
     // El brochure automático del primer contacto llega marcado: no cuenta como
@@ -221,8 +207,14 @@ function datosDelMomento(entrada: EntradaRedes) {
 
     return [
         `Ahora en Chile: ${ahora} (hoy es ${hoyISO}).`,
-        `Canal: mensaje privado de ${red}${entrada.via === 'comentario' ? ', a partir de un comentario en una publicación' : ''}.`,
-        entrada.publicacion ? `Publicación comentada: "${entrada.publicacion}"` : null,
+        entrada.canal === 'whatsapp'
+            ? 'Canal: WhatsApp, al número de Alimin que atiendes tú. Ya tienes su teléfono (es el número desde el que escribe): nunca se lo pidas. Pídele el nombre y, cuando quiera agendar, el correo para coordinar la visita. Todo lo de Instagram y Facebook vale igual aquí, salvo lo del brochure y los comentarios.'
+            : `Canal: mensaje privado de ${red}${entrada.via === 'comentario' ? ', a partir de un comentario en una publicación' : ''}.`,
+        entrada.publicacion
+            ? entrada.canal === 'whatsapp'
+                ? `Llegó desde un anuncio de Meta: "${entrada.publicacion}". Úsalo para orientar la conversación hacia ese proyecto.`
+                : `Publicación comentada: "${entrada.publicacion}"`
+            : null,
         `Datos que ya tienes del cliente: nombre ${nombre || '(no lo sabes)'}, teléfono ${telefono ? 'sí' : 'no'}, correo ${email ? 'sí' : 'no'}.`,
         faltan.length ? `Te falta: ${faltan.join(', ')}.` : 'Ya tienes todos sus datos: no se los vuelvas a pedir.',
         yaMandoBrochure
@@ -268,8 +260,7 @@ export async function conversarRedes(entrada: EntradaRedes, request: NextRequest
         simulacion: process.env.ALI_REDES_SIMULACION === 'true',
     }
 
-    const ultimoDelCliente = [...entrada.mensajes].reverse().find(m => m.de === 'cliente')?.texto || ''
-    const publica = entrada.via === 'comentario' ? respuestaPublica(`${entrada.publicacion || ''} ${ultimoDelCliente}`) : null
+    const publica = entrada.via === 'comentario' ? respuestaPublica() : null
 
     const mensajes = historial(entrada)
     if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, publica }
