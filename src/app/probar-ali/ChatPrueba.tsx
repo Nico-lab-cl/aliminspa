@@ -23,7 +23,7 @@ type Item =
 
 type Guardado = 'nada' | 'guardando' | 'ok' | 'error'
 
-const ASESORES = ['Marcela', 'Bárbara', 'Orlando', 'Nicolás']
+const ASESORES = ['Marcela', 'Bárbara', 'Orlando', 'Patricio', 'Chris', 'Marcela CEO', 'Nicolás']
 const CLAVE_ASESOR = 'probar-ali:asesor'
 
 function leerAsesor() {
