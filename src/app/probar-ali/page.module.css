@@ -291,3 +291,152 @@
         font-size: 15px;
     }
 }
+
+/* ── Feedback del equipo ─────────────────────────────────────────── */
+
+.botonActivo {
+    background: var(--verde-claro);
+    border-color: var(--verde);
+}
+
+.enlace {
+    font: inherit;
+    font-size: inherit;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--verde);
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: left;
+}
+
+.guardadoError {
+    color: #a12b2b;
+}
+
+.quien {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quienTitulo {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.quienOtro {
+    display: flex;
+    gap: 6px;
+}
+
+.quienCampo {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 16px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: var(--texto);
+    background: #fff;
+}
+
+.bloqueAli {
+    align-self: flex-start;
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bloqueAli .burbuja {
+    max-width: 100%;
+}
+
+.aliBien {
+    border-color: #5bb98c;
+}
+
+.aliMal {
+    border-color: #d77a7a;
+}
+
+.votos {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    color: var(--suave);
+    padding-left: 2px;
+}
+
+.voto {
+    font-size: 14px;
+    line-height: 1;
+    padding: 4px 7px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.55;
+}
+
+.voto:hover {
+    opacity: 1;
+    border-color: var(--borde);
+}
+
+.votoBien {
+    opacity: 1;
+    background: #e3f4ea;
+    border-color: #5bb98c;
+}
+
+.votoMal {
+    opacity: 1;
+    background: #fdecec;
+    border-color: #d77a7a;
+}
+
+.correccion,
+.comentario {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.comentario {
+    padding: 10px 12px;
+    border-top: 1px solid var(--borde);
+    background: #fff;
+}
+
+.correccionCampo {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 15px;
+    line-height: 1.4;
+    border: 1px solid #d77a7a;
+    border-radius: 10px;
+    padding: 8px 10px;
+    color: var(--texto);
+    background: #fff;
+    resize: vertical;
+}
+
+.comentario .correccionCampo {
+    border-color: var(--borde);
+}
+
+.campo:disabled {
+    background: #f4f6f7;
+}
