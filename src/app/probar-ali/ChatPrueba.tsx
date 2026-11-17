@@ -20,6 +20,13 @@ type Item =
     | { tipo: 'cliente'; texto: string }
     | { tipo: 'ali'; texto: string; turno: number; voto?: Voto | null; correccion?: string }
     | { tipo: 'aviso'; texto: string }
+    | { tipo: 'archivo'; texto: string; url: string; imagen: boolean }
+
+interface Documento {
+    nombre: string
+    tipo: 'pdf' | 'imagen'
+    url: string
+}
 
 type Guardado = 'nada' | 'guardando' | 'ok' | 'error'
 
@@ -100,7 +107,9 @@ export default function ChatPrueba() {
             mensajes: items.map(it =>
                 it.tipo === 'ali'
                     ? { de: 'ali', texto: it.texto, voto: it.voto ?? null, correccion: it.voto === 'mal' ? it.correccion || null : null }
-                    : { de: it.tipo, texto: it.texto }
+                    : it.tipo === 'archivo'
+                      ? { de: 'aviso', texto: `📎 Ali mandó: ${it.texto}` }
+                      : { de: it.tipo, texto: it.texto }
             ),
         })
         if (cuerpo === ultimoGuardado.current) return
@@ -176,6 +185,11 @@ export default function ChatPrueba() {
                 if (anterior?.de === 'ali' && ultimoTurno === it.turno) anterior.texto += `\n\n${it.texto}`
                 else mensajes.push({ de: 'ali', texto: it.texto })
                 ultimoTurno = it.turno
+            } else if (it.tipo === 'archivo') {
+                // Como lo guarda el CRM: Ali ve que ya lo mandó y no lo repite.
+                const anterior = mensajes[mensajes.length - 1]
+                if (anterior?.de === 'ali') anterior.texto += `\n\n📎 ${it.texto}`
+                else mensajes.push({ de: 'ali', texto: `📎 ${it.texto}` })
             }
         }
         return mensajes
@@ -228,6 +242,18 @@ export default function ChatPrueba() {
                 if (i > 0) await esperar(Math.min(1800, 400 + burbujas[i].length * 12))
                 setItems(prev => [...prev, { tipo: 'ali', texto: burbujas[i], turno: t }])
             }
+            // Los archivos llegan después de los mensajes, como en Instagram y Facebook.
+            const documentos: Documento[] = data.documentos || []
+            for (const d of documentos) {
+                await esperar(700)
+                let url = d.url
+                try {
+                    url = new URL(d.url).pathname
+                } catch {
+                    /* ya es relativa */
+                }
+                setItems(prev => [...prev, { tipo: 'archivo', texto: d.nombre, url, imagen: d.tipo === 'imagen' }])
+            }
             if (!burbujas.length && !nuevos.length) nuevos.push({ tipo: 'aviso', texto: 'Ali no respondió nada a este mensaje.' })
             if (nuevos.length) setItems(prev => [...prev, ...nuevos])
         } catch (e) {
@@ -245,6 +271,7 @@ export default function ChatPrueba() {
         const lineas = items.map(it => {
             if (it.tipo === 'cliente') return `Cliente: ${it.texto}`
             if (it.tipo === 'aviso') return `[${it.texto}]`
+            if (it.tipo === 'archivo') return `[📎 Ali mandó: ${it.texto}]`
             const voto = it.voto === 'bien' ? ' 👍' : it.voto === 'mal' ? ` 👎${it.correccion ? `\n→ Debió decir: ${it.correccion}` : ''}` : ''
             return `Ali: ${it.texto}${voto}`
         })
@@ -377,6 +404,22 @@ export default function ChatPrueba() {
                             <div key={i} className={styles.aviso}>
                                 {it.texto}
                             </div>
+                        ) : it.tipo === 'archivo' ? (
+                            <a
+                                key={i}
+                                href={it.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={`${styles.burbuja} ${styles.ali} ${styles.archivo}`}
+                            >
+                                {it.imagen ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={it.url} alt={it.texto} className={styles.archivoImagen} />
+                                ) : (
+                                    <span className={styles.archivoPdf}>PDF</span>
+                                )}
+                                <span>📎 {it.texto}</span>
+                            </a>
                         ) : it.tipo === 'cliente' ? (
                             <div key={i} className={`${styles.burbuja} ${styles.cliente}`}>
                                 {it.texto}

@@ -6,6 +6,7 @@ import { getAvailability } from '@/lib/availability'
 import { isSlotBookable, parseCalendarDate, toCalendarDateInChile, toChileInstant } from '@/lib/booking-rules'
 import { agendarVisita } from '@/lib/agendar-visita'
 import { ARENA_Y_SOL, LOMAS_DEL_MAR, type Proyecto } from '@/components/agenda3d/proyectos'
+import { DOCUMENTOS, archivoVigente, documentoPorId, urlDocumento, type DocumentoParaEnviar } from './documentos'
 
 /**
  * Herramientas que Ali puede usar mientras conversa.
@@ -45,6 +46,8 @@ export interface ContextoHerramientas {
     contacto?: ContactoAli | null
     /** La visita que quedó agendada en esta respuesta, si quedó una. */
     visita?: { proyecto: string; fecha: string; hora: string } | null
+    /** Lo que dejó enviar_documento en esta respuesta (solo redes). */
+    documentos?: DocumentoParaEnviar[]
 }
 
 /**
@@ -117,6 +120,42 @@ function guardarContacto(entrada: Record<string, string | undefined>, ctx: Conte
         !ctx.cliente.email && 'correo',
     ].filter(Boolean)
     return { ok: true, faltan, avisos }
+}
+
+/**
+ * Solo en Instagram, Facebook y WhatsApp (17-11-2026): Ali manda planos,
+ * brochures y ebooks como archivo adjunto. Solo de la lista de documentos.ts;
+ * el CRM los manda después de los mensajes de Ali.
+ */
+export const HERRAMIENTA_ENVIAR_DOCUMENTO: Anthropic.Tool = {
+    name: 'enviar_documento',
+    description:
+        'Manda un archivo a la persona por este chat, después de tus mensajes. Documentos disponibles:\n' +
+        DOCUMENTOS.map(d => `- ${d.id}: ${d.descripcion}`).join('\n') +
+        '\nÚsala cuando la persona pida el plano, el brochure o algo para leer, o cuando un documento responda mejor que un texto largo. Manda solo el del proyecto que le interesa. No pegues enlaces a estos archivos: el archivo llega solo. En tu mensaje di algo corto como "Te mando el plano 👇".',
+    input_schema: {
+        type: 'object',
+        properties: {
+            documento: { type: 'string', enum: DOCUMENTOS.map(d => d.id), description: 'Cuál documento mandar.' },
+        },
+        required: ['documento'],
+        additionalProperties: false,
+    },
+    strict: true,
+}
+
+/** Máximo de archivos por respuesta, para no llenar el chat. */
+const MAX_DOCUMENTOS = 3
+
+async function enviarDocumento(id: string, ctx: ContextoHerramientas) {
+    const doc = documentoPorId(id)
+    if (!doc) return { error: 'Ese documento no existe. Usa uno de la lista.' }
+    if (!(await archivoVigente(doc))) return { error: `${doc.nombre} no está disponible ahora. Responde sin mandarlo.` }
+    const lista = (ctx.documentos ||= [])
+    if (lista.some(d => d.id === id)) return { ok: true, nota: 'Ya estaba en camino.' }
+    if (lista.length >= MAX_DOCUMENTOS) return { error: `Ya vas a mandar ${MAX_DOCUMENTOS} archivos en esta respuesta: no mandes más.` }
+    lista.push({ id: doc.id, nombre: doc.nombre, tipo: doc.tipo, url: urlDocumento(doc.id) })
+    return { ok: true, nota: `${doc.nombre} se manda como archivo después de tus mensajes. No pegues el enlace.` }
 }
 
 export const HERRAMIENTAS: Anthropic.Tool[] = [
@@ -489,6 +528,8 @@ export async function ejecutarHerramienta(
             return { ok: true, nota: 'Listo: los asesores quedan avisados cuando envíes tu respuesta.' }
         case 'guardar_contacto':
             return guardarContacto(entrada, ctx)
+        case 'enviar_documento':
+            return enviarDocumento(String(entrada.documento || ''), ctx)
         case 'buscar_en_sitio':
             return buscarEnSitio(String(entrada.consulta || ''))
         case 'leer_pagina':

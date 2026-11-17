@@ -73,7 +73,13 @@ export async function POST(request: NextRequest) {
 
     try {
         const r = await conversarRedes(entrada, request, { prueba: true })
-        return NextResponse.json({ burbujas: r.burbujas, contacto: r.contacto, derivacion: r.derivacion, visita: r.visita })
+        return NextResponse.json({
+            burbujas: r.burbujas,
+            contacto: r.contacto,
+            derivacion: r.derivacion,
+            visita: r.visita,
+            documentos: r.documentos,
+        })
     } catch (error) {
         console.error(`[ali:prueba] No se pudo responder ${entrada.conversacionId}:`, error)
         return NextResponse.json({ error: 'Ali no pudo responder. Intenta de nuevo.' }, { status: 502 })

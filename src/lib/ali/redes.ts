@@ -5,12 +5,14 @@ import { INSTRUCCIONES_ALI, INSTRUCCIONES_REDES } from './conocimiento'
 import { bloqueRemoto, configRemota, herramientasApagadas } from './config-remota'
 import {
     HERRAMIENTAS,
+    HERRAMIENTA_ENVIAR_DOCUMENTO,
     HERRAMIENTA_GUARDAR_CONTACTO,
     type ContactoAli,
     type ContextoHerramientas,
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
 import { modoCierre } from './cierre'
+import type { DocumentoParaEnviar } from './documentos'
 
 /**
  * Mensajes para IG/FB. Una línea con ✅ nunca sale sola (va pegada a su
@@ -75,6 +77,8 @@ export interface RespuestaRedes {
     contacto: ContactoAli | null
     derivacion: { motivo: string; resumen: string } | null
     visita: { proyecto: string; fecha: string; hora: string } | null
+    /** Archivos que Ali eligió mandar después de sus mensajes (enviar_documento). */
+    documentos: DocumentoParaEnviar[]
     /** Respuesta pública bajo el comentario, sin precios (solo vía comentario). */
     publica: string | null
 }
@@ -244,7 +248,7 @@ export async function conversarRedes(
     const [remota, cierre] = await Promise.all([configRemota(), modoCierre(entrada.agente, nombres)])
     const config = remota?.agente.activo ? remota : null
     const apagadas = [...(config ? herramientasApagadas(config) : []), ...cierre.apagadas]
-    const tools = [...HERRAMIENTAS.filter(h => !apagadas.includes(h.name)), HERRAMIENTA_GUARDAR_CONTACTO]
+    const tools = [...HERRAMIENTAS.filter(h => !apagadas.includes(h.name)), HERRAMIENTA_GUARDAR_CONTACTO, HERRAMIENTA_ENVIAR_DOCUMENTO]
     const extra = config ? bloqueRemoto(config, nombres) : null
 
     // Mismo prefijo que el chat web (ficha + config aprobada) para compartir el
@@ -265,13 +269,14 @@ export async function conversarRedes(
         canal: entrada.canal,
         contacto: null,
         visita: null,
+        documentos: [],
         simulacion: Boolean(opciones.prueba) || process.env.ALI_REDES_SIMULACION === 'true',
     }
 
     const publica = entrada.via === 'comentario' ? respuestaPublica() : null
 
     const mensajes = historial(entrada)
-    if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, publica }
+    if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, documentos: [], publica }
 
     let final = await correrModelo({
         system,
@@ -291,6 +296,7 @@ export async function conversarRedes(
         contacto: ctx.contacto ?? null,
         derivacion: ctx.derivacion,
         visita: ctx.visita ?? null,
+        documentos: ctx.documentos ?? [],
         publica,
     }
 }

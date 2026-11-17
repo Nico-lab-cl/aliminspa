@@ -440,3 +440,32 @@
 .campo:disabled {
     background: #f4f6f7;
 }
+
+/* ── Archivos que manda Ali ──────────────────────────────────────── */
+
+.archivo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--texto);
+    text-decoration: none;
+    max-width: 75%;
+}
+
+.archivoImagen {
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f4f6f7;
+}
+
+.archivoPdf {
+    align-self: flex-start;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: #c0392b;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
