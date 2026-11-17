@@ -148,21 +148,53 @@ export function validarEntrada(json: unknown): EntradaRedes | null {
     }
 }
 
-/** Historial en el formato de la API: turnos alternados, la conversación parte con el cliente. */
-function historial(entrada: EntradaRedes): Anthropic.MessageParam[] {
-    const fotos = entrada.mensajes
+type FotoBase64 = Anthropic.Base64ImageSource
+
+const TIPOS_FOTO = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'] as const
+/** Límite de la API de Anthropic para una imagen. */
+const MAX_BYTES_FOTO = 5 * 1024 * 1024
+
+/**
+ * Las fotos del cliente las descarga el sitio y van en base64. Antes iban como
+ * URL de Meta y, si Anthropic no podía bajarla (por ejemplo el 👍 de Messenger,
+ * que llega como imagen), fallaba la respuesta completa y el cliente quedaba
+ * sin respuesta (Tomas Pineda, 16-11-2026). Una foto que no se puede bajar
+ * queda como "[El cliente mandó una foto]" y Ali responde igual.
+ */
+async function descargarFotos(entrada: EntradaRedes): Promise<Map<number, FotoBase64>> {
+    const indices = entrada.mensajes
         .map((m, i) => ({ m, i }))
         .filter(({ m }) => m.de === 'cliente' && m.imagenUrl)
         .slice(-MAX_FOTOS)
-        .map(({ i }) => i)
+    const fotos = new Map<number, FotoBase64>()
+    await Promise.all(
+        indices.map(async ({ m, i }) => {
+            try {
+                const res = await fetch(m.imagenUrl as string, { signal: AbortSignal.timeout(8000), cache: 'no-store' })
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                const tipo = (res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase()
+                if (!(TIPOS_FOTO as readonly string[]).includes(tipo)) throw new Error(`tipo ${tipo || 'desconocido'}`)
+                const buf = Buffer.from(await res.arrayBuffer())
+                if (!buf.length || buf.length > MAX_BYTES_FOTO) throw new Error(`tamaño ${buf.length}`)
+                fotos.set(i, { type: 'base64', media_type: tipo as FotoBase64['media_type'], data: buf.toString('base64') })
+            } catch (error) {
+                console.error(`[ali:redes] No se pudo bajar una foto de ${entrada.conversacionId}:`, error instanceof Error ? error.message : error)
+            }
+        })
+    )
+    return fotos
+}
 
+/** Historial en el formato de la API: turnos alternados, la conversación parte con el cliente. */
+function historial(entrada: EntradaRedes, fotos: Map<number, FotoBase64>): Anthropic.MessageParam[] {
     const mensajes: Anthropic.MessageParam[] = []
     entrada.mensajes.forEach((m, i) => {
         const rol = m.de === 'cliente' ? 'user' : 'assistant'
         const bloques: Anthropic.ContentBlockParam[] = []
         if (m.de === 'cliente') {
-            if (m.imagenUrl && fotos.includes(i)) {
-                bloques.push({ type: 'image', source: { type: 'url', url: m.imagenUrl } })
+            const foto = fotos.get(i)
+            if (foto) {
+                bloques.push({ type: 'image', source: foto })
             } else if (m.imagenUrl) {
                 bloques.push({ type: 'text', text: '[El cliente mandó una foto]' })
             }
@@ -275,7 +307,7 @@ export async function conversarRedes(
 
     const publica = entrada.via === 'comentario' ? respuestaPublica() : null
 
-    const mensajes = historial(entrada)
+    const mensajes = historial(entrada, await descargarFotos(entrada))
     if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, documentos: [], publica }
 
     let final = await correrModelo({
