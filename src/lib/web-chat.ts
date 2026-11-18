@@ -305,3 +305,32 @@ export async function publicarMensajeAli(
         throw error
     }
 }
+
+/**
+ * Transcribe un audio con el CRM, que tiene la clave de OpenAI (19-11-2026).
+ * Lo usa el chat de prueba de Ali: no guarda nada. Devuelve lo que dice el
+ * audio o lanza ChatUpstreamError con un mensaje para mostrar.
+ */
+export async function transcribirAudioEnCrm(archivo: File): Promise<string> {
+    requireConfig()
+    const cuerpo = new FormData()
+    cuerpo.append('file', archivo)
+    let respuesta: Response
+    try {
+        respuesta = await fetch(`${CRM_BASE_URL}/api/public/web-chat/transcribir`, {
+            method: 'POST',
+            headers: { 'x-crm-api-key': WEB_CHAT_API_KEY as string },
+            body: cuerpo,
+            signal: AbortSignal.timeout(45000),
+            cache: 'no-store',
+        })
+    } catch (error) {
+        console.error('[chat] El CRM no respondió al transcribir:', error)
+        throw new ChatUpstreamError('No se pudo transcribir el audio', 503)
+    }
+    const datos = (await respuesta.json().catch(() => ({}))) as { texto?: string; error?: string }
+    if (!respuesta.ok || !datos.texto) {
+        throw new ChatUpstreamError(datos.error || 'No se pudo transcribir el audio', respuesta.status === 429 ? 429 : 502)
+    }
+    return datos.texto
+}

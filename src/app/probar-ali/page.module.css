@@ -469,3 +469,23 @@
     border-radius: 6px;
     padding: 4px 8px;
 }
+
+/* ── Grabar audio ────────────────────────────────────────────────── */
+
+.grabando {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--texto);
+    padding: 0 6px;
+}
+
+.puntoRojo {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d64545;
+    animation: rebote 1.2s infinite ease-in-out;
+}

@@ -64,6 +64,13 @@ const CANALES: { id: Canal; nombre: string }[] = [
 
 const SUGERENCIAS = ['Hola, quiero info', '¿Cuánto cuestan los terrenos?', '¿Vienen con rol propio?', '¿Tienen agua y luz?']
 
+/** Android y Chrome graban WEBM/Opus; iOS y Safari solo MP4/AAC (igual que el chat web). */
+const FORMATOS_DE_AUDIO = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus']
+function formatoDeAudio(): string | null {
+    if (typeof MediaRecorder === 'undefined') return null
+    return FORMATOS_DE_AUDIO.find(f => MediaRecorder.isTypeSupported(f)) || null
+}
+
 const nuevoId = () => Math.random().toString(36).slice(2, 12)
 const esperar = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -85,6 +92,20 @@ export default function ChatPrueba() {
     const contacto = useRef<Contacto>({ nombre: null, telefono: null, email: null })
     const turno = useRef(0)
     const fin = useRef<HTMLDivElement>(null)
+    const [grabando, setGrabando] = useState(false)
+    const [msGrabados, setMsGrabados] = useState(0)
+    const [transcribiendo, setTranscribiendo] = useState(false)
+    const [puedeGrabar, setPuedeGrabar] = useState(false)
+    const grabadora = useRef<MediaRecorder | null>(null)
+    const trozos = useRef<Blob[]>([])
+    const cancelada = useRef(false)
+    const inicioGrabacion = useRef(0)
+    const cronometro = useRef<ReturnType<typeof setInterval> | null>(null)
+
+    // Sin MediaRecorder (navegador viejo o sin HTTPS) no se muestra el micrófono.
+    useEffect(() => {
+        setPuedeGrabar(Boolean(navigator.mediaDevices?.getUserMedia) && formatoDeAudio() !== null)
+    }, [])
     const ultimoGuardado = useRef('')
 
     useEffect(() => {
@@ -263,6 +284,78 @@ export default function ChatPrueba() {
             setTexto(limpio)
         } finally {
             setEscribiendo(false)
+        }
+    }
+
+    /* ── Audios (19-11-2026): se graban, el CRM los transcribe y van como "🎤 (audio) …" ── */
+
+    async function empezarGrabacion() {
+        setError(null)
+        const formato = formatoDeAudio()
+        if (!formato) {
+            setError('Tu navegador no permite grabar audio.')
+            return
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+            const rec = new MediaRecorder(stream, { mimeType: formato })
+            trozos.current = []
+            cancelada.current = false
+            inicioGrabacion.current = Date.now()
+            rec.ondataavailable = ev => {
+                if (ev.data.size > 0) trozos.current.push(ev.data)
+            }
+            rec.onstop = () => {
+                stream.getTracks().forEach(t => t.stop())
+                const ms = Date.now() - inicioGrabacion.current
+                const grabados = trozos.current
+                trozos.current = []
+                if (cancelada.current || !grabados.length) return
+                if (ms < 1000) {
+                    setError('La grabación fue muy corta.')
+                    return
+                }
+                const tipo = formato.split(';')[0]
+                const ext = tipo.includes('mp4') ? 'm4a' : tipo.includes('ogg') ? 'ogg' : 'webm'
+                enviarAudio(new File([new Blob(grabados, { type: tipo })], `audio.${ext}`, { type: tipo }))
+            }
+            rec.start()
+            grabadora.current = rec
+            setGrabando(true)
+            setMsGrabados(0)
+            cronometro.current = setInterval(() => {
+                const t = Date.now() - inicioGrabacion.current
+                setMsGrabados(t)
+                if (t > 2 * 60 * 1000) detenerGrabacion(false)
+            }, 200)
+        } catch {
+            setError('No pudimos usar el micrófono. Revisa el permiso en tu navegador.')
+        }
+    }
+
+    function detenerGrabacion(cancelar: boolean) {
+        cancelada.current = cancelar
+        if (cronometro.current) clearInterval(cronometro.current)
+        cronometro.current = null
+        grabadora.current?.stop()
+        grabadora.current = null
+        setGrabando(false)
+    }
+
+    async function enviarAudio(archivo: File) {
+        setTranscribiendo(true)
+        try {
+            const cuerpo = new FormData()
+            cuerpo.append('file', archivo)
+            const res = await fetch('/api/ali/prueba/audio', { method: 'POST', body: cuerpo })
+            const data = await res.json().catch(() => ({}))
+            if (!res.ok || !data.texto) throw new Error(data.error || 'No se pudo transcribir el audio.')
+            setTranscribiendo(false)
+            await enviar(`🎤 (audio) ${data.texto}`)
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'No se pudo transcribir el audio.')
+        } finally {
+            setTranscribiendo(false)
         }
     }
 
@@ -505,6 +598,20 @@ export default function ChatPrueba() {
                     </div>
                 )}
 
+                {grabando ? (
+                    <div className={styles.entrada}>
+                        <div className={styles.grabando} aria-live="polite">
+                            <span className={styles.puntoRojo} /> Grabando {Math.floor(msGrabados / 60000)}:
+                            {String(Math.floor(msGrabados / 1000) % 60).padStart(2, '0')}
+                        </div>
+                        <button type="button" className={styles.boton} onClick={() => detenerGrabacion(true)}>
+                            Cancelar
+                        </button>
+                        <button type="button" className={styles.enviar} onClick={() => detenerGrabacion(false)}>
+                            Enviar
+                        </button>
+                    </div>
+                ) : (
                 <form
                     className={styles.entrada}
                     onSubmit={e => {
@@ -528,10 +635,23 @@ export default function ChatPrueba() {
                         maxLength={1500}
                         aria-label="Mensaje para Ali"
                     />
-                    <button type="submit" className={styles.enviar} disabled={!texto.trim() || escribiendo}>
-                        Enviar
-                    </button>
+                    {!texto.trim() && puedeGrabar ? (
+                        <button
+                            type="button"
+                            className={styles.enviar}
+                            onClick={empezarGrabacion}
+                            disabled={!asesor || escribiendo || transcribiendo}
+                            aria-label="Grabar un audio"
+                        >
+                            {transcribiendo ? '…' : '🎤'}
+                        </button>
+                    ) : (
+                        <button type="submit" className={styles.enviar} disabled={!texto.trim() || escribiendo}>
+                            Enviar
+                        </button>
+                    )}
                 </form>
+                )}
             </div>
         </div>
     )

@@ -39,6 +39,8 @@ const MAX_VUELTAS = 6
 const MAX_FOTOS = 2
 
 const TIPOS_DE_IMAGEN = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+/** El CRM deja así los audios que transcribió (lib/transcribir.ts del CRM móvil). */
+const esAudioTranscrito = (texto?: string | null) => /^🎤 \(audio\)/.test(texto || '')
 
 let cliente: Anthropic | null = null
 
@@ -169,10 +171,12 @@ async function responder(turno: Turno) {
     const inicio = Date.now()
     const yaDerivada = contexto.derivadaAt !== null
 
-    // Audios y videos: Ali no los puede escuchar. Se resuelve sin el modelo
-    // para que nunca invente lo que dice un audio, y ya no deriva: pide que se
-    // lo escriban (Nicolás, 15-11-2026: derivar solo si piden una persona).
-    if (sinResponder.some(m => m.adjunto && m.adjunto.tipo !== 'image')) {
+    // Audios y videos que Ali no puede entender. Los audios llegan transcritos
+    // desde el CRM ("🎤 (audio) …", 19-11-2026) y esos los responde como texto;
+    // si un audio no se pudo transcribir o es un video, se resuelve sin el
+    // modelo para que nunca invente lo que dice: pide que se lo escriban
+    // (Nicolás, 15-11-2026: derivar solo si piden una persona).
+    if (sinResponder.some(m => m.adjunto && m.adjunto.tipo !== 'image' && !esAudioTranscrito(m.texto))) {
         const texto = yaDerivada
             ? 'No puedo escuchar audios ni ver videos por aquí 🙈 El asesor que va a tomar tu conversación lo revisa y te responde.'
             : 'No puedo escuchar audios ni ver videos por aquí 🙈 ¿Me lo puedes escribir? Así te ayudo enseguida.'
@@ -293,7 +297,7 @@ async function historial(contexto: ContextoAli, sesion: ChatSession) {
                     console.error('[ali] No se pudo leer la foto:', error)
                     bloques.push({ type: 'text', text: '[El cliente mandó una foto que no se pudo abrir]' })
                 }
-            } else {
+            } else if (!esAudioTranscrito(m.texto)) {
                 const tipo = m.adjunto.tipo === 'image' ? 'una foto' : m.adjunto.tipo === 'audio' ? 'un audio' : 'un video'
                 bloques.push({ type: 'text', text: `[El cliente mandó ${tipo}]` })
             }
