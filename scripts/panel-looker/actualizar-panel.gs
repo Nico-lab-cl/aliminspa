@@ -13,10 +13,15 @@
  */
 
 const BASE = 'https://aliminspa.cl/api/panel/';
+// Los encabezados sirven para crear la pestaña aunque la descarga falle, así
+// Looker Studio puede conectarse antes de que lleguen los primeros datos.
 const ARCHIVOS = [
-  { hoja: 'visitas', archivo: 'visitas.csv' },
-  { hoja: 'leads', archivo: 'leads.csv' },
-  { hoja: 'meta', archivo: 'meta.csv' },
+  { hoja: 'visitas', archivo: 'visitas.csv',
+    columnas: ['fecha', 'pagina', 'origen', 'fuente', 'medio', 'campana', 'dispositivo', 'vistas', 'entradas'] },
+  { hoja: 'leads', archivo: 'leads.csv',
+    columnas: ['fecha', 'origen', 'proyecto', 'formulario', 'utm_source', 'utm_medium', 'utm_campaign', 'como_conocio', 'leads'] },
+  { hoja: 'meta', archivo: 'meta.csv',
+    columnas: ['fecha', 'campana_id', 'campana', 'objetivo', 'gasto', 'impresiones', 'alcance', 'clics_enlace', 'leads_formulario', 'leads_web', 'conversaciones'] },
 ];
 
 function actualizarPanel() {
@@ -27,6 +32,9 @@ function actualizarPanel() {
   const errores = [];
 
   ARCHIVOS.forEach(function (a) {
+    if (!libro.getSheetByName(a.hoja)) {
+      libro.insertSheet(a.hoja).getRange(1, 1, 1, a.columnas.length).setValues([a.columnas]);
+    }
     try {
       const r = UrlFetchApp.fetch(BASE + a.archivo, {
         headers: { Authorization: 'Bearer ' + clave },
