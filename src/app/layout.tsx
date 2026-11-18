@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import CookieBanner from '@/components/consent/CookieBanner'
+import ContadorVisitas from '@/components/analytics/ContadorVisitas'
 import EbookPopup from '@/components/ebooks/EbookPopup'
 import '@/styles/globals.css'
 import { SITE } from '@/lib/constants'
@@ -95,6 +96,10 @@ export default function RootLayout({
             del CRM ya no van en el <head>: los carga este banner solo si el
             visitante los acepta (Ley 21.719). Ver src/components/consent. */}
         <CookieBanner />
+
+        {/* Contador propio sin cookies ni identificadores: cuenta el 100% de
+            las visitas para el panel de Looker Studio (ver src/lib/panel.ts). */}
+        <ContadorVisitas />
 
         {/* Ofrece un ebook solo a quien muestra interés y solo en las páginas
             que lista src/lib/ebooks.ts (ver EbookPopup). */}
