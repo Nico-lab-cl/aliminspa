@@ -738,6 +738,39 @@
       "contiene": ["Pedro", "correo", "plano"],
       "no_contiene": ["tel[eé]fono"],
       "max_burbujas": 2
+    },
+    {
+      "nombre": "Instagram: da solo el correo → lo guarda, manda el plano y no le vuelve a pedir el teléfono",
+      "origen": "Nicolás, 20-11-2026 (si da solo uno, igual queda en el CRM)",
+      "canal": "instagram",
+      "tipo": ["da_datos"],
+      "mensajes": [
+        { "de": "cliente", "texto": "Precio Lomas del mar 200m2?" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
+        { "de": "cliente", "texto": "Cuotas" },
+        { "de": "ali", "texto": "Con crédito directo pagas en pesos, sin banco ni aval, y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Carla" },
+        { "de": "ali", "texto": "Un gusto, Carla 😊 ¿Me dejas tu teléfono y tu correo? Así guardo tus datos, te mando el plano con los lotes que quedan y te llega toda la info al correo 👇" },
+        { "de": "cliente", "texto": "carla.prueba@ejemplo.cl" }
+      ],
+      "debe": ["Agradecer en pocas palabras sin repetir el correo", "Mandar el plano de Lomas del Mar", "No volver a pedirle el teléfono", "Seguir la conversación con una pregunta corta"],
+      "contiene": ["plano"],
+      "no_contiene": ["tel[eé]fono", "carla\\.prueba@ejemplo\\.cl"],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "Instagram: quiere uno de 390 m² → son de la etapa 3, entrega aproximada a fines de 2030",
+      "origen": "Nicolás, 20-11-2026 (plano de lotes: no hay de 390 m² en las etapas 1 y 2)",
+      "canal": "instagram",
+      "tipo": "consulta",
+      "cliente": { "nombre": "Jorge" },
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola, me interesa uno de 390 m2 en Lomas del Mar, ¿para cuándo lo entregan?" }
+      ],
+      "debe": ["Decir que los de 390 m² son de la etapa 3", "Dar la entrega aproximada de la etapa 3 (fines de 2030), con \"aproximadamente\"", "No decir que hay de 390 m² en las etapas 1 o 2"],
+      "contiene": ["etapa 3", "2030"],
+      "no_contiene": ["(segunda|etapa 2) en adelante", "entrega inmediata"],
+      "max_burbujas": 3
     }
   ]
 }
