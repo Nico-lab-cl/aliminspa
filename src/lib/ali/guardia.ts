@@ -104,3 +104,26 @@ export function problemasDeFormato(texto: string, canal: string): string[] {
     }
     return problemas
 }
+
+/**
+ * Modismos que Ali nunca usa (Nicolás, 20-11-2026: "te respondo al tiro"
+ * "nunca en la vida"). Cercana sí, coloquial no: es la voz de la empresa.
+ */
+const MODISMOS = /\b(al ?tiro|cach[aá]i|cach[aá]s|wena|bac[aá]n|pucha|cu[aá]tico|la raja|filete|we[oó]n|wn|po|pos|oye|ya po|sipo|nopo|hueveo|fome)\b/gi
+
+export function modismos(texto: string): string[] {
+    const vistos = new Set<string>()
+    for (const m of texto.matchAll(MODISMOS)) vistos.add(m[0].toLowerCase())
+    return [...vistos]
+}
+
+/** Último recurso si después de reescribir todavía queda alguno. */
+export function sinModismos(texto: string): string {
+    return texto
+        .replace(/\bal ?tiro\b/gi, 'de inmediato')
+        .replace(/[,\s]+\b(po|pos)\b(?=[\s.,!?😊🙌🌊👋]|$)/gi, '')
+        .replace(/\b(oye|pucha),?\s+/gi, '')
+        .replace(/\bbac[aá]n\b/gi, 'genial')
+        .replace(/\bfome\b/gi, 'aburrido')
+        .replace(/\bcu[aá]tico\b/gi, 'impresionante')
+}

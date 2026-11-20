@@ -13,7 +13,7 @@ import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramie
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
-import { afirmacionesProhibidas, problemasDeFormato } from './guardia'
+import { afirmacionesProhibidas, modismos, problemasDeFormato, sinModismos } from './guardia'
 import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, terminaEnPregunta, type Intencion } from './intencion'
 
 /**
@@ -487,12 +487,14 @@ export async function correrModelo(p: {
             // o, al corregir un precio, queda un párrafo largo.
             const malas = correcciones < 2 ? afirmacionesProhibidas(texto) : []
             const forma = correcciones < 2 ? problemasDeFormato(texto, p.canal) : []
-            if ((malas.length || forma.length) && vuelta < MAX_VUELTAS - 1) {
+            const jerga = correcciones < 2 ? modismos(texto) : []
+            if ((malas.length || forma.length || jerga.length) && vuelta < MAX_VUELTAS - 1) {
                 correcciones++
-                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma].join(' | ')}`)
+                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma, ...jerga].join(' | ')}`)
                 const partes = [
                     malas.length ? `Tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}` : '',
                     forma.length ? `Está demasiado larga para un chat:\n- ${forma.join('\n- ')}` : '',
+                    jerga.length ? `Usa modismos que Ali nunca usa (${jerga.map(j => `"${j}"`).join(', ')}): escribe en un español cercano pero cuidado, por ejemplo "de inmediato" en vez de "al tiro".` : '',
                 ].filter(Boolean)
                 mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
                 mensajes.push({
@@ -502,7 +504,7 @@ export async function correrModelo(p: {
                 continue
             }
             if (!p.prueba) oficinaDice(agenteOficina, fraseDeRespuesta(p.canal, herramientas))
-            return texto
+            return sinModismos(texto)
         }
 
         textoAnterior = textoDe(respuesta.content) || textoAnterior

@@ -771,6 +771,30 @@
       "contiene": ["etapa 3", "2030"],
       "no_contiene": ["(segunda|etapa 2) en adelante", "entrega inmediata"],
       "max_burbujas": 3
+    },
+    {
+      "nombre": "Instagram: escribe con modismos → Ali responde sin modismos (nunca \"al tiro\")",
+      "origen": "Nicolás, 20-11-2026 (\"te respondo al tiro\" nunca)",
+      "canal": "instagram",
+      "tipo": "consulta",
+      "mensajes": [
+        { "de": "cliente", "texto": "wena, me puedes decir altiro cuanto sale el de arena y sol po" }
+      ],
+      "debe": ["Dar el precio de Arena y Sol completo", "Sonar cercana pero sin modismos chilenos (nada de al tiro, po, cachai, wena)"],
+      "no_contiene": ["\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"]
+    },
+    {
+      "nombre": "WhatsApp: pide respuesta rápida → sin \"al tiro\"",
+      "origen": "Nicolás, 20-11-2026 (\"te respondo al tiro\" nunca)",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Patricio. Necesito saber rápido dónde quedan, cachai?" }
+      ],
+      "debe": ["Decir dónde quedan los terrenos (El Tabo)", "Sin modismos chilenos (nada de al tiro, po, cachai)"],
+      "no_contiene": ["\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"]
     }
   ]
 }
