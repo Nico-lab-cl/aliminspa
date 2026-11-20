@@ -13,6 +13,7 @@ import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramie
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
+import { afirmacionesProhibidas } from './guardia'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -388,6 +389,8 @@ export async function correrModelo(p: {
     // herramienta (guardar_contacto) y, con el resultado, termina sin texto.
     // Sin esto la persona se quedaba sin respuesta (prueba del 12-11-2026).
     let textoAnterior = ''
+    /** Ya se le pidió reescribir una vez por guardia.ts: no se repite. */
+    let corregida = false
     // Oficina IA: el personaje se pone a trabajar (sin datos del cliente).
     const agenteOficina = p.agente === 'cierre' ? 'cierre' : 'ali'
     if (!p.prueba) oficinaTrabaja(agenteOficina, p.canal)
@@ -416,8 +419,21 @@ export async function correrModelo(p: {
         )
 
         if (respuesta.stop_reason !== 'tool_use') {
+            const texto = textoDe(respuesta.content) || textoAnterior
+            // Promesas que no se pueden hacer (guardia.ts): Ali reescribe una vez.
+            const malas = corregida ? [] : afirmacionesProhibidas(texto)
+            if (malas.length && vuelta < MAX_VUELTAS - 1) {
+                corregida = true
+                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe por afirmaciones prohibidas: ${malas.join(' | ')}`)
+                mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
+                mensajes.push({
+                    role: 'user',
+                    content: `[Revisión interna antes de enviar, no es un mensaje del cliente] Tu respuesta tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}\nEscribe de nuevo tu respuesta completa para el cliente, igual de breve y con el mismo formato, sin esas afirmaciones. No menciones esta revisión.`,
+                })
+                continue
+            }
             if (!p.prueba) oficinaDice(agenteOficina, fraseDeRespuesta(p.canal, herramientas))
-            return textoDe(respuesta.content) || textoAnterior
+            return texto
         }
 
         textoAnterior = textoDe(respuesta.content) || textoAnterior

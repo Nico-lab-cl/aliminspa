@@ -56,8 +56,9 @@ Lomas del Mar (El Tabo)
 Arena y Sol (El Tabo)
 - A 8 minutos de la playa de El Tabo. Quedan los últimos terrenos.
 - Todos los terrenos son de 200 m².
-- Entrega a fines de 2026, aproximadamente. Es el que se entrega antes. Los terrenos ya tienen su rol propio asignado.
-- No digas que Arena y Sol tiene recepción final ni que la entrega es inmediata: todavía no la tiene.
+- Entrega a fines de 2026, aproximadamente. Es el que se entrega antes, pero NO es inmediata.
+- Todavía no tiene recepción final. Nunca digas que Arena y Sol tiene recepción final, que es de entrega inmediata, que está listo para construir ni que el rol propio ya está: al cliente el rol propio se lo dices en futuro, igual que en Lomas del Mar ("se van a entregar con rol propio").
+- Si preguntan si pueden construir de inmediato o pronto: en ninguno de los dos proyectos se puede construir de inmediato. Arena y Sol es el que se entrega antes (fines de 2026, aproximadamente) y Lomas del Mar va por etapas desde fines de 2027. Para edificar, además, el terreno tiene que estar 100% pagado; mientras paga puede hacer el cierre y la fosa séptica (Nicolás, 20-11-2026: Ali dijo "entrega inmediata, con recepción final", y es falso).
 - $39.000.000 al contado. Con crédito directo: pie de $20.000.000 y 44 cuotas de $500.000 ($42.000.000 en total).
 - Agenda con mapa de lotes: aliminspa.cl/agendar-visita-arenas
 - Google Maps: https://www.google.com/maps/place/Arena+y+Sol+-+Alimin+SPA/@-33.43399,-71.62968,907m/data=!3m1!1e3

@@ -152,6 +152,30 @@ const CASOS = [
             'no dice "te leo"': r => !/te leo|leo bien|leerte/i.test(r.texto),
         },
     },
+    {
+        nombre: '"¿Puedo construir de inmediato?" → ninguno es inmediato, sin recepción final (revisión 20-11)',
+        canal: 'instagram',
+        mensajes: [
+            cliente('Hola, ¿cuánto vale el de 200 m² en Lomas del Mar?'),
+            ali('Hola, soy Ali, del equipo de Alimin 👋\nLomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O con crédito directo, pie de $5.500.000\n✅ y 60 cuotas fijas de $550.000\n✅ $37.990.000 en total con crédito\n\n¿Con quién tengo el gusto?'),
+            cliente('Nicolás. ¿Puedo construir de inmediato?'),
+        ],
+        reglas: {
+            'no promete entrega inmediata': r => !/(est[aá]|es|son|para)\s+(de\s+|para\s+)?entrega inmediata/i.test(r.texto),
+            'no dice que tiene recepción final': r => !/(?<!no )(tiene|con|cuenta con)( la)? recepci[oó]n final/i.test(r.texto),
+            'no dice el rol propio en presente': r => !/(ya )?(tiene|tienen) (su )?rol propio|rol propio (asignado|inscrito)/i.test(r.texto),
+            'menciona que hay que pagar el 100%': r => /100\s?%|pagado/i.test(r.texto),
+        },
+    },
+    {
+        nombre: 'Qué incluyen los terrenos → rol propio en futuro',
+        canal: 'instagram',
+        mensajes: [cliente('¿Qué incluyen los terrenos de Arena y Sol?')],
+        reglas: {
+            'rol propio en futuro': r => !/rol propio/i.test(r.texto) || /van a entregar con rol propio|se va a entregar con rol propio|vas a tener (tu )?rol propio|tendr[aá]n? rol propio/i.test(r.texto),
+            'no dice recepción final': r => !/(?<!no )(tiene|con)( la)? recepci[oó]n final/i.test(r.texto),
+        },
+    },
 ]
 
 async function correr(caso) {
@@ -187,4 +211,5 @@ for (const caso of elegidos) {
     }
 }
 console.log(`\n${elegidos.length - fallas}/${elegidos.length} casos bien.`)
-process.exit(fallas ? 1 : 0)
+// exitCode y no exit(): en Windows, exit() con fetch abiertos corta con un assert de libuv.
+process.exitCode = fallas ? 1 : 0
