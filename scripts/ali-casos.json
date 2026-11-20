@@ -655,6 +655,27 @@
       "contiene": ["✅"],
       "no_contiene": ["te paso con|que te contacte un asesor"],
       "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: \"¿cuánto vale?\" → precio completo + lista corta de lo que viene con el terreno",
+      "origen": "Marcela y Nicolás, 20-11-2026",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": { "nombre": "Marcela" },
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 ¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Marcela. ¿Cuánto vale el terreno de 200 m2 en Lomas del Mar?" }
+      ],
+      "debe": [
+        "Dar el precio completo del de 200 m² (contado, pie, cuotas y total con crédito)",
+        "En un mensaje aparte, una lista corta con ✅ de lo que viene con el terreno: plano y limpio, agua de pozo potabilizada sin pagar cuenta de agua, luz con medidor, estacionamiento de visitas y que se va a entregar con rol propio",
+        "Terminar con una sola pregunta corta",
+        "Rol propio en futuro"
+      ],
+      "contiene": ["35\\.000\\.000", "37\\.990\\.000", "plano y limpio", "pozo potabilizada", "medidor", "estacionamiento de visitas", "(va|van) a entregar con rol propio"],
+      "no_contiene": ["agua potable", "390 m²", "(ya )?(tiene|tienen) (su )?rol propio"],
+      "max_burbujas": 3
     }
   ]
 }
