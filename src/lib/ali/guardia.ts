@@ -31,6 +31,16 @@ const REGLAS: Regla[] = [
     },
 ]
 
+/**
+ * Pie con crédito directo → total con crédito (ficha de conocimiento.ts; si
+ * cambia un precio, cambiarlo también aquí).
+ */
+const TOTALES_CON_CREDITO: [string, string][] = [
+    ['$5.500.000', '$37.990.000'], // Lomas del Mar 200 m²
+    ['$7.500.000', '$45.990.000'], // Lomas del Mar 390 m²
+    ['$20.000.000', '$42.000.000'], // Arena y Sol
+]
+
 /** Lo que va antes de la frase la deja bien: una negación o el futuro. */
 const BIEN_ANTES = /\b(no|ni|sin|ninguno|ninguna|imposible|todav[ií]a no|a[uú]n no|nunca|van a|vas a|se va a|se van a|entregar[aá]n?|entregarlos?|entregar)\b[^.!?\n]{0,25}$/i
 
@@ -42,6 +52,12 @@ export function afirmacionesProhibidas(texto: string): string[] {
             const antes = texto.slice(Math.max(0, (m.index ?? 0) - 40), m.index ?? 0)
             if (BIEN_ANTES.test(antes)) continue
             motivos.add(`"${m[0].trim()}": ${r.motivo}`)
+        }
+    }
+    // Precio con crédito sin el total (pendiente del 20-11: en "muy caro" Ali lo omitía).
+    for (const [pie, total] of TOTALES_CON_CREDITO) {
+        if (texto.includes(pie) && !texto.includes(total)) {
+            motivos.add(`Diste el pie de ${pie} sin el total con crédito: cuando das un precio va completo, con "${total} en total con crédito".`)
         }
     }
     return [...motivos]

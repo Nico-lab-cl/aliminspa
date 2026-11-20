@@ -111,7 +111,14 @@ ${ficha.texto}`
     const conversacion = p.conversacion
         .map(m => `${m.de === 'cliente' ? 'Cliente' : m.de === 'asesor' ? 'Asesor' : 'Ali'}: ${m.texto}`)
         .join('\n')
-    const respuesta = p.silencio && !p.respuesta.length ? '(Ali no respondió, a propósito)' : p.respuesta.join('\n\n')
+    // Cada burbuja numerada: una burbuja puede traer líneas en blanco por dentro
+    // y sin número el juez las contaba como mensajes aparte.
+    const burbujas = p.respuesta.filter(b => !b.startsWith('[Nota para el juez'))
+    const notas = p.respuesta.filter(b => b.startsWith('[Nota para el juez'))
+    const respuesta =
+        p.silencio && !burbujas.length
+            ? '(Ali no respondió, a propósito)'
+            : [...burbujas.map((b, i) => `[Mensaje ${i + 1} de ${burbujas.length}]\n${b}`), ...notas].join('\n\n')
     const debe = p.debe.length ? p.debe.map((d, i) => `${i + 1}. ${d}`).join('\n') : '1. Atender como dicen sus instrucciones.'
 
     const r = await anthropic().messages.create({

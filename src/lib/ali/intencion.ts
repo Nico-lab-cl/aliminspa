@@ -52,7 +52,7 @@ export interface Intencion {
     resumen: string
 }
 
-const DESCRIPCION_TIPOS = `- saludo: solo saluda o escribe "info", "hola", "precio?" sin decir de qué, o algo igual de general.
+const DESCRIPCION_TIPOS = `- saludo: solo saluda o escribe "info", "hola", "precio?" sin decir de qué, o algo igual de general. También si pregunta si lo escuchas o si te llegó su audio ("¿me escuchas?").
 - consulta: una o dos preguntas concretas (precio, ubicación, cuotas, qué incluye, entrega, agua, luz, escritura, visita…).
 - varias_preguntas: tres o más preguntas o temas en el mismo mensaje o en mensajes seguidos.
 - da_datos: contesta lo que Ali le preguntó (su nombre, su correo, un día u horario, para qué lo quiere, qué proyecto) sin hacer una pregunta nueva. Un "gracias" junto a su nombre es da_datos, no cierre.
@@ -165,7 +165,8 @@ const GUIAS: Record<TipoMensaje, string> = {
         'Hizo muchas preguntas juntas. Respóndelas en listas cortas con ✅ agrupadas por tema (precio y crédito en una, qué incluye en otra), máximo 3 mensajes y ningún párrafo. Lo que no alcance, ofrécelo en la pregunta final.',
     da_datos:
         'Te está respondiendo lo que le preguntaste: no es una despedida. Si te dio su nombre, salúdala por su nombre. Si tenía una pregunta pendiente, respóndela ahora; si no, hazle una pregunta abierta corta. No repitas datos que ya le diste.',
-    cierre: 'Solo agradeció, acusó recibo o reaccionó. Sigue "Cuando la persona agradece, cierra o solo reacciona": una línea cálida, sin precios, sin datos nuevos y sin pregunta; si tu último mensaje ya fue una despedida, escribe solo [SIN_RESPUESTA].',
+    // La parte de "qué hacer" depende de tu último mensaje: la arma guiaDeIntencion.
+    cierre: 'Solo agradeció, acusó recibo o reaccionó. Nada de precios, listas, datos nuevos ni preguntas.',
     objecion_precio:
         'Le parece caro o no le alcanza. Valida en una frase y muéstrale una sola vez la opción más accesible (Lomas del Mar 200 m² con crédito directo, precio completo con el total). Si ya se la mostraste o igual no le acomoda, despídete con amabilidad, sin insistir.',
     duda_o_desconfianza:
@@ -179,16 +180,39 @@ const GUIAS: Record<TipoMensaje, string> = {
         'Está molesta. Reconoce lo que le pasa en una frase, sin excusas largas, ayúdala con lo que sepas y ofrécele una sola vez que una persona del equipo lo revise; si ya se lo ofreciste o insiste, deriva.',
     confusion:
         'No entendió tu último mensaje. No lo repitas igual ni pidas perdón largo: dilo distinto en una frase simple. Si le habías ofrecido algo que necesita (por ejemplo, que la contacte una persona), hazlo ahora.',
-    fuera_de_tema: 'No tiene que ver con comprar un terreno. Responde en una frase amable que por aquí atiendes consultas de los terrenos de Alimin, sin derivar.',
+    fuera_de_tema:
+        'No tiene que ver con comprar un terreno. Un solo mensaje de una o dos frases: amable, dile que por aquí atiendes consultas de los terrenos de Alimin. No te presentes con lista, no le pidas el nombre ni datos y no derives.',
 }
 
-/** Bloque para "datos del momento": qué es el mensaje y qué hacer con él. */
-export function guiaDeIntencion(i: Intencion | null): string | null {
+/** Tipos en los que Ali NO debe pedir el nombre aunque sea su primer mensaje. */
+export const SIN_PEDIR_NOMBRE: TipoMensaje[] = ['cierre', 'fuera_de_tema', 'postventa', 'pide_persona', 'quiere_reservar', 'reclamo', 'confusion']
+
+/**
+ * Qué hacer con un cierre, según lo último que escribió Ali (lo decide el
+ * código, no el modelo: el 20-11 Ali se quedó callada ante un sticker aunque
+ * su último mensaje era una pregunta).
+ */
+function guiaDeCierre(ultimoDeAli: string | null) {
+    if (!ultimoDeAli) {
+        return 'Todavía no te presentas: un solo mensaje, en una línea y sin línea en blanco, te presentas y ofreces ayuda con dudas puntuales. Sin pedirle el nombre.'
+    }
+    if (/\?\s*\S{0,3}\s*$/.test(ultimoDeAli.trim())) {
+        return 'Tu último mensaje terminaba en una pregunta: SÍ respondes, con una sola línea cálida de despedida, sin repetir la pregunta.'
+    }
+    return 'Tu último mensaje ya fue un cierre sin pregunta: no respondas, escribe únicamente [SIN_RESPUESTA].'
+}
+
+/**
+ * Bloque para "datos del momento": qué es el mensaje y qué hacer con él.
+ * `ultimoDeAli`: el último mensaje que escribió Ali (sin contar el brochure automático), o null.
+ */
+export function guiaDeIntencion(i: Intencion | null, ultimoDeAli: string | null = null): string | null {
     if (!i) return null
     return [
         `# Qué es su último mensaje (clasificado antes de responder)`,
         `Tipo: ${i.tipo}${i.resumen ? `. ${i.resumen}` : ''}`,
         GUIAS[i.tipo],
+        i.tipo === 'cierre' ? guiaDeCierre(ultimoDeAli) : null,
         i.cree_que_es_otra_persona ? 'Te habla como si fueras otra persona: aclárale en una frase que eres Ali, el asistente virtual de Alimin.' : null,
         'Si al leer la conversación ves que el tipo no calza, atiende según tu ficha.',
     ]

@@ -12,7 +12,7 @@ import {
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
 import { modoCierre } from './cierre'
-import { clasificarMensaje, guiaDeIntencion, type Intencion } from './intencion'
+import { clasificarMensaje, guiaDeIntencion, SIN_PEDIR_NOMBRE, type Intencion } from './intencion'
 import type { DocumentoParaEnviar } from './documentos'
 
 /**
@@ -276,7 +276,13 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
     // Lo último que escribió la persona (desde tu último mensaje) es solo una reacción o un gracias.
     const ultimos: MensajeRedes[] = []
     for (let i = entrada.mensajes.length - 1; i >= 0 && entrada.mensajes[i].de === 'cliente'; i--) ultimos.unshift(entrada.mensajes[i])
-    const soloReaccion = ultimos.length > 0 && ultimos.every(m => !m.imagenUrl && esSoloReaccion(m.texto))
+    // Sin clasificador, el cierre se detecta por código (esSoloReaccion); con él, manda el tipo.
+    const soloReaccion = intencion
+        ? intencion.tipo === 'cierre'
+        : ultimos.length > 0 && ultimos.every(m => !m.imagenUrl && esSoloReaccion(m.texto))
+    const ultimoDeAli = [...entrada.mensajes].reverse().find(m => m.de === 'ali' && !esBrochure(m))?.texto ?? null
+    // Postventa, fuera de tema, reclamo, etc.: no se le pide el nombre aunque sea el primer mensaje.
+    const pedirNombre = !intencion || !SIN_PEDIR_NOMBRE.includes(intencion.tipo)
 
     return [
         `Ahora en Chile: ${ahora} (hoy es ${hoyISO}).`,
@@ -293,16 +299,16 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
         yaMandoBrochure
             ? 'Al principio de la conversación salió un mensaje automático con el brochure, los precios y el enlace: no lo repitas, responde lo que la persona pregunta ahora.'
             : null,
-        soloReaccion
+        soloReaccion && !intencion
             ? 'Su último mensaje es solo un agradecimiento, un emoji o un sticker, sin pregunta: sigue la sección "Cuando la persona agradece, cierra o solo reacciona" (nada de precios ni datos nuevos; si tu último mensaje ya fue una despedida, escribe solo [SIN_RESPUESTA]).'
             : null,
-        primerMensaje && !entrada.memoria && !soloReaccion ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
-        primerMensaje && !entrada.memoria && soloReaccion ? 'Es tu primer mensaje en esta conversación: preséntate corto, sin pedirle el nombre.' : null,
+        primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensaje && !entrada.memoria && (soloReaccion || !pedirNombre) ? 'Es tu primer mensaje en esta conversación: preséntate corto, sin pedirle el nombre.' : null,
         primerMensaje && entrada.memoria
             ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`
             : null,
         entrada.memoria ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${entrada.memoria}` : null,
-        intencion ? `\n${guiaDeIntencion(intencion)}` : null,
+        intencion ? `\n${guiaDeIntencion(intencion, ultimoDeAli)}` : null,
     ]
         .filter(Boolean)
         .join('\n')
