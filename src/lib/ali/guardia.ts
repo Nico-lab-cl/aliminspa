@@ -35,10 +35,10 @@ const REGLAS: Regla[] = [
  * Pie con crédito directo → total con crédito (ficha de conocimiento.ts; si
  * cambia un precio, cambiarlo también aquí).
  */
-const TOTALES_CON_CREDITO: [string, string][] = [
-    ['$5.500.000', '$37.990.000'], // Lomas del Mar 200 m²
-    ['$7.500.000', '$45.990.000'], // Lomas del Mar 390 m²
-    ['$20.000.000', '$42.000.000'], // Arena y Sol
+const TOTALES_CON_CREDITO: [pie: string, total: string, contado: string][] = [
+    ['$5.500.000', '$37.990.000', '$35.000.000'], // Lomas del Mar 200 m²
+    ['$7.500.000', '$45.990.000', '$43.000.000'], // Lomas del Mar 390 m²
+    ['$20.000.000', '$42.000.000', '$39.000.000'], // Arena y Sol
 ]
 
 /** Lo que va antes de la frase la deja bien: una negación o el futuro. */
@@ -55,9 +55,11 @@ export function afirmacionesProhibidas(texto: string): string[] {
         }
     }
     // Precio con crédito sin el total (pendiente del 20-11: en "muy caro" Ali lo omitía).
-    for (const [pie, total] of TOTALES_CON_CREDITO) {
-        if (texto.includes(pie) && !texto.includes(total)) {
-            motivos.add(`Diste el pie de ${pie} sin el total con crédito: cuando das un precio va completo, con "${total} en total con crédito".`)
+    for (const [pie, total, contado] of TOTALES_CON_CREDITO) {
+        if (!texto.includes(pie)) continue
+        const faltan = [!texto.includes(contado) && `"${contado} al contado"`, !texto.includes(total) && `"${total} en total con crédito"`].filter(Boolean)
+        if (faltan.length) {
+            motivos.add(`Diste el pie de ${pie} sin ${faltan.join(' ni ')}: cuando das un precio va completo (contado, pie, cuotas y total con crédito).`)
         }
     }
     return [...motivos]

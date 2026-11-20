@@ -108,9 +108,10 @@ function revisarPorCodigo(caso, r) {
     for (const p of caso.contiene || []) if (!re(p).test(r.texto)) fallas.push(`no contiene /${p}/`)
     for (const p of caso.no_contiene || []) if (re(p).test(r.texto)) fallas.push(`contiene /${p}/`)
     if (caso.max_burbujas && r.burbujas.length > caso.max_burbujas) fallas.push(`${r.burbujas.length} mensajes (máximo ${caso.max_burbujas})`)
-    // Párrafos largos: el texto corrido de cada mensaje, sin las líneas con ✅ ni enlaces.
+    // Párrafos largos: el texto corrido de cada bloque (como lo mide guardia.ts),
+    // sin las líneas con ✅ ni enlaces.
     const maxParrafo = caso.max_parrafo ?? MAX_PARRAFO
-    for (const b of r.burbujas) {
+    for (const b of r.burbujas.flatMap(x => x.split(/\n\s*\n/))) {
         const corrido = b.split('\n').filter(l => !l.trim().startsWith('✅')).join(' ').replace(/https?:\/\/\S+/g, '').trim()
         if (corrido.length > maxParrafo) fallas.push(`párrafo de ${corrido.length} caracteres (máximo ${maxParrafo})`)
     }
