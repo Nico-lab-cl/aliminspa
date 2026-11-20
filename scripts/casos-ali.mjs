@@ -1,190 +1,93 @@
 #!/usr/bin/env node
 /**
- * Casos de prueba de Ali en redes y WhatsApp (feedback de Marcela, 20-11-2026).
+ * Banco de pruebas de Ali (Fase 2 del roadmap, 20-11-2026).
  *
- * Corre cada caso contra /api/ali/prueba (la misma Ali de Instagram, Facebook
- * y WhatsApp, en modo prueba: no crea leads ni avisa a nadie) y revisa la
- * respuesta con reglas simples. Sirve para comprobar que un cambio en las
- * instrucciones no rompe lo que ya funcionaba.
+ * Corre cada caso contra la Ali real en modo prueba (/api/ali/prueba: no crea
+ * leads ni avisa a nadie) y la revisa de dos formas, como enseña el curso de
+ * evaluaciones de Anthropic:
+ *   - por código: "contiene", "no_contiene", "max_burbujas" y "silencio";
+ *   - por un juez (/api/ali/juez, Haiku) que lee la MISMA ficha que Ali y
+ *     califica de 0 a 100 si cumplió lo que "debe" hacer.
+ * Al final saca la nota de Ali y la compara con la nota base guardada: si baja
+ * más de 3 puntos o pasan menos casos, termina con error.
  *
- *   node scripts/casos-ali.mjs                  # contra https://aliminspa.cl
+ * Casos: scripts/ali-casos.json + los que salen de errores reales en el CRM web
+ * (Revisión semanal → "Convertir en caso de prueba").
+ *
+ *   node scripts/casos-ali.mjs                   # todos, contra https://aliminspa.cl
+ *   node scripts/casos-ali.mjs audio             # solo los casos con "audio" en el nombre
+ *   node scripts/casos-ali.mjs --guardar-base    # guarda esta nota como la nueva base
+ *   node scripts/casos-ali.mjs --sin-juez        # solo las revisiones por código (gratis)
  *   node scripts/casos-ali.mjs http://localhost:3000
- *   node scripts/casos-ali.mjs audio            # solo los casos con "audio" en el nombre
  *
- * Cada caso cuesta una llamada a Claude. El endpoint deja 60 por hora por IP.
+ * Clave del juez y de los casos del CRM: IA_SECRET, o el archivo ~/.alimin/ia-secret.
+ * Cuándo correrlo: después de cada despliegue que toque a Ali (las pruebas van
+ * contra el sitio publicado). Si la nota baja, se vuelve a la versión anterior
+ * en EasyPanel y se corrige antes de publicar de nuevo.
+ * Costo: ~US$0,002 por caso (respuesta de Ali + juez). El chat de prueba deja 60 por hora por IP.
  */
 
-// Argumentos: una URL base (opcional) y un texto para correr solo los casos cuyo nombre lo contenga.
+import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const AQUI = dirname(fileURLToPath(import.meta.url))
+const ARCHIVO_CASOS = join(AQUI, 'ali-casos.json')
+const ARCHIVO_BASE = join(AQUI, 'ali-nota-base.json')
+const NOTA_MINIMA_CASO = 70
+const TOLERANCIA = 3
+
 const args = process.argv.slice(2)
+const banderas = new Set(args.filter(a => a.startsWith('--')))
 const BASE = (args.find(a => /^https?:\/\//.test(a)) || 'https://aliminspa.cl').replace(/\/$/, '')
-const FILTRO = (args.find(a => !/^https?:\/\//.test(a)) || '').toLowerCase()
+const FILTRO = (args.find(a => !a.startsWith('--') && !/^https?:\/\//.test(a)) || '').toLowerCase()
+const CRM_WEB = (process.env.CRM_WEB_URL || 'https://marketing.aliminspa.cl').replace(/\/$/, '')
 
-const BROCHURE =
-    '[Mensaje automático con el brochure] ¡Hola! 👋 Te dejamos el brochure de Lomas del Mar con precios, formas de pago y lo que incluye. Lomas del Mar, terreno de 200 m², $35.000.000 al contado o pie de $5.500.000 y 60 cuotas de $550.000. Si tienes cualquier duda, escríbenos por aquí mismo y con gusto te ayudamos 😊'
+function secreto() {
+    if (process.env.IA_SECRET) return process.env.IA_SECRET.trim()
+    const archivo = join(homedir(), '.alimin', 'ia-secret')
+    return existsSync(archivo) ? readFileSync(archivo, 'utf8').trim() : ''
+}
+const SECRETO = secreto()
+const CON_JUEZ = Boolean(SECRETO) && !banderas.has('--sin-juez')
 
-const cliente = texto => ({ de: 'cliente', texto })
-const ali = texto => ({ de: 'ali', texto })
+/* ── Casos ─────────────────────────────────────────────────────────────── */
 
-const tienePrecio = r => r.texto.includes('$')
-const pregunta = r => r.texto.includes('?')
+function casosLocales() {
+    const datos = JSON.parse(readFileSync(ARCHIVO_CASOS, 'utf8'))
+    const reemplazar = t => String(t).replace('{{brochure}}', datos.brochure)
+    return datos.casos.map(c => ({ ...c, mensajes: c.mensajes.map(m => ({ ...m, texto: reemplazar(m.texto) })) }))
+}
 
-/** Cada caso: conversación, y lo que la respuesta debe (true) cumplir. */
-const CASOS = [
-    {
-        nombre: 'Messenger: 👍 al brochure → se presenta corto, sin precio ni pregunta de nombre',
-        canal: 'facebook',
-        mensajes: [ali(BROCHURE), cliente('👍')],
-        reglas: {
-            'no manda precios': r => !tienePrecio(r),
-            'no usa el precio de gancho': r => !/te cuento el precio/i.test(r.texto),
-            'no pide el nombre': r => !/con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre/i.test(r.texto),
-            'un solo mensaje': r => r.burbujas.length === 1,
-        },
-    },
-    {
-        nombre: 'Messenger: "Ya lo vi, gracias" + 👍 → cierre cálido, sin precios (caso Marcela 1)',
-        canal: 'facebook',
-        mensajes: [
-            ali(BROCHURE),
-            cliente('👍'),
-            ali('Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Así te cuento el precio del terreno que te interesa.'),
-            cliente('Ya lo vi, gracias'),
-            cliente('👍'),
-        ],
-        reglas: {
-            'no manda ni ofrece precios': r => !tienePrecio(r) && !/precio/i.test(r.texto),
-            'sin pregunta': r => !pregunta(r),
-            'responde algo (no se queda callada)': r => r.burbujas.length > 0,
-            'un solo mensaje': r => r.burbujas.length === 1,
-        },
-    },
-    {
-        nombre: 'Messenger: otro 👍 después de que Ali ya se despidió → no responde',
-        canal: 'facebook',
-        mensajes: [
-            ali(BROCHURE),
-            cliente('Ya lo vi, gracias'),
-            ali('Perfecto 😊 Cualquier duda me escribes por aquí'),
-            cliente('👍'),
-        ],
-        reglas: {
-            'silencio a propósito': r => r.silencio === true && r.burbujas.length === 0,
-        },
-    },
-    {
-        nombre: 'Instagram: "Gracias por la información" al brochure → sin precios (caso Marcela 2)',
-        canal: 'instagram',
-        mensajes: [ali(BROCHURE), cliente('Gracias por la información')],
-        reglas: {
-            'no manda precios': r => !tienePrecio(r),
-            'no manda listas': r => !r.texto.includes('✅'),
-            'responde algo': r => r.burbujas.length > 0,
-        },
-    },
-    {
-        nombre: 'Instagram: varios emojis (🙏❤️) → respuesta corta y cálida, sin precios',
-        canal: 'instagram',
-        mensajes: [ali(BROCHURE), cliente('🙏❤️')],
-        reglas: {
-            'no manda precios': r => !tienePrecio(r),
-            'un solo mensaje': r => r.burbujas.length === 1,
-        },
-    },
-    {
-        nombre: 'WhatsApp: sticker solo → corto, sin precios',
-        canal: 'whatsapp',
-        mensajes: [cliente('Hola'), ali('Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?'), cliente('[Sticker]')],
-        reglas: {
-            'no manda precios': r => !tienePrecio(r),
-            'no repite la presentación': r => !/soy Ali/i.test(r.texto),
-        },
-    },
-    {
-        nombre: 'Emoji + pregunta → responde la pregunta normal',
-        canal: 'instagram',
-        mensajes: [ali(BROCHURE), cliente('👍 ¿y dónde queda exactamente?')],
-        reglas: {
-            'habla de la ubicación': r => /El Tabo|playa|Ruta 78|Santiago|ubica/i.test(r.texto),
-        },
-    },
-    {
-        nombre: 'Precio de Lomas del Mar sin tamaño → los dos tamaños, primero 200 m²',
-        canal: 'instagram',
-        mensajes: [cliente('Hola, ¿cuánto valen los terrenos de Lomas del Mar?')],
-        reglas: {
-            'trae los dos tamaños': r => /200 m²/.test(r.texto) && /390 m²/.test(r.texto),
-            'primero el de 200 m²': r => r.texto.indexOf('200 m²') < r.texto.indexOf('390 m²'),
-            'precio completo (contado y total con crédito)': r => r.texto.includes('35.000.000') && r.texto.includes('43.000.000'),
-        },
-    },
-    {
-        nombre: 'Precio de un tamaño puntual → solo ese',
-        canal: 'instagram',
-        mensajes: [cliente('¿Cuánto vale el terreno de 390 m² en Lomas del Mar?')],
-        reglas: {
-            'da el de 390 m²': r => r.texto.includes('43.000.000'),
-            'no mete el de 200 m² en la lista': r => !r.texto.includes('35.000.000'),
-        },
-    },
-    {
-        nombre: '"Demasiado alto el valor" → ofrece el más accesible una vez, sin insistir',
-        canal: 'instagram',
-        mensajes: [
-            cliente('¿Cuánto vale el de 390?'),
-            ali('Lomas del Mar, terreno de 390 m² 🌲\n✅ $43.000.000 al contado\n✅ O con crédito directo, pie de $7.500.000\n✅ y 70 cuotas fijas de $550.000\n✅ $45.990.000 en total con crédito\n\n¿Con quién tengo el gusto?'),
-            cliente('Demasiado alto el valor para mi muchas gracias'),
-        ],
-        reglas: {
-            'ofrece el de 200 m² o el pie de $5.500.000': r => /200 m²|5\.500\.000/.test(r.texto),
-            'no repite el precio del 390': r => !r.texto.includes('43.000.000'),
-        },
-    },
-    {
-        nombre: 'WhatsApp: audio "¿me escuchas?" → "te escucho", nunca "te leo"',
-        canal: 'whatsapp',
-        mensajes: [
-            cliente('Hola'),
-            ali('¡Hola! 👋 ¿En qué te puedo ayudar? Si estás buscando terreno en El Tabo, te cuento de Lomas del Mar o de Arena y Sol.'),
-            cliente('🎤 (audio) Hola, ¿me escuchas?'),
-        ],
-        reglas: {
-            'dice que lo escucha': r => /escucho|escuchar/i.test(r.texto),
-            'no dice "te leo"': r => !/te leo|leo bien|leerte/i.test(r.texto),
-        },
-    },
-    {
-        nombre: '"¿Puedo construir de inmediato?" → ninguno es inmediato, sin recepción final (revisión 20-11)',
-        canal: 'instagram',
-        mensajes: [
-            cliente('Hola, ¿cuánto vale el de 200 m² en Lomas del Mar?'),
-            ali('Hola, soy Ali, del equipo de Alimin 👋\nLomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O con crédito directo, pie de $5.500.000\n✅ y 60 cuotas fijas de $550.000\n✅ $37.990.000 en total con crédito\n\n¿Con quién tengo el gusto?'),
-            cliente('Nicolás. ¿Puedo construir de inmediato?'),
-        ],
-        reglas: {
-            'no promete entrega inmediata': r => !/(est[aá]|es|son|para)\s+(de\s+|para\s+)?entrega inmediata/i.test(r.texto),
-            'no dice que tiene recepción final': r => !/(?<!no )(tiene|con|cuenta con)( la)? recepci[oó]n final/i.test(r.texto),
-            'no dice el rol propio en presente': r => !/(ya )?(tiene|tienen) (su )?rol propio|rol propio (asignado|inscrito)/i.test(r.texto),
-            'menciona que hay que pagar el 100%': r => /100\s?%|pagado/i.test(r.texto),
-        },
-    },
-    {
-        nombre: 'Qué incluyen los terrenos → rol propio en futuro',
-        canal: 'instagram',
-        mensajes: [cliente('¿Qué incluyen los terrenos de Arena y Sol?')],
-        reglas: {
-            'rol propio en futuro': r => !/rol propio/i.test(r.texto) || /van a entregar con rol propio|se va a entregar con rol propio|vas a tener (tu )?rol propio|tendr[aá]n? rol propio/i.test(r.texto),
-            'no dice recepción final': r => !/(?<!no )(tiene|con)( la)? recepci[oó]n final/i.test(r.texto),
-        },
-    },
-]
+async function casosDelCrm() {
+    if (!SECRETO || banderas.has('--solo-locales')) return []
+    try {
+        const res = await fetch(`${CRM_WEB}/api/webhooks/ia/casos-ali`, { headers: { 'x-ia-secret': SECRETO }, signal: AbortSignal.timeout(20_000) })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const { casos } = await res.json()
+        return (casos || []).map(c => ({
+            nombre: `[CRM #${c.id}] ${c.nombre}`,
+            origen: 'revisión semanal',
+            canal: c.canal,
+            mensajes: c.mensajes,
+            debe: c.debe,
+        }))
+    } catch (error) {
+        console.log(`(No pude leer los casos del CRM web: ${error.message}. Sigo solo con los locales.)`)
+        return []
+    }
+}
 
-async function correr(caso) {
+/* ── Correr y revisar ──────────────────────────────────────────────────── */
+
+async function responderAli(caso) {
     const res = await fetch(`${BASE}/api/ali/prueba`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
             canal: caso.canal,
-            id: `casos-${Date.now()}`,
+            id: `banco-${Date.now()}`,
             cliente: { nombre: null, telefono: null, email: null },
             mensajes: caso.mensajes,
         }),
@@ -195,21 +98,89 @@ async function correr(caso) {
     return { burbujas, texto: burbujas.join('\n\n'), silencio: Boolean(data.silencio) }
 }
 
-const elegidos = CASOS.filter(c => !FILTRO || c.nombre.toLowerCase().includes(FILTRO))
-let fallas = 0
+function revisarPorCodigo(caso, r) {
+    const fallas = []
+    const re = p => new RegExp(p, 'i')
+    if (caso.silencio === true && !(r.silencio && !r.burbujas.length)) fallas.push('debía no responder')
+    if (caso.silencio !== true && !r.burbujas.length) fallas.push('no respondió')
+    for (const p of caso.contiene || []) if (!re(p).test(r.texto)) fallas.push(`no contiene /${p}/`)
+    for (const p of caso.no_contiene || []) if (re(p).test(r.texto)) fallas.push(`contiene /${p}/`)
+    if (caso.max_burbujas && r.burbujas.length > caso.max_burbujas) fallas.push(`${r.burbujas.length} mensajes (máximo ${caso.max_burbujas})`)
+    return fallas
+}
+
+async function juzgar(caso, r) {
+    const res = await fetch(`${BASE}/api/ali/juez`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-ia-secret': SECRETO },
+        body: JSON.stringify({ canal: caso.canal, conversacion: caso.mensajes, respuesta: r.burbujas, silencio: r.silencio, debe: caso.debe || [] }),
+        signal: AbortSignal.timeout(90_000),
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || `juez HTTP ${res.status}`)
+    return data
+}
+
+/* ── Principal ─────────────────────────────────────────────────────────── */
+
+const todos = [...casosLocales(), ...(await casosDelCrm())]
+const elegidos = todos.filter(c => !FILTRO || c.nombre.toLowerCase().includes(FILTRO))
+console.log(`Banco de pruebas de Ali: ${elegidos.length} casos contra ${BASE}${CON_JUEZ ? ', con juez' : ', sin juez (falta IA_SECRET o --sin-juez)'}.`)
+
+const resultados = []
 for (const caso of elegidos) {
     try {
-        const r = await correr(caso)
-        const malas = Object.entries(caso.reglas).filter(([, ok]) => !ok(r)).map(([n]) => n)
-        fallas += malas.length ? 1 : 0
-        console.log(`\n${malas.length ? '✗' : '✓'} ${caso.nombre}`)
-        console.log(r.silencio ? '   (sin respuesta, a propósito)' : r.burbujas.map(b => `   │ ${b.replace(/\n/g, '\n   │ ')}`).join('\n   ·\n'))
-        for (const m of malas) console.log(`   ✗ no cumple: ${m}`)
+        const r = await responderAli(caso)
+        const fallasCodigo = revisarPorCodigo(caso, r)
+        let veredicto = null
+        if (CON_JUEZ) {
+            try {
+                veredicto = await juzgar(caso, r)
+            } catch (error) {
+                console.log(`   (el juez falló: ${error.message})`)
+            }
+        }
+        // Una falla por código pesa más que la opinión del juez.
+        let nota = veredicto ? veredicto.nota : fallasCodigo.length ? 0 : 100
+        if (fallasCodigo.length) nota = Math.min(nota, 40)
+        const incumplidos = (veredicto?.criterios || []).filter(c => !c.cumple)
+        const pasa = !fallasCodigo.length && nota >= NOTA_MINIMA_CASO
+        resultados.push({ nombre: caso.nombre, nota, pasa })
+
+        console.log(`\n${pasa ? '✓' : '✗'} ${caso.nombre}${veredicto || fallasCodigo.length ? `   nota ${nota}` : ''}`)
+        console.log(r.silencio && !r.burbujas.length ? '   (sin respuesta, a propósito)' : r.burbujas.map(b => `   │ ${b.replace(/\n/g, '\n   │ ')}`).join('\n   ·\n'))
+        for (const f of fallasCodigo) console.log(`   ✗ código: ${f}`)
+        for (const c of incumplidos) console.log(`   ✗ juez: ${c.debe} → ${c.motivo}`)
+        if (veredicto && !pasa && !incumplidos.length && veredicto.comentario) console.log(`   · juez: ${veredicto.comentario}`)
     } catch (error) {
-        fallas++
+        resultados.push({ nombre: caso.nombre, nota: 0, pasa: false })
         console.log(`\n✗ ${caso.nombre}\n   error: ${error.message}`)
     }
 }
-console.log(`\n${elegidos.length - fallas}/${elegidos.length} casos bien.`)
+
+const pasan = resultados.filter(r => r.pasa).length
+const nota = resultados.length ? Math.round(resultados.reduce((a, r) => a + r.nota, 0) / resultados.length) : 0
+console.log(`\nAli: ${nota}/100 · ${pasan}/${resultados.length} casos bien.`)
+
+// La nota base solo se compara con una corrida completa y con juez.
+const completa = !FILTRO && CON_JUEZ
+let bajo = false
+if (completa && existsSync(ARCHIVO_BASE)) {
+    const base = JSON.parse(readFileSync(ARCHIVO_BASE, 'utf8'))
+    const delta = nota - base.nota
+    console.log(`Nota base: ${base.nota}/100 · ${base.pasan}/${base.casos} (${base.fecha}). Cambio: ${delta >= 0 ? '+' : ''}${delta}.`)
+    if (nota < base.nota - TOLERANCIA || pasan < base.pasan) {
+        bajo = true
+        console.log('⚠ Ali quedó peor que la base: revisar antes de dejar este cambio publicado.')
+    }
+}
+if (banderas.has('--guardar-base')) {
+    if (!completa) console.log('No guardo la base: hace falta una corrida completa (sin filtro) y con juez.')
+    else {
+        writeFileSync(ARCHIVO_BASE, JSON.stringify({ nota, pasan, casos: resultados.length, fecha: new Date().toISOString().slice(0, 10) }, null, 2) + '\n')
+        console.log(`Nota base guardada: ${nota}/100 · ${pasan}/${resultados.length}.`)
+    }
+}
+
 // exitCode y no exit(): en Windows, exit() con fetch abiertos corta con un assert de libuv.
-process.exitCode = fallas ? 1 : 0
+process.exitCode = bajo || pasan < resultados.length ? 1 : 0
