@@ -13,7 +13,7 @@ import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramie
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
-import { afirmacionesProhibidas, modismos, problemasDeFormato, sinModismos } from './guardia'
+import { afirmacionesProhibidas, LO_QUE_VIENE, modismos, precioIncompleto, problemasDeFormato, sinModismos } from './guardia'
 import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, terminaEnPregunta, type Intencion } from './intencion'
 
 /**
@@ -452,6 +452,14 @@ export async function correrModelo(p: {
     let textoAnterior = ''
     /** Veces que guardia.ts le pidió reescribir (máximo 2). */
     let correcciones = 0
+    /** La lista de lo que viene con el terreno ya salió antes en la conversación. */
+    const yaDijoLoQueViene = mensajes.some(
+        m =>
+            m.role === 'assistant' &&
+            (typeof m.content === 'string'
+                ? LO_QUE_VIENE.test(m.content)
+                : m.content.some(b => b.type === 'text' && LO_QUE_VIENE.test(b.text)))
+    )
     // Oficina IA: el personaje se pone a trabajar (sin datos del cliente).
     const agenteOficina = p.agente === 'cierre' ? 'cierre' : 'ali'
     if (!p.prueba) oficinaTrabaja(agenteOficina, p.canal)
@@ -488,6 +496,7 @@ export async function correrModelo(p: {
             const malas = correcciones < 2 ? afirmacionesProhibidas(texto) : []
             const forma = correcciones < 2 ? problemasDeFormato(texto, p.canal) : []
             const jerga = correcciones < 2 ? modismos(texto) : []
+            const precio = correcciones < 2 ? precioIncompleto(texto, yaDijoLoQueViene, p.canal) : []
             // Anuncia el plano sin haber llamado a enviar_documento: la persona
             // se quedaba esperando un archivo que nunca llegaba (banco del 20-11).
             const sinArchivo =
@@ -495,10 +504,10 @@ export async function correrModelo(p: {
                 p.tools.some(t => t.name === 'enviar_documento') &&
                 !herramientas.documentos?.length &&
                 anunciaPlano(texto)
-            if ((malas.length || forma.length || jerga.length || sinArchivo) && vuelta < MAX_VUELTAS - 1) {
+            if ((malas.length || forma.length || jerga.length || precio.length || sinArchivo) && vuelta < MAX_VUELTAS - 1) {
                 correcciones++
-                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma, ...jerga, ...(sinArchivo ? ['anuncia el plano sin enviarlo'] : [])].join(' | ')}`)
-                if (sinArchivo && !malas.length && !forma.length && !jerga.length) {
+                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma, ...jerga, ...precio, ...(sinArchivo ? ['anuncia el plano sin enviarlo'] : [])].join(' | ')}`)
+                if (sinArchivo && !malas.length && !forma.length && !jerga.length && !precio.length) {
                     mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
                     mensajes.push({
                         role: 'user',
@@ -509,13 +518,14 @@ export async function correrModelo(p: {
                 const partes = [
                     malas.length ? `Tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}` : '',
                     forma.length ? `Está demasiado larga para un chat:\n- ${forma.join('\n- ')}` : '',
+                    precio.length ? `Al precio le falta algo:\n- ${precio.join('\n- ')}` : '',
                     sinArchivo ? 'Le dices que le mandas el plano, pero no usaste enviar_documento: llámalo con el plano de su proyecto antes de responder (si ya se lo mandaste antes, no lo anuncies).' : '',
                     jerga.length ? `Usa modismos que Ali nunca usa (${jerga.map(j => `"${j}"`).join(', ')}): escribe en un español cercano pero cuidado, por ejemplo "de inmediato" en vez de "al tiro".` : '',
                 ].filter(Boolean)
                 mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
                 mensajes.push({
                     role: 'user',
-                    content: `[Revisión interna antes de enviar, no es un mensaje del cliente] Tu respuesta tiene que corregirse.\n${partes.join('\n')}\nEscribe de nuevo tu respuesta completa para el cliente, con los mismos datos, más breve y ordenada, siguiendo "Cómo se ven tus mensajes": las listas con ✅ se mantienen. No menciones esta revisión.`,
+                    content: `[Revisión interna antes de enviar, no es un mensaje del cliente] Tu respuesta tiene que corregirse.\n${partes.join('\n')}\nEscribe de nuevo tu respuesta completa para el cliente, ${precio.length ? 'con lo que falta, sin párrafos' : 'con los mismos datos, más breve y ordenada'}, siguiendo "Cómo se ven tus mensajes": las listas con ✅ se mantienen. No menciones esta revisión.`,
                 })
                 continue
             }

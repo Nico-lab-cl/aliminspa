@@ -117,6 +117,34 @@ export function modismos(texto: string): string[] {
     return [...vistos]
 }
 
+/**
+ * El precio va siempre con el pie y las cuotas, y la primera vez con lo que
+ * viene con el terreno (Marcela, 20-11-2026: "sigue solo enviando valores";
+ * Ali resumía "$37.990.000 con crédito directo" y nunca mandaba la lista).
+ */
+export function precioIncompleto(texto: string, yaDijoLoQueViene: boolean, canal: string): string[] {
+    const problemas: string[] = []
+    let dioPrecio = false
+    for (const [pie, total, contado] of TOTALES_CON_CREDITO) {
+        if (!texto.includes(contado) && !texto.includes(total)) continue
+        dioPrecio = true
+        if (!texto.includes(pie)) {
+            problemas.push(`Diste ${texto.includes(contado) ? contado : total} sin el pie (${pie}) ni las cuotas: el precio con crédito va siempre con pie, cuotas y total, aunque ya se lo hayas dicho antes.`)
+        }
+    }
+    if (dioPrecio && !yaDijoLoQueViene && !LO_QUE_VIENE.test(texto)) {
+        problemas.push(
+            canal === 'web'
+                ? 'Diste el precio sin lo que viene con el terreno: súmalo en una frase corta (plano y limpio, agua de pozo potabilizada sin cuenta de agua, luz con medidor, estacionamiento de visitas y que se va a entregar con rol propio).'
+                : 'Diste el precio sin lo que viene con el terreno: después de los precios, en un mensaje aparte, va "Y viene con 😊" con las 5 líneas con ✅ de tu ficha, y al final la pregunta. Máximo 3 mensajes: si son varios precios, van todos en el primer mensaje.'
+        )
+    }
+    return problemas
+}
+
+/** Ya salió en la conversación (o en esta respuesta) la lista de lo que viene. */
+export const LO_QUE_VIENE = /plano y limpio|agua de pozo potabilizada/i
+
 /** Último recurso si después de reescribir todavía queda alguno. */
 export function sinModismos(texto: string): string {
     return texto

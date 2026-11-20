@@ -795,6 +795,41 @@
       ],
       "debe": ["Decir dónde quedan los terrenos (El Tabo)", "Sin modismos chilenos (nada de al tiro, po, cachai)"],
       "no_contiene": ["\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"]
+    },
+    {
+      "nombre": "WhatsApp: vuelve a pedir \"Valor\" → precio con pie y cuotas + lo que viene con el terreno, no solo valores",
+      "origen": "Marcela, 20-11-2026 (\"sigue solo enviando valores\": Ali resumía \"$37.990.000 con crédito directo\" sin pie ni lista)",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": { "nombre": "Marcela" },
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Y cuéntame qué te gustaría saber de nuestros terrenos en El Tabo." },
+        { "de": "cliente", "texto": "Marcela" },
+        { "de": "cliente", "texto": "Ubicación" },
+        { "de": "ali", "texto": "Marcela, los dos están en El Tabo, a poco más de 1 hora de Santiago por la Ruta 78 🌊\n✅ Lomas del Mar, a 10 minutos de la playa\n✅ Arena y Sol, a 8 minutos de la playa\n\n¿Te gustaría venir a conocerlos en una visita?" },
+        { "de": "cliente", "texto": "Valor" }
+      ],
+      "debe": ["Dar el precio con contado, pie, cuotas y total", "Mandar la lista corta de lo que viene con el terreno", "Cerrar con una pregunta que siga la conversación (por ejemplo contado o cuotas)"],
+      "contiene": ["\\$5\\.500\\.000|\\$20\\.000\\.000", "plano y limpio"],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: \"Ambos proyectos\" → todos los precios completos en un mensaje + lo que viene",
+      "origen": "Marcela, 20-11-2026 (\"sigue solo enviando valores\")",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": { "nombre": "Marcela" },
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Marcela. Necesito valor" },
+        { "de": "ali", "texto": "Marcela, tenemos dos proyectos en El Tabo 😊\n\n¿Te interesa Lomas del Mar o Arena y Sol? Así te paso el valor exacto de ese." },
+        { "de": "cliente", "texto": "Ambos proyectos" }
+      ],
+      "debe": ["Dar los precios de Lomas del Mar (200 y 390 m²) y de Arena y Sol con contado, pie, cuotas y total", "Mandar la lista corta de lo que viene con el terreno", "Máximo 3 mensajes y cerrar con una pregunta"],
+      "contiene": ["\\$5\\.500\\.000", "\\$7\\.500\\.000", "\\$20\\.000\\.000", "plano y limpio"],
+      "max_burbujas": 3
     }
   ]
 }
