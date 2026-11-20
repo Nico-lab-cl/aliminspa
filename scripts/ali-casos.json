@@ -65,7 +65,7 @@
         { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?" },
         { "de": "cliente", "texto": "[Sticker]" }
       ],
-      "debe": ["Responder corto, sin precios", "No volver a presentarse"],
+      "debe": ["Responder corto, sin precios (una línea cálida de despedida está bien: un sticker después de su pregunta es un acuse de recibo)", "No volver a presentarse"],
       "no_contiene": ["\\$", "soy Ali"]
     },
     {
@@ -161,7 +161,7 @@
         { "de": "ali", "texto": "Te entiendo, es desgastante no tener una respuesta clara.\n\nLo de tu escritura lo ve el equipo de postventa. ¿Quieres que te contacten por este mismo chat?" },
         { "de": "cliente", "texto": "??" }
       ],
-      "debe": ["No repetir la misma pregunta", "Derivar a postventa y decirle en una frase simple que le escriben por este chat"],
+      "debe": ["No volver a preguntarle si quiere que la contacten", "Derivar a postventa y decirle en una frase simple que le escriben por este chat"],
       "deriva": true,
       "no_contiene": ["quieres que te contacten|te parece que te escriban"]
     },

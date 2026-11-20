@@ -389,8 +389,8 @@ export async function correrModelo(p: {
     // herramienta (guardar_contacto) y, con el resultado, termina sin texto.
     // Sin esto la persona se quedaba sin respuesta (prueba del 12-11-2026).
     let textoAnterior = ''
-    /** Ya se le pidió reescribir una vez por guardia.ts: no se repite. */
-    let corregida = false
+    /** Veces que guardia.ts le pidió reescribir (máximo 2). */
+    let correcciones = 0
     // Oficina IA: el personaje se pone a trabajar (sin datos del cliente).
     const agenteOficina = p.agente === 'cierre' ? 'cierre' : 'ali'
     if (!p.prueba) oficinaTrabaja(agenteOficina, p.canal)
@@ -422,10 +422,12 @@ export async function correrModelo(p: {
             const texto = textoDe(respuesta.content) || textoAnterior
             // Promesas que no se pueden hacer y respuestas demasiado largas
             // (guardia.ts): Ali reescribe una sola vez.
-            const malas = corregida ? [] : afirmacionesProhibidas(texto)
-            const forma = corregida ? [] : problemasDeFormato(texto, p.canal)
+            // La forma se revisa solo la primera vez; las afirmaciones falsas,
+            // también en la reescrita (al acortar, a veces vuelve un "✅ Rol propio").
+            const malas = correcciones < 2 ? afirmacionesProhibidas(texto) : []
+            const forma = correcciones === 0 ? problemasDeFormato(texto, p.canal) : []
             if ((malas.length || forma.length) && vuelta < MAX_VUELTAS - 1) {
-                corregida = true
+                correcciones++
                 console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma].join(' | ')}`)
                 const partes = [
                     malas.length ? `Tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}` : '',
