@@ -128,8 +128,12 @@ async function juzgar(caso, r) {
         body: JSON.stringify({
             canal: caso.canal,
             conversacion: caso.mensajes,
-            // El juez no ve las herramientas: si derivó, se lo contamos.
-            respuesta: r.derivacion ? [...r.burbujas, `[Nota para el juez, no es un mensaje: Ali usó derivar_a_asesor con el motivo "${r.derivacion.motivo || 'sin motivo'}"]`] : r.burbujas,
+            // El juez no ve las herramientas: si derivó o mandó archivos, se lo contamos.
+            respuesta: [
+                ...r.burbujas,
+                ...(r.derivacion ? [`[Nota para el juez, no es un mensaje: Ali usó derivar_a_asesor con el motivo "${r.derivacion.motivo || 'sin motivo'}"]`] : []),
+                ...(r.documentos?.length ? [`[Nota para el juez, no es un mensaje: Ali usó enviar_documento y después de sus mensajes llega: ${r.documentos.map(d => d.nombre).join(', ')}]`] : []),
+            ],
             silencio: r.silencio,
             debe: caso.debe || [],
         }),

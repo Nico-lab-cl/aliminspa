@@ -64,7 +64,7 @@ const DESCRIPCION_TIPOS = `- saludo: solo saluda o escribe "info", "hola", "prec
 - pide_persona: pide hablar con una persona, un asesor o un ejecutivo, o que la llamen.
 - postventa: YA COMPRÓ (lo dice, o la memoria del CRM dice que ya es cliente) y pregunta o reclama por su terreno, sus pagos, la escritura, el cierre, los abogados o la entrega.
 - reclamo: está molesta o reclama por la atención, y no es postventa.
-- confusion: no entendió lo último que le dijo Ali ("?", "??", "no entiendo", "¿qué?", "¿cómo así?").
+- confusion: no entendió lo último que le dijo Ali ("?", "??", "no entiendo", "¿qué?", "¿cómo así?"). Si los signos acompañan una pregunta con contenido ("Valores??", "precio??", "dónde queda??"), no es confusion: es consulta.
 - fuera_de_tema: spam, publicidad, ofrece servicios, busca trabajo o escribe algo que no tiene que ver con comprar un terreno.`
 
 const HERRAMIENTA: Anthropic.Tool = {
