@@ -97,7 +97,7 @@ async function responderAli(caso) {
     const data = await res.json().catch(() => ({}))
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`)
     const burbujas = data.burbujas || []
-    return { burbujas, texto: burbujas.join('\n\n'), silencio: Boolean(data.silencio), derivacion: data.derivacion || null }
+    return { burbujas, texto: burbujas.join('\n\n'), silencio: Boolean(data.silencio), derivacion: data.derivacion || null, intencion: data.intencion || null }
 }
 
 function revisarPorCodigo(caso, r) {
@@ -162,9 +162,14 @@ for (const caso of elegidos) {
         if (fallasCodigo.length) nota = Math.min(nota, 40)
         const incumplidos = (veredicto?.criterios || []).filter(c => !c.cumple)
         const pasa = !fallasCodigo.length && nota >= NOTA_MINIMA_CASO
-        resultados.push({ nombre: caso.nombre, nota, pasa })
+        // Clasificador (Fase 3): se mide aparte, no baja la nota del caso.
+        const esperado = caso.tipo ? [].concat(caso.tipo) : null
+        const tipo = r.intencion?.tipo || null
+        const clasificoBien = esperado ? Boolean(tipo && esperado.includes(tipo)) : null
+        resultados.push({ nombre: caso.nombre, nota, pasa, clasificoBien })
 
         console.log(`\n${pasa ? '✓' : '✗'} ${caso.nombre}${veredicto || fallasCodigo.length ? `   nota ${nota}` : ''}`)
+        if (esperado) console.log(`   ${clasificoBien ? '·' : '✗'} tipo: ${tipo || '(sin clasificar)'}${clasificoBien ? '' : ` (esperado ${esperado.join(' o ')})`}`)
         if (r.derivacion) console.log(`   (derivó: ${r.derivacion.motivo || JSON.stringify(r.derivacion).slice(0, 80)})`)
         console.log(r.silencio && !r.burbujas.length ? '   (sin respuesta, a propósito)' : r.burbujas.map(b => `   │ ${b.replace(/\n/g, '\n   │ ')}`).join('\n   ·\n'))
         for (const f of fallasCodigo) console.log(`   ✗ código: ${f}`)
@@ -179,6 +184,8 @@ for (const caso of elegidos) {
 const pasan = resultados.filter(r => r.pasa).length
 const nota = resultados.length ? Math.round(resultados.reduce((a, r) => a + r.nota, 0) / resultados.length) : 0
 console.log(`\nAli: ${nota}/100 · ${pasan}/${resultados.length} casos bien.`)
+const conTipo = resultados.filter(r => r.clasificoBien !== null)
+if (conTipo.length) console.log(`Clasificador: ${conTipo.filter(r => r.clasificoBien).length}/${conTipo.length} mensajes con el tipo esperado.`)
 
 // La nota base solo se compara con una corrida completa y con juez.
 const completa = !FILTRO && CON_JUEZ

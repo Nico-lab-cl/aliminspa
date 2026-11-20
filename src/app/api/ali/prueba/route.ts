@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
             visita: r.visita,
             documentos: r.documentos,
             silencio: r.silencio,
+            intencion: r.intencion,
         })
     } catch (error) {
         console.error(`[ali:prueba] No se pudo responder ${entrada.conversacionId}:`, error)

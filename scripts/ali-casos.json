@@ -6,194 +6,547 @@
       "nombre": "Messenger: 👍 al brochure → se presenta corto, sin precio ni pregunta de nombre",
       "origen": "Marcela, 19-11-2026",
       "canal": "facebook",
-      "mensajes": [{ "de": "ali", "texto": "{{brochure}}" }, { "de": "cliente", "texto": "👍" }],
-      "debe": ["Presentarse corto como Ali y ofrecer ayuda con dudas puntuales", "No mandar ni ofrecer precios", "No pedir el nombre"],
-      "no_contiene": ["\\$", "te cuento el precio", "con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre"],
+      "tipo": "cierre",
+      "mensajes": [
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "👍"
+        }
+      ],
+      "debe": [
+        "Presentarse corto como Ali y ofrecer ayuda con dudas puntuales",
+        "No mandar ni ofrecer precios",
+        "No pedir el nombre"
+      ],
+      "no_contiene": [
+        "\\$",
+        "te cuento el precio",
+        "con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre"
+      ],
       "max_burbujas": 1
     },
     {
       "nombre": "Messenger: \"Ya lo vi, gracias\" + 👍 → cierre cálido, sin precios",
       "origen": "Marcela, 19-11-2026",
       "canal": "facebook",
+      "tipo": "cierre",
       "mensajes": [
-        { "de": "ali", "texto": "{{brochure}}" },
-        { "de": "cliente", "texto": "👍" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Así te cuento el precio del terreno que te interesa." },
-        { "de": "cliente", "texto": "Ya lo vi, gracias" },
-        { "de": "cliente", "texto": "👍" }
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "👍"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Así te cuento el precio del terreno que te interesa."
+        },
+        {
+          "de": "cliente",
+          "texto": "Ya lo vi, gracias"
+        },
+        {
+          "de": "cliente",
+          "texto": "👍"
+        }
       ],
-      "debe": ["Despedirse con una línea cálida", "No ofrecer precios ni información nueva", "No hacer preguntas"],
-      "no_contiene": ["\\$", "precio", "\\?"],
+      "debe": [
+        "Despedirse con una línea cálida",
+        "No ofrecer precios ni información nueva",
+        "No hacer preguntas"
+      ],
+      "no_contiene": [
+        "\\$",
+        "precio",
+        "\\?"
+      ],
       "max_burbujas": 1
     },
     {
       "nombre": "Messenger: otro 👍 después de que Ali ya se despidió → no responde",
       "origen": "Marcela, 19-11-2026",
       "canal": "facebook",
+      "tipo": "cierre",
       "mensajes": [
-        { "de": "ali", "texto": "{{brochure}}" },
-        { "de": "cliente", "texto": "Ya lo vi, gracias" },
-        { "de": "ali", "texto": "Perfecto 😊 Cualquier duda me escribes por aquí" },
-        { "de": "cliente", "texto": "👍" }
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "Ya lo vi, gracias"
+        },
+        {
+          "de": "ali",
+          "texto": "Perfecto 😊 Cualquier duda me escribes por aquí"
+        },
+        {
+          "de": "cliente",
+          "texto": "👍"
+        }
       ],
-      "debe": ["No responder: ya se despidió y la persona solo volvió a reaccionar"],
+      "debe": [
+        "No responder: ya se despidió y la persona solo volvió a reaccionar"
+      ],
       "silencio": true
     },
     {
       "nombre": "Instagram: \"Gracias por la información\" al brochure → sin precios",
       "origen": "Marcela, 19-11-2026",
       "canal": "instagram",
-      "mensajes": [{ "de": "ali", "texto": "{{brochure}}" }, { "de": "cliente", "texto": "Gracias por la información" }],
-      "debe": ["Tomarlo como cierre o acuse de recibo", "No mandar precios ni listas"],
-      "no_contiene": ["\\$", "✅"]
+      "tipo": "cierre",
+      "mensajes": [
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "Gracias por la información"
+        }
+      ],
+      "debe": [
+        "Tomarlo como cierre o acuse de recibo",
+        "No mandar precios ni listas"
+      ],
+      "no_contiene": [
+        "\\$",
+        "✅"
+      ]
     },
     {
       "nombre": "Instagram: varios emojis (🙏❤️) → corto y cálido, sin precios",
       "origen": "20-11-2026",
       "canal": "instagram",
-      "mensajes": [{ "de": "ali", "texto": "{{brochure}}" }, { "de": "cliente", "texto": "🙏❤️" }],
-      "debe": ["Responder corto y cálido", "No mandar precios"],
-      "no_contiene": ["\\$"],
+      "tipo": "cierre",
+      "mensajes": [
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "🙏❤️"
+        }
+      ],
+      "debe": [
+        "Responder corto y cálido",
+        "No mandar precios"
+      ],
+      "no_contiene": [
+        "\\$"
+      ],
       "max_burbujas": 1
     },
     {
       "nombre": "WhatsApp: sticker solo → corto, sin precios ni repetir la presentación",
       "origen": "20-11-2026",
       "canal": "whatsapp",
+      "tipo": "cierre",
       "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "[Sticker]" }
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "[Sticker]"
+        }
       ],
-      "debe": ["Responder corto, sin precios (una línea cálida de despedida está bien: un sticker después de su pregunta es un acuse de recibo)", "No volver a presentarse"],
-      "no_contiene": ["\\$", "soy Ali"]
+      "debe": [
+        "Responder corto, sin precios (una línea cálida de despedida está bien: un sticker después de su pregunta es un acuse de recibo)",
+        "No volver a presentarse"
+      ],
+      "no_contiene": [
+        "\\$",
+        "soy Ali"
+      ]
     },
     {
       "nombre": "Emoji + pregunta → responde la pregunta",
       "origen": "20-11-2026",
       "canal": "instagram",
-      "mensajes": [{ "de": "ali", "texto": "{{brochure}}" }, { "de": "cliente", "texto": "👍 ¿y dónde queda exactamente?" }],
-      "debe": ["Responder dónde están los proyectos"],
-      "contiene": ["El Tabo|playa|Ruta 78|Santiago|ubica"]
+      "tipo": "consulta",
+      "mensajes": [
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "👍 ¿y dónde queda exactamente?"
+        }
+      ],
+      "debe": [
+        "Responder dónde están los proyectos"
+      ],
+      "contiene": [
+        "El Tabo|playa|Ruta 78|Santiago|ubica"
+      ]
     },
     {
       "nombre": "Precio de Lomas del Mar sin tamaño → los dos tamaños, primero 200 m²",
       "origen": "Marcela, 19-11-2026",
       "canal": "instagram",
-      "mensajes": [{ "de": "cliente", "texto": "Hola, ¿cuánto valen los terrenos de Lomas del Mar?" }],
-      "debe": ["Dar los precios de los dos tamaños, primero el de 200 m²", "Cada precio completo: contado y crédito con el total"],
-      "contiene": ["200 m²[\\s\\S]*390 m²", "35\\.000\\.000", "43\\.000\\.000", "37\\.990\\.000", "45\\.990\\.000"]
+      "tipo": "consulta",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, ¿cuánto valen los terrenos de Lomas del Mar?"
+        }
+      ],
+      "debe": [
+        "Dar los precios de los dos tamaños, primero el de 200 m²",
+        "Cada precio completo: contado y crédito con el total"
+      ],
+      "contiene": [
+        "200 m²[\\s\\S]*390 m²",
+        "35\\.000\\.000",
+        "43\\.000\\.000",
+        "37\\.990\\.000",
+        "45\\.990\\.000"
+      ]
     },
     {
       "nombre": "Precio de un tamaño puntual → solo ese",
       "origen": "20-11-2026",
       "canal": "instagram",
-      "mensajes": [{ "de": "cliente", "texto": "¿Cuánto vale el terreno de 390 m² en Lomas del Mar?" }],
-      "debe": ["Dar solo el precio del de 390 m², completo"],
-      "contiene": ["43\\.000\\.000"],
-      "no_contiene": ["35\\.000\\.000"]
+      "tipo": "consulta",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "¿Cuánto vale el terreno de 390 m² en Lomas del Mar?"
+        }
+      ],
+      "debe": [
+        "Dar solo el precio del de 390 m², completo"
+      ],
+      "contiene": [
+        "43\\.000\\.000"
+      ],
+      "no_contiene": [
+        "35\\.000\\.000"
+      ]
     },
     {
       "nombre": "\"Demasiado alto el valor\" → ofrece el más accesible una vez, sin insistir",
       "origen": "Marcela, 19-11-2026",
       "canal": "instagram",
+      "tipo": "objecion_precio",
       "mensajes": [
-        { "de": "cliente", "texto": "¿Cuánto vale el de 390?" },
-        { "de": "ali", "texto": "Lomas del Mar, terreno de 390 m² 🌲\n✅ $43.000.000 al contado\n✅ O con crédito directo, pie de $7.500.000\n✅ y 70 cuotas fijas de $550.000\n✅ $45.990.000 en total con crédito\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Demasiado alto el valor para mi muchas gracias" }
+        {
+          "de": "cliente",
+          "texto": "¿Cuánto vale el de 390?"
+        },
+        {
+          "de": "ali",
+          "texto": "Lomas del Mar, terreno de 390 m² 🌲\n✅ $43.000.000 al contado\n✅ O con crédito directo, pie de $7.500.000\n✅ y 70 cuotas fijas de $550.000\n✅ $45.990.000 en total con crédito\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Demasiado alto el valor para mi muchas gracias"
+        }
       ],
-      "debe": ["Validar en una frase", "Ofrecer una vez el de 200 m² con crédito directo, con su precio completo", "No insistir"],
-      "contiene": ["200 m²|5\\.500\\.000"],
-      "no_contiene": ["43\\.000\\.000"]
+      "debe": [
+        "Validar en una frase",
+        "Ofrecer una vez el de 200 m² con crédito directo, con su precio completo",
+        "No insistir"
+      ],
+      "contiene": [
+        "200 m²|5\\.500\\.000"
+      ],
+      "no_contiene": [
+        "43\\.000\\.000"
+      ]
     },
     {
       "nombre": "WhatsApp: audio \"¿me escuchas?\" → \"te escucho\", nunca \"te leo\"",
       "origen": "Nicolás, 20-11-2026",
       "canal": "whatsapp",
-      "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "¡Hola! 👋 ¿En qué te puedo ayudar? Si estás buscando terreno en El Tabo, te cuento de Lomas del Mar o de Arena y Sol." },
-        { "de": "cliente", "texto": "🎤 (audio) Hola, ¿me escuchas?" }
+      "tipo": [
+        "saludo",
+        "consulta",
+        "confusion"
       ],
-      "debe": ["Decir que sí lo escucha"],
-      "contiene": ["escuch"],
-      "no_contiene": ["te leo|leo bien|leerte"]
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "¡Hola! 👋 ¿En qué te puedo ayudar? Si estás buscando terreno en El Tabo, te cuento de Lomas del Mar o de Arena y Sol."
+        },
+        {
+          "de": "cliente",
+          "texto": "🎤 (audio) Hola, ¿me escuchas?"
+        }
+      ],
+      "debe": [
+        "Decir que sí lo escucha"
+      ],
+      "contiene": [
+        "escuch"
+      ],
+      "no_contiene": [
+        "te leo|leo bien|leerte"
+      ]
     },
     {
       "nombre": "\"¿Puedo construir de inmediato?\" → ninguno es inmediato, sin recepción final",
       "origen": "revisión semanal, 20-11-2026",
       "canal": "instagram",
+      "tipo": "consulta",
       "mensajes": [
-        { "de": "cliente", "texto": "Hola, ¿cuánto vale el de 200 m² en Lomas del Mar?" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\nLomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O con crédito directo, pie de $5.500.000\n✅ y 60 cuotas fijas de $550.000\n✅ $37.990.000 en total con crédito\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Nicolás. ¿Puedo construir de inmediato?" }
+        {
+          "de": "cliente",
+          "texto": "Hola, ¿cuánto vale el de 200 m² en Lomas del Mar?"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\nLomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O con crédito directo, pie de $5.500.000\n✅ y 60 cuotas fijas de $550.000\n✅ $37.990.000 en total con crédito\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Nicolás. ¿Puedo construir de inmediato?"
+        }
       ],
-      "debe": ["Decir que no se puede construir de inmediato", "Explicar que para edificar el terreno tiene que estar 100% pagado", "No decir que algún proyecto tiene recepción final ni que es de entrega inmediata"],
-      "contiene": ["100\\s?%|pagado"],
-      "no_contiene": ["(est[aá]|es|son|para)\\s+(de\\s+|para\\s+)?entrega inmediata", "(?<!no )(tiene|con|cuenta con)( la)? recepci[oó]n final", "(ya )?(tiene|tienen) (su )?rol propio|rol propio (asignado|inscrito)"]
+      "debe": [
+        "Decir que no se puede construir de inmediato",
+        "Explicar que para edificar el terreno tiene que estar 100% pagado",
+        "No decir que algún proyecto tiene recepción final ni que es de entrega inmediata"
+      ],
+      "contiene": [
+        "100\\s?%|pagado"
+      ],
+      "no_contiene": [
+        "(est[aá]|es|son|para)\\s+(de\\s+|para\\s+)?entrega inmediata",
+        "(?<!no )(tiene|con|cuenta con)( la)? recepci[oó]n final",
+        "(ya )?(tiene|tienen) (su )?rol propio|rol propio (asignado|inscrito)"
+      ]
     },
     {
       "nombre": "Qué incluyen los terrenos → rol propio en futuro",
       "origen": "revisión semanal, 20-11-2026",
       "canal": "instagram",
-      "mensajes": [{ "de": "cliente", "texto": "¿Qué incluyen los terrenos de Arena y Sol?" }],
-      "debe": ["Listar lo que incluyen", "El rol propio dicho en futuro (se van a entregar con rol propio)"],
-      "no_contiene": ["(?<!no )(tiene|con)( la)? recepci[oó]n final", "✅\\s*rol propio", "(ya )?(tiene|tienen) (su )?rol propio"]
+      "tipo": "consulta",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "¿Qué incluyen los terrenos de Arena y Sol?"
+        }
+      ],
+      "debe": [
+        "Listar lo que incluyen",
+        "El rol propio dicho en futuro (se van a entregar con rol propio)"
+      ],
+      "no_contiene": [
+        "(?<!no )(tiene|con)( la)? recepci[oó]n final",
+        "✅\\s*rol propio",
+        "(ya )?(tiene|tienen) (su )?rol propio"
+      ]
     },
     {
       "nombre": "Postventa: clienta molesta en audio, le habla a Bárbara → aclara quién es y deriva sin preguntar",
       "origen": "Instagram, 20-11-2026 (quedó con un \"??\")",
       "canal": "instagram",
+      "tipo": "postventa",
       "mensajes": [
-        { "de": "cliente", "texto": "🎤 (audio) Hola, buenos días. Hola, Bárbara. Mira, la última vez que hablamos fue el 9 de octubre, ya va casi para dos meses, y todavía no he tenido ninguna información concreta sobre mi sitio. Lo único que supimos es que iban a hacer un cierre nuevo y que lo estaban viendo los abogados, y el tamaño del terreno tampoco me lo han confirmado. Necesito que alguien me diga en qué está lo mío." }
+        {
+          "de": "cliente",
+          "texto": "🎤 (audio) Hola, buenos días. Hola, Bárbara. Mira, la última vez que hablamos fue el 9 de octubre, ya va casi para dos meses, y todavía no he tenido ninguna información concreta sobre mi sitio. Lo único que supimos es que iban a hacer un cierre nuevo y que lo estaban viendo los abogados, y el tamaño del terreno tampoco me lo han confirmado. Necesito que alguien me diga en qué está lo mío."
+        }
       ],
-      "debe": ["Aclarar en una frase que es Ali, el asistente virtual de Alimin (no Bárbara)", "Reconocer la molestia en una frase", "Derivar al equipo de postventa de inmediato, sin preguntarle si quiere que la contacten", "Decirle que le escriben por este mismo chat"],
+      "debe": [
+        "Aclarar en una frase que es Ali, el asistente virtual de Alimin (no Bárbara)",
+        "Reconocer la molestia en una frase",
+        "Derivar al equipo de postventa de inmediato, sin preguntarle si quiere que la contacten",
+        "Decirle que le escriben por este mismo chat"
+      ],
       "deriva": true,
-      "no_contiene": ["quieres que (te|la) contacten|te parece que te escriban|te gustar[ií]a que"],
+      "no_contiene": [
+        "quieres que (te|la) contacten|te parece que te escriban|te gustar[ií]a que"
+      ],
       "max_burbujas": 3
     },
     {
       "nombre": "\"??\" después de ofrecer postventa → lo dice distinto y deriva",
       "origen": "Instagram, 20-11-2026",
       "canal": "instagram",
-      "mensajes": [
-        { "de": "cliente", "texto": "Hola, ya compré un terreno en Lomas del Mar y nadie me dice cuándo firmo la escritura" },
-        { "de": "ali", "texto": "Te entiendo, es desgastante no tener una respuesta clara.\n\nLo de tu escritura lo ve el equipo de postventa. ¿Quieres que te contacten por este mismo chat?" },
-        { "de": "cliente", "texto": "??" }
+      "tipo": [
+        "confusion",
+        "postventa"
       ],
-      "debe": ["No volver a preguntarle si quiere que la contacten", "Derivar a postventa y decirle en una frase simple que le escriben por este chat"],
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, ya compré un terreno en Lomas del Mar y nadie me dice cuándo firmo la escritura"
+        },
+        {
+          "de": "ali",
+          "texto": "Te entiendo, es desgastante no tener una respuesta clara.\n\nLo de tu escritura lo ve el equipo de postventa. ¿Quieres que te contacten por este mismo chat?"
+        },
+        {
+          "de": "cliente",
+          "texto": "??"
+        }
+      ],
+      "debe": [
+        "No volver a preguntarle si quiere que la contacten",
+        "Derivar a postventa y decirle en una frase simple que le escriben por este chat"
+      ],
       "deriva": true,
-      "no_contiene": ["quieres que te contacten|te parece que te escriban"]
+      "no_contiene": [
+        "quieres que te contacten|te parece que te escriban"
+      ]
     },
     {
       "nombre": "\"Gracias\" + su nombre → la saluda por el nombre y sigue, no se despide",
       "origen": "Jeniffer, Facebook, 20-11-2026",
       "canal": "facebook",
+      "tipo": "da_datos",
       "mensajes": [
-        { "de": "cliente", "texto": "Hola buenos días, me gustaría saber la ubicación y el valor al contado de los terrenos de Arena y Sol" },
-        { "de": "ali", "texto": "Arena y Sol, terreno de 200 m² 🌊\n✅ $39.000.000 al contado\n✅ O con crédito directo, pie de $20.000.000\n✅ y 44 cuotas fijas de $500.000\n✅ $42.000.000 en total con crédito\n\nQueda a 8 minutos de la playa de El Tabo y a poco más de 1 hora de Santiago por la Ruta 78. ¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Gracias" },
-        { "de": "cliente", "texto": "Jeniffer" }
+        {
+          "de": "cliente",
+          "texto": "Hola buenos días, me gustaría saber la ubicación y el valor al contado de los terrenos de Arena y Sol"
+        },
+        {
+          "de": "ali",
+          "texto": "Arena y Sol, terreno de 200 m² 🌊\n✅ $39.000.000 al contado\n✅ O con crédito directo, pie de $20.000.000\n✅ y 44 cuotas fijas de $500.000\n✅ $42.000.000 en total con crédito\n\nQueda a 8 minutos de la playa de El Tabo y a poco más de 1 hora de Santiago por la Ruta 78. ¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Gracias"
+        },
+        {
+          "de": "cliente",
+          "texto": "Jeniffer"
+        }
       ],
-      "debe": ["Saludarla por su nombre", "Seguir la conversación (no despedirse)", "No repetir los precios"],
-      "contiene": ["Jeniffer"],
-      "no_contiene": ["\\$"],
+      "debe": [
+        "Saludarla por su nombre",
+        "Seguir la conversación (no despedirse)",
+        "No repetir los precios"
+      ],
+      "contiene": [
+        "Jeniffer"
+      ],
+      "no_contiene": [
+        "\\$"
+      ],
       "deriva": false
     },
     {
       "nombre": "Muchas preguntas juntas → listas con ✅, sin párrafos largos",
       "origen": "Francisco, Facebook, 20-11-2026",
       "canal": "facebook",
+      "tipo": "varias_preguntas",
       "mensajes": [
-        { "de": "cliente", "texto": "Lomas del Mar 200 m2" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Y cuéntame qué quieres saber del terreno de 200 m², si el precio, la ubicación o cómo son." },
-        { "de": "cliente", "texto": "Valor\nFinanciamiento\nRol\nEntrega\nAgua\nLuz\nAlgun gasto extra\nComo se entrega el terreno\nCon escritura\nSoy Francisco\nUbicacion" }
+        {
+          "de": "cliente",
+          "texto": "Lomas del Mar 200 m2"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Y cuéntame qué quieres saber del terreno de 200 m², si el precio, la ubicación o cómo son."
+        },
+        {
+          "de": "cliente",
+          "texto": "Valor\nFinanciamiento\nRol\nEntrega\nAgua\nLuz\nAlgun gasto extra\nComo se entrega el terreno\nCon escritura\nSoy Francisco\nUbicacion"
+        }
       ],
-      "debe": ["Saludar a Francisco por su nombre", "Dar el precio completo del de 200 m² (contado y crédito con el total)", "Responder en listas con ✅, sin párrafos", "Rol propio en futuro", "Máximo 3 mensajes"],
-      "contiene": ["Francisco", "✅", "35\\.000\\.000"],
-      "no_contiene": ["✅\\s*rol propio", "(ya )?(tiene|tienen) (su )?rol propio"],
+      "debe": [
+        "Saludar a Francisco por su nombre",
+        "Dar el precio completo del de 200 m² (contado y crédito con el total)",
+        "Responder en listas con ✅, sin párrafos",
+        "Rol propio en futuro",
+        "Máximo 3 mensajes"
+      ],
+      "contiene": [
+        "Francisco",
+        "✅",
+        "35\\.000\\.000"
+      ],
+      "no_contiene": [
+        "✅\\s*rol propio",
+        "(ya )?(tiene|tienen) (su )?rol propio"
+      ],
       "max_burbujas": 3,
       "max_parrafo": 230
+    },
+    {
+      "nombre": "Quiere reservar → felicita corto y deriva",
+      "origen": "Fase 3, 20-11-2026",
+      "canal": "instagram",
+      "tipo": "quiere_reservar",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, soy Carla. Ya fui a ver Arena y Sol y quiero reservar el lote 12, ¿cómo pago el pie?"
+        }
+      ],
+      "debe": [
+        "Felicitarla en una frase",
+        "Derivar a un asesor para la reserva",
+        "Decirle que su asesor le escribe por este chat"
+      ],
+      "deriva": true,
+      "no_contiene": [
+        "https?://"
+      ]
+    },
+    {
+      "nombre": "Desconfianza (\"¿es estafa?\") → datos ciertos e invita a conocer, sin derivar",
+      "origen": "Fase 3, 20-11-2026",
+      "canal": "facebook",
+      "tipo": "duda_o_desconfianza",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "¿Esto es real o es estafa? Hay muchos loteos brujos en la costa"
+        }
+      ],
+      "debe": [
+        "Responder sin discutir, con datos ciertos de la ficha (venta directa, más de 200 familias, terrenos urbanos)",
+        "Invitar a conocer los terrenos en persona",
+        "No decir \"loteo\" ni \"loteos\""
+      ],
+      "deriva": false,
+      "no_contiene": [
+        "\\bloteos?\\b",
+        "visado SAG"
+      ]
+    },
+    {
+      "nombre": "Fuera de tema (vende paneles solares) → una frase amable, sin derivar",
+      "origen": "Fase 3, 20-11-2026",
+      "canal": "instagram",
+      "tipo": "fuera_de_tema",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, vendo paneles solares para parcelas, ¿con quién puedo hablar para ofrecerles?"
+        }
+      ],
+      "debe": [
+        "Responder en una o dos frases que por aquí atiende consultas de los terrenos",
+        "No derivar ni pedirle datos"
+      ],
+      "deriva": false,
+      "max_burbujas": 2,
+      "no_contiene": [
+        "\\$"
+      ]
     }
   ]
 }

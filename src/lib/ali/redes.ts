@@ -12,6 +12,7 @@ import {
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
 import { modoCierre } from './cierre'
+import { clasificarMensaje, guiaDeIntencion, type Intencion } from './intencion'
 import type { DocumentoParaEnviar } from './documentos'
 
 /**
@@ -87,6 +88,8 @@ export interface RespuestaRedes {
      * CRM no debe tomarlo como falla.
      */
     silencio: boolean
+    /** Qué tipo de mensaje era según el clasificador (Fase 3); null si no se pudo clasificar. */
+    intencion: Intencion | null
 }
 
 /** Lo que escribe el modelo cuando no corresponde responder. */
@@ -251,7 +254,7 @@ function historial(entrada: EntradaRedes, fotos: Map<number, FotoBase64>): Anthr
     return mensajes
 }
 
-function datosDelMomento(entrada: EntradaRedes) {
+function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
     const ahora = new Date().toLocaleString('es-CL', {
         timeZone: TIMEZONE,
         weekday: 'long',
@@ -299,6 +302,7 @@ function datosDelMomento(entrada: EntradaRedes) {
             ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`
             : null,
         entrada.memoria ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${entrada.memoria}` : null,
+        intencion ? `\n${guiaDeIntencion(intencion)}` : null,
     ]
         .filter(Boolean)
         .join('\n')
@@ -315,7 +319,23 @@ export async function conversarRedes(
     opciones: { prueba?: boolean } = {}
 ): Promise<RespuestaRedes> {
     const nombres = HERRAMIENTAS.map(h => h.name)
-    const [remota, cierre] = await Promise.all([configRemota(), modoCierre(entrada.agente, nombres)])
+    // Fase 3: el clasificador corre en paralelo con la config, así casi no suma espera.
+    const [remota, cierre, intencion] = await Promise.all([
+        configRemota(),
+        modoCierre(entrada.agente, nombres),
+        clasificarMensaje({
+            mensajes: entrada.mensajes.map(m => ({ de: m.de, texto: m.texto || (m.imagenUrl ? '[foto]' : '') })),
+            memoria: entrada.memoria,
+            conversacionId: entrada.conversacionId,
+            canal: entrada.canal,
+            prueba: opciones.prueba,
+        }),
+    ])
+    if (intencion) {
+        console.log(
+            `[ali${opciones.prueba ? ':prueba' : ''}:${entrada.canal}] mensaje tipo ${intencion.tipo}${intencion.cree_que_es_otra_persona ? ' (cree que es otra persona)' : ''}: ${intencion.resumen}`
+        )
+    }
     const config = remota?.agente.activo ? remota : null
     const apagadas = [...(config ? herramientasApagadas(config) : []), ...cierre.apagadas]
     const tools = [...HERRAMIENTAS.filter(h => !apagadas.includes(h.name)), HERRAMIENTA_GUARDAR_CONTACTO, HERRAMIENTA_ENVIAR_DOCUMENTO]
@@ -329,7 +349,7 @@ export async function conversarRedes(
         { type: 'text', text: INSTRUCCIONES_REDES, cache_control: { type: 'ephemeral' } },
         // Si la persona ya llegó a la visita y el Cierre está encendido.
         ...cierre.bloques,
-        { type: 'text', text: datosDelMomento(entrada) },
+        { type: 'text', text: datosDelMomento(entrada, intencion) },
     ]
 
     const ctx: ContextoHerramientas = {
@@ -346,7 +366,7 @@ export async function conversarRedes(
     const publica = entrada.via === 'comentario' ? respuestaPublica() : null
 
     const mensajes = historial(entrada, await descargarFotos(entrada))
-    if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, documentos: [], publica, silencio: false }
+    if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, documentos: [], publica, silencio: false, intencion }
 
     let final = await correrModelo({
         system,
@@ -366,6 +386,7 @@ export async function conversarRedes(
 
     return {
         silencio,
+        intencion,
         burbujas: final ? burbujasRedes(final) : [],
         contacto: ctx.contacto ?? null,
         derivacion: ctx.derivacion,
