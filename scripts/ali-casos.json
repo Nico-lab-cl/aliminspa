@@ -330,7 +330,7 @@
         "100\\s?%|pagado"
       ],
       "no_contiene": [
-        "(est[aá]|es|son|para)\\s+(de\\s+|para\\s+)?entrega inmediata",
+        "(?<!no |ni )(est[aá]|es|son|para)\\s+(de\\s+|para\\s+)?entrega inmediata",
         "(?<!no )(tiene|con|cuenta con)( la)? recepci[oó]n final",
         "(ya )?(tiene|tienen) (su )?rol propio|rol propio (asignado|inscrito)"
       ]
@@ -496,7 +496,7 @@
         }
       ],
       "debe": [
-        "Alegrarse en una frase de que quiera reservar (sin elogiar la elección)",
+        "Recibir con calidez, en una frase, que quiere reservar (sin elogiar la elección)",
         "Derivar a un asesor para la reserva",
         "Decirle que su asesor le escribe por este chat"
       ],
@@ -517,7 +517,7 @@
         }
       ],
       "debe": [
-        "Responder sin discutir, con datos ciertos de la ficha (venta directa, más de 200 familias, terrenos urbanos)",
+        "Responder sin discutir, con al menos un dato cierto de la ficha que dé confianza (por ejemplo venta directa, más de 200 familias o terrenos urbanos)",
         "Invitar a conocer los terrenos en persona",
         "No decir \"loteo\" ni \"loteos\""
       ],

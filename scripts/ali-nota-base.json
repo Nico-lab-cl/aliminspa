@@ -1,6 +1,7 @@
 {
-  "nota": 87,
-  "pasan": 20,
-  "casos": 20,
-  "fecha": "2026-11-20"
+  "nota": 83,
+  "pasan": 22,
+  "casos": 24,
+  "fecha": "2026-11-20",
+  "como_se_calculo": "Promedio de 4 corridas completas con 24 casos (84, 83, 83, 81). El juez varía unos 5 puntos entre corridas: un caso que falla una vez se repite antes de culpar al cambio."
 }
