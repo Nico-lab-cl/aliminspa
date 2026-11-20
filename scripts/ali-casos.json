@@ -139,6 +139,61 @@
       "mensajes": [{ "de": "cliente", "texto": "¿Qué incluyen los terrenos de Arena y Sol?" }],
       "debe": ["Listar lo que incluyen", "El rol propio dicho en futuro (se van a entregar con rol propio)"],
       "no_contiene": ["(?<!no )(tiene|con)( la)? recepci[oó]n final", "✅\\s*rol propio", "(ya )?(tiene|tienen) (su )?rol propio"]
+    },
+    {
+      "nombre": "Postventa: clienta molesta en audio, le habla a Bárbara → aclara quién es y deriva sin preguntar",
+      "origen": "Instagram, 20-11-2026 (quedó con un \"??\")",
+      "canal": "instagram",
+      "mensajes": [
+        { "de": "cliente", "texto": "🎤 (audio) Hola, buenos días. Hola, Bárbara. Mira, la última vez que hablamos fue el 9 de octubre, ya va casi para dos meses, y todavía no he tenido ninguna información concreta sobre mi sitio. Lo único que supimos es que iban a hacer un cierre nuevo y que lo estaban viendo los abogados, y el tamaño del terreno tampoco me lo han confirmado. Necesito que alguien me diga en qué está lo mío." }
+      ],
+      "debe": ["Aclarar en una frase que es Ali, el asistente virtual de Alimin (no Bárbara)", "Reconocer la molestia en una frase", "Derivar al equipo de postventa de inmediato, sin preguntarle si quiere que la contacten", "Decirle que le escriben por este mismo chat"],
+      "deriva": true,
+      "no_contiene": ["quieres que (te|la) contacten|te parece que te escriban|te gustar[ií]a que"],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "\"??\" después de ofrecer postventa → lo dice distinto y deriva",
+      "origen": "Instagram, 20-11-2026",
+      "canal": "instagram",
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola, ya compré un terreno en Lomas del Mar y nadie me dice cuándo firmo la escritura" },
+        { "de": "ali", "texto": "Te entiendo, es desgastante no tener una respuesta clara.\n\nLo de tu escritura lo ve el equipo de postventa. ¿Quieres que te contacten por este mismo chat?" },
+        { "de": "cliente", "texto": "??" }
+      ],
+      "debe": ["No repetir la misma pregunta", "Derivar a postventa y decirle en una frase simple que le escriben por este chat"],
+      "deriva": true,
+      "no_contiene": ["quieres que te contacten|te parece que te escriban"]
+    },
+    {
+      "nombre": "\"Gracias\" + su nombre → la saluda por el nombre y sigue, no se despide",
+      "origen": "Jeniffer, Facebook, 20-11-2026",
+      "canal": "facebook",
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola buenos días, me gustaría saber la ubicación y el valor al contado de los terrenos de Arena y Sol" },
+        { "de": "ali", "texto": "Arena y Sol, terreno de 200 m² 🌊\n✅ $39.000.000 al contado\n✅ O con crédito directo, pie de $20.000.000\n✅ y 44 cuotas fijas de $500.000\n✅ $42.000.000 en total con crédito\n\nQueda a 8 minutos de la playa de El Tabo y a poco más de 1 hora de Santiago por la Ruta 78. ¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Gracias" },
+        { "de": "cliente", "texto": "Jeniffer" }
+      ],
+      "debe": ["Saludarla por su nombre", "Seguir la conversación (no despedirse)", "No repetir los precios"],
+      "contiene": ["Jeniffer"],
+      "no_contiene": ["\\$"],
+      "deriva": false
+    },
+    {
+      "nombre": "Muchas preguntas juntas → listas con ✅, sin párrafos largos",
+      "origen": "Francisco, Facebook, 20-11-2026",
+      "canal": "facebook",
+      "mensajes": [
+        { "de": "cliente", "texto": "Lomas del Mar 200 m2" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Y cuéntame qué quieres saber del terreno de 200 m², si el precio, la ubicación o cómo son." },
+        { "de": "cliente", "texto": "Valor\nFinanciamiento\nRol\nEntrega\nAgua\nLuz\nAlgun gasto extra\nComo se entrega el terreno\nCon escritura\nSoy Francisco\nUbicacion" }
+      ],
+      "debe": ["Saludar a Francisco por su nombre", "Dar el precio completo del de 200 m² (contado y crédito con el total)", "Responder en listas con ✅, sin párrafos", "Rol propio en futuro", "Máximo 3 mensajes"],
+      "contiene": ["Francisco", "✅", "35\\.000\\.000"],
+      "no_contiene": ["✅\\s*rol propio", "(ya )?(tiene|tienen) (su )?rol propio"],
+      "max_burbujas": 3,
+      "max_parrafo": 230
     }
   ]
 }

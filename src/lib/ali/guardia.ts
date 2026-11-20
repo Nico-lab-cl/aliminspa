@@ -46,3 +46,43 @@ export function afirmacionesProhibidas(texto: string): string[] {
     }
     return [...motivos]
 }
+
+/**
+ * Largo y forma de la respuesta (20-11-2026). Con la ficha más larga, Haiku a
+ * veces responde varias preguntas en un párrafo de 400 caracteres en vez de
+ * listas con ✅ (Francisco, Facebook): se lee mal en el celular. Lo que se
+ * revisa es concreto y medible, no el estilo:
+ *   - ningún bloque de texto corrido (sin contar las líneas con ✅ ni los
+ *     enlaces) pasa de LARGO_MAXIMO caracteres;
+ *   - en redes, no más de 3 mensajes (los bloques que parten con ✅ se pegan
+ *     a su título, igual que en burbujasRedes).
+ */
+const LARGO_MAXIMO = 230
+
+export function problemasDeFormato(texto: string, canal: string): string[] {
+    const t = texto.trim()
+    if (!t || /^\[SIN_RESPUESTA\]$/i.test(t)) return []
+    const redes = canal !== 'web'
+    const bloques = t.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean)
+    const problemas: string[] = []
+
+    const largos = bloques
+        .map(b => b.split('\n').filter(l => !l.trim().startsWith('✅')).join(' ').replace(/https?:\/\/\S+/g, '').trim())
+        .filter(b => b.length > LARGO_MAXIMO)
+    if (largos.length) {
+        problemas.push(
+            redes
+                ? `Tiene ${largos.length === 1 ? 'un párrafo' : 'párrafos'} de ${largos.map(b => b.length).join(' y ')} caracteres: en el celular se ve como un bloque. Cada frase suelta, máximo 2 líneas; si son 2 o más datos, van en lista (una línea corta de título y debajo un dato por línea con ✅).`
+                : `Tiene ${largos.length === 1 ? 'un párrafo' : 'párrafos'} de ${largos.map(b => b.length).join(' y ')} caracteres: es un chat, 1 a 3 frases por mensaje.`
+        )
+    }
+
+    if (redes) {
+        let mensajes = 0
+        for (const b of bloques) if (!b.startsWith('✅') || mensajes === 0) mensajes++
+        if (mensajes > 3) {
+            problemas.push(`Son ${mensajes} mensajes: el máximo es 3. Si preguntó muchas cosas, responde lo principal en listas con ✅ y ofrécele lo demás en la pregunta final.`)
+        }
+    }
+    return problemas
+}

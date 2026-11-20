@@ -37,6 +37,8 @@ const ARCHIVO_CASOS = join(AQUI, 'ali-casos.json')
 const ARCHIVO_BASE = join(AQUI, 'ali-nota-base.json')
 const NOTA_MINIMA_CASO = 70
 const TOLERANCIA = 3
+/** Texto corrido máximo por mensaje, para todos los casos (guardia.ts corta en 230). */
+const MAX_PARRAFO = 260
 
 const args = process.argv.slice(2)
 const banderas = new Set(args.filter(a => a.startsWith('--')))
@@ -95,7 +97,7 @@ async function responderAli(caso) {
     const data = await res.json().catch(() => ({}))
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`)
     const burbujas = data.burbujas || []
-    return { burbujas, texto: burbujas.join('\n\n'), silencio: Boolean(data.silencio) }
+    return { burbujas, texto: burbujas.join('\n\n'), silencio: Boolean(data.silencio), derivacion: data.derivacion || null }
 }
 
 function revisarPorCodigo(caso, r) {
@@ -106,6 +108,14 @@ function revisarPorCodigo(caso, r) {
     for (const p of caso.contiene || []) if (!re(p).test(r.texto)) fallas.push(`no contiene /${p}/`)
     for (const p of caso.no_contiene || []) if (re(p).test(r.texto)) fallas.push(`contiene /${p}/`)
     if (caso.max_burbujas && r.burbujas.length > caso.max_burbujas) fallas.push(`${r.burbujas.length} mensajes (máximo ${caso.max_burbujas})`)
+    // Párrafos largos: el texto corrido de cada mensaje, sin las líneas con ✅ ni enlaces.
+    const maxParrafo = caso.max_parrafo ?? MAX_PARRAFO
+    for (const b of r.burbujas) {
+        const corrido = b.split('\n').filter(l => !l.trim().startsWith('✅')).join(' ').replace(/https?:\/\/\S+/g, '').trim()
+        if (corrido.length > maxParrafo) fallas.push(`párrafo de ${corrido.length} caracteres (máximo ${maxParrafo})`)
+    }
+    if (caso.deriva === true && !r.derivacion) fallas.push('debía derivar y no derivó')
+    if (caso.deriva === false && r.derivacion) fallas.push('derivó sin que correspondiera')
     return fallas
 }
 
@@ -113,7 +123,14 @@ async function juzgar(caso, r) {
     const res = await fetch(`${BASE}/api/ali/juez`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-ia-secret': SECRETO },
-        body: JSON.stringify({ canal: caso.canal, conversacion: caso.mensajes, respuesta: r.burbujas, silencio: r.silencio, debe: caso.debe || [] }),
+        body: JSON.stringify({
+            canal: caso.canal,
+            conversacion: caso.mensajes,
+            // El juez no ve las herramientas: si derivó, se lo contamos.
+            respuesta: r.derivacion ? [...r.burbujas, `[Nota para el juez, no es un mensaje: Ali usó derivar_a_asesor con el motivo "${r.derivacion.motivo || 'sin motivo'}"]`] : r.burbujas,
+            silencio: r.silencio,
+            debe: caso.debe || [],
+        }),
         signal: AbortSignal.timeout(90_000),
     })
     const data = await res.json().catch(() => ({}))
@@ -148,6 +165,7 @@ for (const caso of elegidos) {
         resultados.push({ nombre: caso.nombre, nota, pasa })
 
         console.log(`\n${pasa ? '✓' : '✗'} ${caso.nombre}${veredicto || fallasCodigo.length ? `   nota ${nota}` : ''}`)
+        if (r.derivacion) console.log(`   (derivó: ${r.derivacion.motivo || JSON.stringify(r.derivacion).slice(0, 80)})`)
         console.log(r.silencio && !r.burbujas.length ? '   (sin respuesta, a propósito)' : r.burbujas.map(b => `   │ ${b.replace(/\n/g, '\n   │ ')}`).join('\n   ·\n'))
         for (const f of fallasCodigo) console.log(`   ✗ código: ${f}`)
         for (const c of incumplidos) console.log(`   ✗ juez: ${c.debe} → ${c.motivo}`)

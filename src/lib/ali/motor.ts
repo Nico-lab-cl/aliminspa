@@ -13,7 +13,7 @@ import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramie
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
-import { afirmacionesProhibidas } from './guardia'
+import { afirmacionesProhibidas, problemasDeFormato } from './guardia'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -420,15 +420,21 @@ export async function correrModelo(p: {
 
         if (respuesta.stop_reason !== 'tool_use') {
             const texto = textoDe(respuesta.content) || textoAnterior
-            // Promesas que no se pueden hacer (guardia.ts): Ali reescribe una vez.
+            // Promesas que no se pueden hacer y respuestas demasiado largas
+            // (guardia.ts): Ali reescribe una sola vez.
             const malas = corregida ? [] : afirmacionesProhibidas(texto)
-            if (malas.length && vuelta < MAX_VUELTAS - 1) {
+            const forma = corregida ? [] : problemasDeFormato(texto, p.canal)
+            if ((malas.length || forma.length) && vuelta < MAX_VUELTAS - 1) {
                 corregida = true
-                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe por afirmaciones prohibidas: ${malas.join(' | ')}`)
+                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma].join(' | ')}`)
+                const partes = [
+                    malas.length ? `Tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}` : '',
+                    forma.length ? `Está demasiado larga para un chat:\n- ${forma.join('\n- ')}` : '',
+                ].filter(Boolean)
                 mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
                 mensajes.push({
                     role: 'user',
-                    content: `[Revisión interna antes de enviar, no es un mensaje del cliente] Tu respuesta tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}\nEscribe de nuevo tu respuesta completa para el cliente, igual de breve y con el mismo formato, sin esas afirmaciones. No menciones esta revisión.`,
+                    content: `[Revisión interna antes de enviar, no es un mensaje del cliente] Tu respuesta tiene que corregirse.\n${partes.join('\n')}\nEscribe de nuevo tu respuesta completa para el cliente, con los mismos datos, más breve y ordenada, siguiendo "Cómo se ven tus mensajes": las listas con ✅ se mantienen. No menciones esta revisión.`,
                 })
                 continue
             }
