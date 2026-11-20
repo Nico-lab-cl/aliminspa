@@ -283,11 +283,14 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
     const ultimoDeAli = [...entrada.mensajes].reverse().find(m => m.de === 'ali' && !esBrochure(m))?.texto ?? null
     // Postventa, fuera de tema, reclamo, etc.: no se le pide el nombre aunque sea el primer mensaje.
     const pedirNombre = !intencion || !SIN_PEDIR_NOMBRE.includes(intencion.tipo)
+    // Preguntó el precio: el nombre va en la respuesta siguiente, no pegado a los
+    // precios (Nicolás, 20-11-2026: muchos se iban después de "¿Con quién tengo el gusto?").
+    const preguntaPrecio = ultimos.some(m => /valor|precio|cu[aá]nto (vale|cuesta|sale|cobran)|cuotas?\b|\bpie\b|financ/i.test(m.texto))
 
     return [
         `Ahora en Chile: ${ahora} (hoy es ${hoyISO}).`,
         entrada.canal === 'whatsapp'
-            ? 'Canal: WhatsApp, al número de Alimin que atiendes tú. Ya tienes su teléfono (es el número desde el que escribe): nunca se lo pidas. Pídele el nombre y, cuando quiera agendar, el correo para coordinar la visita. Todo lo de Instagram y Facebook vale igual aquí, salvo lo del brochure y los comentarios.'
+            ? 'Canal: WhatsApp, al número de Alimin que atiendes tú. Ya tienes su teléfono (es el número desde el que escribe): nunca se lo pidas. Pídele el nombre y después el correo, como dice "Datos de contacto" (con el ofrecimiento del plano). Todo lo de Instagram y Facebook vale igual aquí, salvo lo del brochure y los comentarios.'
             : `Canal: mensaje privado de ${red}${entrada.via === 'comentario' ? ', a partir de un comentario en una publicación' : ''}.`,
         entrada.publicacion
             ? entrada.canal === 'whatsapp'
@@ -302,7 +305,10 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
         soloReaccion && !intencion
             ? 'Su último mensaje es solo un agradecimiento, un emoji o un sticker, sin pregunta: sigue la sección "Cuando la persona agradece, cierra o solo reacciona" (nada de precios ni datos nuevos; si tu último mensaje ya fue una despedida, escribe solo [SIN_RESPUESTA]).'
             : null,
-        primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre && !preguntaPrecio ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre && preguntaPrecio
+            ? 'Es tu primer mensaje en esta conversación y te preguntó el precio: preséntate corto y respóndelo. En este mensaje NO le pidas el nombre: cierra con "¿Te sirve más pagarlo al contado o en cuotas?" y pídele el nombre en tu respuesta siguiente.'
+            : null,
         primerMensaje && !entrada.memoria && (soloReaccion || !pedirNombre) ? 'Es tu primer mensaje en esta conversación: preséntate corto, sin pedirle el nombre.' : null,
         primerMensaje && entrada.memoria
             ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`

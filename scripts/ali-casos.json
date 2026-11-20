@@ -676,6 +676,68 @@
       "contiene": ["35\\.000\\.000", "37\\.990\\.000", "plano y limpio", "pozo potabilizada", "medidor", "estacionamiento de visitas", "(va|van) a entregar con rol propio"],
       "no_contiene": ["agua potable", "390 m²", "(ya )?(tiene|tienen) (su )?rol propio"],
       "max_burbujas": 3
+    },
+    {
+      "nombre": "Messenger: \"Valores??\" después del brochure → precio + lo que viene, cierra con contado o cuotas, sin pedir el nombre",
+      "origen": "Nicolás, 20-11-2026 (análisis: muchos se iban después de \"¿Con quién tengo el gusto?\")",
+      "canal": "facebook",
+      "tipo": "consulta",
+      "mensajes": [
+        { "de": "ali", "texto": "{{brochure}}" },
+        { "de": "cliente", "texto": "Valores??" }
+      ],
+      "debe": ["Presentarse corto y dar el precio completo", "Mandar la lista corta de lo que viene con el terreno", "Cerrar preguntando si le sirve más al contado o en cuotas", "No pedirle el nombre en este mensaje"],
+      "contiene": ["35\\.000\\.000", "contado o (en )?cuotas"],
+      "no_contiene": ["con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre"],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "Instagram: contesta \"en cuotas\" → explica el crédito directo y recién ahí le pide el nombre",
+      "origen": "Nicolás, 20-11-2026",
+      "canal": "instagram",
+      "tipo": ["da_datos", "consulta"],
+      "mensajes": [
+        { "de": "cliente", "texto": "Precio Lomas del mar 200m2?" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\nY viene con 😊\n✅ Terreno plano y limpio\n✅ Agua de pozo potabilizada, sin pagar cuenta de agua\n✅ Luz con medidor incluido\n✅ Estacionamiento de visitas\n✅ Se va a entregar con rol propio\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
+        { "de": "cliente", "texto": "En cuotas" }
+      ],
+      "debe": ["Explicar en pocas líneas el crédito directo (en pesos, sin banco, sin aval, sirve con DICOM)", "Preguntarle su nombre en ese mismo mensaje", "No repetir la lista de lo que viene con el terreno"],
+      "contiene": ["banco|aval|DICOM", "tengo el gusto|tu nombre|c[oó]mo te llamas"],
+      "no_contiene": ["plano y limpio"],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "Instagram: da su nombre después del precio → pide teléfono y correo juntos, ofreciendo el plano",
+      "origen": "Nicolás, 20-11-2026 (Ali conseguía teléfono en 3 de 15 conversaciones de Instagram)",
+      "canal": "instagram",
+      "tipo": ["da_datos"],
+      "mensajes": [
+        { "de": "cliente", "texto": "Precio Lomas del mar 200m2?" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
+        { "de": "cliente", "texto": "En cuotas" },
+        { "de": "ali", "texto": "Con crédito directo pagas en pesos, sin banco ni aval, y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Carla" }
+      ],
+      "debe": ["Saludar a Carla por su nombre", "Pedirle el teléfono y el correo juntos, en una frase", "Ofrecerle a cambio el plano con los lotes que quedan", "No insistir ni condicionar la ayuda a que dé los datos"],
+      "contiene": ["Carla", "tel[eé]fono[\\s\\S]*correo|correo[\\s\\S]*tel[eé]fono", "plano"],
+      "max_burbujas": 2
+    },
+    {
+      "nombre": "WhatsApp: da su nombre después del precio → pide solo el correo (el teléfono ya lo tiene), ofreciendo el plano",
+      "origen": "Nicolás, 20-11-2026",
+      "canal": "whatsapp",
+      "tipo": ["da_datos"],
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola, cuánto vale el de 200 m2 en Lomas del Mar?" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
+        { "de": "cliente", "texto": "Al contado" },
+        { "de": "ali", "texto": "Al contado se firma la compraventa en notaría y listo 😊\n\n¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Pedro" }
+      ],
+      "debe": ["Saludar a Pedro por su nombre", "Pedirle solo el correo, ofreciendo el plano con los lotes que quedan", "No pedirle el teléfono"],
+      "contiene": ["Pedro", "correo", "plano"],
+      "no_contiene": ["tel[eé]fono"],
+      "max_burbujas": 2
     }
   ]
 }
