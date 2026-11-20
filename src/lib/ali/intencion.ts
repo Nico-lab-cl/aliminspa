@@ -206,13 +206,21 @@ export const SIN_PEDIR_NOMBRE: TipoMensaje[] = ['cierre', 'fuera_de_tema', 'post
  * código, no el modelo: el 20-11 Ali se quedó callada ante un sticker aunque
  * su último mensaje era una pregunta).
  */
+/** El mensaje termina en pregunta (con o sin un emoji al final). */
+export function terminaEnPregunta(texto: string | null) {
+    return Boolean(texto && /\?\s*\S{0,3}\s*$/.test(texto.trim()))
+}
+
+/** Despedida fija para cuando Ali calló sin deber (su último mensaje era una pregunta). */
+export const DESPEDIDA_CORTA = 'Perfecto 😊 Cualquier duda me escribes por aquí'
+
 function guiaDeCierre(ultimoDeAli: string | null, web: boolean) {
     if (!ultimoDeAli) {
         return web
             ? 'Todavía no le has escrito: un solo mensaje de una línea, cálido, ofreciendo ayuda con dudas puntuales.'
             : 'Todavía no te presentas: un solo mensaje, en una línea y sin línea en blanco, te presentas y ofreces ayuda con dudas puntuales. Sin pedirle el nombre.'
     }
-    if (/\?\s*\S{0,3}\s*$/.test(ultimoDeAli.trim())) {
+    if (terminaEnPregunta(ultimoDeAli)) {
         return 'Tu último mensaje terminaba en una pregunta: SÍ respondes, con una sola línea cálida de despedida, sin repetir la pregunta.'
     }
     return 'Tu último mensaje ya fue un cierre sin pregunta: no respondas, escribe únicamente [SIN_RESPUESTA].'

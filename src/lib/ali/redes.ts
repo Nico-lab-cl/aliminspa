@@ -12,7 +12,7 @@ import {
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
 import { modoCierre } from './cierre'
-import { clasificarMensaje, guiaDeIntencion, SIN_PEDIR_NOMBRE, type Intencion } from './intencion'
+import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, SIN_PEDIR_NOMBRE, terminaEnPregunta, type Intencion } from './intencion'
 import type { DocumentoParaEnviar } from './documentos'
 
 /**
@@ -386,8 +386,13 @@ export async function conversarRedes(
         prueba: opciones.prueba,
     })
     // Ali eligió no responder (la persona solo volvió a agradecer o reaccionar).
-    const silencio = Boolean(final && SIN_RESPUESTA.test(final)) && !ctx.derivacion
+    // Solo vale si Ali ya se había despedido: si su último mensaje era una
+    // pregunta, la persona no puede quedar sin respuesta (despedida fija).
+    const ultimoDeAli = [...entrada.mensajes].reverse().find(m => m.de === 'ali' && !/^\[Mensaje automático/.test(m.texto))?.texto ?? null
+    const quiereCallar = Boolean(final && SIN_RESPUESTA.test(final)) && !ctx.derivacion
+    const silencio = quiereCallar && !terminaEnPregunta(ultimoDeAli)
     if (final) final = final.replace(/\[SIN_RESPUESTA\]/gi, '').trim()
+    if (quiereCallar && !silencio) final = DESPEDIDA_CORTA
     if (!final && ctx.derivacion) final = 'Ya le avisé a un asesor y te responde por este mismo chat a la brevedad 🙌'
 
     return {

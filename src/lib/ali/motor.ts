@@ -14,7 +14,7 @@ import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type Age
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
 import { afirmacionesProhibidas, problemasDeFormato } from './guardia'
-import { clasificarMensaje, guiaDeIntencion, type Intencion } from './intencion'
+import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, terminaEnPregunta, type Intencion } from './intencion'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -386,8 +386,12 @@ export async function conversar(
         prueba: opciones.prueba,
     })
     // Ali eligió no responder: la persona solo volvió a agradecer después de que se despidió.
-    const silencio = /^\s*\[SIN_RESPUESTA\]\s*$/i.test(final) && !herramientas.derivacion
-    return { texto: final.replace(/\[SIN_RESPUESTA\]/gi, '').trim(), intencion, silencio }
+    // Si su último mensaje era una pregunta, no puede callar: despedida fija.
+    const ultimoDeAli = [...contexto.mensajes].reverse().find(m => m.de === 'ali')?.texto ?? null
+    const quiereCallar = /^\s*\[SIN_RESPUESTA\]\s*$/i.test(final) && !herramientas.derivacion
+    const silencio = quiereCallar && !terminaEnPregunta(ultimoDeAli)
+    const texto = quiereCallar && !silencio ? DESPEDIDA_CORTA : final.replace(/\[SIN_RESPUESTA\]/gi, '').trim()
+    return { texto, intencion, silencio }
 }
 
 /**
