@@ -483,10 +483,10 @@ export async function correrModelo(p: {
             const texto = textoDe(respuesta.content) || textoAnterior
             // Promesas que no se pueden hacer y respuestas demasiado largas
             // (guardia.ts): Ali reescribe una sola vez.
-            // La forma se revisa solo la primera vez; las afirmaciones falsas,
-            // también en la reescrita (al acortar, a veces vuelve un "✅ Rol propio").
+            // Hasta dos reescrituras: al acortar a veces vuelve un "✅ Rol propio"
+            // o, al corregir un precio, queda un párrafo largo.
             const malas = correcciones < 2 ? afirmacionesProhibidas(texto) : []
-            const forma = correcciones === 0 ? problemasDeFormato(texto, p.canal) : []
+            const forma = correcciones < 2 ? problemasDeFormato(texto, p.canal) : []
             if ((malas.length || forma.length) && vuelta < MAX_VUELTAS - 1) {
                 correcciones++
                 console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma].join(' | ')}`)
