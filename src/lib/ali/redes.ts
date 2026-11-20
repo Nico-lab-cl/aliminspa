@@ -81,6 +81,36 @@ export interface RespuestaRedes {
     documentos: DocumentoParaEnviar[]
     /** Respuesta pública bajo el comentario, sin precios (solo vía comentario). */
     publica: string | null
+    /**
+     * Ali decidió no responder a propósito: la persona solo volvió a agradecer
+     * o reaccionar después de que Ali ya se despidió (Marcela, 20-11-2026). El
+     * CRM no debe tomarlo como falla.
+     */
+    silencio: boolean
+}
+
+/** Lo que escribe el modelo cuando no corresponde responder. */
+const SIN_RESPUESTA = /^\s*\[SIN_RESPUESTA\]\s*$/i
+
+/**
+ * Mensaje que es solo una reacción o un cierre: emojis, sticker, 👍 de
+ * Messenger o un agradecimiento corto sin pregunta. Sirve para avisarle a Ali
+ * que no es un pie para vender (casos de Marcela, 20-11-2026).
+ */
+export function esSoloReaccion(texto: string) {
+    const t = texto.trim()
+    if (!t || t.includes('?')) return false
+    if (/^(\[sticker\]\s*)+$/i.test(t)) return true
+    // Solo emojis (y espacios o signos sueltos).
+    const sinEmojis = t.replace(/[\p{Extended_Pictographic}\p{Emoji_Modifier}‍️\s!.¡,]/gu, '')
+    if (!sinEmojis) return true
+    const palabras = sinEmojis
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+    return /^(muchas)?(gracias|grx|graciass+)(por(la|tu|el)?(info|informacion|datos?|todo))?(igual)?$|^(ok|oka|okey|okis|listo|perfecto|dale|genial|buenisimo|bacan|yalovi|yaloleí|yalolei|entendido|vale|super)(gracias)?$/.test(
+        palabras.replace(/[^a-zñ]/g, '')
+    )
 }
 
 /* ── Respuesta pública bajo el comentario ────────────────────────────── */
@@ -240,6 +270,10 @@ function datosDelMomento(entrada: EntradaRedes) {
     const esBrochure = (m: MensajeRedes) => m.de === 'ali' && /^\[Mensaje automático/.test(m.texto)
     const yaMandoBrochure = entrada.mensajes.some(esBrochure)
     const primerMensaje = !entrada.mensajes.some(m => m.de === 'ali' && !esBrochure(m))
+    // Lo último que escribió la persona (desde tu último mensaje) es solo una reacción o un gracias.
+    const ultimos: MensajeRedes[] = []
+    for (let i = entrada.mensajes.length - 1; i >= 0 && entrada.mensajes[i].de === 'cliente'; i--) ultimos.unshift(entrada.mensajes[i])
+    const soloReaccion = ultimos.length > 0 && ultimos.every(m => !m.imagenUrl && esSoloReaccion(m.texto))
 
     return [
         `Ahora en Chile: ${ahora} (hoy es ${hoyISO}).`,
@@ -256,7 +290,11 @@ function datosDelMomento(entrada: EntradaRedes) {
         yaMandoBrochure
             ? 'Al principio de la conversación salió un mensaje automático con el brochure, los precios y el enlace: no lo repitas, responde lo que la persona pregunta ahora.'
             : null,
-        primerMensaje && !entrada.memoria ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        soloReaccion
+            ? 'Su último mensaje es solo un agradecimiento, un emoji o un sticker, sin pregunta: sigue la sección "Cuando la persona agradece, cierra o solo reacciona" (nada de precios ni datos nuevos; si tu último mensaje ya fue una despedida, escribe solo [SIN_RESPUESTA]).'
+            : null,
+        primerMensaje && !entrada.memoria && !soloReaccion ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensaje && !entrada.memoria && soloReaccion ? 'Es tu primer mensaje en esta conversación: preséntate corto, sin pedirle el nombre.' : null,
         primerMensaje && entrada.memoria
             ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`
             : null,
@@ -308,7 +346,7 @@ export async function conversarRedes(
     const publica = entrada.via === 'comentario' ? respuestaPublica() : null
 
     const mensajes = historial(entrada, await descargarFotos(entrada))
-    if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, documentos: [], publica }
+    if (!mensajes.length) return { burbujas: [], contacto: null, derivacion: null, visita: null, documentos: [], publica, silencio: false }
 
     let final = await correrModelo({
         system,
@@ -321,9 +359,13 @@ export async function conversarRedes(
         etiquetaConfig: cierre.version ?? config?.version ?? null,
         prueba: opciones.prueba,
     })
+    // Ali eligió no responder (la persona solo volvió a agradecer o reaccionar).
+    const silencio = Boolean(final && SIN_RESPUESTA.test(final)) && !ctx.derivacion
+    if (final) final = final.replace(/\[SIN_RESPUESTA\]/gi, '').trim()
     if (!final && ctx.derivacion) final = 'Ya le avisé a un asesor y te responde por este mismo chat a la brevedad 🙌'
 
     return {
+        silencio,
         burbujas: final ? burbujasRedes(final) : [],
         contacto: ctx.contacto ?? null,
         derivacion: ctx.derivacion,

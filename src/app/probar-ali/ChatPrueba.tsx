@@ -275,7 +275,13 @@ export default function ChatPrueba() {
                 }
                 setItems(prev => [...prev, { tipo: 'archivo', texto: d.nombre, url, imagen: d.tipo === 'imagen' }])
             }
-            if (!burbujas.length && !nuevos.length) nuevos.push({ tipo: 'aviso', texto: 'Ali no respondió nada a este mensaje.' })
+            if (!burbujas.length && !nuevos.length)
+                nuevos.push({
+                    tipo: 'aviso',
+                    texto: data.silencio
+                        ? 'Ali no respondió a propósito: solo volviste a agradecer o reaccionar después de que se despidió.'
+                        : 'Ali no respondió nada a este mensaje.',
+                })
             if (nuevos.length) setItems(prev => [...prev, ...nuevos])
         } catch (e) {
             setError(e instanceof Error ? e.message : 'Ali no pudo responder.')
