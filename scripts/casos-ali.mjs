@@ -9,11 +9,15 @@
  *
  *   node scripts/casos-ali.mjs                  # contra https://aliminspa.cl
  *   node scripts/casos-ali.mjs http://localhost:3000
+ *   node scripts/casos-ali.mjs audio            # solo los casos con "audio" en el nombre
  *
  * Cada caso cuesta una llamada a Claude. El endpoint deja 60 por hora por IP.
  */
 
-const BASE = (process.argv[2] || 'https://aliminspa.cl').replace(/\/$/, '')
+// Argumentos: una URL base (opcional) y un texto para correr solo los casos cuyo nombre lo contenga.
+const args = process.argv.slice(2)
+const BASE = (args.find(a => /^https?:\/\//.test(a)) || 'https://aliminspa.cl').replace(/\/$/, '')
+const FILTRO = (args.find(a => !/^https?:\/\//.test(a)) || '').toLowerCase()
 
 const BROCHURE =
     '[Mensaje automático con el brochure] ¡Hola! 👋 Te dejamos el brochure de Lomas del Mar con precios, formas de pago y lo que incluye. Lomas del Mar, terreno de 200 m², $35.000.000 al contado o pie de $5.500.000 y 60 cuotas de $550.000. Si tienes cualquier duda, escríbenos por aquí mismo y con gusto te ayudamos 😊'
@@ -135,6 +139,19 @@ const CASOS = [
             'no repite el precio del 390': r => !r.texto.includes('43.000.000'),
         },
     },
+    {
+        nombre: 'WhatsApp: audio "¿me escuchas?" → "te escucho", nunca "te leo"',
+        canal: 'whatsapp',
+        mensajes: [
+            cliente('Hola'),
+            ali('¡Hola! 👋 ¿En qué te puedo ayudar? Si estás buscando terreno en El Tabo, te cuento de Lomas del Mar o de Arena y Sol.'),
+            cliente('🎤 (audio) Hola, ¿me escuchas?'),
+        ],
+        reglas: {
+            'dice que lo escucha': r => /escucho|escuchar/i.test(r.texto),
+            'no dice "te leo"': r => !/te leo|leo bien|leerte/i.test(r.texto),
+        },
+    },
 ]
 
 async function correr(caso) {
@@ -154,8 +171,9 @@ async function correr(caso) {
     return { burbujas, texto: burbujas.join('\n\n'), silencio: Boolean(data.silencio) }
 }
 
+const elegidos = CASOS.filter(c => !FILTRO || c.nombre.toLowerCase().includes(FILTRO))
 let fallas = 0
-for (const caso of CASOS) {
+for (const caso of elegidos) {
     try {
         const r = await correr(caso)
         const malas = Object.entries(caso.reglas).filter(([, ok]) => !ok(r)).map(([n]) => n)
@@ -168,5 +186,5 @@ for (const caso of CASOS) {
         console.log(`\n✗ ${caso.nombre}\n   error: ${error.message}`)
     }
 }
-console.log(`\n${CASOS.length - fallas}/${CASOS.length} casos bien.`)
+console.log(`\n${elegidos.length - fallas}/${elegidos.length} casos bien.`)
 process.exit(fallas ? 1 : 0)
