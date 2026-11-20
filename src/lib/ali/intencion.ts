@@ -85,7 +85,7 @@ const HERRAMIENTA: Anthropic.Tool = {
     },
 }
 
-const SISTEMA = `Clasificas mensajes que le llegan a Ali, la asistente virtual de Alimin, una inmobiliaria que vende terrenos en El Tabo (Chile), por Instagram, Facebook y WhatsApp. No respondes al cliente: solo dices qué tipo de mensaje es su ÚLTIMO mensaje (o sus últimos mensajes seguidos, si mandó varios), mirando la conversación para entenderlo.
+const SISTEMA = `Clasificas mensajes que le llegan a Ali, la asistente virtual de Alimin, una inmobiliaria que vende terrenos en El Tabo (Chile), por Instagram, Facebook, WhatsApp y el chat de su página web. No respondes al cliente: solo dices qué tipo de mensaje es su ÚLTIMO mensaje (o sus últimos mensajes seguidos, si mandó varios), mirando la conversación para entenderlo.
 
 Tipos
 ${DESCRIPCION_TIPOS}
@@ -184,6 +184,20 @@ const GUIAS: Record<TipoMensaje, string> = {
         'No tiene que ver con comprar un terreno. Un solo mensaje de una o dos frases: amable, dile que por aquí atiendes consultas de los terrenos de Alimin. No te presentes con lista, no le pidas el nombre ni datos y no derives.',
 }
 
+/**
+ * En el chat web la persona ya dejó nombre, teléfono y correo en el
+ * formulario, y ahí no van listas con ✅ ni el "Sin enlaces" de redes: estas
+ * guías reemplazan a las de arriba para el canal web.
+ */
+const GUIAS_WEB: Partial<Record<TipoMensaje, string>> = {
+    saludo: 'Solo saludó o pidió información general. Salúdala por su nombre si lo tienes y pregúntale qué le interesa saber (precio, ubicación, cómo son). Nada de precios todavía.',
+    consulta: 'Hizo una pregunta concreta. Respóndela directo y breve, 1 a 3 frases por mensaje.',
+    varias_preguntas:
+        'Hizo muchas preguntas juntas. Responde lo principal en mensajes breves (máximo 3, ningún párrafo largo) y ofrécele lo demás en la pregunta final.',
+    quiere_visitar: 'Quiere visitar. Sigue el flujo de agenda con tus herramientas: proyecto, horarios disponibles y agendar.',
+    fuera_de_tema: 'No tiene que ver con comprar un terreno. Un solo mensaje de una o dos frases, amable: por aquí atiendes consultas de los terrenos de Alimin. No derives.',
+}
+
 /** Tipos en los que Ali NO debe pedir el nombre aunque sea su primer mensaje. */
 export const SIN_PEDIR_NOMBRE: TipoMensaje[] = ['cierre', 'fuera_de_tema', 'postventa', 'pide_persona', 'quiere_reservar', 'reclamo', 'confusion']
 
@@ -192,9 +206,11 @@ export const SIN_PEDIR_NOMBRE: TipoMensaje[] = ['cierre', 'fuera_de_tema', 'post
  * código, no el modelo: el 20-11 Ali se quedó callada ante un sticker aunque
  * su último mensaje era una pregunta).
  */
-function guiaDeCierre(ultimoDeAli: string | null) {
+function guiaDeCierre(ultimoDeAli: string | null, web: boolean) {
     if (!ultimoDeAli) {
-        return 'Todavía no te presentas: un solo mensaje, en una línea y sin línea en blanco, te presentas y ofreces ayuda con dudas puntuales. Sin pedirle el nombre.'
+        return web
+            ? 'Todavía no le has escrito: un solo mensaje de una línea, cálido, ofreciendo ayuda con dudas puntuales.'
+            : 'Todavía no te presentas: un solo mensaje, en una línea y sin línea en blanco, te presentas y ofreces ayuda con dudas puntuales. Sin pedirle el nombre.'
     }
     if (/\?\s*\S{0,3}\s*$/.test(ultimoDeAli.trim())) {
         return 'Tu último mensaje terminaba en una pregunta: SÍ respondes, con una sola línea cálida de despedida, sin repetir la pregunta.'
@@ -206,13 +222,14 @@ function guiaDeCierre(ultimoDeAli: string | null) {
  * Bloque para "datos del momento": qué es el mensaje y qué hacer con él.
  * `ultimoDeAli`: el último mensaje que escribió Ali (sin contar el brochure automático), o null.
  */
-export function guiaDeIntencion(i: Intencion | null, ultimoDeAli: string | null = null): string | null {
+export function guiaDeIntencion(i: Intencion | null, ultimoDeAli: string | null = null, canal = 'instagram'): string | null {
     if (!i) return null
+    const web = canal === 'web'
     return [
         `# Qué es su último mensaje (clasificado antes de responder)`,
         `Tipo: ${i.tipo}${i.resumen ? `. ${i.resumen}` : ''}`,
-        GUIAS[i.tipo],
-        i.tipo === 'cierre' ? guiaDeCierre(ultimoDeAli) : null,
+        (web && GUIAS_WEB[i.tipo]) || GUIAS[i.tipo],
+        i.tipo === 'cierre' ? guiaDeCierre(ultimoDeAli, web) : null,
         i.cree_que_es_otra_persona ? 'Te habla como si fueras otra persona: aclárale en una frase que eres Ali, el asistente virtual de Alimin.' : null,
         'Si al leer la conversación ves que el tipo no calza, atiende según tu ficha.',
     ]

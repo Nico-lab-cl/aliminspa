@@ -14,6 +14,7 @@ import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type Age
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
 import { afirmacionesProhibidas, problemasDeFormato } from './guardia'
+import { clasificarMensaje, guiaDeIntencion, type Intencion } from './intencion'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -194,7 +195,12 @@ async function responder(turno: Turno) {
 
     let texto: string
     try {
-        texto = await conversar(contexto, herramientas, sesion)
+        const r = await conversar(contexto, herramientas, sesion)
+        if (r.silencio) {
+            console.log(`[ali] Sin respuesta a propósito en ${sesion.conversationId} (solo volvió a agradecer)`)
+            return
+        }
+        texto = r.texto
     } catch (error) {
         console.error('[ali] Claude no respondió:', error)
         // Sin respuesta del modelo (caída, sin saldo) la persona no puede
@@ -241,7 +247,8 @@ function resumenCorto(contexto: ContextoAli) {
 }
 
 /** Fecha, hora y datos del cliente: van fuera del bloque cacheado. */
-function datosDelMomento(contexto: ContextoAli) {
+function datosDelMomento(contexto: ContextoAli, intencion: Intencion | null) {
+    const ultimoDeAli = [...contexto.mensajes].reverse().find(m => m.de === 'ali')?.texto ?? null
     const ahora = new Date().toLocaleString('es-CL', {
         timeZone: TIMEZONE,
         weekday: 'long',
@@ -263,13 +270,14 @@ function datosDelMomento(contexto: ContextoAli) {
         contexto.memoria
             ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${contexto.memoria.slice(0, 8000)}`
             : null,
+        intencion ? `\n${guiaDeIntencion(intencion, ultimoDeAli, 'web')}` : null,
     ]
         .filter(Boolean)
         .join('\n')
 }
 
 /** Arma el historial en el formato de la API, con las fotos más recientes. */
-async function historial(contexto: ContextoAli, sesion: ChatSession) {
+async function historial(contexto: ContextoAli, sesion: ChatSession | null) {
     const fotos = contexto.mensajes
         .filter(m => m.de === 'cliente' && m.adjunto?.tipo === 'image' && TIPOS_DE_IMAGEN.has(m.adjunto.mimeType))
         .slice(-MAX_FOTOS)
@@ -283,7 +291,7 @@ async function historial(contexto: ContextoAli, sesion: ChatSession) {
         const bloques: Anthropic.ContentBlockParam[] = []
 
         if (m.adjunto && rol === 'user') {
-            if (fotos.includes(m.id)) {
+            if (fotos.includes(m.id) && sesion) {
                 try {
                     const { contenido, mimeType } = await leerAdjunto(sesion, m.adjunto.id)
                     bloques.push({
@@ -326,13 +334,30 @@ async function historial(contexto: ContextoAli, sesion: ChatSession) {
  * Conversa con Claude, resolviendo las herramientas, y devuelve el texto final.
  * Se exporta para probar conversaciones sin pasar por el CRM.
  */
-export async function conversar(contexto: ContextoAli, herramientas: ContextoHerramientas, sesion: ChatSession) {
+export async function conversar(
+    contexto: ContextoAli,
+    herramientas: ContextoHerramientas,
+    sesion: ChatSession | null,
+    opciones: { conversacionId?: string; prueba?: boolean } = {}
+) {
     const nombres = HERRAMIENTAS.map(h => h.name)
-    const [mensajes, remota, cierre] = await Promise.all([
+    const conversacionId = sesion?.conversationId || opciones.conversacionId || 'sin-id'
+    // Fase 3: qué es el último mensaje, en paralelo con lo demás (intencion.ts).
+    const [mensajes, remota, cierre, intencion] = await Promise.all([
         historial(contexto, sesion),
         configRemota(),
         modoCierre(contexto.agente, nombres),
+        clasificarMensaje({
+            mensajes: contexto.mensajes.map(m => ({ de: m.de, texto: m.texto || (m.adjunto ? `[${m.adjunto.tipo}]` : '') })),
+            memoria: contexto.memoria,
+            conversacionId,
+            canal: 'web',
+            prueba: opciones.prueba,
+        }),
     ])
+    if (intencion) {
+        console.log(`[ali${opciones.prueba ? ':prueba' : ''}] mensaje tipo ${intencion.tipo}${intencion.cree_que_es_otra_persona ? ' (cree que es otra persona)' : ''}: ${intencion.resumen}`)
+    }
 
     // La config del CRM web solo cuenta si el equipo dejó el agente activo;
     // si no, o si no llegó, Ali sigue con lo local tal cual.
@@ -346,19 +371,51 @@ export async function conversar(contexto: ContextoAli, herramientas: ContextoHer
         ...(extra ? [{ type: 'text' as const, text: extra, cache_control: { type: 'ephemeral' as const } }] : []),
         // Si la persona ya llegó a la visita y el Cierre está encendido.
         ...cierre.bloques,
-        { type: 'text', text: datosDelMomento(contexto) },
+        { type: 'text', text: datosDelMomento(contexto, intencion) },
     ]
 
-    return correrModelo({
+    const final = await correrModelo({
         system,
         mensajes,
         tools: herramientasActivas,
         herramientas,
-        conversacionId: sesion.conversationId,
+        conversacionId,
         canal: 'web',
         agente: cierre.agente,
         etiquetaConfig: cierre.version ?? config?.version ?? null,
+        prueba: opciones.prueba,
     })
+    // Ali eligió no responder: la persona solo volvió a agradecer después de que se despidió.
+    const silencio = /^\s*\[SIN_RESPUESTA\]\s*$/i.test(final) && !herramientas.derivacion
+    return { texto: final.replace(/\[SIN_RESPUESTA\]/gi, '').trim(), intencion, silencio }
+}
+
+/**
+ * Chat web en modo prueba (/api/ali/prueba con canal "web", banco de pruebas):
+ * misma Ali que el chat de aliminspa.cl, sin sesión ni CRM; agendar solo valida.
+ */
+export async function conversarWebPrueba(
+    entrada: { mensajes: { de: 'cliente' | 'ali'; texto: string }[]; cliente: { nombre: string | null; telefono: string | null; email: string | null }; id: string },
+    request: NextRequest
+) {
+    const contexto: ContextoAli = {
+        activa: true,
+        derivadaAt: null,
+        mensajes: entrada.mensajes.map((m, i) => ({ id: `p${i}`, texto: m.texto, de: m.de, derivacion: false, createdAt: '', adjunto: null })),
+        cliente: { ...entrada.cliente, interes: null },
+        asesorAsignado: null,
+        memoria: null,
+        agente: null,
+    }
+    const herramientas: ContextoHerramientas = { cliente: entrada.cliente, request, derivacion: null, simulacion: true, canal: 'web' }
+    const r = await conversar(contexto, herramientas, null, { conversacionId: `prueba-web-${entrada.id}`, prueba: true })
+    return {
+        burbujas: r.texto ? enBurbujas(r.texto) : [],
+        derivacion: herramientas.derivacion,
+        visita: herramientas.visita ?? null,
+        silencio: r.silencio,
+        intencion: r.intencion,
+    }
 }
 
 /**

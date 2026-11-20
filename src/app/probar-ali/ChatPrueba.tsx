@@ -13,7 +13,7 @@ import styles from './page.module.css'
  * sola en el CRM web (/api/ali/prueba/guardar → Agentes IA → Pruebas del equipo).
  */
 
-type Canal = 'instagram' | 'facebook' | 'whatsapp'
+type Canal = 'instagram' | 'facebook' | 'whatsapp' | 'web'
 type Voto = 'bien' | 'mal'
 
 type Item =
@@ -60,6 +60,7 @@ const CANALES: { id: Canal; nombre: string }[] = [
     { id: 'instagram', nombre: 'Instagram' },
     { id: 'facebook', nombre: 'Facebook' },
     { id: 'whatsapp', nombre: 'WhatsApp' },
+    { id: 'web', nombre: 'Chat web' },
 ]
 
 const SUGERENCIAS = ['Hola, quiero info', '¿Cuánto cuestan los terrenos?', '¿Vienen con rol propio?', '¿Tienen agua y luz?']

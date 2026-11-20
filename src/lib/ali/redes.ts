@@ -308,7 +308,7 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
             ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`
             : null,
         entrada.memoria ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${entrada.memoria}` : null,
-        intencion ? `\n${guiaDeIntencion(intencion, ultimoDeAli)}` : null,
+        intencion ? `\n${guiaDeIntencion(intencion, ultimoDeAli, entrada.canal)}` : null,
     ]
         .filter(Boolean)
         .join('\n')

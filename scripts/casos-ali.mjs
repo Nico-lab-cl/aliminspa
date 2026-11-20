@@ -90,7 +90,7 @@ async function responderAli(caso) {
         body: JSON.stringify({
             canal: caso.canal,
             id: `banco-${Date.now()}`,
-            cliente: { nombre: null, telefono: null, email: null },
+            cliente: { nombre: null, telefono: null, email: null, ...(caso.cliente || {}) },
             mensajes: caso.mensajes,
         }),
     })

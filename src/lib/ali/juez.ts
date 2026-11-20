@@ -130,7 +130,11 @@ ${ficha.texto}`
         messages: [
             {
                 role: 'user',
-                content: `Canal: ${p.canal}\n\nConversación hasta el último mensaje del cliente:\n${conversacion}\n\nRespuesta de Ali:\n${respuesta}\n\nLo que debía hacer:\n${debe}`,
+                content: `Canal: ${p.canal}${
+                    p.canal === 'web'
+                        ? ' (chat de la página web: la persona ya dejó nombre, teléfono y correo en el formulario; la sección "Esta conversación es por Instagram o Facebook" y lo que sigue NO aplican)'
+                        : ''
+                }\n\nConversación hasta el último mensaje del cliente:\n${conversacion}\n\nRespuesta de Ali:\n${respuesta}\n\nLo que debía hacer:\n${debe}`,
             },
         ],
     })

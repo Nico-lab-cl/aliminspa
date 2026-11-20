@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { aliHabilitada } from '@/lib/ali/motor'
+import { aliHabilitada, conversarWebPrueba } from '@/lib/ali/motor'
 import { conversarRedes, validarEntrada } from '@/lib/ali/redes'
 
 export const dynamic = 'force-dynamic'
@@ -49,8 +49,31 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
     }
 
-    const canal = json.canal === 'facebook' || json.canal === 'whatsapp' ? json.canal : 'instagram'
     const id = typeof json.id === 'string' ? json.id.replace(/[^a-z0-9-]/gi, '').slice(0, 40) : ''
+
+    // Chat web (20-11-2026): misma Ali que el chat de aliminspa.cl, sin sesión ni CRM.
+    if (json.canal === 'web') {
+        const mensajes = (Array.isArray(json.mensajes) ? json.mensajes : [])
+            .slice(-40)
+            .map(m => (m && typeof m === 'object' ? (m as Record<string, unknown>) : {}))
+            .filter(m => (m.de === 'cliente' || m.de === 'ali') && typeof m.texto === 'string' && m.texto.trim())
+            .map(m => ({ de: m.de as 'cliente' | 'ali', texto: String(m.texto).slice(0, 4000) }))
+        if (!mensajes.length || mensajes[mensajes.length - 1].de !== 'cliente') {
+            return NextResponse.json({ error: 'Falta tu mensaje' }, { status: 400 })
+        }
+        const c = (json.cliente && typeof json.cliente === 'object' ? json.cliente : {}) as Record<string, unknown>
+        const dato = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, 120) : null)
+        // En la web la persona ya dejó sus datos en el formulario antes de escribir.
+        const cliente = { nombre: dato(c.nombre) || 'Visitante', telefono: dato(c.telefono) || '+56900000000', email: dato(c.email) || 'prueba@ejemplo.cl' }
+        try {
+            return NextResponse.json(await conversarWebPrueba({ mensajes, cliente, id: id || 'anonima' }, request))
+        } catch (error) {
+            console.error('[ali:prueba] No se pudo responder (web):', error)
+            return NextResponse.json({ error: 'Ali no pudo responder. Intenta de nuevo.' }, { status: 502 })
+        }
+    }
+
+    const canal = json.canal === 'facebook' || json.canal === 'whatsapp' ? json.canal : 'instagram'
     const entrada = validarEntrada({
         canal,
         via: 'dm',
