@@ -488,12 +488,28 @@ export async function correrModelo(p: {
             const malas = correcciones < 2 ? afirmacionesProhibidas(texto) : []
             const forma = correcciones < 2 ? problemasDeFormato(texto, p.canal) : []
             const jerga = correcciones < 2 ? modismos(texto) : []
-            if ((malas.length || forma.length || jerga.length) && vuelta < MAX_VUELTAS - 1) {
+            // Anuncia el plano sin haber llamado a enviar_documento: la persona
+            // se quedaba esperando un archivo que nunca llegaba (banco del 20-11).
+            const sinArchivo =
+                correcciones < 2 &&
+                p.tools.some(t => t.name === 'enviar_documento') &&
+                !herramientas.documentos?.length &&
+                anunciaPlano(texto)
+            if ((malas.length || forma.length || jerga.length || sinArchivo) && vuelta < MAX_VUELTAS - 1) {
                 correcciones++
-                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma, ...jerga].join(' | ')}`)
+                console.warn(`[ali${p.canal === 'web' ? '' : `:${p.canal}`}] Reescribe: ${[...malas, ...forma, ...jerga, ...(sinArchivo ? ['anuncia el plano sin enviarlo'] : [])].join(' | ')}`)
+                if (sinArchivo && !malas.length && !forma.length && !jerga.length) {
+                    mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
+                    mensajes.push({
+                        role: 'user',
+                        content: '[Revisión interna antes de enviar, no es un mensaje del cliente] Le dices que le mandas el plano, pero no usaste enviar_documento, así que no le llegaría. Llama ahora a enviar_documento con el plano de su proyecto y después escribe de nuevo tu respuesta completa (si el plano ya se lo mandaste antes en la conversación, no lo anuncies). No menciones esta revisión.',
+                    })
+                    continue
+                }
                 const partes = [
                     malas.length ? `Tiene afirmaciones que no son ciertas:\n- ${malas.join('\n- ')}` : '',
                     forma.length ? `Está demasiado larga para un chat:\n- ${forma.join('\n- ')}` : '',
+                    sinArchivo ? 'Le dices que le mandas el plano, pero no usaste enviar_documento: llámalo con el plano de su proyecto antes de responder (si ya se lo mandaste antes, no lo anuncies).' : '',
                     jerga.length ? `Usa modismos que Ali nunca usa (${jerga.map(j => `"${j}"`).join(', ')}): escribe en un español cercano pero cuidado, por ejemplo "de inmediato" en vez de "al tiro".` : '',
                 ].filter(Boolean)
                 mensajes.push({ role: 'assistant', content: respuesta.content.length ? respuesta.content : [{ type: 'text', text: texto }] })
@@ -532,4 +548,19 @@ export async function correrModelo(p: {
     }
 
     throw new Error('Ali superó el máximo de vueltas de herramientas')
+}
+
+/**
+ * Ali afirma que manda el plano ahora ("Te mando el plano con los lotes que
+ * quedan 👇"). No cuenta el ofrecimiento: "¿Me dejas tu correo? Así te mando
+ * el plano" o "si quieres, te mando el plano".
+ */
+export function anunciaPlano(texto: string): boolean {
+    const frases = texto.split(/(?<=[.!?\n👇])\s*/)
+    return frases.some(
+        f =>
+            !f.includes('?') &&
+            !/^(y )?(así|si |para |cuando |apenas )/i.test(f.trim()) &&
+            /\b(te|le)\s+(mando|env[ií]o|dejo|paso|comparto|adjunto)\b[^.\n]{0,40}\bplanos?\b|\b(ah[ií]|aqu[ií]) (te )?va el plano/i.test(f)
+    )
 }
