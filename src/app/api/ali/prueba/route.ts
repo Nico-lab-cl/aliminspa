@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { aliHabilitada, conversarWebPrueba } from '@/lib/ali/motor'
+import { secretoValido } from '@/lib/ali/juez'
 import { conversarRedes, validarEntrada } from '@/lib/ali/redes'
 
 export const dynamic = 'force-dynamic'
@@ -38,7 +39,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'El chat de prueba está apagado.' }, { status: 503 })
     }
     const ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'sin-ip'
-    if (!dentroDelLimite(ip)) {
+    // El banco de pruebas (scripts/casos-ali.mjs) manda x-ia-secret: no cuenta para el límite.
+    if (!secretoValido(request.headers.get('x-ia-secret')) && !dentroDelLimite(ip)) {
         return NextResponse.json({ error: 'Llegaste al límite de mensajes de prueba por hora. Intenta más tarde.' }, { status: 429 })
     }
 

@@ -24,7 +24,7 @@
  * Cuándo correrlo: después de cada despliegue que toque a Ali (las pruebas van
  * contra el sitio publicado). Si la nota baja, se vuelve a la versión anterior
  * en EasyPanel y se corrige antes de publicar de nuevo.
- * Costo: ~US$0,002 por caso (respuesta de Ali + juez). El chat de prueba deja 60 por hora por IP.
+ * Costo: ~US$0,002 por caso (respuesta de Ali + juez). Con la clave no cuenta para el límite de 60 por hora del chat de prueba.
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
@@ -86,7 +86,8 @@ async function casosDelCrm() {
 async function responderAli(caso) {
     const res = await fetch(`${BASE}/api/ali/prueba`, {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        // Con la clave, el banco no cuenta para el límite de 60 por hora del chat de prueba.
+        headers: { 'content-type': 'application/json', ...(SECRETO ? { 'x-ia-secret': SECRETO } : {}) },
         body: JSON.stringify({
             canal: caso.canal,
             id: `banco-${Date.now()}`,
