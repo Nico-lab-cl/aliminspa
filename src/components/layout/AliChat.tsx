@@ -733,7 +733,7 @@ export default function AliChat({ utmPorDefecto }: AliChatProps = {}) {
                 <div className={`${styles.burbuja} ${styles.deAsesor} ${styles.saludo}`}>
                     <span className={styles.autor}>Ali</span>
                     <span className={styles.texto}>
-                        ¡Hola! 👋 Soy <strong>Ali</strong>, el asistente virtual de{' '}
+                        ¡Hola! 👋 Soy <strong>Ali</strong>, del equipo de{' '}
                         <strong>Alimin Inmobiliaria</strong>. ¿Cómo puedo ayudarte hoy con la
                         cotización de tu terreno?
                     </span>

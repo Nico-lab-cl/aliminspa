@@ -597,6 +597,64 @@
       "contiene": ["35\\.000\\.000"],
       "no_contiene": ["(ya )?(tiene|tienen) (su )?rol propio"],
       "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: \"Hola\" → se presenta \"del equipo de Alimin 👋\", nunca \"asistente virtual\"",
+      "origen": "Nicolás, WhatsApp, 20-11-2026",
+      "canal": "whatsapp",
+      "tipo": "saludo",
+      "mensajes": [{ "de": "cliente", "texto": "Hola buenas" }],
+      "debe": ["Presentarse como Ali, del equipo de Alimin, con el emoji 👋", "Preguntarle su nombre o qué le interesa saber", "No mandar precios"],
+      "contiene": ["del equipo de Alimin", "👋"],
+      "no_contiene": ["asistente virtual", "\\$"],
+      "max_burbujas": 2
+    },
+    {
+      "nombre": "WhatsApp: le corrigen el saludo → lo acepta sin justificarse ni ofrecer asesor",
+      "origen": "Nicolás, WhatsApp, 20-11-2026",
+      "canal": "whatsapp",
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola buenas" },
+        { "de": "ali", "texto": "Hola, soy Ali, el asistente virtual de Alimin. ¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Por que asistente virtual? Prefiero que diga Hola soy Ali del equipo de Alimin como lo hacias antes" }
+      ],
+      "debe": ["Aceptarlo en pocas palabras y presentarse como Ali, del equipo de Alimin", "Seguir la conversación (por ejemplo, preguntarle su nombre o en qué le ayuda)", "No justificarse con reglas ni decir que no puede", "No ofrecer pasarlo con un asesor ni derivar"],
+      "deriva": false,
+      "contiene": ["del equipo de Alimin"],
+      "no_contiene": ["asistente virtual", "no puedo", "te paso con|un asesor"],
+      "max_burbujas": 2
+    },
+    {
+      "nombre": "WhatsApp: \"dame información de Lomas del Mar\" → precios completos, sin aclarar el pie ni ofrecer asesor",
+      "origen": "Nicolás, WhatsApp, 20-11-2026",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": { "nombre": "Nicolás" },
+      "mensajes": [
+        { "de": "cliente", "texto": "Hola" },
+        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 ¿Con quién tengo el gusto?" },
+        { "de": "cliente", "texto": "Nicolás. Dame información de Lomas del Mar" }
+      ],
+      "debe": ["Dar los precios completos de Lomas del Mar (contado y crédito con el total)", "No aclarar que el \"desde $5.500.000\" es el pie: nadie lo confundió", "No ofrecer pasarlo con un asesor"],
+      "contiene": ["35\\.000\\.000"],
+      "no_contiene": ["desde \\$5\\.500\\.000", "precio total", "te paso con|que te contacte un asesor|un asesor te (escriba|contacte)"],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: elige el de 200 m² → le da la información de esa opción antes de invitar a la visita",
+      "origen": "Nicolás, WhatsApp, 20-11-2026 (tuvo que preguntar \"¿Y la información?\")",
+      "canal": "whatsapp",
+      "tipo": ["da_datos", "consulta"],
+      "cliente": { "nombre": "Nicolás" },
+      "mensajes": [
+        { "de": "cliente", "texto": "Dame información de Lomas del Mar" },
+        { "de": "ali", "texto": "Lomas del Mar, a 10 minutos de la playa 🌊\n✅ 200 m², $35.000.000 al contado\n✅ 200 m² con crédito, pie de $5.500.000, 60 cuotas de $550.000 y $37.990.000 en total\n✅ 390 m², $43.000.000 al contado\n✅ 390 m² con crédito, pie de $7.500.000, 70 cuotas de $550.000 y $45.990.000 en total\n\n¿Cuál de los dos tamaños te interesa?" },
+        { "de": "cliente", "texto": "Me interesa el de 200m2" }
+      ],
+      "debe": ["Darle en ese mensaje información del terreno de 200 m² que todavía no tenía (por ejemplo, qué incluye o la entrega aproximada), en lista con ✅", "No responder solo \"perfecto\" ni saltar directo a la visita", "Si invita a la visita, que sea después de la información", "No ofrecer pasarlo con un asesor"],
+      "contiene": ["✅"],
+      "no_contiene": ["te paso con|que te contacte un asesor"],
+      "max_burbujas": 3
     }
   ]
 }

@@ -55,7 +55,7 @@ export interface Intencion {
 const DESCRIPCION_TIPOS = `- saludo: solo saluda o escribe "info", "hola", "precio?" sin decir de qué, o algo igual de general. También si pregunta si lo escuchas o si te llegó su audio ("¿me escuchas?").
 - consulta: una o dos preguntas concretas (precio, ubicación, cuotas, qué incluye, entrega, agua, luz, escritura, visita…).
 - varias_preguntas: tres o más preguntas o temas en el mismo mensaje o en mensajes seguidos.
-- da_datos: contesta lo que Ali le preguntó (su nombre, su correo, un día u horario, para qué lo quiere, qué proyecto) sin hacer una pregunta nueva. Un "gracias" junto a su nombre es da_datos, no cierre.
+- da_datos: contesta lo que Ali le preguntó (su nombre, su correo, un día u horario, para qué lo quiere, qué proyecto o qué tamaño le interesa) sin hacer una pregunta nueva. Un "gracias" junto a su nombre es da_datos, no cierre.
 - cierre: solo agradece o acusa recibo ("gracias", "ok", "ya lo vi", "perfecto"), o es solo emojis o un sticker, sin pregunta ni dato.
 - objecion_precio: dice que es caro, que no le alcanza o que no tiene el pie.
 - duda_o_desconfianza: desconfía ("¿es estafa?", "¿son reales?"), le parece lejos, duda de los papeles o de la empresa, o pone otra objeción que no es el precio.
@@ -159,12 +159,12 @@ export async function clasificarMensaje(p: {
  * un recordatorio de la sección de la ficha que aplica, no una ficha nueva.
  */
 const GUIAS: Record<TipoMensaje, string> = {
-    saludo: 'Solo saludó o pidió información general. Preséntate si no lo has hecho y pregúntale su nombre y qué le interesa saber (precio, ubicación, cómo son). Nada de precios ni listas todavía.',
+    saludo: 'Solo saludó o pidió información general. Si no te has presentado, hazlo con "Hola, soy Ali, del equipo de Alimin 👋" (con el 👋, nunca "asistente virtual") y pregúntale su nombre y qué le interesa saber (precio, ubicación, cómo son). Nada de precios ni listas todavía.',
     consulta: 'Hizo una pregunta concreta. Respóndela directo, con lista ✅ si son 2 o más datos. Si no sabes su nombre, pregúntaselo al final ("¿con quién tengo el gusto?").',
     varias_preguntas:
         'Hizo muchas preguntas juntas. Respóndelas en listas cortas con ✅ agrupadas por tema (precio y crédito en una, qué incluye en otra), máximo 3 mensajes y ningún párrafo. Lo que no alcance, ofrécelo en la pregunta final.',
     da_datos:
-        'Te está respondiendo lo que le preguntaste: no es una despedida. Si te dio su nombre, salúdala por su nombre. Si tenía una pregunta pendiente, respóndela ahora; si no, hazle una pregunta abierta corta. No repitas datos que ya le diste.',
+        'Te está respondiendo lo que le preguntaste: no es una despedida. Si te dio su nombre, salúdala por su nombre. Si tenía una pregunta pendiente, respóndela ahora. Si eligió una opción que le mostraste (un proyecto o un tamaño), eso es pedirte más de esa opción: dale en lista con ✅ lo que todavía no le diste de ella (qué incluye, entrega aproximada) y recién después invítala a la visita; nunca solo "perfecto". Si no, hazle una pregunta abierta corta. No repitas datos que ya le diste.',
     // La parte de "qué hacer" depende de tu último mensaje: la arma guiaDeIntencion.
     cierre: 'Solo agradeció, acusó recibo o reaccionó. Nada de precios, listas, datos nuevos ni preguntas.',
     objecion_precio:
@@ -242,7 +242,7 @@ export function guiaDeIntencion(i: Intencion | null, ultimoDeAli: string | null 
         `Tipo: ${i.tipo}${i.resumen ? `. ${i.resumen}` : ''}`,
         (web && GUIAS_WEB[i.tipo]) || GUIAS[i.tipo],
         i.tipo === 'cierre' ? guiaDeCierre(ultimoDeAli, web) : null,
-        i.cree_que_es_otra_persona ? 'Te habla como si fueras otra persona: aclárale en una frase que eres Ali, el asistente virtual de Alimin.' : null,
+        i.cree_que_es_otra_persona ? 'Te habla como si fueras otra persona: aclárale en una frase que eres Ali, del equipo de Alimin.' : null,
         'Si al leer la conversación ves que el tipo no calza, atiende según tu ficha.',
     ]
         .filter(Boolean)
