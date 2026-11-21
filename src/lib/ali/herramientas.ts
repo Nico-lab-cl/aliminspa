@@ -8,6 +8,7 @@ import { agendarVisita } from '@/lib/agendar-visita'
 import { ARENA_Y_SOL, LOMAS_DEL_MAR, type Proyecto } from '@/components/agenda3d/proyectos'
 import { DOCUMENTOS, archivoVigente, documentoPorId, urlDocumento, type DocumentoParaEnviar } from './documentos'
 import { PROYECTOS_RESERVA, clp, enlaceReserva, lotesLibres, lotesTomados, numeroDeLote, refLote } from '@/lib/reservas'
+import { leerLoteLomas, lotesLibresLomas } from '@/lib/reservas-lomas'
 
 /**
  * Herramientas que Ali puede usar mientras conversa.
@@ -239,12 +240,15 @@ export const HERRAMIENTAS: Anthropic.Tool[] = [
     {
         name: 'link_reserva',
         description:
-            'Da el enlace para que la persona reserve y pague la reserva con Webpay. Arena y Sol: con el lote que eligió (por ejemplo "P45"); revisa que esté libre. Lomas del Mar: el enlace lleva a aliminlomasdelmar.com, donde elige el lote en el mapa. Úsala solo después de contarle las condiciones de la reserva (ver "Reservar el terreno").',
+            'Da el enlace directo de pago de la reserva (Webpay) para el lote que eligió, y revisa que esté libre. Arena y Sol: lote como "P45". Lomas del Mar: etapa y lote, como "Etapa 1 · Lote 22"; si solo dijo el número, pásalo igual y la herramienta te dice si hay que preguntar la etapa. Devuelve también el monto de la reserva de ese lote. Úsala solo después de contarle las condiciones de la reserva (ver "Reservar el terreno").',
         input_schema: {
             type: 'object',
             properties: {
                 proyecto: { type: 'string', enum: ['Lomas del Mar', 'Arena y Sol'] },
-                lote: { type: 'string', description: 'Lote que eligió, por ejemplo "P45". Vacío si no eligió.' },
+                lote: {
+                    type: 'string',
+                    description: 'Lote que eligió: "P45" en Arena y Sol, "Etapa 1 · Lote 22" en Lomas del Mar. Vacío si no eligió.',
+                },
             },
             required: ['proyecto', 'lote'],
             additionalProperties: false,
@@ -293,6 +297,27 @@ async function lotesDisponibles(proyectoNombre: string) {
     const proyecto = PROYECTOS_EN_VENTA[proyectoNombre]
     if (!proyecto) return { error: 'Proyecto desconocido. Los proyectos en venta son Lomas del Mar y Arena y Sol.' }
 
+    // Lomas del Mar: lo que se puede reservar y cobrar es lo de la base de
+    // aliminlomasdelmar.com (21-11-2026: el plano de la agenda decía 43 libres
+    // en la etapa 2 y esa base, 25). Si no responde, el plano.
+    if (proyecto.id === LOMAS_DEL_MAR.id) {
+        try {
+            const libres = await lotesLibresLomas()
+            const porEtapa: Record<string, string[]> = {}
+            for (const l of libres) (porEtapa[`Etapa ${l.etapa}`] ||= []).push(l.numero)
+            return {
+                proyecto: proyecto.nombre,
+                disponibles: libres.length,
+                disponiblesPorEtapa: Object.fromEntries(Object.entries(porEtapa).map(([e, ns]) => [e, ns.length])),
+                lotesPorEtapa: porEtapa,
+                nota: 'Un mismo número de lote puede estar en varias etapas: al reservar di siempre etapa y lote. La superficie exacta la confirma link_reserva o el asesor.',
+                mapa: 'aliminspa.cl/agendar-visita',
+            }
+        } catch (error) {
+            console.error('[ali] No se pudieron leer los lotes de aliminlomasdelmar.com, uso el plano:', error)
+        }
+    }
+
     const respuesta = await fetch(`${ORIGEN}${proyecto.plano.lotes}`, {
         signal: AbortSignal.timeout(8000),
         next: { revalidate: 300 },
@@ -332,19 +357,69 @@ async function lotesDisponibles(proyectoNombre: string) {
 
 /* ── Reserva ─────────────────────────────────────────────────────── */
 
-/** Lomas del Mar reserva en su propio sitio, con su mapa de lotes y Webpay. */
-const RESERVA_LOMAS = 'https://aliminlomasdelmar.com'
+const ENTREGA_ETAPA: Record<number, string> = {
+    1: 'fines de 2027',
+    2: 'fines de 2028 o verano de 2029',
+    3: 'fines de 2030',
+    4: 'fines de 2031',
+}
+
+/**
+ * Lomas del Mar: lotes, monto y Webpay de aliminlomasdelmar.com (21-11-2026,
+ * Nicolás: "que me envíe el link de pago nomás", no el sitio general).
+ */
+async function linkReservaLomas(lote: string | undefined, origen: string) {
+    let libres
+    try {
+        libres = await lotesLibresLomas()
+    } catch {
+        return { ok: false, error: 'No pude revisar los lotes de Lomas del Mar ahora. Dile que lo intentas de nuevo en un momento, o deriva con el motivo "quiere reservar".' }
+    }
+    const pedido = leerLoteLomas(lote)
+    const url = (ref?: string) => {
+        const u = new URL('/reservar/lomas-del-mar', SITE.url)
+        if (ref) u.searchParams.set('lote', ref)
+        u.searchParams.set('origen', origen)
+        return u.toString()
+    }
+    if (!pedido) {
+        return { ok: true, url: url(), monto: clp(libres[0]?.reserva ?? 500_000), como: 'En el enlace elige etapa y lote, deja sus datos (con RUT) y paga con Webpay.' }
+    }
+    const candidatos = libres.filter(l => l.numero === pedido.numero && (pedido.etapa === null || l.etapa === pedido.etapa))
+    if (!candidatos.length) {
+        const porEtapa = [1, 2, 3, 4]
+            .map(e => [e, libres.filter(l => l.etapa === e).map(l => l.numero)] as const)
+            .filter(([, ns]) => ns.length)
+            .map(([e, ns]) => `Etapa ${e}: ${ns.slice(0, 12).join(', ')}${ns.length > 12 ? '…' : ''}`)
+        return {
+            ok: false,
+            error: `${pedido.etapa ? `El lote ${pedido.numero} de la etapa ${pedido.etapa}` : `El lote ${pedido.numero}`} no está libre. Ofrécele otro. Libres: ${porEtapa.join(' · ')}.`,
+        }
+    }
+    if (candidatos.length > 1) {
+        return {
+            ok: false,
+            pregunta_etapa: true,
+            error: `El lote ${pedido.numero} está libre en ${candidatos.map(c => `la etapa ${c.etapa} (entrega aproximada a ${ENTREGA_ETAPA[c.etapa] || 'confirmar'})`).join(' y en ')}. Pregúntale de qué etapa lo quiere, en una frase, y después vuelve a llamar con la etapa.`,
+        }
+    }
+    const l = candidatos[0]
+    return {
+        ok: true,
+        url: url(l.ref),
+        lote: l.etiqueta,
+        superficie: l.area ? `${Math.round(l.area)} m²` : null,
+        monto: clp(l.reserva),
+        entrega: ENTREGA_ETAPA[l.etapa] ? `aproximadamente a ${ENTREGA_ETAPA[l.etapa]}` : null,
+        como: 'En el enlace confirma sus datos (con RUT) y paga con Webpay, débito o crédito. El monto de la reserva es el de "monto".',
+    }
+}
 
 async function linkReserva(entrada: { proyecto?: string; lote?: string }, ctx: ContextoHerramientas) {
     const condiciones =
-        'Antes del enlace ya le dijiste, breve: reserva de $550.000 que no se devuelve, 10 días corridos para pie y promesa, y los beneficios. Pega el enlace tal cual.'
+        'Antes del enlace ya le dijiste, breve: el monto de la reserva (el de "monto"), que no se devuelve, 10 días corridos para pie y promesa, y los beneficios. Pega el enlace tal cual.'
     if (entrada.proyecto === 'Lomas del Mar') {
-        return {
-            ok: true,
-            url: RESERVA_LOMAS,
-            como: 'En ese sitio elige su lote en el mapa, deja sus datos y paga la reserva con Webpay.',
-            nota: condiciones,
-        }
+        return { ...(await linkReservaLomas(entrada.lote, `ali-${ctx.canal || 'web'}`)), nota: condiciones }
     }
     if (entrada.proyecto !== 'Arena y Sol') return { ok: false, error: 'Proyecto desconocido.' }
 

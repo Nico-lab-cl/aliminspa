@@ -146,7 +146,7 @@ export function precioIncompleto(texto: string, yaDijoLoQueViene: boolean, canal
 export const LO_QUE_VIENE = /plano y limpio|agua de pozo potabilizada/i
 
 /** Ya le dio en la conversación las condiciones de la reserva. */
-export const CONDICIONES_RESERVA = /550\.000/
+export const CONDICIONES_RESERVA = /reserva[^\n]{0,40}\$5[05]0\.000|\$5[05]0\.000[^\n]{0,60}reserva/i
 
 /**
  * Cuando Ali ofrece reservar (lotes P45… y "reserv") sin el enlace todavía y
@@ -156,9 +156,9 @@ export const CONDICIONES_RESERVA = /550\.000/
  */
 export function reservaIncompleta(texto: string, yaDioCondiciones: boolean): string[] {
     if (yaDioCondiciones || /\/reservar\//.test(texto)) return []
-    if (!/\bP\d{1,2}\b/.test(texto) || !/reserv/i.test(texto)) return []
+    if (!/\bP\d{1,2}\b|\bLote \d{1,3}\b|\bEtapa \d\b/i.test(texto) || !/reserv/i.test(texto)) return []
     const faltan = [
-        !/550\.000/.test(texto) && 'que la reserva es de $550.000 y no se devuelve si decide no seguir',
+        !/\$5[05]0\.000/.test(texto) && 'el monto de la reserva (Arena y Sol $550.000, Lomas del Mar $500.000) y que no se devuelve si decide no seguir',
         !/10 d[ií]as/i.test(texto) && 'que tiene 10 días corridos para pagar el pie y firmar la promesa',
         !/contrato/i.test(texto) && 'que después de la reserva procesamos su contrato de compraventa y lo contacta un asesor',
         !/portal/i.test(texto) && 'que le creamos acceso al portal de pagos para ver su terreno, sus pagos, sus documentos y los avances',

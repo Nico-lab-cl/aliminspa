@@ -1345,6 +1345,77 @@
         "aliminspa\\.cl/reservar/arena-y-sol\\?lote=P45"
       ],
       "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: Lomas, \"quiero el 22\" (está en varias etapas) → pregunta la etapa, sin mandar a aliminlomasdelmar.com",
+      "origen": "Nicolás, 21-11-2026 (Ali mandó aliminlomasdelmar.com en vez del enlace de pago)",
+      "canal": "whatsapp",
+      "tipo": "quiere_reservar",
+      "cliente": {
+        "nombre": "Nicolás",
+        "telefono": "+56912345678"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, soy Nicolás. Quiero reservar en Lomas del Mar, enlístame los lotes libres"
+        },
+        {
+          "de": "ali",
+          "texto": "Lotes libres en Lomas del Mar 🌊\n✅ Etapa 1, 19 y 21 al 26\n✅ Etapa 2, 2, 3, 5 al 7 y 9 al 17\n✅ Etapa 3, 1 al 10 y 12 al 15\n\nPara reservar\n✅ Reserva de $500.000, que no se devuelve si decides no seguir\n✅ 10 días corridos para pagar el pie y firmar la promesa\n✅ Después procesamos tu contrato de compraventa y te contacta un asesor\n✅ Te creamos acceso al portal de pagos para ver tu terreno, tus pagos, tus documentos y los avances\n✅ Puedes visitar el proyecto cuando quieras\n\n¿Qué lote te gustaría reservar?"
+        },
+        {
+          "de": "cliente",
+          "texto": "quiero el l22"
+        }
+      ],
+      "debe": [
+        "Preguntar de qué etapa quiere el lote 22, en una frase, con la entrega aproximada de cada etapa",
+        "No mandar a aliminlomasdelmar.com ni al mapa general",
+        "No derivar"
+      ],
+      "deriva": false,
+      "no_contiene": [
+        "aliminlomasdelmar\\.com"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: Lomas, \"etapa 1 lote 22\" → enlace directo de pago de ese lote",
+      "origen": "Nicolás, 21-11-2026 (\"que me envíe el link de pago nomás\")",
+      "canal": "whatsapp",
+      "tipo": "quiere_reservar",
+      "cliente": {
+        "nombre": "Nicolás",
+        "telefono": "+56912345678"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, soy Nicolás. Quiero reservar en Lomas del Mar, enlístame los lotes libres"
+        },
+        {
+          "de": "ali",
+          "texto": "Lotes libres en Lomas del Mar 🌊\n✅ Etapa 1, 19 y 21 al 26\n✅ Etapa 2, 2, 3, 5 al 7 y 9 al 17\n✅ Etapa 3, 1 al 10 y 12 al 15\n\nPara reservar\n✅ Reserva de $500.000, que no se devuelve si decides no seguir\n✅ 10 días corridos para pagar el pie y firmar la promesa\n✅ Después procesamos tu contrato de compraventa y te contacta un asesor\n✅ Te creamos acceso al portal de pagos para ver tu terreno, tus pagos, tus documentos y los avances\n✅ Puedes visitar el proyecto cuando quieras\n\n¿Qué lote te gustaría reservar?"
+        },
+        {
+          "de": "cliente",
+          "texto": "el 22 de la etapa 1"
+        }
+      ],
+      "debe": [
+        "Mandar el enlace de pago de ese lote (lo entrega link_reserva: aliminspa.cl/reservar/lomas-del-mar?lote=E1-22, puede llevar &origen=...)",
+        "Decir en una frase cómo sigue (paga con Webpay y deja su RUT)",
+        "No derivar"
+      ],
+      "deriva": false,
+      "contiene": [
+        "aliminspa\\.cl/reservar/lomas-del-mar\\?lote=E1-22"
+      ],
+      "no_contiene": [
+        "aliminlomasdelmar\\.com"
+      ],
+      "max_burbujas": 3
     }
   ]
 }

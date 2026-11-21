@@ -4,9 +4,20 @@ import { useState, type FormEvent } from 'react'
 import ConsentimientoFormulario, { useConsentimiento } from '@/components/consent/ConsentimientoFormulario'
 import styles from '../reservar.module.css'
 
+export interface LoteOpcion {
+    ref: string
+    /** Lo que se ve en el botón: "P45" o "22". */
+    corto: string
+    /** Lo que se ve en el botón de pagar: "Lote P45" o "Etapa 1 · Lote 22". */
+    etiqueta: string
+    /** Para agrupar los botones (las etapas de Lomas del Mar). */
+    grupo?: string
+    monto: number
+}
+
 interface Props {
-    proyecto: { slug: string; nombre: string; monto: number }
-    lotes: string[]
+    proyecto: { slug: string; nombre: string }
+    lotes: LoteOpcion[]
     loteInicial: string | null
     origen: string | null
     utm: Record<string, string | null>
@@ -36,6 +47,12 @@ export default function ReservaForm({ proyecto, lotes: lotesIniciales, loteInici
     const [estado, setEstado] = useState<'listo' | 'enviando' | 'error'>('listo')
     const [error, setError] = useState('')
     const consentimiento = useConsentimiento()
+    const elegido = lotes.find(l => l.ref === lote) || null
+    const monto = elegido?.monto ?? lotes[0]?.monto ?? 0
+    const grupos = lotes.reduce<Record<string, LoteOpcion[]>>((acc, l) => {
+        ;(acc[l.grupo || ''] ||= []).push(l)
+        return acc
+    }, {})
 
     const cambiar = (campo: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
         setForm(f => ({ ...f, [campo]: e.target.value }))
@@ -66,7 +83,8 @@ export default function ReservaForm({ proyecto, lotes: lotesIniciales, loteInici
             const j = await res.json().catch(() => ({}))
             if (!res.ok || !j.url || !j.token) {
                 if (Array.isArray(j.lotes)) {
-                    setLotes(j.lotes.map((l: { ref: string }) => l.ref))
+                    const siguen = new Set(j.lotes.map((l: { ref: string }) => l.ref))
+                    setLotes(ls => ls.filter(l => siguen.has(l.ref)))
                     setLote(null)
                 }
                 throw new Error(j.error || 'No pudimos iniciar la reserva. Intenta de nuevo.')
@@ -91,20 +109,26 @@ export default function ReservaForm({ proyecto, lotes: lotesIniciales, loteInici
         <form onSubmit={enviar} className={styles.formulario}>
             <h2 className={styles.subtitulo}>1. Elige tu lote</h2>
             <p className={styles.ayuda}>Lotes disponibles hoy ({lotes.length}):</p>
-            <div className={styles.lotes} role="radiogroup" aria-label="Lotes disponibles">
-                {lotes.map(ref => (
-                    <button
-                        key={ref}
-                        type="button"
-                        role="radio"
-                        aria-checked={lote === ref}
-                        className={`${styles.lote} ${lote === ref ? styles.loteElegido : ''}`}
-                        onClick={() => setLote(ref)}
-                    >
-                        {ref}
-                    </button>
-                ))}
-            </div>
+            {Object.entries(grupos).map(([grupo, delGrupo]) => (
+                <div key={grupo || 'todos'}>
+                    {grupo ? <p className={styles.grupoLotes}>{grupo}</p> : null}
+                    <div className={styles.lotes} role="radiogroup" aria-label={grupo || 'Lotes disponibles'}>
+                        {delGrupo.map(l => (
+                            <button
+                                key={l.ref}
+                                type="button"
+                                role="radio"
+                                aria-checked={lote === l.ref}
+                                aria-label={l.etiqueta}
+                                className={`${styles.lote} ${lote === l.ref ? styles.loteElegido : ''}`}
+                                onClick={() => setLote(l.ref)}
+                            >
+                                {l.corto}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            ))}
 
             <h2 className={styles.subtitulo}>2. Tus datos</h2>
             <div className={styles.campos}>
@@ -129,7 +153,7 @@ export default function ReservaForm({ proyecto, lotes: lotesIniciales, loteInici
             <label className={styles.condiciones}>
                 <input type="checkbox" required checked={acepta} onChange={e => setAcepta(e.target.checked)} />
                 <span>
-                    Entiendo que la reserva de {clp(proyecto.monto)} no se devuelve si decido no seguir, y que tengo 10 días
+                    Entiendo que la reserva de {clp(monto)} no se devuelve si decido no seguir, y que tengo 10 días
                     corridos para pagar el pie y firmar la promesa.
                 </span>
             </label>
@@ -141,10 +165,10 @@ export default function ReservaForm({ proyecto, lotes: lotesIniciales, loteInici
             <button type="submit" className={styles.boton} disabled={estado === 'enviando'}>
                 {estado === 'enviando'
                     ? 'Conectando con Webpay…'
-                    : `Pagar reserva ${clp(proyecto.monto)}${lote ? ` · Lote ${lote}` : ''}`}
+                    : `Pagar reserva ${clp(monto)}${elegido ? ` · ${elegido.etiqueta}` : ''}`}
             </button>
             {estado === 'error' && error ? <p className={styles.error}>{error}</p> : null}
-            <p className={styles.ayuda}>Pagas en Webpay (Transbank) con débito o crédito. El lote queda apartado 15 minutos mientras pagas.</p>
+            <p className={styles.ayuda}>Pagas en Webpay (Transbank) con débito o crédito. El lote queda apartado mientras pagas.</p>
         </form>
     )
 }

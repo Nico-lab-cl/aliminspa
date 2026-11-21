@@ -14,8 +14,68 @@ import {
     normalizarRut,
     numeroDeLote,
 } from '@/lib/reservas'
+import { crearPagoLomas, leerLoteLomas, lotesLibresLomas, type LoteLomas } from '@/lib/reservas-lomas'
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * Lomas del Mar: el lote, el candado, la reserva y Webpay son los de
+ * aliminlomasdelmar.com (ver lib/reservas-lomas.ts). Acá solo se valida lo
+ * mismo que en Arena y Sol y se pide el pago a ese sitio.
+ */
+async function reservarLomas(body: Record<string, unknown>) {
+    const pedido = leerLoteLomas(body.lote)
+    const nombre = String(body.nombre || '').trim().replace(/\s+/g, ' ').slice(0, 120)
+    const rut = normalizarRut(body.rut)
+    const email = String(body.email || '').trim().toLowerCase()
+    const celular = normalizarCelular(body.celular)
+
+    if (!pedido?.etapa) return NextResponse.json({ error: 'Elige un lote.' }, { status: 400 })
+    if (nombre.split(' ').length < 2) return NextResponse.json({ error: 'Escribe tu nombre y apellido.' }, { status: 400 })
+    if (!rut) return NextResponse.json({ error: 'El RUT no es válido.' }, { status: 400 })
+    if (!CORREO_VALIDO.test(email) || email.length > 120) return NextResponse.json({ error: 'El correo no es válido.' }, { status: 400 })
+    if (!celular) return NextResponse.json({ error: 'El celular no es válido.' }, { status: 400 })
+    if (body.acepta_condiciones !== true || body.consentimiento_contacto !== true) {
+        return NextResponse.json({ error: 'Tienes que aceptar las condiciones de la reserva.' }, { status: 400 })
+    }
+
+    let libres: LoteLomas[]
+    try {
+        libres = await lotesLibresLomas()
+    } catch (error) {
+        console.error('[reservas:lomas] No se pudieron leer los lotes:', error)
+        return NextResponse.json({ error: 'No pudimos revisar los lotes. Intenta de nuevo.' }, { status: 502 })
+    }
+    const lote = libres.find(l => l.etapa === pedido.etapa && l.numero === pedido.numero)
+    if (!lote) {
+        return NextResponse.json(
+            { error: 'Ese lote ya no está disponible. Elige otro.', lotes: libres.map(l => ({ ref: l.ref })) },
+            { status: 409 }
+        )
+    }
+
+    const texto = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, 120) : null)
+    const pago = await crearPagoLomas({
+        lotId: lote.id,
+        sessionId: `aliminspa-${randomBytes(8).toString('hex')}`,
+        name: nombre,
+        email,
+        phone: celular,
+        rut,
+        utm_source: texto(body.utm_source) || (texto(body.origen) ? 'ali' : 'aliminspa'),
+        utm_medium: texto(body.utm_medium) || texto(body.origen),
+        utm_campaign: texto(body.utm_campaign) || 'reserva-enlace',
+    })
+    if (pago.ok) return NextResponse.json({ url: pago.url, token: pago.token })
+    if (pago.error === 'lot_reserved' || pago.error === 'lot_sold') {
+        return NextResponse.json(
+            { error: 'Alguien está pagando ese lote en este momento. Elige otro o intenta en unos minutos.' },
+            { status: 409 }
+        )
+    }
+    console.error('[reservas:lomas] aliminlomasdelmar.com no creó el pago:', pago.status, pago.error)
+    return NextResponse.json({ error: 'No pudimos conectar con Webpay. Intenta de nuevo.' }, { status: 502 })
+}
 
 /**
  * Crea la reserva y la transacción de Webpay. El lote queda apartado
@@ -36,6 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     const slug = String(body.proyecto || '')
+    if (slug === 'lomas-del-mar') return reservarLomas(body)
     const proyecto = PROYECTOS_RESERVA[slug]
     if (!proyecto) return NextResponse.json({ error: 'Proyecto no disponible para reserva en línea.' }, { status: 400 })
 
