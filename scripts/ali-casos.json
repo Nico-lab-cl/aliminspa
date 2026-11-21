@@ -485,8 +485,8 @@
       "max_parrafo": 230
     },
     {
-      "nombre": "Quiere reservar → felicita corto y deriva",
-      "origen": "Fase 3, 20-11-2026",
+      "nombre": "Quiere reservar un lote vendido → lo dice, ofrece los libres y las condiciones breves (sin derivar)",
+      "origen": "Nicolás, 21-11-2026 (antes derivaba; ahora Ali cierra con el enlace)",
       "canal": "instagram",
       "tipo": "quiere_reservar",
       "mensajes": [
@@ -496,14 +496,16 @@
         }
       ],
       "debe": [
-        "Recibir con calidez, en una frase, que quiere reservar (sin elogiar la elección)",
-        "Derivar a un asesor para la reserva",
-        "Decirle que su asesor le escribe por este chat"
+        "Decir que el lote 12 (P12) ya no está disponible y nombrar algunos lotes libres para que elija",
+        "Contar breve que la reserva es de $550.000, no se devuelve y hay 10 días corridos para pagar el pie y firmar la promesa",
+        "No derivar a un asesor ni dar datos bancarios"
       ],
-      "deriva": true,
-      "no_contiene": [
-        "https?://"
-      ]
+      "deriva": false,
+      "contiene": [
+        "550.000",
+        "10 d[ií]as"
+      ],
+      "max_burbujas": 3
     },
     {
       "nombre": "Desconfianza (\"¿es estafa?\") → datos ciertos e invita a conocer, sin derivar",
@@ -553,11 +555,26 @@
       "origen": "Fase 3 en el chat web, 20-11-2026",
       "canal": "web",
       "tipo": "consulta",
-      "cliente": { "nombre": "Carla" },
-      "mensajes": [{ "de": "cliente", "texto": "Hola, ¿cuánto vale un terreno en Arena y Sol?" }],
-      "debe": ["Dar el precio completo de Arena y Sol (contado y crédito con el total)", "No pedirle nombre, teléfono ni correo"],
-      "contiene": ["39\\.000\\.000", "42\\.000\\.000"],
-      "no_contiene": ["con qui[eé]n tengo el gusto|tu correo|tu tel[eé]fono"],
+      "cliente": {
+        "nombre": "Carla"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, ¿cuánto vale un terreno en Arena y Sol?"
+        }
+      ],
+      "debe": [
+        "Dar el precio completo de Arena y Sol (contado y crédito con el total)",
+        "No pedirle nombre, teléfono ni correo"
+      ],
+      "contiene": [
+        "39\\.000\\.000",
+        "42\\.000\\.000"
+      ],
+      "no_contiene": [
+        "con qui[eé]n tengo el gusto|tu correo|tu tel[eé]fono"
+      ],
       "max_burbujas": 3
     },
     {
@@ -565,14 +582,30 @@
       "origen": "Fase 3 en el chat web, 20-11-2026",
       "canal": "web",
       "tipo": "cierre",
-      "cliente": { "nombre": "Carla" },
+      "cliente": {
+        "nombre": "Carla"
+      },
       "mensajes": [
-        { "de": "cliente", "texto": "¿Dónde quedan los terrenos?" },
-        { "de": "ali", "texto": "Los dos proyectos están en El Tabo, a poco más de 1 hora de Santiago por la Ruta 78 🌊\n\n¿Te gustaría venir a conocerlos?" },
-        { "de": "cliente", "texto": "Ok gracias" }
+        {
+          "de": "cliente",
+          "texto": "¿Dónde quedan los terrenos?"
+        },
+        {
+          "de": "ali",
+          "texto": "Los dos proyectos están en El Tabo, a poco más de 1 hora de Santiago por la Ruta 78 🌊\n\n¿Te gustaría venir a conocerlos?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Ok gracias"
+        }
       ],
-      "debe": ["Despedirse con una línea cálida", "No mandar precios ni datos nuevos"],
-      "no_contiene": ["\\$"],
+      "debe": [
+        "Despedirse con una línea cálida",
+        "No mandar precios ni datos nuevos"
+      ],
+      "no_contiene": [
+        "\\$"
+      ],
       "max_burbujas": 1
     },
     {
@@ -580,22 +613,50 @@
       "origen": "Fase 3 en el chat web, 20-11-2026",
       "canal": "web",
       "tipo": "postventa",
-      "cliente": { "nombre": "Jorge" },
-      "mensajes": [{ "de": "cliente", "texto": "Compré un terreno en Lomas del Mar el año pasado y nadie me dice nada de la escritura, ¿qué pasa?" }],
-      "debe": ["Reconocer la molestia en una frase", "Derivar a postventa sin preguntarle antes", "Decirle que le escriben por este mismo chat"],
+      "cliente": {
+        "nombre": "Jorge"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Compré un terreno en Lomas del Mar el año pasado y nadie me dice nada de la escritura, ¿qué pasa?"
+        }
+      ],
+      "debe": [
+        "Reconocer la molestia en una frase",
+        "Derivar a postventa sin preguntarle antes",
+        "Decirle que le escriben por este mismo chat"
+      ],
       "deriva": true,
-      "no_contiene": ["quieres que te contacten|te parece que te escriban"]
+      "no_contiene": [
+        "quieres que te contacten|te parece que te escriban"
+      ]
     },
     {
       "nombre": "Web: muchas preguntas juntas → breve, sin párrafos largos",
       "origen": "Fase 3 en el chat web, 20-11-2026",
       "canal": "web",
       "tipo": "varias_preguntas",
-      "cliente": { "nombre": "Francisco" },
-      "mensajes": [{ "de": "cliente", "texto": "Lomas del Mar 200 m2: valor, financiamiento, rol, entrega, agua, luz, gastos extra, escritura y ubicación" }],
-      "debe": ["Dar el precio completo del de 200 m²", "Responder lo principal en mensajes breves, sin párrafos largos", "Rol propio en futuro"],
-      "contiene": ["35\\.000\\.000"],
-      "no_contiene": ["(ya )?(tiene|tienen) (su )?rol propio"],
+      "cliente": {
+        "nombre": "Francisco"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Lomas del Mar 200 m2: valor, financiamiento, rol, entrega, agua, luz, gastos extra, escritura y ubicación"
+        }
+      ],
+      "debe": [
+        "Dar el precio completo del de 200 m²",
+        "Responder lo principal en mensajes breves, sin párrafos largos",
+        "Rol propio en futuro"
+      ],
+      "contiene": [
+        "35\\.000\\.000"
+      ],
+      "no_contiene": [
+        "(ya )?(tiene|tienen) (su )?rol propio"
+      ],
       "max_burbujas": 3
     },
     {
@@ -603,10 +664,25 @@
       "origen": "Nicolás, WhatsApp, 20-11-2026",
       "canal": "whatsapp",
       "tipo": "saludo",
-      "mensajes": [{ "de": "cliente", "texto": "Hola buenas" }],
-      "debe": ["Presentarse como Ali, del equipo de Alimin, con el emoji 👋", "Preguntarle su nombre o qué le interesa saber", "No mandar precios"],
-      "contiene": ["del equipo de Alimin", "👋"],
-      "no_contiene": ["asistente virtual", "\\$"],
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola buenas"
+        }
+      ],
+      "debe": [
+        "Presentarse como Ali, del equipo de Alimin, con el emoji 👋",
+        "Preguntarle su nombre o qué le interesa saber",
+        "No mandar precios"
+      ],
+      "contiene": [
+        "del equipo de Alimin",
+        "👋"
+      ],
+      "no_contiene": [
+        "asistente virtual",
+        "\\$"
+      ],
       "max_burbujas": 2
     },
     {
@@ -614,14 +690,34 @@
       "origen": "Nicolás, WhatsApp, 20-11-2026",
       "canal": "whatsapp",
       "mensajes": [
-        { "de": "cliente", "texto": "Hola buenas" },
-        { "de": "ali", "texto": "Hola, soy Ali, el asistente virtual de Alimin. ¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Por que asistente virtual? Prefiero que diga Hola soy Ali del equipo de Alimin como lo hacias antes" }
+        {
+          "de": "cliente",
+          "texto": "Hola buenas"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, el asistente virtual de Alimin. ¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Por que asistente virtual? Prefiero que diga Hola soy Ali del equipo de Alimin como lo hacias antes"
+        }
       ],
-      "debe": ["Aceptarlo en pocas palabras y presentarse como Ali, del equipo de Alimin", "Seguir la conversación (por ejemplo, preguntarle su nombre o en qué le ayuda)", "No justificarse con reglas ni decir que no puede", "No ofrecer pasarlo con un asesor ni derivar"],
+      "debe": [
+        "Aceptarlo en pocas palabras y presentarse como Ali, del equipo de Alimin",
+        "Seguir la conversación (por ejemplo, preguntarle su nombre o en qué le ayuda)",
+        "No justificarse con reglas ni decir que no puede",
+        "No ofrecer pasarlo con un asesor ni derivar"
+      ],
       "deriva": false,
-      "contiene": ["del equipo de Alimin"],
-      "no_contiene": ["asistente virtual", "no puedo", "te paso con|un asesor"],
+      "contiene": [
+        "del equipo de Alimin"
+      ],
+      "no_contiene": [
+        "asistente virtual",
+        "no puedo",
+        "te paso con|un asesor"
+      ],
       "max_burbujas": 2
     },
     {
@@ -629,31 +725,75 @@
       "origen": "Nicolás, WhatsApp, 20-11-2026",
       "canal": "whatsapp",
       "tipo": "consulta",
-      "cliente": { "nombre": "Nicolás" },
+      "cliente": {
+        "nombre": "Nicolás"
+      },
       "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 ¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Nicolás. Dame información de Lomas del Mar" }
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋 ¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Nicolás. Dame información de Lomas del Mar"
+        }
       ],
-      "debe": ["Dar los precios completos de Lomas del Mar (contado y crédito con el total)", "No aclarar que el \"desde $5.500.000\" es el pie: nadie lo confundió", "No ofrecer pasarlo con un asesor"],
-      "contiene": ["35\\.000\\.000"],
-      "no_contiene": ["desde \\$5\\.500\\.000", "precio total", "te paso con|que te contacte un asesor|un asesor te (escriba|contacte)"],
+      "debe": [
+        "Dar los precios completos de Lomas del Mar (contado y crédito con el total)",
+        "No aclarar que el \"desde $5.500.000\" es el pie: nadie lo confundió",
+        "No ofrecer pasarlo con un asesor"
+      ],
+      "contiene": [
+        "35\\.000\\.000"
+      ],
+      "no_contiene": [
+        "desde \\$5\\.500\\.000",
+        "precio total",
+        "te paso con|que te contacte un asesor|un asesor te (escriba|contacte)"
+      ],
       "max_burbujas": 3
     },
     {
       "nombre": "WhatsApp: elige el de 200 m² → le da la información de esa opción antes de invitar a la visita",
       "origen": "Nicolás, WhatsApp, 20-11-2026 (tuvo que preguntar \"¿Y la información?\")",
       "canal": "whatsapp",
-      "tipo": ["da_datos", "consulta"],
-      "cliente": { "nombre": "Nicolás" },
-      "mensajes": [
-        { "de": "cliente", "texto": "Dame información de Lomas del Mar" },
-        { "de": "ali", "texto": "Lomas del Mar, a 10 minutos de la playa 🌊\n✅ 200 m², $35.000.000 al contado\n✅ 200 m² con crédito, pie de $5.500.000, 60 cuotas de $550.000 y $37.990.000 en total\n✅ 390 m², $43.000.000 al contado\n✅ 390 m² con crédito, pie de $7.500.000, 70 cuotas de $550.000 y $45.990.000 en total\n\n¿Cuál de los dos tamaños te interesa?" },
-        { "de": "cliente", "texto": "Me interesa el de 200m2" }
+      "tipo": [
+        "da_datos",
+        "consulta"
       ],
-      "debe": ["Darle en ese mensaje información del terreno de 200 m² que todavía no tenía (por ejemplo, qué incluye o la entrega aproximada), en lista con ✅", "No responder solo \"perfecto\" ni saltar directo a la visita", "Si invita a la visita, que sea después de la información", "No ofrecer pasarlo con un asesor"],
-      "contiene": ["✅"],
-      "no_contiene": ["te paso con|que te contacte un asesor"],
+      "cliente": {
+        "nombre": "Nicolás"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Dame información de Lomas del Mar"
+        },
+        {
+          "de": "ali",
+          "texto": "Lomas del Mar, a 10 minutos de la playa 🌊\n✅ 200 m², $35.000.000 al contado\n✅ 200 m² con crédito, pie de $5.500.000, 60 cuotas de $550.000 y $37.990.000 en total\n✅ 390 m², $43.000.000 al contado\n✅ 390 m² con crédito, pie de $7.500.000, 70 cuotas de $550.000 y $45.990.000 en total\n\n¿Cuál de los dos tamaños te interesa?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Me interesa el de 200m2"
+        }
+      ],
+      "debe": [
+        "Darle en ese mensaje información del terreno de 200 m² que todavía no tenía (por ejemplo, qué incluye o la entrega aproximada), en lista con ✅",
+        "No responder solo \"perfecto\" ni saltar directo a la visita",
+        "Si invita a la visita, que sea después de la información",
+        "No ofrecer pasarlo con un asesor"
+      ],
+      "contiene": [
+        "✅"
+      ],
+      "no_contiene": [
+        "te paso con|que te contacte un asesor"
+      ],
       "max_burbujas": 3
     },
     {
@@ -661,11 +801,22 @@
       "origen": "Marcela y Nicolás, 20-11-2026",
       "canal": "whatsapp",
       "tipo": "consulta",
-      "cliente": { "nombre": "Marcela" },
+      "cliente": {
+        "nombre": "Marcela"
+      },
       "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 ¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Marcela. ¿Cuánto vale el terreno de 200 m2 en Lomas del Mar?" }
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋 ¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Marcela. ¿Cuánto vale el terreno de 200 m2 en Lomas del Mar?"
+        }
       ],
       "debe": [
         "Dar el precio completo del de 200 m² (contado, pie, cuotas y total con crédito)",
@@ -673,8 +824,20 @@
         "Terminar con una sola pregunta corta",
         "Rol propio en futuro"
       ],
-      "contiene": ["35\\.000\\.000", "37\\.990\\.000", "plano y limpio", "pozo potabilizada", "medidor", "estacionamiento de visitas", "(va|van) a entregar con rol propio"],
-      "no_contiene": ["agua potable", "390 m²", "(ya )?(tiene|tienen) (su )?rol propio"],
+      "contiene": [
+        "35\\.000\\.000",
+        "37\\.990\\.000",
+        "plano y limpio",
+        "pozo potabilizada",
+        "medidor",
+        "estacionamiento de visitas",
+        "(va|van) a entregar con rol propio"
+      ],
+      "no_contiene": [
+        "agua potable",
+        "390 m²",
+        "(ya )?(tiene|tienen) (su )?rol propio"
+      ],
       "max_burbujas": 3
     },
     {
@@ -683,79 +846,202 @@
       "canal": "facebook",
       "tipo": "consulta",
       "mensajes": [
-        { "de": "ali", "texto": "{{brochure}}" },
-        { "de": "cliente", "texto": "Valores??" }
+        {
+          "de": "ali",
+          "texto": "{{brochure}}"
+        },
+        {
+          "de": "cliente",
+          "texto": "Valores??"
+        }
       ],
-      "debe": ["Presentarse corto y dar el precio completo", "Mandar la lista corta de lo que viene con el terreno", "Cerrar preguntando si le sirve más al contado o en cuotas", "No pedirle el nombre en este mensaje"],
-      "contiene": ["35\\.000\\.000", "contado o (en )?cuotas"],
-      "no_contiene": ["con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre"],
+      "debe": [
+        "Presentarse corto y dar el precio completo",
+        "Mandar la lista corta de lo que viene con el terreno",
+        "Cerrar preguntando si le sirve más al contado o en cuotas",
+        "No pedirle el nombre en este mensaje"
+      ],
+      "contiene": [
+        "35\\.000\\.000",
+        "contado o (en )?cuotas"
+      ],
+      "no_contiene": [
+        "con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre"
+      ],
       "max_burbujas": 3
     },
     {
       "nombre": "Instagram: contesta \"en cuotas\" → explica el crédito directo y recién ahí le pide el nombre",
       "origen": "Nicolás, 20-11-2026",
       "canal": "instagram",
-      "tipo": ["da_datos", "consulta"],
-      "mensajes": [
-        { "de": "cliente", "texto": "Precio Lomas del mar 200m2?" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\nY viene con 😊\n✅ Terreno plano y limpio\n✅ Agua de pozo potabilizada, sin pagar cuenta de agua\n✅ Luz con medidor incluido\n✅ Estacionamiento de visitas\n✅ Se va a entregar con rol propio\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
-        { "de": "cliente", "texto": "En cuotas" }
+      "tipo": [
+        "da_datos",
+        "consulta"
       ],
-      "debe": ["Explicar en pocas líneas el crédito directo (en pesos, sin banco, sin aval, sirve con DICOM)", "Preguntarle su nombre en ese mismo mensaje", "No repetir la lista de lo que viene con el terreno"],
-      "contiene": ["banco|aval|DICOM", "tengo el gusto|tu nombre|c[oó]mo te llamas"],
-      "no_contiene": ["plano y limpio"],
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Precio Lomas del mar 200m2?"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\nY viene con 😊\n✅ Terreno plano y limpio\n✅ Agua de pozo potabilizada, sin pagar cuenta de agua\n✅ Luz con medidor incluido\n✅ Estacionamiento de visitas\n✅ Se va a entregar con rol propio\n\n¿Te sirve más pagarlo al contado o en cuotas?"
+        },
+        {
+          "de": "cliente",
+          "texto": "En cuotas"
+        }
+      ],
+      "debe": [
+        "Explicar en pocas líneas el crédito directo (en pesos, sin banco, sin aval, sirve con DICOM)",
+        "Preguntarle su nombre en ese mismo mensaje",
+        "No repetir la lista de lo que viene con el terreno"
+      ],
+      "contiene": [
+        "banco|aval|DICOM",
+        "tengo el gusto|tu nombre|c[oó]mo te llamas"
+      ],
+      "no_contiene": [
+        "plano y limpio"
+      ],
       "max_burbujas": 3
     },
     {
       "nombre": "Instagram: da su nombre después del precio → pide teléfono y correo juntos, ofreciendo el plano",
       "origen": "Nicolás, 20-11-2026 (Ali conseguía teléfono en 3 de 15 conversaciones de Instagram)",
       "canal": "instagram",
-      "tipo": ["da_datos"],
-      "mensajes": [
-        { "de": "cliente", "texto": "Precio Lomas del mar 200m2?" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
-        { "de": "cliente", "texto": "En cuotas" },
-        { "de": "ali", "texto": "Con crédito directo pagas en pesos, sin banco ni aval, y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Carla" }
+      "tipo": [
+        "da_datos"
       ],
-      "debe": ["Saludar a Carla por su nombre", "Pedirle el teléfono y el correo juntos, en una frase", "Ofrecerle a cambio el plano con los lotes que quedan", "No insistir ni condicionar la ayuda a que dé los datos"],
-      "contiene": ["Carla", "tel[eé]fono[\\s\\S]*correo|correo[\\s\\S]*tel[eé]fono", "plano"],
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Precio Lomas del mar 200m2?"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?"
+        },
+        {
+          "de": "cliente",
+          "texto": "En cuotas"
+        },
+        {
+          "de": "ali",
+          "texto": "Con crédito directo pagas en pesos, sin banco ni aval, y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Carla"
+        }
+      ],
+      "debe": [
+        "Saludar a Carla por su nombre",
+        "Pedirle el teléfono y el correo juntos, en una frase",
+        "Ofrecerle a cambio el plano con los lotes que quedan",
+        "No insistir ni condicionar la ayuda a que dé los datos"
+      ],
+      "contiene": [
+        "Carla",
+        "tel[eé]fono[\\s\\S]*correo|correo[\\s\\S]*tel[eé]fono",
+        "plano"
+      ],
       "max_burbujas": 2
     },
     {
       "nombre": "WhatsApp: da su nombre después del precio → pide solo el correo (el teléfono ya lo tiene), ofreciendo el plano",
       "origen": "Nicolás, 20-11-2026",
       "canal": "whatsapp",
-      "tipo": ["da_datos"],
-      "mensajes": [
-        { "de": "cliente", "texto": "Hola, cuánto vale el de 200 m2 en Lomas del Mar?" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
-        { "de": "cliente", "texto": "Al contado" },
-        { "de": "ali", "texto": "Al contado se firma la compraventa en notaría y listo 😊\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Pedro" }
+      "tipo": [
+        "da_datos"
       ],
-      "debe": ["Saludar a Pedro por su nombre", "Pedirle solo el correo, ofreciendo el plano con los lotes que quedan", "No pedirle el teléfono"],
-      "contiene": ["Pedro", "correo", "plano"],
-      "no_contiene": ["tel[eé]fono"],
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, cuánto vale el de 200 m2 en Lomas del Mar?"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Al contado"
+        },
+        {
+          "de": "ali",
+          "texto": "Al contado se firma la compraventa en notaría y listo 😊\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Pedro"
+        }
+      ],
+      "debe": [
+        "Saludar a Pedro por su nombre",
+        "Pedirle solo el correo, ofreciendo el plano con los lotes que quedan",
+        "No pedirle el teléfono"
+      ],
+      "contiene": [
+        "Pedro",
+        "correo",
+        "plano"
+      ],
+      "no_contiene": [
+        "tel[eé]fono"
+      ],
       "max_burbujas": 2
     },
     {
       "nombre": "Instagram: da solo el correo → lo guarda, manda el plano y no le vuelve a pedir el teléfono",
       "origen": "Nicolás, 20-11-2026 (si da solo uno, igual queda en el CRM)",
       "canal": "instagram",
-      "tipo": ["da_datos"],
-      "mensajes": [
-        { "de": "cliente", "texto": "Precio Lomas del mar 200m2?" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?" },
-        { "de": "cliente", "texto": "Cuotas" },
-        { "de": "ali", "texto": "Con crédito directo pagas en pesos, sin banco ni aval, y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Carla" },
-        { "de": "ali", "texto": "Un gusto, Carla 😊 ¿Me dejas tu teléfono y tu correo? Así guardo tus datos, te mando el plano con los lotes que quedan y te llega toda la info al correo 👇" },
-        { "de": "cliente", "texto": "carla.prueba@ejemplo.cl" }
+      "tipo": [
+        "da_datos"
       ],
-      "debe": ["Agradecer en pocas palabras sin repetir el correo", "Mandar el plano de Lomas del Mar", "No volver a pedirle el teléfono", "Seguir la conversación con una pregunta corta"],
-      "contiene": ["plano"],
-      "no_contiene": ["tel[eé]fono", "carla\\.prueba@ejemplo\\.cl"],
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Precio Lomas del mar 200m2?"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋 Lomas del Mar, terreno de 200 m² 🌊\n✅ $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ $37.990.000 en total, sin banco ni aval\n\n¿Te sirve más pagarlo al contado o en cuotas?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Cuotas"
+        },
+        {
+          "de": "ali",
+          "texto": "Con crédito directo pagas en pesos, sin banco ni aval, y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Carla"
+        },
+        {
+          "de": "ali",
+          "texto": "Un gusto, Carla 😊 ¿Me dejas tu teléfono y tu correo? Así guardo tus datos, te mando el plano con los lotes que quedan y te llega toda la info al correo 👇"
+        },
+        {
+          "de": "cliente",
+          "texto": "carla.prueba@ejemplo.cl"
+        }
+      ],
+      "debe": [
+        "Agradecer en pocas palabras sin repetir el correo",
+        "Mandar el plano de Lomas del Mar",
+        "No volver a pedirle el teléfono",
+        "Seguir la conversación con una pregunta corta"
+      ],
+      "contiene": [
+        "plano"
+      ],
+      "no_contiene": [
+        "tel[eé]fono",
+        "carla\\.prueba@ejemplo\\.cl"
+      ],
       "max_burbujas": 3
     },
     {
@@ -763,13 +1049,28 @@
       "origen": "Nicolás, 20-11-2026 (plano de lotes: no hay de 390 m² en las etapas 1 y 2)",
       "canal": "instagram",
       "tipo": "consulta",
-      "cliente": { "nombre": "Jorge" },
+      "cliente": {
+        "nombre": "Jorge"
+      },
       "mensajes": [
-        { "de": "cliente", "texto": "Hola, me interesa uno de 390 m2 en Lomas del Mar, ¿para cuándo lo entregan?" }
+        {
+          "de": "cliente",
+          "texto": "Hola, me interesa uno de 390 m2 en Lomas del Mar, ¿para cuándo lo entregan?"
+        }
       ],
-      "debe": ["Decir que los de 390 m² son de la etapa 3", "Dar la entrega aproximada de la etapa 3 (fines de 2030), con \"aproximadamente\"", "No decir que hay de 390 m² en las etapas 1 o 2"],
-      "contiene": ["etapa 3", "2030"],
-      "no_contiene": ["(segunda|etapa 2) en adelante", "entrega inmediata"],
+      "debe": [
+        "Decir que los de 390 m² son de la etapa 3",
+        "Dar la entrega aproximada de la etapa 3 (fines de 2030), con \"aproximadamente\"",
+        "No decir que hay de 390 m² en las etapas 1 o 2"
+      ],
+      "contiene": [
+        "etapa 3",
+        "2030"
+      ],
+      "no_contiene": [
+        "(segunda|etapa 2) en adelante",
+        "entrega inmediata"
+      ],
       "max_burbujas": 3
     },
     {
@@ -778,10 +1079,18 @@
       "canal": "instagram",
       "tipo": "consulta",
       "mensajes": [
-        { "de": "cliente", "texto": "wena, me puedes decir altiro cuanto sale el de arena y sol po" }
+        {
+          "de": "cliente",
+          "texto": "wena, me puedes decir altiro cuanto sale el de arena y sol po"
+        }
       ],
-      "debe": ["Dar el precio de Arena y Sol completo", "Sonar cercana pero sin modismos chilenos (nada de al tiro, po, cachai, wena)"],
-      "no_contiene": ["\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"]
+      "debe": [
+        "Dar el precio de Arena y Sol completo",
+        "Sonar cercana pero sin modismos chilenos (nada de al tiro, po, cachai, wena)"
+      ],
+      "no_contiene": [
+        "\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"
+      ]
     },
     {
       "nombre": "WhatsApp: pide respuesta rápida → sin \"al tiro\"",
@@ -789,29 +1098,70 @@
       "canal": "whatsapp",
       "tipo": "consulta",
       "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Patricio. Necesito saber rápido dónde quedan, cachai?" }
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Patricio. Necesito saber rápido dónde quedan, cachai?"
+        }
       ],
-      "debe": ["Decir dónde quedan los terrenos (El Tabo)", "Sin modismos chilenos (nada de al tiro, po, cachai)"],
-      "no_contiene": ["\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"]
+      "debe": [
+        "Decir dónde quedan los terrenos (El Tabo)",
+        "Sin modismos chilenos (nada de al tiro, po, cachai)"
+      ],
+      "no_contiene": [
+        "\\b(al ?tiro|cach[aá]i|wena|bac[aá]n|pucha|la raja|po|oye)\\b"
+      ]
     },
     {
       "nombre": "WhatsApp: vuelve a pedir \"Valor\" → precio con pie y cuotas + lo que viene con el terreno, no solo valores",
       "origen": "Marcela, 20-11-2026 (\"sigue solo enviando valores\": Ali resumía \"$37.990.000 con crédito directo\" sin pie ni lista)",
       "canal": "whatsapp",
       "tipo": "consulta",
-      "cliente": { "nombre": "Marcela" },
+      "cliente": {
+        "nombre": "Marcela"
+      },
       "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Y cuéntame qué te gustaría saber de nuestros terrenos en El Tabo." },
-        { "de": "cliente", "texto": "Marcela" },
-        { "de": "cliente", "texto": "Ubicación" },
-        { "de": "ali", "texto": "Marcela, los dos están en El Tabo, a poco más de 1 hora de Santiago por la Ruta 78 🌊\n✅ Lomas del Mar, a 10 minutos de la playa\n✅ Arena y Sol, a 8 minutos de la playa\n\n¿Te gustaría venir a conocerlos en una visita?" },
-        { "de": "cliente", "texto": "Valor" }
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto? Y cuéntame qué te gustaría saber de nuestros terrenos en El Tabo."
+        },
+        {
+          "de": "cliente",
+          "texto": "Marcela"
+        },
+        {
+          "de": "cliente",
+          "texto": "Ubicación"
+        },
+        {
+          "de": "ali",
+          "texto": "Marcela, los dos están en El Tabo, a poco más de 1 hora de Santiago por la Ruta 78 🌊\n✅ Lomas del Mar, a 10 minutos de la playa\n✅ Arena y Sol, a 8 minutos de la playa\n\n¿Te gustaría venir a conocerlos en una visita?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Valor"
+        }
       ],
-      "debe": ["Dar el precio con contado, pie, cuotas y total", "Mandar la lista corta de lo que viene con el terreno", "Cerrar con una pregunta que siga la conversación (por ejemplo contado o cuotas)"],
-      "contiene": ["\\$5\\.500\\.000|\\$20\\.000\\.000", "plano y limpio"],
+      "debe": [
+        "Dar el precio con contado, pie, cuotas y total",
+        "Mandar la lista corta de lo que viene con el terreno",
+        "Cerrar con una pregunta que siga la conversación (por ejemplo contado o cuotas)"
+      ],
+      "contiene": [
+        "\\$5\\.500\\.000|\\$20\\.000\\.000",
+        "plano y limpio"
+      ],
       "max_burbujas": 3
     },
     {
@@ -819,16 +1169,181 @@
       "origen": "Marcela, 20-11-2026 (\"sigue solo enviando valores\")",
       "canal": "whatsapp",
       "tipo": "consulta",
-      "cliente": { "nombre": "Marcela" },
+      "cliente": {
+        "nombre": "Marcela"
+      },
       "mensajes": [
-        { "de": "cliente", "texto": "Hola" },
-        { "de": "ali", "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?" },
-        { "de": "cliente", "texto": "Marcela. Necesito valor" },
-        { "de": "ali", "texto": "Marcela, tenemos dos proyectos en El Tabo 😊\n\n¿Te interesa Lomas del Mar o Arena y Sol? Así te paso el valor exacto de ese." },
-        { "de": "cliente", "texto": "Ambos proyectos" }
+        {
+          "de": "cliente",
+          "texto": "Hola"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola, soy Ali, del equipo de Alimin 👋\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Marcela. Necesito valor"
+        },
+        {
+          "de": "ali",
+          "texto": "Marcela, tenemos dos proyectos en El Tabo 😊\n\n¿Te interesa Lomas del Mar o Arena y Sol? Así te paso el valor exacto de ese."
+        },
+        {
+          "de": "cliente",
+          "texto": "Ambos proyectos"
+        }
       ],
-      "debe": ["Dar los precios de Lomas del Mar (200 y 390 m²) y de Arena y Sol con contado, pie, cuotas y total", "Mandar la lista corta de lo que viene con el terreno", "Máximo 3 mensajes y cerrar con una pregunta"],
-      "contiene": ["\\$5\\.500\\.000", "\\$7\\.500\\.000", "\\$20\\.000\\.000", "plano y limpio"],
+      "debe": [
+        "Dar los precios de Lomas del Mar (200 y 390 m²) y de Arena y Sol con contado, pie, cuotas y total",
+        "Mandar la lista corta de lo que viene con el terreno",
+        "Máximo 3 mensajes y cerrar con una pregunta"
+      ],
+      "contiene": [
+        "\\$5\\.500\\.000",
+        "\\$7\\.500\\.000",
+        "\\$20\\.000\\.000",
+        "plano y limpio"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "Facebook: \"si tengo 10 millones, ¿encuentro un sitio?\" hablando de Lomas → los dos tamaños",
+      "origen": "Nicolás, 21-11-2026 (Ali mostró solo el de 200 m²)",
+      "canal": "facebook",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Jean"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, quiero información de Lomas del Mar"
+        },
+        {
+          "de": "ali",
+          "texto": "Hola Jean, soy Ali, del equipo de Alimin 👋\n\nLomas del Mar queda a 10 minutos de la playa de El Tabo, con terrenos de 200 y 390 m².\n\n¿Te sirve más pagarlo al contado o en cuotas?"
+        },
+        {
+          "de": "cliente",
+          "texto": "con sinceridad si uno tiene 10 millones de pesos, es posible que encuentre un sitio???"
+        }
+      ],
+      "debe": [
+        "Decir que sí: con $10.000.000 le alcanza para el pie de los dos tamaños de Lomas del Mar",
+        "Mostrar los dos tamaños (200 m² y 390 m²) con contado, pie y cuotas",
+        "Máximo 3 mensajes, en listas con ✅"
+      ],
+      "contiene": [
+        "$5.500.000",
+        "$7.500.000",
+        "390"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "Facebook: pregunta papeles hablando de Lomas del Mar → no invita a Arena y Sol",
+      "origen": "Nicolás, 21-11-2026 (cerró invitando a Arena y Sol)",
+      "canal": "facebook",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Jean"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, me interesa Lomas del Mar"
+        },
+        {
+          "de": "ali",
+          "texto": "Lomas del Mar tiene dos tamaños 🌊\n✅ 200 m² a $35.000.000 al contado\n✅ O pie de $5.500.000 y 60 cuotas de $550.000\n✅ 390 m² a $43.000.000 al contado\n✅ O pie de $7.500.000 y 70 cuotas de $550.000\n\nY viene con 😊\n✅ Terreno plano y limpio\n✅ Agua de pozo potabilizada, sin pagar cuenta de agua\n✅ Luz con medidor incluido\n✅ Estacionamiento de visitas\n✅ Se va a entregar con rol propio\n\n¿Te sirve más pagarlo al contado o en cuotas?"
+        },
+        {
+          "de": "cliente",
+          "texto": "en cuotas"
+        },
+        {
+          "de": "ali",
+          "texto": "Con el crédito directo pagas en cuotas fijas en pesos, sin banco, sin aval y sirve aunque estés en DICOM 😊\n\n¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Jean. que exigen como papeles???"
+        }
+      ],
+      "debe": [
+        "Responder que se necesita la cédula de identidad vigente y el pago del pie",
+        "Si invita a una visita o agrega algo de un proyecto, que sea Lomas del Mar"
+      ],
+      "no_contiene": [
+        "Arena y Sol"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: \"¿cómo reservo en Arena y Sol?\" → lotes libres, condiciones y beneficios en breve",
+      "origen": "Nicolás, 21-11-2026 (reserva en línea)",
+      "canal": "whatsapp",
+      "tipo": "quiere_reservar",
+      "cliente": {
+        "nombre": "Pedro",
+        "telefono": "+56912345678"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, soy Pedro. Me gustó Arena y Sol, ¿cómo hago para reservar?"
+        }
+      ],
+      "debe": [
+        "Nombrar lotes libres de Arena y Sol (formato P45) para que elija",
+        "Decir breve que la reserva es de $550.000, no se devuelve y hay 10 días corridos para pie y promesa",
+        "Mencionar en pocas palabras los beneficios: puede visitar cuando quiera, el contrato después de la reserva, que lo contacta un asesor y el acceso al portal de pagos",
+        "No derivar"
+      ],
+      "deriva": false,
+      "contiene": [
+        "550.000",
+        "Pd{1,2}"
+      ],
+      "no_contiene": [
+        "transferencia",
+        "cuenta corriente"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: elige el lote P45 → manda el enlace de reserva de ese lote",
+      "origen": "Nicolás, 21-11-2026 (reserva en línea)",
+      "canal": "whatsapp",
+      "tipo": "quiere_reservar",
+      "cliente": {
+        "nombre": "Pedro",
+        "telefono": "+56912345678"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, soy Pedro. Me gustó Arena y Sol, ¿cómo hago para reservar?"
+        },
+        {
+          "de": "ali",
+          "texto": "Pedro, en Arena y Sol quedan libres los lotes P4, P5, P18, P43, P45 y P64, entre otros 😊\n\nLa reserva es de $550.000 y no se devuelve si decides no seguir. Después tienes 10 días corridos para pagar el pie y firmar la promesa. Puedes visitar el proyecto cuando quieras, procesamos tu contrato después de la reserva, te contacta un asesor y te creamos acceso al portal de pagos.\n\n¿Qué lote te gustaría?"
+        },
+        {
+          "de": "cliente",
+          "texto": "el P45"
+        }
+      ],
+      "debe": [
+        "Mandar el enlace de reserva del lote P45 tal cual",
+        "Decir en una frase cómo sigue (paga con Webpay y deja su RUT)",
+        "No derivar"
+      ],
+      "deriva": false,
+      "contiene": [
+        "aliminspa.cl/reservar/arena-y-sol?lote=P45"
+      ],
       "max_burbujas": 3
     }
   ]
