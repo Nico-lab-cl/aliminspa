@@ -502,7 +502,7 @@
       ],
       "deriva": false,
       "contiene": [
-        "550.000",
+        "550\\.000",
         "10 d[ií]as"
       ],
       "max_burbujas": 3
@@ -1235,8 +1235,8 @@
         "Máximo 3 mensajes, en listas con ✅"
       ],
       "contiene": [
-        "$5.500.000",
-        "$7.500.000",
+        "\\$5\\.500\\.000",
+        "\\$7\\.500\\.000",
         "390"
       ],
       "max_burbujas": 3
@@ -1303,8 +1303,8 @@
       ],
       "deriva": false,
       "contiene": [
-        "550.000",
-        "Pd{1,2}"
+        "550\\.000",
+        "P\\d{1,2}"
       ],
       "no_contiene": [
         "transferencia",
@@ -1336,13 +1336,13 @@
         }
       ],
       "debe": [
-        "Mandar el enlace de reserva del lote P45 tal cual",
+        "Mandar el enlace de reserva del lote P45 (lo entrega la herramienta link_reserva: aliminspa.cl/reservar/arena-y-sol?lote=P45, puede llevar &origen=...)",
         "Decir en una frase cómo sigue (paga con Webpay y deja su RUT)",
         "No derivar"
       ],
       "deriva": false,
       "contiene": [
-        "aliminspa.cl/reservar/arena-y-sol?lote=P45"
+        "aliminspa\\.cl/reservar/arena-y-sol\\?lote=P45"
       ],
       "max_burbujas": 3
     }
