@@ -13,7 +13,7 @@ import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramie
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
-import { afirmacionesProhibidas, LO_QUE_VIENE, modismos, precioIncompleto, problemasDeFormato, sinModismos } from './guardia'
+import { afirmacionesProhibidas, CONDICIONES_RESERVA, LO_QUE_VIENE, modismos, precioIncompleto, problemasDeFormato, reservaIncompleta, sinModismos } from './guardia'
 import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, terminaEnPregunta, type Intencion } from './intencion'
 
 /**
@@ -460,6 +460,14 @@ export async function correrModelo(p: {
                 ? LO_QUE_VIENE.test(m.content)
                 : m.content.some(b => b.type === 'text' && LO_QUE_VIENE.test(b.text)))
     )
+    /** Las condiciones de la reserva ya salieron antes en la conversación. */
+    const yaDioCondiciones = mensajes.some(
+        m =>
+            m.role === 'assistant' &&
+            (typeof m.content === 'string'
+                ? CONDICIONES_RESERVA.test(m.content)
+                : m.content.some(b => b.type === 'text' && CONDICIONES_RESERVA.test(b.text)))
+    )
     // Oficina IA: el personaje se pone a trabajar (sin datos del cliente).
     const agenteOficina = p.agente === 'cierre' ? 'cierre' : 'ali'
     if (!p.prueba) oficinaTrabaja(agenteOficina, p.canal)
@@ -496,7 +504,9 @@ export async function correrModelo(p: {
             const malas = correcciones < 2 ? afirmacionesProhibidas(texto) : []
             const forma = correcciones < 2 ? problemasDeFormato(texto, p.canal) : []
             const jerga = correcciones < 2 ? modismos(texto) : []
-            const precio = correcciones < 2 ? precioIncompleto(texto, yaDijoLoQueViene, p.canal) : []
+            const precio = correcciones < 2
+                ? [...precioIncompleto(texto, yaDijoLoQueViene, p.canal), ...reservaIncompleta(texto, yaDioCondiciones)]
+                : []
             // Anuncia el plano sin haber llamado a enviar_documento: la persona
             // se quedaba esperando un archivo que nunca llegaba (banco del 20-11).
             const sinArchivo =

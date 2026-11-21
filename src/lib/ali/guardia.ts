@@ -145,6 +145,30 @@ export function precioIncompleto(texto: string, yaDijoLoQueViene: boolean, canal
 /** Ya salió en la conversación (o en esta respuesta) la lista de lo que viene. */
 export const LO_QUE_VIENE = /plano y limpio|agua de pozo potabilizada/i
 
+/** Ya le dio en la conversación las condiciones de la reserva. */
+export const CONDICIONES_RESERVA = /550\.000/
+
+/**
+ * Cuando Ali ofrece reservar (lotes P45… y "reserv") sin el enlace todavía y
+ * sin haber dado antes las condiciones, en esa respuesta van las condiciones y
+ * lo bueno (Nicolás, 21-11-2026: en el banco de pruebas mostraba los lotes y
+ * dejaba las condiciones para después, o se saltaba el contrato y el portal).
+ */
+export function reservaIncompleta(texto: string, yaDioCondiciones: boolean): string[] {
+    if (yaDioCondiciones || /\/reservar\//.test(texto)) return []
+    if (!/\bP\d{1,2}\b/.test(texto) || !/reserv/i.test(texto)) return []
+    const faltan = [
+        !/550\.000/.test(texto) && 'que la reserva es de $550.000 y no se devuelve si decide no seguir',
+        !/10 d[ií]as/i.test(texto) && 'que tiene 10 días corridos para pagar el pie y firmar la promesa',
+        !/contrato/i.test(texto) && 'que después de la reserva procesamos su contrato de compraventa y lo contacta un asesor',
+        !/portal/i.test(texto) && 'que le creamos acceso al portal de pagos para ver su terreno, sus pagos, sus documentos y los avances',
+    ].filter(Boolean) as string[]
+    if (!faltan.length) return []
+    return [
+        `Le ofreces reservar, pero falta ${faltan.join('; ')}. Van en esta misma respuesta, como en el ejemplo de "Reservar el terreno": una lista con los lotes, otra "Para reservar" con las condiciones y lo bueno (máximo 5 líneas con ✅), y la pregunta de qué lote quiere. Si saludas, el saludo va en el título de la primera lista.`,
+    ]
+}
+
 /** Último recurso si después de reescribir todavía queda alguno. */
 export function sinModismos(texto: string): string {
     return texto

@@ -53,11 +53,11 @@ export interface Intencion {
 }
 
 const DESCRIPCION_TIPOS = `- saludo: solo saluda o escribe "info", "hola", "precio?" sin decir de qué, o algo igual de general. También si pregunta si lo escuchas o si te llegó su audio ("¿me escuchas?").
-- consulta: una o dos preguntas concretas (precio, ubicación, cuotas, qué incluye, entrega, agua, luz, escritura, visita…).
+- consulta: una o dos preguntas concretas (precio, ubicación, cuotas, qué incluye, entrega, agua, luz, escritura, visita…). También si dice cuánto tiene y pregunta qué le alcanza ("si tengo 10 millones, ¿encuentro un sitio?"), aunque empiece con "con sinceridad".
 - varias_preguntas: tres o más preguntas o temas en el mismo mensaje o en mensajes seguidos.
 - da_datos: contesta lo que Ali le preguntó (su nombre, su correo, un día u horario, para qué lo quiere, qué proyecto o qué tamaño le interesa) sin hacer una pregunta nueva. Un "gracias" junto a su nombre es da_datos, no cierre.
 - cierre: solo agradece o acusa recibo ("gracias", "ok", "ya lo vi", "perfecto"), o es solo emojis o un sticker, sin pregunta ni dato.
-- objecion_precio: dice que es caro, que no le alcanza o que no tiene el pie.
+- objecion_precio: dice que es caro, que no le alcanza o que no tiene el pie. Si dice un monto y pregunta qué puede comprar con eso, es consulta.
 - duda_o_desconfianza: desconfía ("¿es estafa?", "¿son reales?"), le parece lejos, duda de los papeles o de la empresa, o pone otra objeción que no es el precio.
 - quiere_visitar: quiere ir a ver los terrenos, pregunta por horarios de visita o elige un horario.
 - quiere_reservar: quiere reservar, apartar, pagar el pie o cerrar la compra.
@@ -160,7 +160,7 @@ export async function clasificarMensaje(p: {
  */
 const GUIAS: Record<TipoMensaje, string> = {
     saludo: 'Solo saludó o pidió información general. Si no te has presentado, hazlo con "Hola, soy Ali, del equipo de Alimin 👋" (con el 👋, nunca "asistente virtual") y pregúntale su nombre y qué le interesa saber (precio, ubicación, cómo son). Nada de precios ni listas todavía.',
-    consulta: 'Hizo una pregunta concreta. Respóndela directo, con lista ✅ si son 2 o más datos. Si es el precio, en el mensaje siguiente va la lista de lo que viene con el terreno (las 5 líneas de tu ficha), si no salió antes, y cierras con "¿Te sirve más pagarlo al contado o en cuotas?" sin pedirle el nombre todavía. Si no es el precio y no sabes su nombre, pregúntaselo al final ("¿con quién tengo el gusto?").',
+    consulta: 'Hizo una pregunta concreta. Respóndela directo, con lista ✅ si son 2 o más datos. Si te dice cuánto tiene, sigue "Si te dice cuánto tiene": todas las opciones cuyo pie le alcanza (con $10.000.000, los dos tamaños de Lomas del Mar). Si es el precio, en el mensaje siguiente va la lista de lo que viene con el terreno (las 5 líneas de tu ficha), si no salió antes, y cierras con "¿Te sirve más pagarlo al contado o en cuotas?" sin pedirle el nombre todavía. Si no es el precio y no sabes su nombre, pregúntaselo al final ("¿con quién tengo el gusto?").',
     varias_preguntas:
         'Hizo muchas preguntas juntas. Respóndelas en listas cortas con ✅ agrupadas por tema (precio y crédito en una, qué incluye en otra), máximo 3 mensajes y ningún párrafo. Lo que no alcance, ofrécelo en la pregunta final.',
     da_datos:
