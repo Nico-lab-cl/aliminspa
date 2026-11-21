@@ -172,7 +172,8 @@ const GUIAS: Record<TipoMensaje, string> = {
     duda_o_desconfianza:
         'Tiene una duda de fondo o desconfía. Responde con datos ciertos de tu ficha, en pocas frases y sin discutir, e invítala a conocer los terrenos en persona, que es lo que más tranquiliza.',
     quiere_visitar: 'Quiere visitar. Sigue el flujo de agenda: proyecto, horarios disponibles con la herramienta y los datos que te falten para agendar. No le mandes enlaces de agenda.',
-    quiere_reservar: 'Quiere reservar o pagar. Felicítala en una frase y deriva con derivar_a_asesor (motivo "quiere reservar", con proyecto y lote si los dijo). Dile que su asesor le escribe por este chat.',
+    quiere_reservar:
+        'Quiere reservar. Sigue "Reservar el terreno": en un mensaje breve, lotes libres, condiciones (reserva $550.000 que no se devuelve, 10 días para pie y promesa) y beneficios; cuando elija lote, link_reserva y pega el enlace. Deriva solo si quiere reservar con una persona o por transferencia.',
     pide_persona: 'Pide hablar con una persona. Deriva con derivar_a_asesor y dile en una frase que un asesor le responde por este mismo chat.',
     postventa:
         'Ya es cliente y esto es postventa. Deriva AHORA con derivar_a_asesor, sin preguntarle antes. Reconoce lo que le pasa en una frase y dile que ya le avisaste al equipo de postventa y que le escriben por este mismo chat. No le vendas nada ni le pidas datos.',

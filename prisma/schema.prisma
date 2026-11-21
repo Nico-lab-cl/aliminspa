@@ -131,3 +131,48 @@ model PollVote {
   @@index([pollId, fingerprint])
   @@map("poll_votes")
 }
+
+// Reservas pagadas con Webpay desde /reservar/<proyecto> (21-11-2026). Hoy solo
+// Arena y Sol: Lomas del Mar reserva en aliminlomasdelmar.com con su propia
+// base. El lote queda tomado mientras la reserva está "pendiente" y no venció
+// (expira_en) o está "pagada"; un índice único parcial (ver
+// prisma/sql/2026-11-21-reservas-web.sql) impide dos pagadas del mismo lote.
+model ReservaWeb {
+  id                  String    @id @default(cuid())
+  folio               String    @unique
+  proyecto            String
+  lote                Int
+  nombre              String
+  rut                 String
+  email               String
+  celular             String
+  monto               Int
+  /// pendiente | pagada | fallida | anulada | conflicto
+  estado              String    @default("pendiente")
+  buy_order           String    @unique
+  token               String?   @unique
+  expira_en           DateTime
+  pagada_at           DateTime?
+  codigo_autorizacion String?
+  tarjeta             String?
+  tipo_pago           String?
+  cuotas_tarjeta      Int?
+  /// De dónde vino: "ali-whatsapp", "ali-instagram", "web"...
+  origen              String?
+  utm_source          String?
+  utm_medium          String?
+  utm_campaign        String?
+  /// Cuándo salieron el correo, el aviso a postventa y el del CRM (una sola vez).
+  avisos_at           DateTime?
+  crm_lead_id         String?
+  consentimiento_contacto  Boolean?
+  consentimiento_marketing Boolean?
+  consentimiento_at        DateTime?
+  politica_version         String?
+  consentimiento_origen    String?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  @@index([proyecto, lote])
+  @@map("reservas_web")
+}

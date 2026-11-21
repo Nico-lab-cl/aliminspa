@@ -7,6 +7,7 @@ import { isSlotBookable, parseCalendarDate, toCalendarDateInChile, toChileInstan
 import { agendarVisita } from '@/lib/agendar-visita'
 import { ARENA_Y_SOL, LOMAS_DEL_MAR, type Proyecto } from '@/components/agenda3d/proyectos'
 import { DOCUMENTOS, archivoVigente, documentoPorId, urlDocumento, type DocumentoParaEnviar } from './documentos'
+import { PROYECTOS_RESERVA, clp, enlaceReserva, lotesLibres, lotesTomados, numeroDeLote, refLote } from '@/lib/reservas'
 
 /**
  * Herramientas que Ali puede usar mientras conversa.
@@ -236,6 +237,21 @@ export const HERRAMIENTAS: Anthropic.Tool[] = [
         strict: true,
     },
     {
+        name: 'link_reserva',
+        description:
+            'Da el enlace para que la persona reserve y pague la reserva con Webpay. Arena y Sol: con el lote que eligió (por ejemplo "P45"); revisa que esté libre. Lomas del Mar: el enlace lleva a aliminlomasdelmar.com, donde elige el lote en el mapa. Úsala solo después de contarle las condiciones de la reserva (ver "Reservar el terreno").',
+        input_schema: {
+            type: 'object',
+            properties: {
+                proyecto: { type: 'string', enum: ['Lomas del Mar', 'Arena y Sol'] },
+                lote: { type: 'string', description: 'Lote que eligió, por ejemplo "P45". Vacío si no eligió.' },
+            },
+            required: ['proyecto', 'lote'],
+            additionalProperties: false,
+        },
+        strict: true,
+    },
+    {
         name: 'buscar_en_sitio',
         description:
             'Busca en las páginas de aliminspa.cl (proyectos, preguntas frecuentes, quiénes somos, blog) y devuelve los fragmentos más relevantes con su ruta.',
@@ -284,7 +300,10 @@ async function lotesDisponibles(proyectoNombre: string) {
     if (!respuesta.ok) return { error: 'No se pudo leer el mapa de lotes en este momento.' }
 
     const { lotes } = (await respuesta.json()) as { lotes: LotePlano[] }
-    const libres = lotes.filter(l => (l.tipo ?? 'lote') === 'lote' && !l.sold && l.n !== null)
+    // Lo reservado y pagado en aliminspa.cl/reservar todavía no figura en el
+    // plano hasta que postventa lo marca: se descuenta acá.
+    const tomados = PROYECTOS_RESERVA[proyecto.id] ? await lotesTomados(proyecto.id) : new Set<number>()
+    const libres = lotes.filter(l => (l.tipo ?? 'lote') === 'lote' && !l.sold && l.n !== null && !tomados.has(l.n))
 
     const nombre = (l: LotePlano) =>
         proyecto.numeraLotes
@@ -308,6 +327,50 @@ async function lotesDisponibles(proyectoNombre: string) {
         lotes: libres.map(nombre),
         nota: 'La superficie exacta de cada lote la confirma el asesor en la visita.',
         mapa: proyecto.id === ARENA_Y_SOL.id ? 'aliminspa.cl/agendar-visita-arenas' : 'aliminspa.cl/agendar-visita',
+    }
+}
+
+/* ── Reserva ─────────────────────────────────────────────────────── */
+
+/** Lomas del Mar reserva en su propio sitio, con su mapa de lotes y Webpay. */
+const RESERVA_LOMAS = 'https://aliminlomasdelmar.com'
+
+async function linkReserva(entrada: { proyecto?: string; lote?: string }, ctx: ContextoHerramientas) {
+    const condiciones =
+        'Antes del enlace ya le dijiste, breve: reserva de $550.000 que no se devuelve, 10 días corridos para pie y promesa, y los beneficios. Pega el enlace tal cual.'
+    if (entrada.proyecto === 'Lomas del Mar') {
+        return {
+            ok: true,
+            url: RESERVA_LOMAS,
+            como: 'En ese sitio elige su lote en el mapa, deja sus datos y paga la reserva con Webpay.',
+            nota: condiciones,
+        }
+    }
+    if (entrada.proyecto !== 'Arena y Sol') return { ok: false, error: 'Proyecto desconocido.' }
+
+    const slug = ARENA_Y_SOL.id
+    const p = PROYECTOS_RESERVA[slug]
+    const libres = await lotesLibres(slug)
+    if (!libres.length) {
+        return { ok: false, error: 'No quedan lotes para reservar en línea en Arena y Sol. Deriva con el motivo "quiere reservar".' }
+    }
+    const n = numeroDeLote(entrada.lote)
+    if (n && !libres.some(l => l.n === n)) {
+        return {
+            ok: false,
+            error: `El lote ${refLote(p, n)} ya no está disponible. Ofrécele otro de estos: ${libres.map(l => l.ref).join(', ')}.`,
+        }
+    }
+    const origen = `ali-${ctx.canal || 'web'}`
+    return {
+        ok: true,
+        url: enlaceReserva(slug, n, origen),
+        lote: n ? refLote(p, n) : null,
+        monto: clp(p.monto),
+        como: n
+            ? 'En el enlace confirma sus datos (con RUT) y paga con Webpay, débito o crédito.'
+            : 'En el enlace elige su lote, deja sus datos (con RUT) y paga con Webpay.',
+        nota: condiciones,
     }
 }
 
@@ -520,6 +583,8 @@ export async function ejecutarHerramienta(
             return horariosDisponibles(datos as { desde?: string; dias?: number })
         case 'agendar_visita':
             return agendar(datos as { proyecto: string; fecha: string; hora: string; lote?: string }, ctx)
+        case 'link_reserva':
+            return linkReserva(entrada, ctx)
         case 'derivar_a_asesor':
             ctx.derivacion = {
                 motivo: String(entrada.motivo || '').slice(0, 300),
