@@ -155,7 +155,7 @@ export const CONDICIONES_RESERVA = /reserva[^\n]{0,40}\$5[05]0\.000|\$5[05]0\.00
  * dejaba las condiciones para después, o se saltaba el contrato y el portal).
  */
 export function reservaIncompleta(texto: string, yaDioCondiciones: boolean): string[] {
-    if (yaDioCondiciones || /\/reservar\//.test(texto)) return []
+    if (yaDioCondiciones || /\/reservar\/|\/pagar\//.test(texto)) return []
     if (!/\bP\d{1,2}\b|\bLote \d{1,3}\b|\bEtapa \d\b/i.test(texto) || !/reserv/i.test(texto)) return []
     const faltan = [
         !/\$5[05]0\.000/.test(texto) && 'el monto de la reserva (Arena y Sol $550.000, Lomas del Mar $500.000) y que no se devuelve si decide no seguir',

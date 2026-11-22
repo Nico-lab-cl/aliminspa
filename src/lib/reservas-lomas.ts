@@ -76,6 +76,45 @@ export async function lotesLibresLomas(): Promise<LoteLomas[]> {
         .sort((a, b) => a.etapa - b.etapa || Number(a.numero) - Number(b.numero))
 }
 
+export const ENTREGA_ETAPA: Record<number, string> = {
+    1: 'fines de 2027',
+    2: 'fines de 2028 o verano de 2029',
+    3: 'fines de 2030',
+    4: 'fines de 2031',
+}
+
+/**
+ * De lo que dijo la persona ("el 22", "etapa 1 lote 22") al lote libre exacto.
+ * Si el número está libre en varias etapas, devuelve el error para que Ali
+ * pregunte cuál.
+ */
+export function resolverLoteLomas(
+    libres: LoteLomas[],
+    texto: unknown
+): { ok: true; lote: LoteLomas } | { ok: false; error: string; preguntaEtapa?: boolean } {
+    const pedido = leerLoteLomas(texto)
+    if (!pedido) return { ok: false, error: 'No dijo qué lote. Pregúntale cuál quiere (etapa y número).' }
+    const candidatos = libres.filter(l => l.numero === pedido.numero && (pedido.etapa === null || l.etapa === pedido.etapa))
+    if (!candidatos.length) {
+        const porEtapa = [1, 2, 3, 4]
+            .map(e => [e, libres.filter(l => l.etapa === e).map(l => l.numero)] as const)
+            .filter(([, ns]) => ns.length)
+            .map(([e, ns]) => `Etapa ${e}: ${ns.slice(0, 12).join(', ')}${ns.length > 12 ? '…' : ''}`)
+        return {
+            ok: false,
+            error: `${pedido.etapa ? `El lote ${pedido.numero} de la etapa ${pedido.etapa}` : `El lote ${pedido.numero}`} no está libre. Ofrécele otro. Libres: ${porEtapa.join(' · ')}.`,
+        }
+    }
+    if (candidatos.length > 1) {
+        return {
+            ok: false,
+            preguntaEtapa: true,
+            error: `El lote ${pedido.numero} está libre en ${candidatos.map(c => `la etapa ${c.etapa} (entrega aproximada a ${ENTREGA_ETAPA[c.etapa] || 'confirmar'})`).join(' y en ')}. Pregúntale de qué etapa lo quiere, en una frase, y después vuelve a llamar con la etapa.`,
+        }
+    }
+    return { ok: true, lote: candidatos[0] }
+}
+
 /** Crea la reserva y la transacción en aliminlomasdelmar.com. */
 export async function crearPagoLomas(datos: {
     lotId: number

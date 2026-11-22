@@ -52,6 +52,8 @@ async function manejar(request: NextRequest) {
             await prisma.reservaWeb.update({ where: { id: r.id }, data: { estado: 'anulada' } })
         }
         const p = r ? PROYECTOS_RESERVA[r.proyecto] : null
+        // Vino del enlace con los datos que pidió Ali: vuelve a ese enlace.
+        if (r && r.utm_campaign === 'reserva-datos-chat') return ir(`/pagar/${r.id}?cancelada=1`)
         return ir(r && p ? `/reservar/${r.proyecto}?lote=${refLote(p, r.lote)}&cancelada=1` : '/reservar/resultado?estado=anulada')
     }
 

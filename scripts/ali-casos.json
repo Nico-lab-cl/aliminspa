@@ -1313,8 +1313,8 @@
       "max_burbujas": 3
     },
     {
-      "nombre": "WhatsApp: elige el lote P45 → manda el enlace de reserva de ese lote",
-      "origen": "Nicolás, 21-11-2026 (reserva en línea)",
+      "nombre": "WhatsApp: elige el lote P45 → pide en un mensaje nombre y apellido, RUT y correo (el celular ya lo tiene)",
+      "origen": "Nicolás, 22-11-2026 (\"que la misma IA pida los datos, como con la visita\")",
       "canal": "whatsapp",
       "tipo": "quiere_reservar",
       "cliente": {
@@ -1336,15 +1336,18 @@
         }
       ],
       "debe": [
-        "Mandar el enlace de reserva del lote P45 (lo entrega la herramienta link_reserva: aliminspa.cl/reservar/arena-y-sol?lote=P45, puede llevar &origen=...)",
-        "Decir en una frase cómo sigue (paga con Webpay y deja su RUT)",
+        "Pedir en un solo mensaje corto lo que falta para dejarle el pago listo: nombre y apellido, RUT y correo",
+        "No pedir el celular (ya lo tiene por WhatsApp)",
         "No derivar"
       ],
       "deriva": false,
+      "max_burbujas": 3,
       "contiene": [
-        "aliminspa\\.cl/reservar/arena-y-sol\\?lote=P45"
+        "RUT"
       ],
-      "max_burbujas": 3
+      "no_contiene": [
+        "aliminlomasdelmar\\.com"
+      ]
     },
     {
       "nombre": "WhatsApp: Lomas, \"quiero el 22\" (está en varias etapas) → pregunta la etapa, sin mandar a aliminlomasdelmar.com",
@@ -1381,8 +1384,8 @@
       "max_burbujas": 3
     },
     {
-      "nombre": "WhatsApp: Lomas, \"etapa 1 lote 22\" → enlace directo de pago de ese lote",
-      "origen": "Nicolás, 21-11-2026 (\"que me envíe el link de pago nomás\")",
+      "nombre": "WhatsApp: Lomas, \"etapa 1 lote 22\" → pide nombre y apellido, RUT y correo para dejar el pago listo",
+      "origen": "Nicolás, 22-11-2026 (\"que la misma IA pida los datos\")",
       "canal": "whatsapp",
       "tipo": "quiere_reservar",
       "cliente": {
@@ -1404,13 +1407,58 @@
         }
       ],
       "debe": [
-        "Mandar el enlace de pago de ese lote (lo entrega link_reserva: aliminspa.cl/reservar/lomas-del-mar?lote=E1-22, puede llevar &origen=...)",
-        "Decir en una frase cómo sigue (paga con Webpay y deja su RUT)",
+        "Confirmar Etapa 1 · Lote 22 y pedir en un solo mensaje corto nombre y apellido, RUT y correo",
+        "No mandar a aliminlomasdelmar.com",
         "No derivar"
       ],
       "deriva": false,
       "contiene": [
-        "aliminspa\\.cl/reservar/lomas-del-mar\\?lote=E1-22"
+        "RUT"
+      ],
+      "no_contiene": [
+        "aliminlomasdelmar\\.com"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: da nombre, RUT y correo → enlace de pago listo (/pagar/), sin pedir nada más",
+      "origen": "Nicolás, 22-11-2026 (\"para qué depende de que el usuario complete los datos\")",
+      "canal": "whatsapp",
+      "tipo": "da_datos",
+      "cliente": {
+        "nombre": "Pedro",
+        "telefono": "+56912345678"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, soy Pedro. Me gustó Arena y Sol, ¿cómo hago para reservar?"
+        },
+        {
+          "de": "ali",
+          "texto": "Pedro, en Arena y Sol quedan libres los lotes P4, P5, P18, P43, P45 y P64, entre otros 😊\n\nLa reserva es de $550.000 y no se devuelve si decides no seguir. Después tienes 10 días corridos para pagar el pie y firmar la promesa. Puedes visitar el proyecto cuando quieras, procesamos tu contrato después de la reserva, te contacta un asesor y te creamos acceso al portal de pagos.\n\n¿Qué lote te gustaría?"
+        },
+        {
+          "de": "cliente",
+          "texto": "el P45"
+        },
+        {
+          "de": "ali",
+          "texto": "Perfecto, Pedro, el P45 😊\n\nPara dejarte el pago listo, ¿me das tu nombre y apellido, tu RUT y tu correo?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Pedro Soto Vera, 11.111.111-1, pedro.prueba@ejemplo.cl"
+        }
+      ],
+      "debe": [
+        "Mandar el enlace de pago listo (lo entrega preparar_pago_reserva: aliminspa.cl/pagar/...)",
+        "Decir en una frase que ya está todo listo: lo abre, acepta y paga con Webpay sin escribir nada",
+        "No volver a pedir datos ni derivar"
+      ],
+      "deriva": false,
+      "contiene": [
+        "aliminspa\\.cl/pagar/"
       ],
       "no_contiene": [
         "aliminlomasdelmar\\.com"

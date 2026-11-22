@@ -8,7 +8,9 @@ import { agendarVisita } from '@/lib/agendar-visita'
 import { ARENA_Y_SOL, LOMAS_DEL_MAR, type Proyecto } from '@/components/agenda3d/proyectos'
 import { DOCUMENTOS, archivoVigente, documentoPorId, urlDocumento, type DocumentoParaEnviar } from './documentos'
 import { PROYECTOS_RESERVA, clp, enlaceReserva, lotesLibres, lotesTomados, numeroDeLote, refLote } from '@/lib/reservas'
-import { leerLoteLomas, lotesLibresLomas } from '@/lib/reservas-lomas'
+import { ENTREGA_ETAPA, leerLoteLomas, lotesLibresLomas, resolverLoteLomas } from '@/lib/reservas-lomas'
+import { PROYECTO_LOMAS, prepararEnlacePago } from '@/lib/reservas-enlace'
+import { normalizarCelular, normalizarRut, CORREO_VALIDO } from '@/lib/reservas'
 
 /**
  * Herramientas que Ali puede usar mientras conversa.
@@ -256,6 +258,24 @@ export const HERRAMIENTAS: Anthropic.Tool[] = [
         strict: true,
     },
     {
+        name: 'preparar_pago_reserva',
+        description:
+            'Deja la reserva lista para pagar con los datos que la persona te dio en el chat y devuelve un enlace: ella solo acepta las condiciones y paga con Webpay, sin escribir nada. Es la forma normal de cerrar la reserva. Úsala cuando ya eligió el lote, ya le contaste las condiciones y tienes su nombre y apellido, RUT y correo (el celular lo pone el sistema). Si falta algo, la herramienta te dice qué pedir.',
+        input_schema: {
+            type: 'object',
+            properties: {
+                proyecto: { type: 'string', enum: ['Lomas del Mar', 'Arena y Sol'] },
+                lote: { type: 'string', description: '"P45" en Arena y Sol, "Etapa 1 · Lote 22" en Lomas del Mar.' },
+                nombre: { type: 'string', description: 'Nombre y apellido, tal como los dio. Vacío si usas el que ya tienes.' },
+                rut: { type: 'string', description: 'RUT tal como lo escribió. Vacío si no lo dio.' },
+                email: { type: 'string', description: 'Correo. Vacío si usas el que ya tienes.' },
+            },
+            required: ['proyecto', 'lote', 'nombre', 'rut', 'email'],
+            additionalProperties: false,
+        },
+        strict: true,
+    },
+    {
         name: 'buscar_en_sitio',
         description:
             'Busca en las páginas de aliminspa.cl (proyectos, preguntas frecuentes, quiénes somos, blog) y devuelve los fragmentos más relevantes con su ruta.',
@@ -357,12 +377,8 @@ async function lotesDisponibles(proyectoNombre: string) {
 
 /* ── Reserva ─────────────────────────────────────────────────────── */
 
-const ENTREGA_ETAPA: Record<number, string> = {
-    1: 'fines de 2027',
-    2: 'fines de 2028 o verano de 2029',
-    3: 'fines de 2030',
-    4: 'fines de 2031',
-}
+const SIN_LOTES_LOMAS =
+    'No pude revisar los lotes de Lomas del Mar ahora. Dile que lo intentas de nuevo en un momento, o deriva con el motivo "quiere reservar".'
 
 /**
  * Lomas del Mar: lotes, monto y Webpay de aliminlomasdelmar.com (21-11-2026,
@@ -373,37 +389,20 @@ async function linkReservaLomas(lote: string | undefined, origen: string) {
     try {
         libres = await lotesLibresLomas()
     } catch {
-        return { ok: false, error: 'No pude revisar los lotes de Lomas del Mar ahora. Dile que lo intentas de nuevo en un momento, o deriva con el motivo "quiere reservar".' }
+        return { ok: false, error: SIN_LOTES_LOMAS }
     }
-    const pedido = leerLoteLomas(lote)
     const url = (ref?: string) => {
         const u = new URL('/reservar/lomas-del-mar', SITE.url)
         if (ref) u.searchParams.set('lote', ref)
         u.searchParams.set('origen', origen)
         return u.toString()
     }
-    if (!pedido) {
+    if (!leerLoteLomas(lote)) {
         return { ok: true, url: url(), monto: clp(libres[0]?.reserva ?? 500_000), como: 'En el enlace elige etapa y lote, deja sus datos (con RUT) y paga con Webpay.' }
     }
-    const candidatos = libres.filter(l => l.numero === pedido.numero && (pedido.etapa === null || l.etapa === pedido.etapa))
-    if (!candidatos.length) {
-        const porEtapa = [1, 2, 3, 4]
-            .map(e => [e, libres.filter(l => l.etapa === e).map(l => l.numero)] as const)
-            .filter(([, ns]) => ns.length)
-            .map(([e, ns]) => `Etapa ${e}: ${ns.slice(0, 12).join(', ')}${ns.length > 12 ? '…' : ''}`)
-        return {
-            ok: false,
-            error: `${pedido.etapa ? `El lote ${pedido.numero} de la etapa ${pedido.etapa}` : `El lote ${pedido.numero}`} no está libre. Ofrécele otro. Libres: ${porEtapa.join(' · ')}.`,
-        }
-    }
-    if (candidatos.length > 1) {
-        return {
-            ok: false,
-            pregunta_etapa: true,
-            error: `El lote ${pedido.numero} está libre en ${candidatos.map(c => `la etapa ${c.etapa} (entrega aproximada a ${ENTREGA_ETAPA[c.etapa] || 'confirmar'})`).join(' y en ')}. Pregúntale de qué etapa lo quiere, en una frase, y después vuelve a llamar con la etapa.`,
-        }
-    }
-    const l = candidatos[0]
+    const elegido = resolverLoteLomas(libres, lote)
+    if (!elegido.ok) return { ok: false, error: elegido.error }
+    const l = elegido.lote
     return {
         ok: true,
         url: url(l.ref),
@@ -446,6 +445,63 @@ async function linkReserva(entrada: { proyecto?: string; lote?: string }, ctx: C
             ? 'En el enlace confirma sus datos (con RUT) y paga con Webpay, débito o crédito.'
             : 'En el enlace elige su lote, deja sus datos (con RUT) y paga con Webpay.',
         nota: condiciones,
+    }
+}
+
+/**
+ * El pago con los datos que Ali pidió en el chat (22-11-2026, Nicolás: "que la
+ * misma IA pida los datos, como con la visita"). Devuelve aliminspa.cl/pagar/<id>:
+ * la persona solo acepta y paga (lib/reservas-enlace.ts).
+ */
+async function prepararPago(
+    entrada: { proyecto?: string; lote?: string; nombre?: string; rut?: string; email?: string },
+    ctx: ContextoHerramientas
+) {
+    const nombre = String(entrada.nombre || ctx.cliente.nombre || '').trim().replace(/\s+/g, ' ').slice(0, 120)
+    const rut = normalizarRut(entrada.rut)
+    const email = String(entrada.email || ctx.cliente.email || '').trim().toLowerCase()
+    const celular = normalizarCelular(ctx.cliente.telefono || '')
+    const faltan = [
+        nombre.split(' ').length < 2 && 'su nombre y apellido',
+        !rut && (entrada.rut ? 'su RUT (el que dio no es válido, pídele que lo revise)' : 'su RUT'),
+        (!email || !CORREO_VALIDO.test(email)) && 'su correo',
+        !celular && 'su celular',
+    ].filter(Boolean) as string[]
+    if (faltan.length) {
+        return { ok: false, error: `Para dejarle el pago listo falta ${faltan.join(', ')}. Pídeselo todo en un solo mensaje, corto.` }
+    }
+
+    let datos: { proyecto: string; lote: number; monto: number; etiqueta: string }
+    if (entrada.proyecto === 'Lomas del Mar') {
+        const libres = await lotesLibresLomas().catch(() => null)
+        if (!libres) return { ok: false, error: SIN_LOTES_LOMAS }
+        const elegido = resolverLoteLomas(libres, entrada.lote)
+        if (!elegido.ok) return { ok: false, error: elegido.error }
+        datos = { proyecto: PROYECTO_LOMAS, lote: elegido.lote.id, monto: elegido.lote.reserva, etiqueta: elegido.lote.etiqueta }
+    } else if (entrada.proyecto === 'Arena y Sol') {
+        const p = PROYECTOS_RESERVA[ARENA_Y_SOL.id]
+        const n = numeroDeLote(entrada.lote)
+        const libres = await lotesLibres(ARENA_Y_SOL.id)
+        if (!n) return { ok: false, error: 'No dijo qué lote. Pregúntale cuál quiere.' }
+        if (!libres.some(l => l.n === n)) {
+            return { ok: false, error: `El lote ${refLote(p, n)} ya no está disponible. Ofrécele otro de estos: ${libres.map(l => l.ref).join(', ')}.` }
+        }
+        datos = { proyecto: ARENA_Y_SOL.id, lote: n, monto: p.monto, etiqueta: `Lote ${refLote(p, n)}` }
+    } else {
+        return { ok: false, error: 'Proyecto desconocido.' }
+    }
+
+    const url = ctx.simulacion
+        ? `${SITE.url}/pagar/PRUEBA`
+        : // rut y celular ya se validaron arriba (si faltaban, se devolvió antes).
+          await prepararEnlacePago({ ...datos, nombre, rut: rut as string, email, celular: celular as string, origen: `ali-${ctx.canal || 'web'}` })
+    return {
+        ok: true,
+        url,
+        lote: datos.etiqueta,
+        monto: clp(datos.monto),
+        a_nombre_de: nombre,
+        como: 'Pega el enlace tal cual y dile en una frase que ya está todo listo: lo abre, acepta las condiciones y paga con Webpay, débito o crédito, sin escribir nada. El lote se aparta cuando entra a pagar, así que conviene que lo haga pronto. El enlace dura 3 días.',
     }
 }
 
@@ -660,6 +716,8 @@ export async function ejecutarHerramienta(
             return agendar(datos as { proyecto: string; fecha: string; hora: string; lote?: string }, ctx)
         case 'link_reserva':
             return linkReserva(entrada, ctx)
+        case 'preparar_pago_reserva':
+            return prepararPago(entrada, ctx)
         case 'derivar_a_asesor':
             ctx.derivacion = {
                 motivo: String(entrada.motivo || '').slice(0, 300),
