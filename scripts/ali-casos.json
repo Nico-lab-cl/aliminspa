@@ -69,8 +69,8 @@
       "max_burbujas": 1
     },
     {
-      "nombre": "Messenger: otro 👍 después de que Ali ya se despidió → no responde",
-      "origen": "Marcela, 19-11-2026",
+      "nombre": "Messenger: otro 👍 después de que Ali ya se despidió → igual responde, una línea",
+      "origen": "Marcela, 19-11-2026; regla cambiada por Nicolás, 22-11-2026",
       "canal": "facebook",
       "tipo": "cierre",
       "mensajes": [
@@ -92,9 +92,11 @@
         }
       ],
       "debe": [
-        "No responder: ya se despidió y la persona solo volvió a reaccionar"
+        "Responder igual, con una sola línea cálida distinta a la despedida anterior (por ejemplo \"De nada 😊 Estamos aquí para ayudarte\")",
+        "Sin precios, listas ni preguntas"
       ],
-      "silencio": true
+      "no_contiene": ["\\$", "\\?"],
+      "max_burbujas": 1
     },
     {
       "nombre": "Instagram: \"Gracias por la información\" al brochure → sin precios",

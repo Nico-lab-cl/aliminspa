@@ -14,7 +14,7 @@ import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type Age
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
 import { afirmacionesProhibidas, CONDICIONES_RESERVA, LO_QUE_VIENE, modismos, pideRut, precioIncompleto, problemasDeFormato, reservaIncompleta, sinModismos } from './guardia'
-import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, terminaEnPregunta, type Intencion } from './intencion'
+import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, type Intencion } from './intencion'
 
 /**
  * Ali atiende el chat web con Claude Haiku.
@@ -385,13 +385,13 @@ export async function conversar(
         etiquetaConfig: cierre.version ?? config?.version ?? null,
         prueba: opciones.prueba,
     })
-    // Ali eligió no responder: la persona solo volvió a agradecer después de que se despidió.
-    // Si su último mensaje era una pregunta, no puede callar: despedida fija.
-    const ultimoDeAli = [...contexto.mensajes].reverse().find(m => m.de === 'ali')?.texto ?? null
-    const quiereCallar = /^\s*\[SIN_RESPUESTA\]\s*$/i.test(final) && !herramientas.derivacion
-    const silencio = quiereCallar && !terminaEnPregunta(ultimoDeAli)
-    const texto = quiereCallar && !silencio ? DESPEDIDA_CORTA : final.replace(/\[SIN_RESPUESTA\]/gi, '').trim()
-    return { texto, intencion, silencio }
+    // Ali siempre responde un gracias (Nicolás, 22-11-2026): si el modelo no
+    // escribió nada o escribió el viejo [SIN_RESPUESTA] ante un cierre, sale la
+    // despedida fija.
+    const quiereCallar = /^\s*\[SIN_RESPUESTA\]\s*$/i.test(final)
+    let texto = final.replace(/\[SIN_RESPUESTA\]/gi, '').trim()
+    if (!texto && !herramientas.derivacion && (quiereCallar || intencion?.tipo === 'cierre')) texto = DESPEDIDA_CORTA
+    return { texto, intencion, silencio: false }
 }
 
 /**

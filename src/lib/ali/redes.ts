@@ -12,7 +12,7 @@ import {
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
 import { modoCierre } from './cierre'
-import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, SIN_PEDIR_NOMBRE, terminaEnPregunta, type Intencion } from './intencion'
+import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, SIN_PEDIR_NOMBRE, type Intencion } from './intencion'
 import type { DocumentoParaEnviar } from './documentos'
 
 /**
@@ -303,7 +303,7 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
             ? 'Al principio de la conversación salió un mensaje automático con el brochure, los precios y el enlace: no lo repitas, responde lo que la persona pregunta ahora.'
             : null,
         soloReaccion && !intencion
-            ? 'Su último mensaje es solo un agradecimiento, un emoji o un sticker, sin pregunta: sigue la sección "Cuando la persona agradece, cierra o solo reacciona" (nada de precios ni datos nuevos; si tu último mensaje ya fue una despedida, escribe solo [SIN_RESPUESTA]).'
+            ? 'Su último mensaje es solo un agradecimiento, un emoji o un sticker, sin pregunta: sigue la sección "Cuando la persona agradece, cierra o solo reacciona" (nada de precios ni datos nuevos; siempre respondes con una línea cálida, aunque ya te hayas despedido).'
             : null,
         primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre && !preguntaPrecio ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
         primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre && preguntaPrecio
@@ -391,18 +391,21 @@ export async function conversarRedes(
         etiquetaConfig: cierre.version ?? config?.version ?? null,
         prueba: opciones.prueba,
     })
-    // Ali eligió no responder (la persona solo volvió a agradecer o reaccionar).
-    // Solo vale si Ali ya se había despedido: si su último mensaje era una
-    // pregunta, la persona no puede quedar sin respuesta (despedida fija).
-    const ultimoDeAli = [...entrada.mensajes].reverse().find(m => m.de === 'ali' && !/^\[Mensaje automático/.test(m.texto))?.texto ?? null
-    const quiereCallar = Boolean(final && SIN_RESPUESTA.test(final)) && !ctx.derivacion
-    const silencio = quiereCallar && !terminaEnPregunta(ultimoDeAli)
+    // Ali siempre responde un gracias (Nicolás, 22-11-2026). Si el modelo no
+    // escribió nada o escribió el viejo [SIN_RESPUESTA] ante un cierre, sale la
+    // despedida fija. Antes ese vacío el CRM lo contaba como falla, reintentaba
+    // y avisaba al grupo "Ali no pudo responder después de 2 intentos".
+    const quiereCallar = Boolean(final && SIN_RESPUESTA.test(final))
     if (final) final = final.replace(/\[SIN_RESPUESTA\]/gi, '').trim()
-    if (quiereCallar && !silencio) final = DESPEDIDA_CORTA
     if (!final && ctx.derivacion) final = 'Ya le avisé a un asesor y te responde por este mismo chat a la brevedad 🙌'
+    const ultimoCliente = [...entrada.mensajes].reverse().find(m => m.de === 'cliente')
+    const esCierre = intencion
+        ? intencion.tipo === 'cierre'
+        : Boolean(ultimoCliente && !ultimoCliente.imagenUrl && esSoloReaccion(ultimoCliente.texto))
+    if (!final && (quiereCallar || esCierre)) final = DESPEDIDA_CORTA
 
     return {
-        silencio,
+        silencio: false,
         intencion,
         burbujas: final ? burbujasRedes(final) : [],
         contacto: ctx.contacto ?? null,

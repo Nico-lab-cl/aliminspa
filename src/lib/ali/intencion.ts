@@ -216,8 +216,12 @@ export function terminaEnPregunta(texto: string | null) {
     return Boolean(texto && texto.includes('?'))
 }
 
-/** Despedida fija para cuando Ali calló sin deber (su último mensaje era una pregunta). */
-export const DESPEDIDA_CORTA = 'Perfecto 😊 Cualquier duda me escribes por aquí'
+/**
+ * Despedida fija para cuando el modelo no escribió nada (o escribió el viejo
+ * [SIN_RESPUESTA]) ante un gracias. Ali siempre responde los agradecimientos
+ * (Nicolás, 22-11-2026).
+ */
+export const DESPEDIDA_CORTA = 'De nada 😊 Estamos aquí para ayudarte, cualquier duda me escribes por aquí'
 
 function guiaDeCierre(ultimoDeAli: string | null, web: boolean) {
     if (!ultimoDeAli) {
@@ -228,7 +232,7 @@ function guiaDeCierre(ultimoDeAli: string | null, web: boolean) {
     if (terminaEnPregunta(ultimoDeAli)) {
         return 'Tu último mensaje le hacía una pregunta: SÍ respondes, con una sola línea cálida de despedida, sin repetir la pregunta.'
     }
-    return 'Tu último mensaje ya fue un cierre sin pregunta: no respondas, escribe únicamente [SIN_RESPUESTA].'
+    return 'Tu último mensaje ya fue un cierre, pero igual respondes: una sola línea cálida que conteste el gracias, distinta a tu despedida anterior (por ejemplo "De nada 😊 Estamos aquí para ayudarte"). Sin pregunta.'
 }
 
 /**
