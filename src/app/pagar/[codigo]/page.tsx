@@ -14,8 +14,8 @@ export const metadata: Metadata = {
     robots: { index: false, follow: false },
 }
 
-/** 12.345.678-5 → 12.345.***-5: el enlace puede reenviarse. */
-const rutOculto = (rut: string) => rut.replace(/^(\d{1,3}\.\d{3}\.)\d{3}/, '$1***')
+/** +56912345678 → +56 9 **** 5678: el enlace puede reenviarse. */
+const celularOculto = (c: string) => c.replace(/^\+56(9)\d{4}(\d{4})$/, '+56 $1 **** $2')
 
 export default async function PagarPage({
     params,
@@ -58,9 +58,8 @@ export default async function PagarPage({
         ['Proyecto', d.proyecto],
         ['Lote', d.lote],
         ['Reserva', d.monto],
-        ['A nombre de', d.r.nombre],
-        ['RUT', rutOculto(d.r.rut)],
         ['Correo', d.r.email],
+        ['Celular', celularOculto(d.r.celular)],
     ]
 
     return (
@@ -68,7 +67,7 @@ export default async function PagarPage({
             <section className={styles.resultado}>
                 <p className={styles.antetitulo}>Reserva lista para pagar</p>
                 <h1 className={styles.titulo}>Hola, {d.r.nombre.split(' ')[0]} 👋</h1>
-                <p className={styles.bajada}>Revisa los datos, acepta y pagas con Webpay. Ya no tienes que escribir nada.</p>
+                <p className={styles.bajada}>Te dejamos la reserva lista. Solo pon tu RUT, acepta y pagas con Webpay.</p>
                 {q.cancelada ? <p className={styles.aviso}>Anulaste el pago en Webpay. Puedes intentarlo de nuevo.</p> : null}
                 <div className={styles.tarjeta} style={{ marginTop: 18 }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 12 }}>
@@ -81,7 +80,7 @@ export default async function PagarPage({
                             ))}
                         </tbody>
                     </table>
-                    <PagarBoton id={d.r.id} monto={d.monto} />
+                    <PagarBoton id={d.r.id} monto={d.monto} nombre={d.r.nombre} />
                     <p className={styles.ayuda}>
                         ¿Algún dato está mal? <a href={whatsapp}>Escríbenos</a> y te mandamos un enlace nuevo.
                     </p>

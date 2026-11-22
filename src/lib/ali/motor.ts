@@ -13,7 +13,7 @@ import { HERRAMIENTAS, ejecutarHerramienta, type CanalAli, type ContextoHerramie
 import { bloqueRemoto, configRemota, herramientasApagadas, reportarUso, type AgenteChat } from './config-remota'
 import { modoCierre } from './cierre'
 import { fraseDeRespuesta, oficinaDice, oficinaTrabaja } from './oficina'
-import { afirmacionesProhibidas, CONDICIONES_RESERVA, LO_QUE_VIENE, modismos, precioIncompleto, problemasDeFormato, reservaIncompleta, sinModismos } from './guardia'
+import { afirmacionesProhibidas, CONDICIONES_RESERVA, LO_QUE_VIENE, modismos, pideRut, precioIncompleto, problemasDeFormato, reservaIncompleta, sinModismos } from './guardia'
 import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, terminaEnPregunta, type Intencion } from './intencion'
 
 /**
@@ -505,7 +505,7 @@ export async function correrModelo(p: {
             const forma = correcciones < 2 ? problemasDeFormato(texto, p.canal) : []
             const jerga = correcciones < 2 ? modismos(texto) : []
             const precio = correcciones < 2
-                ? [...precioIncompleto(texto, yaDijoLoQueViene, p.canal), ...reservaIncompleta(texto, yaDioCondiciones)]
+                ? [...precioIncompleto(texto, yaDijoLoQueViene, p.canal), ...reservaIncompleta(texto, yaDioCondiciones), ...pideRut(texto)]
                 : []
             // Anuncia el plano sin haber llamado a enviar_documento: la persona
             // se quedaba esperando un archivo que nunca llegaba (banco del 20-11).

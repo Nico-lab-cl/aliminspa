@@ -6,12 +6,12 @@ import { MINUTOS_BLOQUEO, PROYECTOS_RESERVA, clp, lotesLibres, refLote } from '@
 import { crearPagoLomas, lotesLibresLomas } from '@/lib/reservas-lomas'
 
 /**
- * Pago de reserva con los datos que Ali pidió en el chat (22-11-2026, Nicolás:
- * "que la misma IA pida los datos, como con la visita").
+ * Pago de reserva con los datos que Ali ya tiene del chat (22-11-2026).
  *
- * Ali guarda nombre, RUT, correo y celular en una fila de reservas_web con
- * estado "enlace" y manda aliminspa.cl/pagar/<id>. La persona abre el enlace,
- * marca que acepta las condiciones y va directo a Webpay: no escribe nada.
+ * Ali guarda nombre, correo y celular en una fila de reservas_web con estado
+ * "enlace" y manda aliminspa.cl/pagar/<id>. La persona abre el enlace, escribe
+ * su RUT (nunca se pide por el chat: Nicolás, "esos datos son muy personales
+ * para que los pida una IA"), puede corregir su nombre, acepta y va a Webpay.
  *
  * El lote NO se aparta al mandar el enlace (un enlace que nadie paga no puede
  * bloquear un lote): se aparta al abrirlo y apretar pagar, con el mismo
@@ -30,7 +30,6 @@ export interface DatosPago {
     /** Arena y Sol: número del plano. Lomas del Mar: id del lote en aliminlomasdelmar.com. */
     lote: number
     nombre: string
-    rut: string
     email: string
     celular: string
     monto: number
@@ -45,7 +44,8 @@ export async function prepararEnlacePago(d: DatosPago): Promise<string> {
             proyecto: d.proyecto,
             lote: d.lote,
             nombre: d.nombre,
-            rut: d.rut,
+            // Lo escribe la persona en /pagar antes de pagar.
+            rut: '',
             email: d.email,
             celular: d.celular,
             monto: d.monto,
@@ -89,13 +89,17 @@ type Consentimiento = {
     consentimiento_origen: string | null
 }
 
-/** La persona apretó pagar: aparta el lote y crea la transacción de Webpay. */
+/** La persona puso su RUT y apretó pagar: aparta el lote y crea la transacción de Webpay. */
 export async function pagarEnlace(
     id: string,
-    consentimiento: Consentimiento
+    consentimiento: Consentimiento,
+    persona: { rut: string; nombre: string }
 ): Promise<{ ok: true; url: string; token: string } | { ok: false; error: string; status: number }> {
-    const r = await prisma.reservaWeb.findUnique({ where: { id } })
-    if (!r) return { ok: false, error: 'Este enlace no existe.', status: 404 }
+    const fila = await prisma.reservaWeb.findUnique({ where: { id } })
+    if (!fila) return { ok: false, error: 'Este enlace no existe.', status: 404 }
+    if (fila.estado === 'pagada') return { ok: false, error: 'Esta reserva ya está pagada.', status: 409 }
+    // El RUT y el nombre que confirmó la persona quedan en la reserva.
+    const r = await prisma.reservaWeb.update({ where: { id }, data: { rut: persona.rut, nombre: persona.nombre } })
     if (r.estado === 'pagada') return { ok: false, error: 'Esta reserva ya está pagada.', status: 409 }
     if (r.estado === 'enlace' && r.expira_en < new Date()) {
         return { ok: false, error: 'Este enlace venció. Escríbenos y te mandamos uno nuevo.', status: 410 }

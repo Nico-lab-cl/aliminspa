@@ -18,7 +18,9 @@ function irAWebpay(url: string, token: string) {
     form.submit()
 }
 
-export default function PagarBoton({ id, monto }: { id: string; monto: string }) {
+export default function PagarBoton({ id, monto, nombre: nombreInicial }: { id: string; monto: string; nombre: string }) {
+    const [nombre, setNombre] = useState(nombreInicial)
+    const [rut, setRut] = useState('')
     const [acepta, setAcepta] = useState(false)
     const [estado, setEstado] = useState<'listo' | 'enviando' | 'error'>('listo')
     const [error, setError] = useState('')
@@ -32,7 +34,7 @@ export default function PagarBoton({ id, monto }: { id: string; monto: string })
             const res = await fetch('/api/reservas/pagar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, acepta_condiciones: acepta, ...consentimiento.datos() }),
+                body: JSON.stringify({ id, nombre, rut, acepta_condiciones: acepta, ...consentimiento.datos() }),
             })
             const j = await res.json().catch(() => ({}))
             if (!res.ok || !j.url || !j.token) throw new Error(j.error || 'No pudimos iniciar el pago. Intenta de nuevo.')
@@ -45,6 +47,16 @@ export default function PagarBoton({ id, monto }: { id: string; monto: string })
 
     return (
         <form onSubmit={pagar}>
+            <div className={styles.campos}>
+                <label className={styles.campo}>
+                    <span>Nombre y apellido</span>
+                    <input required autoComplete="name" value={nombre} onChange={e => setNombre(e.target.value)} />
+                </label>
+                <label className={styles.campo}>
+                    <span>RUT</span>
+                    <input required placeholder="12.345.678-9" value={rut} onChange={e => setRut(e.target.value)} />
+                </label>
+            </div>
             <label className={styles.condiciones}>
                 <input type="checkbox" required checked={acepta} onChange={e => setAcepta(e.target.checked)} />
                 <span>

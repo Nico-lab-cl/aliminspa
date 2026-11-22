@@ -145,6 +145,19 @@ export function precioIncompleto(texto: string, yaDijoLoQueViene: boolean, canal
 /** Ya salió en la conversación (o en esta respuesta) la lista de lo que viene. */
 export const LO_QUE_VIENE = /plano y limpio|agua de pozo potabilizada/i
 
+/**
+ * Ali nunca pide el RUT por el chat (Nicolás, 22-11-2026: es muy personal para
+ * que lo pida una IA). La persona lo escribe en el enlace de pago.
+ */
+export function pideRut(texto: string): string[] {
+    const pide =
+        /(me (das|dejas|pasas|indicas|compartes|env[ií]as)|necesito|p[aá]same|d[eé]jame|dime|ind[ií]came|cu[aá]l es)[^.?!\n]{0,60}\bRUT\b/i.test(texto) ||
+        /\b(tu|su) RUT\b[^.!\n]{0,40}\?/i.test(texto)
+    return pide
+        ? ['Le pides el RUT por el chat, y eso nunca: es un dato muy personal. El RUT lo escribe en el enlace de pago. Usa preparar_pago_reserva (o link_reserva si no tienes su nombre o correo) y pega el enlace.']
+        : []
+}
+
 /** Ya le dio en la conversación las condiciones de la reserva. */
 export const CONDICIONES_RESERVA = /reserva[^\n]{0,40}\$5[05]0\.000|\$5[05]0\.000[^\n]{0,60}reserva/i
 

@@ -10,7 +10,7 @@ import { DOCUMENTOS, archivoVigente, documentoPorId, urlDocumento, type Document
 import { PROYECTOS_RESERVA, clp, enlaceReserva, lotesLibres, lotesTomados, numeroDeLote, refLote } from '@/lib/reservas'
 import { ENTREGA_ETAPA, leerLoteLomas, lotesLibresLomas, resolverLoteLomas } from '@/lib/reservas-lomas'
 import { PROYECTO_LOMAS, prepararEnlacePago } from '@/lib/reservas-enlace'
-import { normalizarCelular, normalizarRut, CORREO_VALIDO } from '@/lib/reservas'
+import { normalizarCelular, CORREO_VALIDO } from '@/lib/reservas'
 
 /**
  * Herramientas que Ali puede usar mientras conversa.
@@ -260,17 +260,16 @@ export const HERRAMIENTAS: Anthropic.Tool[] = [
     {
         name: 'preparar_pago_reserva',
         description:
-            'Deja la reserva lista para pagar con los datos que la persona te dio en el chat y devuelve un enlace: ella solo acepta las condiciones y paga con Webpay, sin escribir nada. Es la forma normal de cerrar la reserva. Úsala cuando ya eligió el lote, ya le contaste las condiciones y tienes su nombre y apellido, RUT y correo (el celular lo pone el sistema). Si falta algo, la herramienta te dice qué pedir.',
+            'Deja la reserva lista para pagar con el nombre, correo y celular que ya tienes de la persona, y devuelve un enlace: ella solo pone su RUT, acepta y paga con Webpay. Es la forma normal de cerrar la reserva cuando ya eligió el lote y ya le contaste las condiciones. Nunca pidas el RUT por el chat. Si no tienes su nombre o correo, no los pidas para esto: la herramienta te dirá que uses link_reserva.',
         input_schema: {
             type: 'object',
             properties: {
                 proyecto: { type: 'string', enum: ['Lomas del Mar', 'Arena y Sol'] },
                 lote: { type: 'string', description: '"P45" en Arena y Sol, "Etapa 1 · Lote 22" en Lomas del Mar.' },
-                nombre: { type: 'string', description: 'Nombre y apellido, tal como los dio. Vacío si usas el que ya tienes.' },
-                rut: { type: 'string', description: 'RUT tal como lo escribió. Vacío si no lo dio.' },
-                email: { type: 'string', description: 'Correo. Vacío si usas el que ya tienes.' },
+                nombre: { type: 'string', description: 'Su nombre, si te lo dio en este chat. Vacío para usar el que ya tienes.' },
+                email: { type: 'string', description: 'Su correo, si te lo dio en este chat. Vacío para usar el que ya tienes.' },
             },
-            required: ['proyecto', 'lote', 'nombre', 'rut', 'email'],
+            required: ['proyecto', 'lote', 'nombre', 'email'],
             additionalProperties: false,
         },
         strict: true,
@@ -449,26 +448,21 @@ async function linkReserva(entrada: { proyecto?: string; lote?: string }, ctx: C
 }
 
 /**
- * El pago con los datos que Ali pidió en el chat (22-11-2026, Nicolás: "que la
- * misma IA pida los datos, como con la visita"). Devuelve aliminspa.cl/pagar/<id>:
- * la persona solo acepta y paga (lib/reservas-enlace.ts).
+ * El pago con los datos que Ali YA tiene del chat (nombre, correo, celular).
+ * Devuelve aliminspa.cl/pagar/<id>: la persona solo escribe su RUT, acepta y
+ * paga (lib/reservas-enlace.ts). El RUT nunca se pide por el chat (Nicolás,
+ * 22-11-2026: "esos datos son muy personales para que los pida una IA"). Si a
+ * Ali le falta el nombre o el correo, no los pide: usa link_reserva.
  */
-async function prepararPago(
-    entrada: { proyecto?: string; lote?: string; nombre?: string; rut?: string; email?: string },
-    ctx: ContextoHerramientas
-) {
+async function prepararPago(entrada: { proyecto?: string; lote?: string; nombre?: string; email?: string }, ctx: ContextoHerramientas) {
     const nombre = String(entrada.nombre || ctx.cliente.nombre || '').trim().replace(/\s+/g, ' ').slice(0, 120)
-    const rut = normalizarRut(entrada.rut)
     const email = String(entrada.email || ctx.cliente.email || '').trim().toLowerCase()
     const celular = normalizarCelular(ctx.cliente.telefono || '')
-    const faltan = [
-        nombre.split(' ').length < 2 && 'su nombre y apellido',
-        !rut && (entrada.rut ? 'su RUT (el que dio no es válido, pídele que lo revise)' : 'su RUT'),
-        (!email || !CORREO_VALIDO.test(email)) && 'su correo',
-        !celular && 'su celular',
-    ].filter(Boolean) as string[]
-    if (faltan.length) {
-        return { ok: false, error: `Para dejarle el pago listo falta ${faltan.join(', ')}. Pídeselo todo en un solo mensaje, corto.` }
+    if (!nombre || !email || !CORREO_VALIDO.test(email) || !celular) {
+        return {
+            ok: false,
+            error: 'No tienes su nombre, correo y celular. No se los pidas por esto: usa link_reserva con el mismo lote y pega ese enlace (ahí deja sus datos).',
+        }
     }
 
     let datos: { proyecto: string; lote: number; monto: number; etiqueta: string }
@@ -493,15 +487,14 @@ async function prepararPago(
 
     const url = ctx.simulacion
         ? `${SITE.url}/pagar/PRUEBA`
-        : // rut y celular ya se validaron arriba (si faltaban, se devolvió antes).
-          await prepararEnlacePago({ ...datos, nombre, rut: rut as string, email, celular: celular as string, origen: `ali-${ctx.canal || 'web'}` })
+        : await prepararEnlacePago({ ...datos, nombre, email, celular, origen: `ali-${ctx.canal || 'web'}` })
     return {
         ok: true,
         url,
         lote: datos.etiqueta,
         monto: clp(datos.monto),
         a_nombre_de: nombre,
-        como: 'Pega el enlace tal cual y dile en una frase que ya está todo listo: lo abre, acepta las condiciones y paga con Webpay, débito o crédito, sin escribir nada. El lote se aparta cuando entra a pagar, así que conviene que lo haga pronto. El enlace dura 3 días.',
+        como: 'Pega el enlace tal cual y dile en una frase que le dejaste la reserva lista con sus datos: lo abre, pone su RUT, acepta y paga con Webpay, débito o crédito. El lote se aparta cuando entra a pagar, así que conviene que lo haga pronto. El enlace dura 3 días.',
     }
 }
 
