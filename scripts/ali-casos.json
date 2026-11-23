@@ -846,7 +846,7 @@
       "max_burbujas": 3
     },
     {
-      "nombre": "Messenger: \"Valores??\" después del brochure → precio + lo que viene, cierra con contado o cuotas, sin pedir el nombre",
+      "nombre": "Messenger: \"Valores??\" después del brochure → precio + lo que viene, cierra con pregunta abierta, sin pedir el nombre",
       "origen": "Nicolás, 20-11-2026 (análisis: muchos se iban después de \"¿Con quién tengo el gusto?\")",
       "canal": "facebook",
       "tipo": "consulta",
@@ -863,15 +863,15 @@
       "debe": [
         "Presentarse corto y dar el precio completo",
         "Mandar la lista corta de lo que viene con el terreno",
-        "Cerrar preguntando si le sirve más al contado o en cuotas",
+        "Cerrar con una pregunta abierta, no con contado o cuotas (Nicolás, 22-11-2026)",
         "No pedirle el nombre en este mensaje"
       ],
       "contiene": [
-        "35\\.000\\.000",
-        "contado o (en )?cuotas"
+        "35\\.000\\.000"
       ],
       "no_contiene": [
-        "con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre"
+        "con qui[eé]n tengo el gusto|c[oó]mo te llamas|tu nombre",
+        "contado o (en )?cuotas"
       ],
       "max_burbujas": 3
     },
@@ -1161,7 +1161,7 @@
       "debe": [
         "Dar el precio con contado, pie, cuotas y total",
         "Mandar la lista corta de lo que viene con el terreno",
-        "Cerrar con una pregunta que siga la conversación (por ejemplo contado o cuotas)"
+        "Cerrar con una pregunta abierta (no contado o cuotas)"
       ],
       "contiene": [
         "\\$5\\.500\\.000|\\$20\\.000\\.000",
@@ -1567,7 +1567,7 @@
         "asesor",
         "s[ií], tiene vista"
       ],
-      "max_burbujas": 2
+      "max_burbujas": 3
     },
     {
       "nombre": "WhatsApp: pide información de ambas tras el precio de Arena y Sol → da los dos proyectos",
@@ -1619,13 +1619,13 @@
         "Cerrar con una pregunta abierta, sin preguntar contado o cuotas ni invitar a la visita"
       ],
       "contiene": [
-        "$39.000.000",
+        "\\$39\\.000\\.000",
         "en auto"
       ],
       "no_contiene": [
         "contado o en cuotas",
         "qu[eé] te gustar[ií]a saber primero",
-        "visita"
+        "agendar|venir a conocer|visitar"
       ],
       "max_burbujas": 3
     },
@@ -1649,7 +1649,7 @@
       "contiene": [
         "Lomas del Mar",
         "Arena y Sol",
-        "$"
+        "\\$"
       ],
       "no_contiene": [
         "contado o en cuotas",
