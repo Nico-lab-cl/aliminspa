@@ -90,6 +90,7 @@ async function responderAli(caso) {
         headers: { 'content-type': 'application/json', ...(SECRETO ? { 'x-ia-secret': SECRETO } : {}) },
         body: JSON.stringify({
             canal: caso.canal,
+            publicacion: caso.publicacion || null,
             id: `banco-${Date.now()}`,
             cliente: { nombre: null, telefono: null, email: null, ...(caso.cliente || {}) },
             mensajes: caso.mensajes,

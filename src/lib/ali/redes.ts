@@ -286,6 +286,17 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
     // Preguntó el precio: el nombre va en la respuesta siguiente, no pegado a los
     // precios (Nicolás, 20-11-2026: muchos se iban después de "¿Con quién tengo el gusto?").
     const preguntaPrecio = ultimos.some(m => /valor|precio|cu[aá]nto (vale|cuesta|sale|cobran)|cuotas?\b|\bpie\b|financ/i.test(m.texto))
+    // Llegó por un anuncio de WhatsApp con "Quiero más información" o un
+    // saludo: ya pidió información, así que se la da de entrada (Nicolás,
+    // 22-11-2026: casi la mitad no respondía el "¿qué te gustaría saber
+    // primero?"). Si escribió una pregunta concreta, manda la pregunta.
+    const bienvenidaAnuncio =
+        entrada.canal === 'whatsapp' &&
+        primerMensaje &&
+        Boolean(entrada.publicacion) &&
+        !soloReaccion &&
+        (!intencion || intencion.tipo === 'saludo')
+    const primerMensajeNormal = primerMensaje && !bienvenidaAnuncio
 
     return [
         `Ahora en Chile: ${ahora} (hoy es ${hoyISO}).`,
@@ -305,16 +316,20 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
         soloReaccion && !intencion
             ? 'Su último mensaje es solo un agradecimiento, un emoji o un sticker, sin pregunta: sigue la sección "Cuando la persona agradece, cierra o solo reacciona" (nada de precios ni datos nuevos; siempre respondes con una línea cálida, aunque ya te hayas despedido).'
             : null,
-        primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre && !preguntaPrecio ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
-        primerMensaje && !entrada.memoria && !soloReaccion && pedirNombre && preguntaPrecio
-            ? 'Es tu primer mensaje en esta conversación y te preguntó el precio: preséntate corto y respóndelo. En este mensaje NO le pidas el nombre: cierra con "¿Te sirve más pagarlo al contado o en cuotas?" y pídele el nombre en tu respuesta siguiente.'
+        bienvenidaAnuncio
+            ? `Es tu primer mensaje y llegó por el anuncio pidiendo información: dásela de entrada, sin preguntarle qué quiere saber (Nicolás, 22-11-2026). Preséntate corto con el 👋${nombre ? ' y salúdala por su nombre' : ''}. Si el anuncio nombra un proyecto, va la lista del precio completo de ese proyecto (en Lomas del Mar, los dos tamaños) y después la lista de lo que viene con el terreno, con una línea de ubicación (El Tabo, a 8 o 10 minutos en auto de la playa, a poco más de 1 hora de Santiago). Si el anuncio no nombra un proyecto, van los dos en una sola lista corta, una o dos líneas por proyecto (tamaños, contado y pie, minutos en auto a la playa). Cierra con una sola pregunta abierta, por ejemplo "¿Qué más te gustaría saber?" o "¿Cuál te llama más?". No le pidas el nombre ni el correo en este mensaje, y nada de visita todavía.`
             : null,
-        primerMensaje && !entrada.memoria && (soloReaccion || !pedirNombre) ? 'Es tu primer mensaje en esta conversación: preséntate corto, sin pedirle el nombre.' : null,
+        primerMensajeNormal && !entrada.memoria && !soloReaccion && pedirNombre && !preguntaPrecio ? 'Es tu primer mensaje en esta conversación: preséntate y pregúntale su nombre.' : null,
+        primerMensajeNormal && !entrada.memoria && !soloReaccion && pedirNombre && preguntaPrecio
+            ? 'Es tu primer mensaje en esta conversación y te preguntó el precio: preséntate corto y respóndelo. En este mensaje NO le pidas el nombre: cierra con una pregunta abierta ("¿Qué más te gustaría saber?") y pídele el nombre en tu respuesta siguiente.'
+            : null,
+        primerMensajeNormal && !entrada.memoria && (soloReaccion || !pedirNombre) ? 'Es tu primer mensaje en esta conversación: preséntate corto, sin pedirle el nombre.' : null,
         primerMensaje && entrada.memoria
             ? `Es tu primer mensaje de hoy, pero esta persona ya habló antes con nosotros (mira la memoria abajo). ${nombre ? 'Salúdala por su nombre y no se lo vuelvas a pedir.' : 'Preséntate corto y pregúntale su nombre.'} Retoma desde lo que pregunta ahora.`
             : null,
         entrada.memoria ? `\n# Memoria del CRM sobre esta persona (solo para ti)\n${entrada.memoria}` : null,
-        intencion ? `\n${guiaDeIntencion(intencion, ultimoDeAli, entrada.canal)}` : null,
+        // La guía de "saludo" dice "nada de precios todavía": no aplica a la bienvenida del anuncio.
+        intencion && !bienvenidaAnuncio ? `\n${guiaDeIntencion(intencion, ultimoDeAli, entrada.canal)}` : null,
     ]
         .filter(Boolean)
         .join('\n')

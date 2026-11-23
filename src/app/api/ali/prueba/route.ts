@@ -80,7 +80,8 @@ export async function POST(request: NextRequest) {
         canal,
         via: 'dm',
         conversacionId: `prueba-${id || 'anonima'}`,
-        publicacion: null,
+        // El anuncio por el que llegó (WhatsApp), para probar la bienvenida del anuncio.
+        publicacion: typeof json.publicacion === 'string' && json.publicacion.trim() ? json.publicacion.trim().slice(0, 200) : null,
         cliente: json.cliente,
         mensajes: json.mensajes,
         memoria: null,

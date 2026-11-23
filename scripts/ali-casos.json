@@ -95,7 +95,10 @@
         "Responder igual, con una sola línea cálida distinta a la despedida anterior (por ejemplo \"De nada 😊 Estamos aquí para ayudarte\")",
         "Sin precios, listas ni preguntas"
       ],
-      "no_contiene": ["\\$", "\\?"],
+      "no_contiene": [
+        "\\$",
+        "\\?"
+      ],
       "max_burbujas": 1
     },
     {
@@ -1462,6 +1465,252 @@
         "(me (das|dejas|pasas|indicas)|necesito|p[aá]same|dime|cu[aá]l es)[^.?!\\n]{0,60}\\bRUT\\b"
       ],
       "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: \"¿Es condominio cerrado?\" → responde que sí, sin invitar a la visita",
+      "origen": "Chats de WhatsApp, 22-11-2026 (Rosa)",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, precio de los terrenos más grandes"
+        },
+        {
+          "de": "ali",
+          "texto": "Lomas del Mar, terreno de 390 m² 🌊\n✅ $43.000.000 al contado\n✅ O pie de $7.500.000 y 70 cuotas de $550.000\n✅ $45.990.000 en total, sin banco ni aval"
+        },
+        {
+          "de": "cliente",
+          "texto": "Contado"
+        },
+        {
+          "de": "ali",
+          "texto": "Perfecto, al contado la compra se firma en notaría, con la compraventa a tu nombre 😊"
+        },
+        {
+          "de": "cliente",
+          "texto": "Es condominio cerrado?"
+        }
+      ],
+      "debe": [
+        "Responder que sí, que es un condominio cerrado",
+        "No invitar a la visita en esta respuesta",
+        "No ofrecer un asesor"
+      ],
+      "no_contiene": [
+        "venir a conocer|agendar|visita",
+        "asesor"
+      ],
+      "max_burbujas": 2
+    },
+    {
+      "nombre": "WhatsApp: \"Pero 8 a pie\" → aclara que son 8 minutos en auto, sin asesor",
+      "origen": "Chats de WhatsApp, 22-11-2026 (Brenda)",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Brenda"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Cuál es el más cercano a la playa"
+        },
+        {
+          "de": "ali",
+          "texto": "Arena y Sol es el más cercano, a 8 minutos de la playa de El Tabo 🌊\nLomas del Mar queda a 10 minutos."
+        },
+        {
+          "de": "cliente",
+          "texto": "Pero 8 a pie"
+        }
+      ],
+      "debe": [
+        "Aclarar que los 8 minutos son en auto, no a pie",
+        "Decir que caminando no tiene el dato, sin inventar un tiempo",
+        "No ofrecer un asesor ni invitar a la visita"
+      ],
+      "no_contiene": [
+        "asesor",
+        "no s[eé] si son a pie"
+      ],
+      "max_burbujas": 2
+    },
+    {
+      "nombre": "WhatsApp: \"¿Tiene vista al mar?\" → no tiene vista al mar",
+      "origen": "Chats de WhatsApp, 22-11-2026 (Brenda)",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Brenda"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, quiero información de Arena y Sol"
+        },
+        {
+          "de": "ali",
+          "texto": "Arena y Sol, terreno de 200 m² 🌊\n✅ $39.000.000 al contado\n✅ O pie de $20.000.000 y 44 cuotas de $500.000\n✅ $42.000.000 en total, sin banco ni aval"
+        },
+        {
+          "de": "cliente",
+          "texto": "Tiene vista al mar"
+        }
+      ],
+      "debe": [
+        "Decir claramente que no tiene vista al mar",
+        "Decir que está cerca de la playa, a 8 minutos en auto"
+      ],
+      "no_contiene": [
+        "asesor",
+        "s[ií], tiene vista"
+      ],
+      "max_burbujas": 2
+    },
+    {
+      "nombre": "WhatsApp: pide información de ambas tras el precio de Arena y Sol → da los dos proyectos",
+      "origen": "Chats de WhatsApp, 22-11-2026 (Exequiel)",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "publicacion": "Arena y Sol: terrenos de 200 m² en El Tabo",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Hola, quiero información de Arena y Sol"
+        },
+        {
+          "de": "ali",
+          "texto": "Arena y Sol, terreno de 200 m² 🌊\n✅ $39.000.000 al contado\n✅ O pie de $20.000.000 y 44 cuotas de $500.000\n✅ $42.000.000 en total, sin banco ni aval"
+        },
+        {
+          "de": "cliente",
+          "texto": "información de los dos proyectos"
+        }
+      ],
+      "debe": [
+        "Dar la información de Lomas del Mar además de Arena y Sol",
+        "No preguntar contado o cuotas"
+      ],
+      "contiene": [
+        "Lomas del Mar"
+      ],
+      "no_contiene": [
+        "contado o en cuotas"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: llega por anuncio de Arena y Sol con \"Quiero más información\" → precio de entrada",
+      "origen": "Chats de WhatsApp, 22-11-2026",
+      "canal": "whatsapp",
+      "tipo": "saludo",
+      "publicacion": "Arena y Sol: tu terreno cerca del mar",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "¡Hola! Quiero más información"
+        }
+      ],
+      "debe": [
+        "Presentarse corto como Ali con 👋",
+        "Dar de entrada el precio completo de Arena y Sol (contado, pie y cuotas)",
+        "Cerrar con una pregunta abierta, sin preguntar contado o cuotas ni invitar a la visita"
+      ],
+      "contiene": [
+        "$39.000.000",
+        "en auto"
+      ],
+      "no_contiene": [
+        "contado o en cuotas",
+        "qu[eé] te gustar[ií]a saber primero",
+        "visita"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: llega por anuncio general con \"Quiero más información\" → los dos proyectos de entrada",
+      "origen": "Chats de WhatsApp, 22-11-2026",
+      "canal": "whatsapp",
+      "tipo": "saludo",
+      "publicacion": "Tu terreno en El Tabo, sin banco",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "¡Hola! Quiero más información"
+        }
+      ],
+      "debe": [
+        "Presentarse corto como Ali con 👋",
+        "Dar de entrada un resumen de los dos proyectos con precio",
+        "Cerrar con una pregunta abierta"
+      ],
+      "contiene": [
+        "Lomas del Mar",
+        "Arena y Sol",
+        "$"
+      ],
+      "no_contiene": [
+        "contado o en cuotas",
+        "qu[eé] te gustar[ií]a saber primero"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: pregunta el precio → no cierra con contado o cuotas",
+      "origen": "Chats de WhatsApp, 22-11-2026",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Cuánto vale el terreno de Lomas del Mar?"
+        }
+      ],
+      "debe": [
+        "Dar el precio completo de los dos tamaños de Lomas del Mar",
+        "Cerrar con una pregunta abierta, no con contado o cuotas"
+      ],
+      "no_contiene": [
+        "contado o en cuotas"
+      ],
+      "max_burbujas": 3
+    },
+    {
+      "nombre": "WhatsApp: ya le ofreció la visita y pregunta otra cosa → responde sin volver a ofrecerla",
+      "origen": "Chats de WhatsApp, 22-11-2026",
+      "canal": "whatsapp",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Sara"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Precio de Arena y Sol"
+        },
+        {
+          "de": "ali",
+          "texto": "Arena y Sol, terreno de 200 m² 🌊\n✅ $39.000.000 al contado\n✅ O pie de $20.000.000 y 44 cuotas de $500.000\n✅ $42.000.000 en total, sin banco ni aval"
+        },
+        {
+          "de": "ali",
+          "texto": "¿Te gustaría venir a conocerlo?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Y el agua cómo es?"
+        }
+      ],
+      "debe": [
+        "Responder cómo es el agua",
+        "No volver a ofrecer la visita"
+      ],
+      "no_contiene": [
+        "venir a conocer|agendar|visitar"
+      ],
+      "max_burbujas": 2
     }
   ]
 }
