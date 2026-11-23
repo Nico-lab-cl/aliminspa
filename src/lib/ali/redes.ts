@@ -77,7 +77,7 @@ export interface RespuestaRedes {
     burbujas: string[]
     contacto: ContactoAli | null
     derivacion: { motivo: string; resumen: string } | null
-    visita: { proyecto: string; fecha: string; hora: string } | null
+    visita: { proyecto: string; fecha: string; hora: string; resumen?: string | null } | null
     /** Archivos que Ali eligió mandar después de sus mensajes (enviar_documento). */
     documentos: DocumentoParaEnviar[]
     /** Respuesta pública bajo el comentario, sin precios (solo vía comentario). */

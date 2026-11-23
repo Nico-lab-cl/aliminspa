@@ -49,7 +49,7 @@ export interface ContextoHerramientas {
     /** Lo que dejó guardar_contacto en esta respuesta (solo redes). */
     contacto?: ContactoAli | null
     /** La visita que quedó agendada en esta respuesta, si quedó una. */
-    visita?: { proyecto: string; fecha: string; hora: string } | null
+    visita?: { proyecto: string; fecha: string; hora: string; resumen?: string | null } | null
     /** Lo que dejó enviar_documento en esta respuesta (solo redes). */
     documentos?: DocumentoParaEnviar[]
 }
@@ -212,8 +212,13 @@ export const HERRAMIENTAS: Anthropic.Tool[] = [
                     description:
                         'Lote que le interesa, si mencionó uno (por ejemplo "Etapa 3 · Lote 12" o "P61"). Vacío si no.',
                 },
+                resumen: {
+                    type: 'string',
+                    description:
+                        'Para el asesor que acompaña la visita (el cliente no lo ve). De 3 a 6 líneas cortas con lo que sabes de la conversación: qué busca y para qué (vivir, veranear, invertir), proyecto y tamaño, presupuesto o pie, si prefiere contado o cuotas, sus dudas u objeciones, y lo que ya le aclaraste (por ejemplo que es a 8 minutos en auto y sin vista al mar). Solo lo que dijo la persona, sin inventar. Sin teléfono ni correo.',
+                },
             },
-            required: ['proyecto', 'fecha', 'hora'],
+            required: ['proyecto', 'fecha', 'hora', 'resumen'],
             additionalProperties: false,
         },
     },
@@ -514,8 +519,19 @@ async function horariosDisponibles(entrada: { desde?: string; dias?: number }) {
     }
 }
 
+/** El resumen para el asesor: texto corto, sin teléfonos ni correos aunque el modelo los ponga. */
+function limpiarResumen(resumen: unknown): string | null {
+    if (typeof resumen !== 'string') return null
+    const limpio = resumen
+        .replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, '[correo]')
+        .replace(/\+?\d[\d\s]{7,}\d/g, '[teléfono]')
+        .trim()
+        .slice(0, 900)
+    return limpio || null
+}
+
 async function agendar(
-    entrada: { proyecto: string; fecha: string; hora: string; lote?: string },
+    entrada: { proyecto: string; fecha: string; hora: string; lote?: string; resumen?: string },
     ctx: ContextoHerramientas
 ) {
     const proyecto = PROYECTOS_EN_VENTA[entrada.proyecto]
@@ -536,7 +552,7 @@ async function agendar(
     if (ctx.simulacion) {
         const horaTexto = `${String(hora).padStart(2, '0')}:00`
         if (!isSlotBookable(dia, horaTexto)) return { ok: false, error: 'Ese horario no se puede agendar.' }
-        ctx.visita = { proyecto: proyecto.nombre, fecha: entrada.fecha, hora: horaTexto }
+        ctx.visita = { proyecto: proyecto.nombre, fecha: entrada.fecha, hora: horaTexto, resumen: limpiarResumen(entrada.resumen) }
         return { ok: true, proyecto: proyecto.nombre, fecha: entrada.fecha, hora: horaTexto, mapa: proyecto.mapaLugar }
     }
 
@@ -571,7 +587,7 @@ async function agendar(
     )
 
     if (!resultado.ok) return { ok: false, error: resultado.error }
-    ctx.visita = { proyecto: proyecto.nombre, fecha: entrada.fecha, hora: `${String(hora).padStart(2, '0')}:00` }
+    ctx.visita = { proyecto: proyecto.nombre, fecha: entrada.fecha, hora: `${String(hora).padStart(2, '0')}:00`, resumen: limpiarResumen(entrada.resumen) }
     return {
         ok: true,
         proyecto: proyecto.nombre,
