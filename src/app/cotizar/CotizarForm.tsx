@@ -183,7 +183,7 @@ export default function CotizarForm() {
 
             <ConsentimientoFormulario consentimiento={consentimiento} tono="oscuro" />
 
-            <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
+            <button type="submit" className={`${styles.submitBtn} btn-destello`} disabled={status === 'loading'}>
                 {status === 'loading' ? 'Enviando...' : 'Quiero cotizar →'}
             </button>
 

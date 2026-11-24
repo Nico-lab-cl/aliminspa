@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './Projects.module.css'
+import GaleriaSlider from './GaleriaSlider'
 
 const GALLERY = {
-    lomas: ['g10', 'g11', 'g12', 'g13', 'g14'],
-    arena: ['g01', 'g02', 'g03', 'g04', 'g05'],
+    lomas: ['lomas-del-mar-01', 'lomas-del-mar-02', 'lomas-del-mar-03', 'lomas-del-mar-04', 'lomas-del-mar-05'],
+    arena: ['arena-y-sol-01', 'arena-y-sol-02', 'arena-y-sol-03', 'arena-y-sol-04', 'arena-y-sol-05-v2'],
 } as const
 
 const GALLERY_LABELS = {
@@ -61,17 +62,45 @@ export default function Projects() {
         })
     }
 
-    return (
-        <section className={styles.section} id="proyectos">
-            <div className={styles.bgWrapper}>
-                <img
-                    src="https://images.pexels.com/photos/34671909/pexels-photo-34671909.jpeg?auto=compress&cs=tinysrgb&w=2400"
-                    alt="Costa del Litoral Central de Chile"
-                    className={styles.bgImage}
-                />
-            </div>
-            <div className={styles.overlay} />
+    // Logo de Alimin difuminado que sigue al cursor sobre el fondo oscuro.
+    // Queda detrás del contenido, así que solo se ve en las zonas sin tarjetas.
+    const glowRef = useRef<HTMLDivElement>(null)
+    const estelaRef = useRef<HTMLDivElement>(null)
+    const ultimaChispa = useRef(0)
 
+    const moverGlow = (e: React.MouseEvent<HTMLElement>) => {
+        const glow = glowRef.current
+        if (!glow) return
+        const r = e.currentTarget.getBoundingClientRect()
+        const x = e.clientX - r.left
+        const y = e.clientY - r.top
+        glow.style.transform = `translate(${x}px, ${y}px)`
+        glow.classList.add(styles.logoGlowOn)
+
+        // Estela tipo cometa: chispas que se desvanecen donde pasó el cursor.
+        const estela = estelaRef.current
+        const ahora = performance.now()
+        if (!estela || ahora - ultimaChispa.current < 28 || estela.childElementCount > 24) return
+        ultimaChispa.current = ahora
+        const chispa = document.createElement('span')
+        chispa.className = styles.chispa
+        chispa.style.left = `${x}px`
+        chispa.style.top = `${y}px`
+        chispa.addEventListener('animationend', () => chispa.remove())
+        estela.appendChild(chispa)
+    }
+
+    const ocultarGlow = () => glowRef.current?.classList.remove(styles.logoGlowOn)
+
+    return (
+        <section
+            className={styles.section}
+            id="proyectos"
+            onMouseMove={moverGlow}
+            onMouseLeave={ocultarGlow}
+        >
+            <div ref={estelaRef} className={styles.estela} aria-hidden="true" />
+            <div ref={glowRef} className={styles.logoGlow} aria-hidden="true" />
             <div className={styles.inner}>
                 <div className={styles.header}>
                     <div className={styles.kickerRow}>
@@ -85,7 +114,14 @@ export default function Projects() {
 
                 <div className={styles.videoGrid}>
                     <div className={styles.videoCard}>
-                        <video autoPlay muted loop playsInline className={styles.video}>
+                        <video
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            poster="/assets/homepage-v2/video-lomas-del-mar-poster.webp"
+                            className={styles.video}
+                        >
                             <source src="/assets/homepage-v2/video-lomas-del-mar.mp4" type="video/mp4" />
                         </video>
                         <div className={styles.videoOverlay} />
@@ -95,7 +131,14 @@ export default function Projects() {
                         </div>
                     </div>
                     <div className={styles.videoCard}>
-                        <video autoPlay muted loop playsInline className={styles.video}>
+                        <video
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            poster="/assets/homepage-v2/video-arena-y-sol-poster.webp"
+                            className={styles.video}
+                        >
                             <source src="/assets/homepage-v2/video-arena-y-sol.mp4" type="video/mp4" />
                         </video>
                         <div className={styles.videoOverlay} />
@@ -111,26 +154,7 @@ export default function Projects() {
                         <div className={styles.galleryTitle}>Así están los terrenos hoy</div>
                         <div className={styles.gallerySubtitle}>Galería de avance de cada proyecto en El Tabo</div>
                     </div>
-                    <div className={styles.galleryGrid}>
-                        {(Object.keys(GALLERY) as Project[]).map((project) => (
-                            <div key={project}>
-                                <div className={styles.galleryLabel}>{GALLERY_LABELS[project]}</div>
-                                <div className={styles.galleryMasonry}>
-                                    {GALLERY[project].map((g, i) => (
-                                        <button
-                                            key={g}
-                                            type="button"
-                                            className={`${styles.galleryItem} ${i === 0 ? styles.gallerySpan : ''}`}
-                                            onClick={() => setLightbox({ project, index: i })}
-                                            aria-label={`Ampliar foto ${i + 1} de ${GALLERY_LABELS[project]}`}
-                                        >
-                                            <Image src={`/assets/venta-terrenos/gallery/${g}.webp`} alt={GALLERY_LABELS[project]} width={300} height={220} className={styles.galleryImg} />
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <GaleriaSlider onAbrir={(project, index) => setLightbox({ project, index })} />
                 </div>
 
                 <div className={styles.ctaWrapper}>

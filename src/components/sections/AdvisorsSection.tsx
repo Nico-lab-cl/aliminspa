@@ -86,7 +86,7 @@ export const AdvisorsSection = ({ dark = false }: { dark?: boolean }) => {
                     href={advisor.whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`${styles.advBtn} crm-track-click`}
+                    className={`${styles.advBtn} btn-destello crm-track-click`}
                     data-crm-name={`WhatsApp Asesor - Seccion Asesores - ${advisor.name}`}
                     data-crm-category="Contacto Asesor"
                   >

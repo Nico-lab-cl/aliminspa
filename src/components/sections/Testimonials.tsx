@@ -39,6 +39,20 @@ const REVIEWS = [
     },
 ]
 
+// En celular el comentario destacado de Sebastián también corre en el cintillo
+// (su tarjeta grande se oculta ahí); en PC sigue en la tarjeta grande.
+const RESENA_DESTACADA = {
+    initials: 'SU',
+    name: 'Sebastián Ullbrish',
+    meta: '2 opiniones · 18 fotos',
+    time: 'Hace 50 semanas',
+    gradient: 'linear-gradient(135deg,#4ba646,#76d845)',
+    text: 'Excelente lugar, amo mi terreno aquí en El Tabo. Me costó confiar al principio, pero di el primer paso y hoy estoy feliz con mi inversión.',
+    soloMovil: true,
+}
+
+const CINTILLO = [RESENA_DESTACADA, ...REVIEWS.map((r) => ({ ...r, soloMovil: false }))]
+
 const CLIENT_PHOTOS = [1, 2, 3, 4, 5, 6]
 
 export default function Testimonials() {
@@ -96,9 +110,16 @@ export default function Testimonials() {
                     </div>
                 </div>
 
+                {/* PC: grilla de comentarios. Celular: cintillo que corre de izquierda a
+                    derecha bajo el video (la copia extra solo sirve para el loop y va oculta). */}
                 <div className={styles.reviewsGrid}>
-                    {REVIEWS.map((r) => (
-                        <div key={r.name} className={styles.reviewCard}>
+                    <div className={styles.reviewsTrack}>
+                    {[...CINTILLO, ...CINTILLO].map((r, i) => (
+                        <div
+                            key={i}
+                            className={`${styles.reviewCard} ${i >= CINTILLO.length ? styles.reviewDup : ''} ${r.soloMovil ? styles.soloMovil : ''}`}
+                            aria-hidden={i >= CINTILLO.length ? true : undefined}
+                        >
                             <div className={styles.reviewHeader}>
                                 <div className={styles.reviewAvatar} style={{ background: r.gradient }}>
                                     {r.initials}
@@ -112,6 +133,7 @@ export default function Testimonials() {
                             <div className={styles.reviewTime}>{r.time}</div>
                         </div>
                     ))}
+                    </div>
                 </div>
             </div>
 

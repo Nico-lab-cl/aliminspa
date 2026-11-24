@@ -2,31 +2,8 @@
     position: relative;
     padding: 80px 20px;
     overflow: hidden;
-    background: var(--sec-bg);
-}
-
-.bgImg {
-    position: absolute;
-    inset: 0;
-    background: url('https://images.unsplash.com/photo-1476610182048-b716b8518aae?w=1920&auto=format&fit=crop&q=85')
-        center 50% / cover no-repeat;
-}
-
-.overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(160deg, rgba(var(--sec-overlay), 0.82) 0%, rgba(var(--sec-overlay), 0.75) 50%, rgba(var(--sec-overlay), 0.85) 100%);
-}
-
-.orb {
-    position: absolute;
-    top: -80px;
-    right: -60px;
-    width: 360px;
-    height: 360px;
-    background: radial-gradient(circle, rgba(118, 216, 69, 0.12) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+    /* Mismo color sólido que "Estándar de urbanización" (Benefits). */
+    background: #f4f6fc;
 }
 
 .inner {
@@ -89,9 +66,161 @@
 .card {
     position: relative;
     border-radius: 20px;
-    overflow: hidden;
     aspect-ratio: 3 / 4;
+    perspective: 1400px;
+    cursor: pointer;
+    outline: none;
+}
+
+.card:focus-visible .cara {
+    box-shadow: 0 0 0 3px rgba(75, 166, 70, 0.6);
+}
+
+/* Giro de la tarjeta: foto adelante, información atrás (mismo tamaño). */
+.flip {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.girada {
+    transform: rotateY(180deg);
+}
+
+.cara {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    overflow: hidden;
     border: 2px solid rgba(118, 216, 69, 0.4);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Botón "+" que invita a tocar la foto. */
+.verMas {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.verMas svg {
+    width: 16px;
+    height: 16px;
+}
+
+@media (hover: hover) {
+    .card:hover .verMas {
+        background: #4ba646;
+        transform: rotate(90deg);
+    }
+}
+
+/* Reverso: mismo estilo que las tarjetas de la galería de proyectos. */
+.reverso {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    padding: 22px 20px 18px;
+    background: #1c2831;
+    border-color: rgba(118, 216, 69, 0.4);
+}
+
+.reversoTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.reversoBadge {
+    background: rgba(118, 216, 69, 0.9);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.7rem;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.reversoCat {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: right;
+}
+
+.reversoTitle {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.35rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 14px;
+}
+
+.reversoList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reversoList li {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.42;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.reversoList li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #76d845, #4ba646);
+}
+
+.reversoHint {
+    margin-top: auto;
+    padding-top: 12px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flip {
+        transition: none;
+    }
 }
 
 .cardImg {

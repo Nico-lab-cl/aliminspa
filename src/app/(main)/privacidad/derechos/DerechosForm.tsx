@@ -104,7 +104,7 @@ export default function DerechosForm() {
 
             {estado === 'error' && <p className={styles.error}>{error}</p>}
 
-            <button type="submit" className={styles.boton} disabled={estado === 'enviando'}>
+            <button type="submit" className={`${styles.boton} btn-destello`} disabled={estado === 'enviando'}>
                 {estado === 'enviando' ? 'Enviando…' : 'Enviar solicitud'}
             </button>
         </form>

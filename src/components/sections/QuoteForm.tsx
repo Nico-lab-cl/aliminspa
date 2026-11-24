@@ -210,7 +210,7 @@ function QuoteFormInner({
 
             <ConsentimientoFormulario consentimiento={consentimiento} />
 
-            <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
+            <button type="submit" className={`${styles.submitBtn} btn-destello`} disabled={status === 'loading'}>
                 {status === 'loading' ? 'Enviando...' : submitLabel}
             </button>
 

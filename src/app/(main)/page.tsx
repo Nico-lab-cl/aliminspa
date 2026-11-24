@@ -1,4 +1,5 @@
 import Hero from '@/components/sections/Hero'
+import Cintillo from '@/components/sections/Cintillo'
 import Benefits from '@/components/sections/Benefits'
 import Projects from '@/components/sections/Projects'
 import StrategicLocation from '@/components/sections/StrategicLocation'
@@ -21,13 +22,14 @@ export default function HomePage() {
         <>
             <FAQSchema />
             <Hero />
+            <Cintillo />
             <Benefits />
             <Projects />
             <SeccionCalculadora origen="Inicio" valoresIniciales={PLAN_LOMAS_200} />
             <StrategicLocation />
+            <HomeContactForm />
             <Testimonials />
             <NearbyPlaces />
-            <HomeContactForm />
             <FAQ />
             <HomeNewsletter />
         </>

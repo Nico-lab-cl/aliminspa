@@ -1,0 +1,73 @@
+.cintillo {
+    background: #365662;
+    color: #fff;
+    overflow: hidden;
+    padding: 26px 0;
+}
+
+.pista {
+    display: flex;
+    width: max-content;
+    animation: cintilloScroll 55s linear infinite;
+}
+
+.grupo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.item {
+    display: inline-flex;
+    align-items: center;
+    gap: 48px;
+    padding-right: 48px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.icono {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    display: block;
+}
+
+@keyframes cintilloScroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 640px) {
+    .cintillo {
+        padding: 16px 0;
+    }
+
+    .pista {
+        animation-duration: 45s;
+    }
+
+    .item {
+        gap: 28px;
+        padding-right: 28px;
+        font-size: 17px;
+    }
+
+    .icono {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pista {
+        animation: none;
+    }
+}

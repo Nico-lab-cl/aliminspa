@@ -224,7 +224,7 @@ export default function CalculadoraCredito({
 
             <button
                 type="submit"
-                className={styles.boton}
+                className={`${styles.boton} btn-destello`}
                 disabled={status === 'loading' || dividendos === null}
             >
                 {status === 'loading' ? 'Enviando...' : 'Quiero este plan de pago →'}

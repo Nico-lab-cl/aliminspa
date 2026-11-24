@@ -2,33 +2,65 @@
     position: relative;
     padding: 80px 24px;
     overflow: hidden;
+    background: #25333e;
 }
 
-.bgWrapper {
+/* Logo de Alimin difuminado que sigue al cursor (solo con mouse).
+   Va detrás de .inner, así que solo se ve sobre el fondo oscuro. */
+.logoGlow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 56px;
+    height: 56px;
+    margin: -28px 0 0 -28px;
+    background-color: #fff;
+    -webkit-mask: url('/assets/homepage-v2/icono-alimin-blanco.png') center / contain no-repeat;
+    mask: url('/assets/homepage-v2/icono-alimin-blanco.png') center / contain no-repeat;
+    filter: blur(1.5px) drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.4s ease, transform 0.1s ease-out;
+    will-change: transform, opacity;
+}
+
+.logoGlowOn {
+    opacity: 0.45;
+}
+
+/* Estela tipo cometa detrás del logo. */
+.estela {
     position: absolute;
     inset: 0;
+    pointer-events: none;
     z-index: 0;
 }
 
-.bgImage {
+.chispa {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.7);
+    opacity: 0.5;
+    animation: chispaFade 0.6s ease-out forwards;
 }
 
-.overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(14, 26, 36, 0.94) 0%,
-        rgba(14, 26, 36, 0.82) 12%,
-        rgba(14, 26, 36, 0.8) 88%,
-        rgba(14, 26, 36, 0.94) 100%
-    );
+@keyframes chispaFade {
+    to {
+        opacity: 0;
+        transform: scale(0.15);
+    }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+    .logoGlow,
+    .estela {
+        display: none;
+    }
 }
 
 .inner {
@@ -369,24 +401,65 @@
     margin: 0 auto;
 }
 
+/* Mismo estilo que "Ver Proyectos" del hero: verde, texto blanco y destello. */
 .ctaButton {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--verde-lima) 0%, var(--verde-solido) 100%);
-    color: #0e1a24;
+    color: #fff;
     border-radius: 100px;
     padding: 1rem 2.5rem;
     font-family: var(--font-heading);
     font-weight: 800;
     font-size: 1rem;
     text-decoration: none;
+    white-space: nowrap;
     box-shadow: 0 6px 28px rgba(118, 216, 69, 0.38);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ctaButton:hover {
     transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(118, 216, 69, 0.5);
+}
+
+.ctaButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(
+        100deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: translateX(-150%) skewX(-20deg);
+    animation: ctaShine 3.2s ease-in-out 1s infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes ctaShine {
+    0% {
+        transform: translateX(-150%) skewX(-20deg);
+    }
+    35%,
+    100% {
+        transform: translateX(330%) skewX(-20deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ctaButton::after {
+        display: none;
+    }
 }
 
 @media (max-width: 640px) {

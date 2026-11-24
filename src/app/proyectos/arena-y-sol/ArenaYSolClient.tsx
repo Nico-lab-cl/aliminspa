@@ -149,14 +149,14 @@ const PLACES = [
         distance: '15 min',
         category: 'Cultura · Patrimonio',
         title: 'Isla Negra',
-        description: 'La casa de Pablo Neruda, Patrimonio Mundial de la UNESCO',
+        description: 'La Casa Museo de Pablo Neruda, Monumento Histórico Nacional',
     },
     {
         image: '/assets/minipie/pasted-1782761947129-0.webp',
         distance: '20 min',
         category: 'Turismo · Recreación',
         title: 'Algarrobo',
-        description: 'La piscina más grande del mundo · Playas exclusivas del Litoral',
+        description: 'San Alfonso del Mar y su gran laguna cristalina · Playas exclusivas del Litoral',
     },
 ]
 
