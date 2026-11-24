@@ -645,8 +645,8 @@ export default function VentaTerrenosClient({ variante }: { variante?: VarianteL
                         {[
                             { img: 'playa-el-tabo', min: '5 min', tag: 'Playa', name: 'El Tabo', desc: 'Playa icónica del litoral con arena extensa y aguas del Pacífico' },
                             { img: 'quebrada-de-cordova', min: '8 min', tag: 'Naturaleza', name: 'Quebrada de Córdova', desc: 'Paisaje natural único donde el río se une al océano Pacífico' },
-                            { img: 'isla-negra', min: '12 min', tag: 'Cultura · Patrimonio', name: 'Isla Negra', desc: 'La casa de Pablo Neruda, Patrimonio Mundial de la UNESCO' },
-                            { img: 'algarrobo', min: '20 min', tag: 'Turismo · Recreación', name: 'Algarrobo', desc: 'La piscina más grande del mundo · Playas exclusivas del Litoral' },
+                            { img: 'isla-negra', min: '12 min', tag: 'Cultura · Patrimonio', name: 'Isla Negra', desc: 'La Casa Museo de Pablo Neruda, Monumento Histórico Nacional' },
+                            { img: 'algarrobo', min: '20 min', tag: 'Turismo · Recreación', name: 'Algarrobo', desc: 'San Alfonso del Mar y su gran laguna cristalina · Playas exclusivas del Litoral' },
                         ].map((p) => (
                             // Se tocaban sin respuesta (clics muertos): ahora llevan al mapa de los proyectos.
                             <a key={p.name} href="#ubicacion" aria-label={'Ver ' + p.name + ' en el mapa de los proyectos'} className="al-placecard" style={s("position:relative;display:block;border-radius:20px;overflow:hidden;aspect-ratio:3/4;border:2px solid rgba(118,216,69,.4);text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s")}>

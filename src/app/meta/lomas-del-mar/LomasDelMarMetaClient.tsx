@@ -793,7 +793,7 @@ export default function LomasDelMarMetaClient() {
 
         </div>
         <div className="hero-ctas" style={{"animation":"fadeInUp .55s .4s ease both"}}>
-          <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845 0%,#4ba646 100%)","color":"#fff","border":"none","padding":"15px 32px","borderRadius":"14px","font":"700 15px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 6px 28px rgba(118,216,69,.38)","transition":"transform .2s,box-shadow .2s","letterSpacing":".01em"}}>
+          <button onClick={toForm} className="btn-destello" style={{"background":"linear-gradient(135deg,#76d845 0%,#4ba646 100%)","color":"#fff","border":"none","padding":"15px 32px","borderRadius":"14px","font":"700 15px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 6px 28px rgba(118,216,69,.38)","transition":"transform .2s,box-shadow .2s","letterSpacing":".01em"}}>
             COTIZAR MI TERRENO →
           </button>
           <a href="#terrenos" style={{"background":"rgba(255,255,255,.09)","color":"rgba(255,255,255,.85)","border":"1px solid rgba(255,255,255,.18)","padding":"15px 26px","borderRadius":"14px","font":"600 15px 'Montserrat',sans-serif","cursor":"pointer","transition":"background .2s","display":"flex","alignItems":"center","gap":"6px"}}>
@@ -928,7 +928,7 @@ export default function LomasDelMarMetaClient() {
         </div>
         <div style={{"display":"flex","alignItems":"center","gap":"8px"}}>
           <div className="nav-badge" style={{"background":"rgba(118,216,69,.15)","border":"1px solid rgba(118,216,69,.35)","borderRadius":"100px","padding":"4px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#b8f07a"}}>✓ Crédito directo</div>
-          <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"10px 20px","borderRadius":"100px","font":"700 13px 'Montserrat',sans-serif","cursor":"pointer","whiteSpace":"nowrap","boxShadow":"0 4px 16px rgba(118,216,69,.4)"}}>
+          <button onClick={toForm} className="btn-destello" style={{"background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"10px 20px","borderRadius":"100px","font":"700 13px 'Montserrat',sans-serif","cursor":"pointer","whiteSpace":"nowrap","boxShadow":"0 4px 16px rgba(118,216,69,.4)"}}>
             Cotizar
           </button>
         </div>
@@ -1475,19 +1475,19 @@ export default function LomasDelMarMetaClient() {
         <div style={{"position":"absolute","bottom":"0","left":"0","right":"0","padding":"24px 20px"}}>
           <div style={{"font":"700 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.55)","textTransform":"uppercase","letterSpacing":".1em","marginBottom":"5px"}}>Cultura · Patrimonio</div>
           <div style={{"font":"800 22px 'Montserrat',sans-serif","color":"#fff","lineHeight":"1.1","marginBottom":"6px"}}>Isla Negra</div>
-          <div style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","lineHeight":"1.5"}}>La casa de Pablo Neruda, Patrimonio Mundial de la UNESCO</div>
+          <div style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","lineHeight":"1.5"}}>La Casa Museo de Pablo Neruda, Monumento Histórico Nacional</div>
         </div>
       </div>
 
       
       <div style={{"position":"relative","borderRadius":"20px","overflow":"hidden","aspectRatio":"3/4","cursor":"default","transition":"transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s","border":"2px solid rgba(118,216,69,.4)"}} >
-        <img src="/assets/minipie/pasted-1782761947129-0.webp" loading="lazy" decoding="async" alt="Algarrobo — La piscina más grande del mundo" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
+        <img src="/assets/minipie/pasted-1782761947129-0.webp" loading="lazy" decoding="async" alt="Algarrobo — San Alfonso del Mar y su gran laguna cristalina" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","display":"block","transition":"transform .6s ease"}}  />
         <div style={{"position":"absolute","inset":"0","background":"linear-gradient(to top,rgba(10,18,28,.92) 0%,rgba(10,18,28,.3) 45%,transparent 100%)"}}></div>
         <div style={{"position":"absolute","top":"14px","left":"14px","background":"rgba(118,216,69,.9)","backdropFilter":"blur(8px)","borderRadius":"100px","padding":"5px 12px","font":"700 11px 'Montserrat',sans-serif","color":"#fff"}}>📍 20 min</div>
         <div style={{"position":"absolute","bottom":"0","left":"0","right":"0","padding":"24px 20px"}}>
           <div style={{"font":"700 10px 'Montserrat',sans-serif","color":"rgba(255,255,255,.55)","textTransform":"uppercase","letterSpacing":".1em","marginBottom":"5px"}}>Turismo · Recreación</div>
           <div style={{"font":"800 22px 'Montserrat',sans-serif","color":"#fff","lineHeight":"1.1","marginBottom":"6px"}}>Algarrobo</div>
-          <div style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","lineHeight":"1.5"}}>La piscina más grande del mundo · Playas exclusivas del Litoral</div>
+          <div style={{"font":"400 13px 'Roboto',sans-serif","color":"rgba(255,255,255,.6)","lineHeight":"1.5"}}>San Alfonso del Mar y su gran laguna cristalina · Playas exclusivas del Litoral</div>
         </div>
       </div>
 
@@ -1495,7 +1495,7 @@ export default function LomasDelMarMetaClient() {
 
     
     <div style={{"textAlign":"center","marginTop":"52px"}} data-animate="">
-      <button onClick={toForm} style={{"background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px 40px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 8px 32px rgba(118,216,69,.4)","letterSpacing":".02em"}}>
+      <button onClick={toForm} className="btn-destello" style={{"background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px 40px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","boxShadow":"0 8px 32px rgba(118,216,69,.4)","letterSpacing":".02em"}}>
         Quiero mi terreno aquí →
       </button>
       <p style={{"font":"400 12px 'Roboto',sans-serif","color":"rgba(255,255,255,.3)","marginTop":"12px"}}>Todo esto a minutos de Lomas del Mar</p>
@@ -1789,7 +1789,7 @@ export default function LomasDelMarMetaClient() {
           
           <ConsentimientoFormulario consentimiento={consentimiento} style={{ marginBottom: 14 }} />
 
-          <button type="submit" disabled={submitDisabled} style={{"width":"100%","background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","letterSpacing":".02em","boxShadow":"0 6px 24px rgba(75,166,70,.35)","transition":"all .25s"}}>
+          <button type="submit" disabled={submitDisabled} className="btn-destello" style={{"width":"100%","background":"linear-gradient(135deg,#76d845,#4ba646)","color":"#fff","border":"none","padding":"16px","borderRadius":"14px","font":"700 16px 'Montserrat',sans-serif","cursor":"pointer","letterSpacing":".02em","boxShadow":"0 6px 24px rgba(75,166,70,.35)","transition":"all .25s"}}>
             {submitText}
           </button>
 

@@ -184,10 +184,107 @@
 }
 
 .reviewsGrid {
+    padding-bottom: 64px;
+}
+
+.reviewsTrack {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
-    padding-bottom: 64px;
+}
+
+/* Copia para el loop del cintillo móvil y comentario de Sebastián dentro del
+   cintillo: en PC no se muestran (ahí Sebastián va en la tarjeta grande). */
+.reviewDup,
+.soloMovil {
+    display: none;
+}
+
+/* Celular: comentarios en cintillo bajo el video, corriendo de izquierda a derecha. */
+@media (max-width: 640px) {
+    .inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .featuredGrid {
+        display: contents;
+    }
+
+    .header {
+        order: 0;
+    }
+
+    .videoCard {
+        order: 1;
+        margin-bottom: 18px;
+    }
+
+    .reviewsGrid {
+        order: 2;
+        margin: 0 -1rem 24px;
+        padding: 4px 0 8px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+        mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    }
+
+    /* Su comentario ya corre en el cintillo. */
+    .quoteCard {
+        display: none;
+    }
+
+    .reviewsGrid {
+        margin-bottom: 48px;
+    }
+
+    .soloMovil {
+        display: block;
+    }
+
+    .reviewsTrack {
+        display: flex;
+        gap: 14px;
+        width: max-content;
+        padding: 0 7px;
+        animation: reviewsScroll 32s linear infinite;
+    }
+
+    .reviewsTrack:active {
+        animation-play-state: paused;
+    }
+
+    .reviewDup {
+        display: block;
+    }
+
+    .reviewCard {
+        width: 260px;
+        flex-shrink: 0;
+    }
+}
+
+@keyframes reviewsScroll {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+    .reviewsGrid {
+        overflow-x: auto;
+    }
+
+    .reviewsTrack {
+        animation: none;
+    }
+
+    .reviewDup {
+        display: none;
+    }
 }
 
 .reviewCard {
@@ -250,7 +347,7 @@
     position: relative;
     overflow: hidden;
     background: var(--bg-mint-2);
-    padding: 48px 0 56px;
+    padding: 48px 0 36px;
 }
 
 .marqueeTitle {
@@ -268,6 +365,8 @@
     width: 100%;
     -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    /* Espacio arriba y abajo para que la foto agrandada no se corte. */
+    padding: 20px 0;
 }
 
 .marqueeTrack {
@@ -287,12 +386,22 @@
     overflow: hidden;
     border: var(--borde-tarjeta);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-    transition: transform 0.25s ease, border-color 0.25s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.marqueeCard:hover {
-    transform: translateY(-4px);
-    border-color: rgba(118, 216, 69, 0.7);
+/* Con mouse: la galería se detiene al pasar el cursor y la foto apuntada se
+   agranda; al quitar el cursor sigue corriendo. (En pantallas táctiles no aplica.) */
+@media (hover: hover) {
+    .marqueeMask:hover .marqueeTrack {
+        animation-play-state: paused;
+    }
+
+    .marqueeCard:hover {
+        z-index: 2;
+        transform: scale(1.08);
+        border-color: rgba(118, 216, 69, 0.7);
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+    }
 }
 
 .marqueeImg {

@@ -72,7 +72,7 @@ export default async function BrochurePage({ params, searchParams }: Props) {
                 <h1>{b.proyecto}</h1>
                 <p className={styles.bajada}>{b.bajada}</p>
                 <div className={styles.acciones}>
-                    <Link href={b.agendar} className={styles.boton} data-medir="brochure_agendar">
+                    <Link href={b.agendar} className={`${styles.boton} btn-destello`} data-medir="brochure_agendar">
                         Agendar visita
                     </Link>
                     <a href={b.pdf} className={styles.botonSecundario} download data-medir="brochure_pdf">
@@ -102,7 +102,7 @@ export default async function BrochurePage({ params, searchParams }: Props) {
                 <h2>¿Te gustaría conocerlo en persona?</h2>
                 <p>Agenda tu visita y un asesor te acompaña en el terreno.</p>
                 <div className={styles.acciones}>
-                    <Link href={b.agendar} className={styles.boton} data-medir="brochure_agendar">
+                    <Link href={b.agendar} className={`${styles.boton} btn-destello`} data-medir="brochure_agendar">
                         Agendar visita
                     </Link>
                     <Link href={b.proyectoUrl} className={styles.botonSecundario}>

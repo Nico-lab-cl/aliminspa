@@ -1,0 +1,343 @@
+.galeria {
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+/* Dos proyectos lado a lado (PC y tablet). */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+}
+
+.label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #76d845;
+    margin-bottom: 14px;
+}
+
+/* Selector de proyecto: solo en celular. */
+.selector {
+    display: none;
+}
+
+/* ---------- Tarjeta: foto arriba, texto abajo ---------- */
+.card {
+    border-radius: 22px;
+    overflow: hidden;
+    background: #1c2831;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.stage {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    padding: 0;
+    border: 0;
+    background: #16212a;
+    cursor: zoom-in;
+}
+
+.foto {
+    object-fit: cover;
+    object-position: center 45%;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+}
+
+.foto.on {
+    opacity: 1;
+}
+
+.copy {
+    position: relative;
+    padding: 28px 32px 32px;
+    /* Alto fijo para que la tarjeta no salte al cambiar de texto. */
+    min-height: 260px;
+}
+
+.flechas {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    /* Por encima del texto animado (su transform crea una capa que tapaba los clics). */
+    z-index: 2;
+    display: flex;
+    gap: 8px;
+}
+
+.flecha {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.flecha:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.flecha svg {
+    width: 18px;
+    height: 18px;
+}
+
+.txt {
+    animation: txtIn 0.5s ease both;
+}
+
+@keyframes txtIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Número grande con degradado verde que se desvanece hacia abajo. */
+.big {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 4.6rem;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    background: linear-gradient(180deg, #76d845 0%, rgba(75, 166, 70, 0.12) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 18px;
+}
+
+.titulo {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0 0 12px;
+}
+
+.texto {
+    font-family: var(--font);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.68);
+    margin: 0;
+}
+
+/* ---------- Pestañas 01–05 con barra de progreso ---------- */
+.tabs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.tab {
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: var(--font);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.tab:hover,
+.tabOn {
+    color: #fff;
+}
+
+.tab b {
+    font-weight: 700;
+}
+
+.bar {
+    display: block;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.bar i {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: #4ba646;
+}
+
+.tabDone .bar i {
+    width: 100%;
+}
+
+.tabOn .bar i {
+    animation: barFill 5.5s linear forwards;
+}
+
+/* Pausa la reproducción automática mientras el usuario mira ese proyecto. */
+.proyecto:hover .tabOn .bar i {
+    animation-play-state: paused;
+}
+
+@keyframes barFill {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Tablet: tarjetas más angostas, texto más compacto. */
+@media (max-width: 1024px) {
+    .grid {
+        gap: 20px;
+    }
+
+    .copy {
+        padding: 22px 22px 26px;
+        min-height: 250px;
+    }
+
+    .flechas {
+        top: 22px;
+        right: 22px;
+    }
+
+    .big {
+        font-size: 3.6rem;
+    }
+
+    .titulo {
+        font-size: 1.25rem;
+    }
+
+    .texto {
+        font-size: 0.92rem;
+    }
+}
+
+/* ---------- Celular: un proyecto a la vez + selector ---------- */
+@media (max-width: 760px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* El proyecto no elegido se oculta (y su avance automático queda en pausa). */
+    .ocultoMovil {
+        display: none;
+    }
+
+    .label {
+        display: none;
+    }
+
+    .selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        padding: 4px;
+        margin-bottom: 16px;
+        border-radius: 100px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .selectorBtn {
+        padding: 11px 8px;
+        border: 0;
+        border-radius: 100px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .selectorOn {
+        background: #4ba646;
+        color: #fff;
+    }
+
+    .card {
+        border-radius: 18px;
+    }
+
+    .copy {
+        padding: 20px 20px 24px;
+        min-height: 0;
+    }
+
+    .flechas {
+        top: 20px;
+        right: 20px;
+    }
+
+    .flecha {
+        width: 40px;
+        height: 40px;
+    }
+
+    .big {
+        font-size: 3.2rem;
+        margin-bottom: 14px;
+    }
+
+    .titulo {
+        font-size: 1.2rem;
+    }
+
+    .texto {
+        font-size: 0.9rem;
+    }
+
+    .tabs {
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .tab {
+        font-size: 0.75rem;
+    }
+}
+
+/* Sin movimiento: no avanza solo ni anima el texto. */
+@media (prefers-reduced-motion: reduce) {
+    .tabOn .bar i {
+        animation: none;
+        width: 100%;
+    }
+
+    .txt {
+        animation: none;
+    }
+
+    .foto {
+        transition: none;
+    }
+}

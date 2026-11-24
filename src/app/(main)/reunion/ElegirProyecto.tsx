@@ -81,7 +81,7 @@ export default function ElegirProyecto({ proyectos }: { proyectos: ProyectoTarje
                                         <span className={styles.chipNeutro}>{p.disponibilidad}</span>
                                     )}
                                 </div>
-                                <span className={styles.cta}>{p.cta}</span>
+                                <span className={`${styles.cta} btn-destello`}>{p.cta}</span>
                             </div>
                         </Link>
                     ))}

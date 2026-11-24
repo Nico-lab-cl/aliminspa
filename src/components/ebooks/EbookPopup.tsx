@@ -177,7 +177,7 @@ export default function EbookPopup() {
                         <div className={styles.popupAcciones}>
                             <button
                                 type="button"
-                                className={styles.boton}
+                                className={`${styles.boton} btn-destello`}
                                 onClick={() => {
                                     setConFormulario(true)
                                     ;(window as any).gtag?.('event', 'ebook_popup_clic', { ebook: slug })

@@ -66,7 +66,7 @@ export default function Newsletter() {
                             />
                             <button
                                 type="submit"
-                                className={styles.btn}
+                                className={`${styles.btn} btn-destello`}
                                 disabled={status === 'loading'}
                             >
                                 {status === 'loading' ? '...' : 'Suscribirme'}

@@ -61,7 +61,7 @@ export default function TerrenosLitoralCentral() {
                     <div className={styles.ctas}>
                         <Link
                             href="#cotizar"
-                            className={`${styles.btnPrimary} crm-track-click`}
+                            className={`${styles.btnPrimary} btn-destello crm-track-click`}
                             data-crm-name="Cotizar - Hero Pillar Litoral Central"
                             data-crm-category="Cotizacion"
                         >

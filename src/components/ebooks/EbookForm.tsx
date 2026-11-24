@@ -95,7 +95,7 @@ export default function EbookForm({ ebook, ubicacion, compacto = false }: Props)
                 <span className={styles.listoIcono} aria-hidden="true">✓</span>
                 <p className={styles.listoTitulo}>Tu guía está lista</p>
                 <a
-                    className={styles.boton}
+                    className={`${styles.boton} btn-destello`}
                     href={ebook.pdf}
                     target="_blank"
                     rel="noopener"
@@ -154,7 +154,7 @@ export default function EbookForm({ ebook, ubicacion, compacto = false }: Props)
 
             <ConsentimientoFormulario consentimiento={consentimiento} textoContacto="para descargar esta guía." />
 
-            <button type="submit" className={styles.boton} disabled={estado === 'enviando'}>
+            <button type="submit" className={`${styles.boton} btn-destello`} disabled={estado === 'enviando'}>
                 {estado === 'enviando' ? 'Preparando tu guía…' : 'Quiero mi guía gratis'}
             </button>
             <p className={styles.nota}>Sin costo. Un PDF de {ebook.paginas} páginas para leer con calma.</p>

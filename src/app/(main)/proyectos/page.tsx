@@ -65,7 +65,7 @@ export default function ProyectosPage() {
                                         href={project.externalUrl || `/proyectos/${project.slug}`}
                                         target={project.externalUrl ? '_blank' : undefined}
                                         rel={project.externalUrl ? 'noopener noreferrer' : undefined}
-                                        className={styles.btnAction}
+                                        className={`${styles.btnAction} btn-destello`}
                                     >
                                         Más info &raquo;
                                     </Link>

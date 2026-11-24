@@ -55,7 +55,7 @@ export default function HomeNewsletter() {
                             onChange={(e) => setEmail(e.target.value)}
                             aria-label="Correo electrónico para newsletter"
                         />
-                        <button type="submit" className={styles.btn} disabled={status === 'loading'}>
+                        <button type="submit" className={`${styles.btn} btn-destello`} disabled={status === 'loading'}>
                             {status === 'loading' ? '...' : 'Suscribirme'}
                         </button>
                     </div>

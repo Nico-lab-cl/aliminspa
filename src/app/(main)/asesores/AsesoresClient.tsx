@@ -115,7 +115,7 @@ export default function AsesoresClient() {
               Te acompañamos a elegir tu terreno en El Tabo. Escríbenos por WhatsApp o llámanos directo.
             </p>
             <div className={styles.heroButtons}>
-              <button onClick={handleScrollToAdvisors} className={styles.scheduleBtn}>
+              <button onClick={handleScrollToAdvisors} className={`${styles.scheduleBtn} btn-destello`}>
                 <span className={styles.desktopText}>Hablar con un asesor de una</span>
                 <span className={styles.mobileText}>Hablar con asesor</span>
               </button>

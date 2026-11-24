@@ -96,7 +96,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                         <div className={styles.ctas}>
                             <Link
                                 href="#precios"
-                                className={`${styles.btnPrimary} crm-track-click`}
+                                className={`${styles.btnPrimary} btn-destello crm-track-click`}
                                 data-crm-name="Ver precios - Hero Terrenos Baratos"
                                 data-crm-category="Cotizacion"
                             >
@@ -238,7 +238,7 @@ export default function TerrenosBaratosLanding({ variante }: { variante?: Varian
                                     <div className={styles.terrenoCta}>
                                         <Link
                                             href="#cotizar"
-                                            className={`${styles.btnCard} crm-track-click`}
+                                            className={`${styles.btnCard} btn-destello crm-track-click`}
                                             data-crm-name={`Cotizar ${t.proyecto} ${t.superficie} - Terrenos Baratos`}
                                             data-crm-category="Cotizacion"
                                         >
