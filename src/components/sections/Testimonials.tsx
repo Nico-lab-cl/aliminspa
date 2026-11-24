@@ -78,6 +78,8 @@ export default function Testimonials() {
                         <video
                             ref={videoRef}
                             src="/assets/homepage-v2/video-testimonio-cliente.mp4"
+                            poster="/assets/homepage-v2/video-testimonio-cliente-poster.webp"
+                            preload="none"
                             playsInline
                             className={styles.video}
                         />

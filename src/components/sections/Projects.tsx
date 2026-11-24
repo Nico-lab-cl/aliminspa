@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from './Projects.module.css'
 import GaleriaSlider from './GaleriaSlider'
+import VideoDiferido from '@/components/ui/VideoDiferido'
 
 const GALLERY = {
     lomas: ['lomas-del-mar-01', 'lomas-del-mar-02', 'lomas-del-mar-03', 'lomas-del-mar-04', 'lomas-del-mar-05'],
@@ -114,16 +115,11 @@ export default function Projects() {
 
                 <div className={styles.videoGrid}>
                     <div className={styles.videoCard}>
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
+                        <VideoDiferido
+                            src="/assets/homepage-v2/video-lomas-del-mar.mp4"
                             poster="/assets/homepage-v2/video-lomas-del-mar-poster.webp"
                             className={styles.video}
-                        >
-                            <source src="/assets/homepage-v2/video-lomas-del-mar.mp4" type="video/mp4" />
-                        </video>
+                        />
                         <div className={styles.videoOverlay} />
                         <div className={styles.videoCaption}>
                             <div className={styles.videoTitle}>Lomas del Mar</div>
@@ -131,16 +127,11 @@ export default function Projects() {
                         </div>
                     </div>
                     <div className={styles.videoCard}>
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
+                        <VideoDiferido
+                            src="/assets/homepage-v2/video-arena-y-sol.mp4"
                             poster="/assets/homepage-v2/video-arena-y-sol-poster.webp"
                             className={styles.video}
-                        >
-                            <source src="/assets/homepage-v2/video-arena-y-sol.mp4" type="video/mp4" />
-                        </video>
+                        />
                         <div className={styles.videoOverlay} />
                         <div className={styles.videoCaption}>
                             <div className={styles.videoTitle}>Arena y Sol</div>
