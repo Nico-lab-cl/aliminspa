@@ -1711,6 +1711,170 @@
         "venir a conocer|agendar|visitar"
       ],
       "max_burbujas": 2
+    },
+    {
+      "nombre": "Messenger: 👍 al ofrecimiento del plano → manda el plano, no se despide",
+      "origen": "Marcelo Soto, Facebook, 26-11-2026 (Marcela)",
+      "canal": "facebook",
+      "tipo": "da_datos",
+      "cliente": {
+        "nombre": "Marcelo"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Que parte del Tabo están ubicados"
+        },
+        {
+          "de": "ali",
+          "texto": "Están en El Tabo, en el Litoral Central, a poco más de 1 hora de Santiago por la Ruta 78 🌊\n✅ Lomas del Mar, a 10 minutos en auto de la playa\n✅ Arena y Sol, a 8 minutos en auto de la playa"
+        },
+        {
+          "de": "ali",
+          "texto": "¿Quieres que te mande el plano con los lotes que quedan?"
+        },
+        {
+          "de": "cliente",
+          "texto": "👍"
+        }
+      ],
+      "debe": [
+        "Mandar el plano (o decir que se lo manda) en vez de despedirse"
+      ],
+      "contiene": [
+        "plano"
+      ],
+      "no_contiene": [
+        "cualquier duda"
+      ]
+    },
+    {
+      "nombre": "Facebook: ¿está arriba de la carretera que va a Algarrobo? → sí, Lomas del Mar",
+      "origen": "Marcelo Soto, Facebook, 26-11-2026 (Nicolás)",
+      "canal": "facebook",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Marcelo"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Donde queda Lomas del Mar?"
+        },
+        {
+          "de": "ali",
+          "texto": "Lomas del Mar está en El Tabo, a 10 minutos en auto de la playa 🌲"
+        },
+        {
+          "de": "cliente",
+          "texto": "Eso es por la parte de arriba la carretera k va A algarrobo"
+        }
+      ],
+      "debe": [
+        "Decir que sí, que queda arriba por la carretera que va a Algarrobo",
+        "No decir que no tiene el dato",
+        "No ofrecer el plano de lotes como respuesta a la ubicación"
+      ],
+      "contiene": [
+        "s[ií]"
+      ],
+      "no_contiene": [
+        "no tengo el dato",
+        "no te puedo confirmar"
+      ]
+    },
+    {
+      "nombre": "Instagram: ¿restricción de construcción? → diseño libre, 40% (80 m² / 156 m²)",
+      "origen": "ulisesolivares179, Instagram, 24-11-2026 (Marcela)",
+      "canal": "instagram",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": null
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Precios"
+        },
+        {
+          "de": "ali",
+          "texto": "Lomas del Mar tiene dos tamaños 🌊\n✅ 200 m² a $35.000.000 al contado\n✅ 390 m² a $43.000.000 al contado"
+        },
+        {
+          "de": "cliente",
+          "texto": "Alguna restriccion de construccion ?"
+        }
+      ],
+      "debe": [
+        "Decir que el diseño y los materiales son libres",
+        "Decir el máximo de 80 m² (200 m²) y 156 m² (390 m²) en el primer piso, el 40%",
+        "No saltar a formas de pago"
+      ],
+      "contiene": [
+        "80",
+        "156"
+      ],
+      "no_contiene": [
+        "no lo tengo",
+        "no tengo ese dato"
+      ]
+    },
+    {
+      "nombre": "¿Cuándo puedo construir? → con el 50% pagado, no el 100%",
+      "origen": "Nicolás, 27-11-2026",
+      "canal": "instagram",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": "Paula"
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Si compro con crédito directo, cuándo puedo empezar a construir?"
+        }
+      ],
+      "debe": [
+        "Decir que puede construir cuando tenga pagado el 50% del terreno",
+        "Recordar que el proyecto tiene que estar entregado, con fechas aproximadas"
+      ],
+      "contiene": [
+        "50"
+      ],
+      "no_contiene": [
+        "100%",
+        "100 %"
+      ]
+    },
+    {
+      "nombre": "Ya pidió el nombre y no lo dio → no lo vuelve a pedir",
+      "origen": "Marcela, 27-11-2026",
+      "canal": "instagram",
+      "tipo": "consulta",
+      "cliente": {
+        "nombre": null
+      },
+      "mensajes": [
+        {
+          "de": "cliente",
+          "texto": "Cómo es el agua?"
+        },
+        {
+          "de": "ali",
+          "texto": "Es agua de pozo potabilizada, sin pagar cuenta de agua 💧 ¿Con quién tengo el gusto?"
+        },
+        {
+          "de": "cliente",
+          "texto": "Y la luz?"
+        }
+      ],
+      "debe": [
+        "Responder cómo es la luz",
+        "No volver a preguntar el nombre"
+      ],
+      "no_contiene": [
+        "con qui[eé]n tengo el gusto",
+        "tu nombre"
+      ]
     }
   ]
 }

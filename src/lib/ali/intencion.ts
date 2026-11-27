@@ -56,7 +56,7 @@ const DESCRIPCION_TIPOS = `- saludo: solo saluda o escribe "info", "hola", "prec
 - consulta: una o dos preguntas concretas (precio, ubicación, cuotas, qué incluye, entrega, agua, luz, escritura, visita…). También si dice cuánto tiene y pregunta qué le alcanza ("si tengo 10 millones, ¿encuentro un sitio?"), aunque empiece con "con sinceridad".
 - varias_preguntas: tres o más preguntas o temas en el mismo mensaje o en mensajes seguidos.
 - da_datos: contesta lo que Ali le preguntó (su nombre, su correo, un día u horario, para qué lo quiere, qué proyecto o qué tamaño le interesa) sin hacer una pregunta nueva. Un "gracias" junto a su nombre es da_datos, no cierre.
-- cierre: solo agradece o acusa recibo ("gracias", "ok", "ya lo vi", "perfecto"), o es solo emojis o un sticker, sin pregunta ni dato.
+- cierre: solo agradece o acusa recibo ("gracias", "ok", "ya lo vi", "perfecto"), o es solo emojis o un sticker, sin pregunta ni dato. EXCEPCIÓN: si el último mensaje de Ali le ofrecía algo o le hacía una pregunta de sí o no ("¿Quieres que te mande el plano?", "¿Te cuento…?") y contesta 👍, "sí", "ok", "dale" o "ya", está aceptando: es da_datos, no cierre.
 - objecion_precio: dice que es caro, que no le alcanza o que no tiene el pie. Si dice un monto y pregunta qué puede comprar con eso, es consulta.
 - duda_o_desconfianza: desconfía ("¿es estafa?", "¿son reales?"), le parece lejos, duda de los papeles o de la empresa, o pone otra objeción que no es el precio.
 - quiere_visitar: quiere ir a ver los terrenos, pregunta por horarios de visita o elige un horario.
@@ -164,7 +164,7 @@ const GUIAS: Record<TipoMensaje, string> = {
     varias_preguntas:
         'Hizo muchas preguntas juntas. Respóndelas en listas cortas con ✅ agrupadas por tema (precio y crédito en una, qué incluye en otra), máximo 3 mensajes y ningún párrafo. Lo que no alcance, ofrécelo en la pregunta final.',
     da_datos:
-        'Te está respondiendo lo que le preguntaste: no es una despedida. Si te dio su nombre, salúdala por su nombre. Si tenía una pregunta pendiente, respóndela ahora. Si eligió una opción que le mostraste (un proyecto o un tamaño), eso es pedirte más de esa opción: dale en lista con ✅ lo que todavía no le diste de ella (qué incluye, entrega aproximada) y cierra con una pregunta abierta (la visita solo si calza y no se la ofreciste antes); nunca solo "perfecto". Si no, hazle una pregunta abierta corta. No repitas datos que ya le diste.',
+        'Te está respondiendo lo que le preguntaste: no es una despedida. Si aceptó algo que le ofreciste (con un 👍, "sí", "ok" o "dale"), hazlo ahora mismo: si era el plano, mándalo con enviar_documento ("Te mando el plano 👇"); si era contarle algo, cuéntaselo; si era la visita, ofrécele días. Si te dio su nombre, salúdala por su nombre. Si tenía una pregunta pendiente, respóndela ahora. Si eligió una opción que le mostraste (un proyecto o un tamaño), eso es pedirte más de esa opción: dale en lista con ✅ lo que todavía no le diste de ella (qué incluye, entrega aproximada) y cierra con una pregunta abierta (la visita solo si calza y no se la ofreciste antes); nunca solo "perfecto". Si no, hazle una pregunta abierta corta. No repitas datos que ya le diste.',
     // La parte de "qué hacer" depende de tu último mensaje: la arma guiaDeIntencion.
     cierre: 'Solo agradeció, acusó recibo o reaccionó. Nada de precios, listas, datos nuevos ni preguntas.',
     objecion_precio:
@@ -214,6 +214,44 @@ export const SIN_PEDIR_NOMBRE: TipoMensaje[] = ['cierre', 'fuera_de_tema', 'post
  */
 export function terminaEnPregunta(texto: string | null) {
     return Boolean(texto && texto.includes('?'))
+}
+
+/**
+ * La última pregunta de Ali le ofrecía algo o era de sí o no ("¿Quieres que
+ * te mande el plano?", "¿Te cuento cómo llega la luz?"). Un 👍 o un "sí" a
+ * eso es aceptar, no despedirse (Marcela, 27-11-2026: Ali ofreció el plano,
+ * Marcelo puso 👍 y Ali se despidió sin mandarlo).
+ */
+export function esOfrecimiento(texto: string | null) {
+    if (!texto || !texto.includes('?')) return false
+    const pregunta = texto.slice(texto.lastIndexOf('¿') >= 0 ? texto.lastIndexOf('¿') : 0)
+    return /^¿?\s*(quieres|quiere|te gustar[ií]a|le gustar[ií]a|te (mando|env[ií]o|paso|cuento|muestro|comparto|explico|ayudo)|prefieres que|deseas|agendamos|coordinamos|vamos)/i.test(pregunta.trim())
+}
+
+/** Respuesta corta que dice que sí: 👍, "sí", "ok", "dale", "ya", "bueno", "claro", "por favor". */
+export function esAceptacion(texto: string) {
+    const t = texto.trim()
+    if (!t || t.includes('?')) return false
+    if (/^[\s👍👌🙌✅🙏👏💯]+$/u.test(t)) return true
+    const p = t
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[\p{Extended_Pictographic}\p{Emoji_Modifier}‍️]/gu, '')
+        .replace(/[^a-zñ ]/g, '')
+        .trim()
+    return /^(si+|sip|sii+ por favor|si porfa(vor)?|si gracias|ok(ey|a|is)?|dale|ya|ya po|bueno|claro|perfecto|por favor|porfa(vor)?|mandalo|mandamelo|envialo|de una|obvio|me parece|si me interesa)( gracias| por favor| porfa)?$/.test(
+        p
+    )
+}
+
+/** El cliente acepta, con un 👍 o un "sí", lo último que Ali le ofreció. */
+export function aceptaOfrecimiento(mensajes: { de: string; texto: string; imagenUrl?: string | null }[]) {
+    const ultimos: typeof mensajes = []
+    for (let i = mensajes.length - 1; i >= 0 && mensajes[i].de === 'cliente'; i--) ultimos.unshift(mensajes[i])
+    if (!ultimos.length || ultimos.some(m => m.imagenUrl || !esAceptacion(m.texto))) return false
+    const ultimoDeAli = [...mensajes].reverse().find(m => m.de === 'ali' && !/^\[Mensaje automático/.test(m.texto))?.texto ?? null
+    return esOfrecimiento(ultimoDeAli)
 }
 
 /**

@@ -12,7 +12,7 @@ import {
 } from './herramientas'
 import { correrModelo, partirEnBloques } from './motor'
 import { modoCierre } from './cierre'
-import { clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, SIN_PEDIR_NOMBRE, type Intencion } from './intencion'
+import { aceptaOfrecimiento, clasificarMensaje, DESPEDIDA_CORTA, guiaDeIntencion, SIN_PEDIR_NOMBRE, type Intencion } from './intencion'
 import type { DocumentoParaEnviar } from './documentos'
 
 /**
@@ -277,9 +277,14 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
     const ultimos: MensajeRedes[] = []
     for (let i = entrada.mensajes.length - 1; i >= 0 && entrada.mensajes[i].de === 'cliente'; i--) ultimos.unshift(entrada.mensajes[i])
     // Sin clasificador, el cierre se detecta por código (esSoloReaccion); con él, manda el tipo.
+    const acepta = aceptaOfrecimiento(entrada.mensajes)
     const soloReaccion = intencion
         ? intencion.tipo === 'cierre'
-        : ultimos.length > 0 && ultimos.every(m => !m.imagenUrl && esSoloReaccion(m.texto))
+        : !acepta && ultimos.length > 0 && ultimos.every(m => !m.imagenUrl && esSoloReaccion(m.texto))
+    // El nombre se pide una sola vez (Marcela, 27-11-2026).
+    const yaPidioNombre = entrada.mensajes.some(
+        m => m.de === 'ali' && /con qui[eé]n tengo el gusto|c[oó]mo te llamas|me (dices|das|compartes) tu nombre|cu[aá]l es tu nombre/i.test(m.texto)
+    )
     const ultimoDeAli = [...entrada.mensajes].reverse().find(m => m.de === 'ali' && !esBrochure(m))?.texto ?? null
     // Postventa, fuera de tema, reclamo, etc.: no se le pide el nombre aunque sea el primer mensaje.
     const pedirNombre = !intencion || !SIN_PEDIR_NOMBRE.includes(intencion.tipo)
@@ -310,6 +315,12 @@ function datosDelMomento(entrada: EntradaRedes, intencion: Intencion | null) {
             : null,
         `Datos que ya tienes del cliente: nombre ${nombre || '(no lo sabes)'}, teléfono ${telefono ? 'sí' : 'no'}, correo ${email ? 'sí' : 'no'}.`,
         faltan.length ? `Te falta: ${faltan.join(', ')}.` : 'Ya tienes todos sus datos: no se los vuelvas a pedir.',
+        !nombre && yaPidioNombre
+            ? 'Ya le preguntaste su nombre en esta conversación y no te lo dio: NO se lo vuelvas a preguntar ("¿con quién tengo el gusto?" ni de otra forma). Sigue atendiendo sin nombre.'
+            : null,
+        acepta && !intencion
+            ? 'Su último mensaje (un 👍, "sí", "ok" o "dale") acepta lo que le ofreciste en tu último mensaje: hazlo ahora (si era el plano, mándalo con enviar_documento). No es una despedida.'
+            : null,
         yaMandoBrochure
             ? 'Al principio de la conversación salió un mensaje automático con el brochure, los precios y el enlace: no lo repitas, responde lo que la persona pregunta ahora.'
             : null,
@@ -347,7 +358,7 @@ export async function conversarRedes(
 ): Promise<RespuestaRedes> {
     const nombres = HERRAMIENTAS.map(h => h.name)
     // Fase 3: el clasificador corre en paralelo con la config, así casi no suma espera.
-    const [remota, cierre, intencion] = await Promise.all([
+    const [remota, cierre, clasificada] = await Promise.all([
         configRemota(),
         modoCierre(entrada.agente, nombres),
         clasificarMensaje({
@@ -358,6 +369,13 @@ export async function conversarRedes(
             prueba: opciones.prueba,
         }),
     ])
+    // Un 👍 o un "sí" a algo que Ali ofreció es aceptarlo, aunque el clasificador
+    // lo marque como cierre (Marcela, 27-11-2026).
+    const acepta = aceptaOfrecimiento(entrada.mensajes)
+    const intencion: Intencion | null =
+        clasificada && acepta && clasificada.tipo === 'cierre'
+            ? { ...clasificada, tipo: 'da_datos', resumen: 'Acepta, con un 👍 o un sí, lo que Ali le ofreció en su último mensaje' }
+            : clasificada
     if (intencion) {
         console.log(
             `[ali${opciones.prueba ? ':prueba' : ''}:${entrada.canal}] mensaje tipo ${intencion.tipo}${intencion.cree_que_es_otra_persona ? ' (cree que es otra persona)' : ''}: ${intencion.resumen}`
@@ -416,7 +434,7 @@ export async function conversarRedes(
     const ultimoCliente = [...entrada.mensajes].reverse().find(m => m.de === 'cliente')
     const esCierre = intencion
         ? intencion.tipo === 'cierre'
-        : Boolean(ultimoCliente && !ultimoCliente.imagenUrl && esSoloReaccion(ultimoCliente.texto))
+        : !acepta && Boolean(ultimoCliente && !ultimoCliente.imagenUrl && esSoloReaccion(ultimoCliente.texto))
     if (!final && (quiereCallar || esCierre)) final = DESPEDIDA_CORTA
 
     return {
